@@ -4,6 +4,8 @@ import game.exception.InvalidInputException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MapReaderTest {
@@ -50,6 +52,17 @@ public class MapReaderTest {
         String[][] expectedMap = {{"opa", "0"}, {"1", "1"}, {"a", "5"}};
 
         Map result = underTest.convert(jsonWithStrings);
+
+        assertEquals("test", result.getName());
+        assertArrayEquals(expectedMap, result.getMap());
+    }
+
+    @Test
+    public void readAndConvert() throws InvalidInputException, IOException {
+        String[][] expectedMap = {{"opa", "0"}, {"1", "1"}, {"a", "5"}};
+
+        String json = underTest.read("src\\test\\java\\game\\map\\test.json");
+        Map result = underTest.convert(json);
 
         assertEquals("test", result.getName());
         assertArrayEquals(expectedMap, result.getMap());

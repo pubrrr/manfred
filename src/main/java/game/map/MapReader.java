@@ -5,11 +5,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.xml.ws.BindingType;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 public class MapReader {
-    public void read(String fileLocation) {
-//        JSONObject
+    public String read(String jsonFileLocation) throws IOException {
+        List<String> input = Files.readAllLines(Paths.get(jsonFileLocation));
+        return String.join("", input);
     }
 
     public Map convert(String jsonString) throws InvalidInputException {
