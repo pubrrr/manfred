@@ -7,6 +7,18 @@
     <groupId>manf</groupId>
     <artifactId>ManfredsApocalypse2_0</artifactId>
     <version>2.0</version>
+    <dependencies>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20190722</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.6.0</version>
+        </dependency>
+    </dependencies>
 
 
 </project>
