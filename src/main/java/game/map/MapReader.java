@@ -1,5 +1,6 @@
 package game.map;
 
+import game.GameFactory;
 import game.exception.InvalidInputException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,6 +12,8 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class MapReader {
+    public static final String PATH_MAPS = GameFactory.PATH_DATA + "maps\\";
+
     public String read(String jsonFileLocation) throws IOException {
         List<String> input = Files.readAllLines(Paths.get(jsonFileLocation));
         return String.join("", input);
