@@ -1,20 +1,18 @@
 package game;
 
-import game.graphics.GraphicsManager;
-
 public class Game {
-    private GraphicsManager graphics;
+    private Thread graphicsPainterThread;
 
     public static void main(String[] args) {
         GameFactory factory = new GameFactory();
         factory.create().run();
     }
 
-    public Game(GraphicsManager graphics) {
-        this.graphics = graphics;
+    public Game(Thread graphicsPainterThread) {
+        this.graphicsPainterThread = graphicsPainterThread;
     }
 
     public void run() {
-        graphics.paint();
+        graphicsPainterThread.start();
     }
 }
