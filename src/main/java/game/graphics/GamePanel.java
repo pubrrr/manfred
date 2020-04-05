@@ -1,6 +1,6 @@
 package game.graphics;
 
-import game.controls.KeyControls;
+import game.Manfred;
 import game.map.Map;
 
 import javax.swing.*;
@@ -9,14 +9,15 @@ import java.awt.*;
 public class GamePanel extends JPanel {
     private static final int WIDTH = 1600;
     private static final int HEIGHT = 1200;
-    private static final int PIXEL_BLOCK_SIZE = 40;
+    public static final int PIXEL_BLOCK_SIZE = 40;
 
     private Map map;
+    private Manfred manfred;
 
-    public GamePanel(Map map, KeyControls keyControls) {
+    public GamePanel(Map map, Manfred manfred) {
         super();
         this.map = map;
-        addKeyListener(keyControls);
+        this.manfred = manfred;
     }
 
     public Dimension getPreferredSize() {
@@ -27,6 +28,7 @@ public class GamePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         paintMap(g);
+        paintManfred(g);
     }
 
     private void paintMap(Graphics g) {
@@ -39,5 +41,10 @@ public class GamePanel extends JPanel {
                 }
             }
         }
+    }
+
+    private void paintManfred(Graphics g) {
+        g.setColor(Color.GREEN);
+        g.fillRect(manfred.getX(), manfred.getY(), PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE);
     }
 }

@@ -2,8 +2,8 @@ package game;
 
 import game.controls.KeyControls;
 import game.exception.InvalidInputException;
+import game.graphics.GamePanel;
 import game.graphics.GraphicsManager;
-import game.graphics.GraphicsPainter;
 import game.graphics.ManfredWindow;
 import game.map.Map;
 import game.map.MapReader;
@@ -14,14 +14,14 @@ public class GameFactory {
     public static final String PATH_DATA = "data\\";
 
     public Game create() throws InvalidInputException, IOException {
-        Manfred manfred = new Manfred();
+        Manfred manfred = new Manfred(GamePanel.PIXEL_BLOCK_SIZE * 3, GamePanel.PIXEL_BLOCK_SIZE * 3);
         Map map = loadMap("Wald");
         KeyControls keyControls = new KeyControls(manfred);
 
         GraphicsManager graphics = new GraphicsManager();
-        graphics.initGraphics(map, keyControls, new ManfredWindow());
+        graphics.initGraphics(map, keyControls, new ManfredWindow(), manfred);
 
-        Thread graphicsPainterThread = new Thread(new GraphicsPainter(graphics), "graphicsPainter");
+        Thread graphicsPainterThread = new Thread(new GameRunner(graphics, manfred), "gameRunner");
         graphicsPainterThread.setDaemon(true);
         return new Game(graphicsPainterThread);
     }

@@ -1,16 +1,21 @@
-package game.graphics;
+package game;
 
-public class GraphicsPainter implements Runnable {
+import game.graphics.GraphicsManager;
+
+public class GameRunner implements Runnable {
     final static int REPAINT_PERIOD = 30;
 
     private GraphicsManager graphicsManager;
+    private Manfred manfred;
 
-    public GraphicsPainter(GraphicsManager graphicsManager) {
+    public GameRunner(GraphicsManager graphicsManager, Manfred manfred) {
         this.graphicsManager = graphicsManager;
+        this.manfred = manfred;
     }
 
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
+            move();
             graphicsManager.paint();
             try {
                 Thread.sleep(REPAINT_PERIOD);
@@ -18,5 +23,9 @@ public class GraphicsPainter implements Runnable {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void move() {
+        manfred.move();
     }
 }

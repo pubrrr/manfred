@@ -24,6 +24,5 @@ public class KeyControls implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 }
