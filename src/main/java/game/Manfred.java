@@ -16,6 +16,7 @@ public class Manfred {
         this.x = x;
         this.y = y;
     }
+
     public int getX() {
         return x;
     }
@@ -25,11 +26,37 @@ public class Manfred {
     }
 
     public void keyPressed(KeyEvent e) {
-        dx = SPEED;
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_A:
+                dx = -SPEED;
+                break;
+            case KeyEvent.VK_D:
+                dx = SPEED;
+                break;
+            case KeyEvent.VK_S:
+                dy = SPEED;
+                break;
+            case KeyEvent.VK_W:
+                dy = -SPEED; // y-Achse ist invertiert: kleiner Werte werden weiter oben gezeichnet
+                break;
+        }
     }
 
     public void keyReleased(KeyEvent e) {
-        dx = 0;
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_A:
+                dx = 0;
+                break;
+            case KeyEvent.VK_D:
+                dx = 0;
+                break;
+            case KeyEvent.VK_S:
+                dy = 0;
+                break;
+            case KeyEvent.VK_W:
+                dy = 0;
+                break;
+        }
     }
 
     public void move() {
