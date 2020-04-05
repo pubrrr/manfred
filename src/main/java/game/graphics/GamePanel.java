@@ -1,5 +1,6 @@
 package game.graphics;
 
+import game.controls.KeyControls;
 import game.map.Map;
 
 import javax.swing.*;
@@ -12,9 +13,10 @@ public class GamePanel extends JPanel {
 
     private Map map;
 
-    public GamePanel(Map map) {
+    public GamePanel(Map map, KeyControls keyControls) {
         super();
         this.map = map;
+        addKeyListener(keyControls);
     }
 
     public Dimension getPreferredSize() {

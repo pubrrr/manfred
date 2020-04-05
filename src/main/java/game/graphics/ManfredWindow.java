@@ -2,8 +2,8 @@ package game.graphics;
 
 import javax.swing.*;
 
-public class ManfredFrame extends JFrame {
-    public ManfredFrame() {
+public class ManfredWindow extends JFrame {
+    public ManfredWindow() {
         super("Manfreds Apokalüpse");
 
         setUndecorated(true);
