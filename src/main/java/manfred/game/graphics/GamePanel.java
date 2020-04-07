@@ -5,46 +5,36 @@ import manfred.game.map.Map;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class GamePanel extends JPanel {
     private static final int WIDTH = 1600;
     private static final int HEIGHT = 1200;
     public static final int PIXEL_BLOCK_SIZE = 40;
 
-    private Map map;
-    private Manfred manfred;
+    private List<Paintable> paintables = new LinkedList<>();
 
     public GamePanel(Map map, Manfred manfred) {
         super();
-        this.map = map;
-        this.manfred = manfred;
+        registerPaintable(map);
+        registerPaintable(manfred);
     }
 
     public Dimension getPreferredSize() {
         return new Dimension(WIDTH, HEIGHT);
     }
 
+    public void registerPaintable(Paintable paintable) {
+        paintables.add(paintable);
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        paintMap(g);
-        paintManfred(g);
-    }
-
-    private void paintMap(Graphics g) {
-        g.setColor(Color.RED);
-
-        for (int x = 0; x < map.getMap().length; x++) {
-            for (int y = 0; y < map.getMap()[0].length; y++) {
-                if (!map.isAccessible(x, y)) {
-                    g.fillRect(PIXEL_BLOCK_SIZE * x, PIXEL_BLOCK_SIZE * y, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE);
-                }
-            }
+        // TODO add some way to determine the order in which the elements get painted
+        for (Paintable paintable : paintables) {
+            paintable.paint(g);
         }
-    }
-
-    private void paintManfred(Graphics g) {
-        g.setColor(Color.GREEN);
-        g.fillRect(manfred.getX(), manfred.getY(), PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE);
     }
 }

@@ -1,20 +1,28 @@
 package manfred.game;
 
+import manfred.game.graphics.GamePanel;
+import manfred.game.graphics.Paintable;
+
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class Manfred {
+public class Manfred implements Paintable {
     private static final int SPEED = 2;
 
     private int x;
-
     private int y;
 
     private int dx = 0;
     private int dy = 0;
 
+    private final int sizeX;
+    private final int sizeY;
+
     public Manfred(int x, int y) {
         this.x = x;
         this.y = y;
+        sizeX = GamePanel.PIXEL_BLOCK_SIZE;
+        sizeY = GamePanel.PIXEL_BLOCK_SIZE;
     }
 
     public int getX() {
@@ -62,5 +70,11 @@ public class Manfred {
     public void move() {
         x += dx;
         y += dy;
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        g.setColor(Color.GREEN);
+        g.fillRect(getX(), getY(), sizeX, sizeY);
     }
 }
