@@ -1,6 +1,6 @@
-package game.controls;
+package manfred.game.controls;
 
-import game.Manfred;
+import manfred.game.Manfred;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

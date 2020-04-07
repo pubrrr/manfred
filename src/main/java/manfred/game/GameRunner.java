@@ -1,6 +1,6 @@
-package game;
+package manfred.game;
 
-import game.graphics.GraphicsManager;
+import manfred.game.graphics.GraphicsManager;
 
 public class GameRunner implements Runnable {
     final static int REPAINT_PERIOD = 30;

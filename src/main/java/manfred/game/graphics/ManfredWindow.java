@@ -1,4 +1,4 @@
-package game.graphics;
+package manfred.game.graphics;
 
 import javax.swing.*;
 

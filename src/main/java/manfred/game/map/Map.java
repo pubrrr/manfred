@@ -1,4 +1,4 @@
-package game.map;
+package manfred.game.map;
 
 public class Map {
     public static final String ACCESSIBLE = "1";

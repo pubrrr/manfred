@@ -1,4 +1,4 @@
-package game.exception;
+package manfred.game.exception;
 
 abstract public class ManfredException extends Exception {
     protected final static String type = "ManfredException";

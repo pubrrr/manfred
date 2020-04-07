@@ -1,7 +1,7 @@
-package game.graphics;
+package manfred.game.graphics;
 
-import game.Manfred;
-import game.map.Map;
+import manfred.game.Manfred;
+import manfred.game.map.Map;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,6 +1,6 @@
-package game;
+package manfred.game;
 
-import game.exception.InvalidInputException;
+import manfred.game.exception.InvalidInputException;
 
 import java.io.IOException;
 

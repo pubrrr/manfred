@@ -1,7 +1,7 @@
-package game.map;
+package manfred.game.map;
 
-import game.GameFactory;
-import game.exception.InvalidInputException;
+import manfred.game.GameFactory;
+import manfred.game.exception.InvalidInputException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

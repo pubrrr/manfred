@@ -1,4 +1,4 @@
-package game.exception;
+package manfred.game.exception;
 
 public class InvalidInputException extends ManfredException {
     private static final String type = "InvalidInputException";

@@ -1,8 +1,8 @@
-package game.graphics;
+package manfred.game.graphics;
 
-import game.Manfred;
-import game.controls.KeyControls;
-import game.map.Map;
+import manfred.game.Manfred;
+import manfred.game.controls.KeyControls;
+import manfred.game.map.Map;
 
 public class GraphicsManager {
     private ManfredWindow window;

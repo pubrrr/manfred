@@ -1,4 +1,4 @@
-package game.map;
+package manfred.game.map;
 
 import org.junit.jupiter.api.Test;
 

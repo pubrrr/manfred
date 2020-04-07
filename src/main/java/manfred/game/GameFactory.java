@@ -1,12 +1,12 @@
-package game;
+package manfred.game;
 
-import game.controls.KeyControls;
-import game.exception.InvalidInputException;
-import game.graphics.GamePanel;
-import game.graphics.GraphicsManager;
-import game.graphics.ManfredWindow;
-import game.map.Map;
-import game.map.MapReader;
+import manfred.game.controls.KeyControls;
+import manfred.game.exception.InvalidInputException;
+import manfred.game.graphics.GamePanel;
+import manfred.game.graphics.GraphicsManager;
+import manfred.game.graphics.ManfredWindow;
+import manfred.game.map.Map;
+import manfred.game.map.MapReader;
 
 import java.io.IOException;
 

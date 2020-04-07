@@ -1,4 +1,4 @@
-package game;
+package manfred.game;
 
 import java.awt.event.KeyEvent;
 

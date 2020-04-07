@@ -1,6 +1,6 @@
-package game.map;
+package manfred.game.map;
 
-import game.exception.InvalidInputException;
+import manfred.game.exception.InvalidInputException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
