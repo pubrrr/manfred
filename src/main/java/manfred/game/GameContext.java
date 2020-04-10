@@ -6,6 +6,7 @@ import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.ManfredWindow;
 import manfred.game.map.Map;
 import manfred.game.map.MapReader;
+import manfred.game.map.MapWrapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -43,6 +44,11 @@ public class GameContext {
     @Bean
     public KeyControls keyControls(Manfred manfred) {
         return new KeyControls(manfred);
+    }
+
+    @Bean
+    public MapWrapper mapWrapper(MapReader mapReader, Map initialMap) {
+        return new MapWrapper(mapReader, initialMap);
     }
 
     @Bean

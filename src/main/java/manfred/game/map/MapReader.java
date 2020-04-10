@@ -15,16 +15,16 @@ public class MapReader {
     public static final String PATH_MAPS = Game.PATH_DATA + "maps\\";
 
     public Map loadMap(String name) throws InvalidInputException, IOException {
-        String jsonMap = read(MapReader.PATH_MAPS + name + ".json");
+        String jsonMap = read(PATH_MAPS + name + ".json");
         return convert(jsonMap);
     }
 
-    public String read(String jsonFileLocation) throws IOException {
+    String read(String jsonFileLocation) throws IOException {
         List<String> input = Files.readAllLines(Paths.get(jsonFileLocation));
         return String.join("", input);
     }
 
-    public Map convert(String jsonString) throws InvalidInputException {
+    Map convert(String jsonString) throws InvalidInputException {
         try {
             JSONObject jsonInput = new JSONObject(jsonString);
 

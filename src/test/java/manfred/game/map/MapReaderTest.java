@@ -21,7 +21,7 @@ public class MapReaderTest {
         Map result = underTest.convert("{\"name\":\"test\",\"map\":[[]]}");
 
         assertEquals("test", result.getName());
-        assertArrayEquals(new String[1][0], result.getMap());
+        assertArrayEquals(new String[1][0], result.getArray());
     }
 
     @Test
@@ -32,7 +32,7 @@ public class MapReaderTest {
         Map result = underTest.convert(jsonWithStrings);
 
         assertEquals("test", result.getName());
-        assertArrayEquals(expectedMap, result.getMap());
+        assertArrayEquals(expectedMap, result.getArray());
     }
 
     @Test
@@ -43,7 +43,7 @@ public class MapReaderTest {
         Map result = underTest.convert(jsonWithIntMap);
 
         assertEquals("test", result.getName());
-        assertArrayEquals(expectedMap, result.getMap());
+        assertArrayEquals(expectedMap, result.getArray());
     }
 
     @Test
@@ -54,7 +54,7 @@ public class MapReaderTest {
         Map result = underTest.convert(jsonWithStrings);
 
         assertEquals("test", result.getName());
-        assertArrayEquals(expectedMap, result.getMap());
+        assertArrayEquals(expectedMap, result.getArray());
     }
 
     @Test
@@ -65,7 +65,7 @@ public class MapReaderTest {
         Map result = underTest.convert(json);
 
         assertEquals("test", result.getName());
-        assertArrayEquals(expectedMap, result.getMap());
+        assertArrayEquals(expectedMap, result.getArray());
     }
 
     @Test
