@@ -1,6 +1,6 @@
 package manfred.game.graphics;
 
-import manfred.game.Manfred;
+import manfred.game.characters.Manfred;
 import manfred.game.controls.KeyControls;
 import manfred.game.map.MapWrapper;
 

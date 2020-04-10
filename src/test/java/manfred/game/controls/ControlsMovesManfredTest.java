@@ -1,6 +1,6 @@
 package manfred.game.controls;
 
-import manfred.game.Manfred;
+import manfred.game.characters.Manfred;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

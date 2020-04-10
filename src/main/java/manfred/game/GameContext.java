@@ -1,5 +1,7 @@
 package manfred.game;
 
+import manfred.game.characters.Manfred;
+import manfred.game.characters.MapCollider;
 import manfred.game.controls.KeyControls;
 import manfred.game.exception.InvalidInputException;
 import manfred.game.graphics.GamePanel;
@@ -59,5 +61,10 @@ public class GameContext {
     @Bean
     public Map map(MapReader mapReader) throws InvalidInputException, IOException {
         return mapReader.loadMap("Wald");
+    }
+
+    @Bean
+    public MapCollider mapCollider(MapWrapper mapWrapper) {
+        return new MapCollider(mapWrapper);
     }
 }

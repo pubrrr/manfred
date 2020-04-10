@@ -1,4 +1,4 @@
-package manfred.game;
+package manfred.game.characters;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

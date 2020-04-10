@@ -1,4 +1,4 @@
-package manfred.game;
+package manfred.game.characters;
 
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.Paintable;

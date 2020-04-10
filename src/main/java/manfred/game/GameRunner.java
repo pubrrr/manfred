@@ -1,5 +1,6 @@
 package manfred.game;
 
+import manfred.game.characters.Manfred;
 import manfred.game.graphics.ManfredWindow;
 
 public class GameRunner implements Runnable {
