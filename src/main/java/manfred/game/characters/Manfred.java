@@ -21,11 +21,14 @@ public class Manfred implements Paintable {
     private final int sizeX;
     private final int sizeY;
 
-    public Manfred(int x, int y) {
+    private MapCollider collider;
+
+    public Manfred(int x, int y, MapCollider collider) {
         this.x = x;
         this.y = y;
         sizeX = GamePanel.PIXEL_BLOCK_SIZE;
         sizeY = GamePanel.PIXEL_BLOCK_SIZE;
+        this.collider = collider;
     }
 
     public int getX() {
@@ -78,8 +81,23 @@ public class Manfred implements Paintable {
     }
 
     public void move() {
-        x += currentSpeedX;
-        y += currentSpeedY;
+        if (!collider.collides(
+                x + currentSpeedX,
+                x + currentSpeedX + (sizeX - 1),
+                y,
+                y + (sizeY - 1)
+        )) {
+            x += currentSpeedX;
+        }
+
+        if (!collider.collides(
+                x,
+                x + (sizeX - 1),
+                y + currentSpeedY,
+                y + currentSpeedY + (sizeY - 1)
+        )) {
+            y += currentSpeedY;
+        }
     }
 
     @Override

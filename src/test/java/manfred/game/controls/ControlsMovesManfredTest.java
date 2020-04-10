@@ -1,6 +1,7 @@
 package manfred.game.controls;
 
 import manfred.game.characters.Manfred;
+import manfred.game.characters.MapCollider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,10 @@ class ControlsMovesManfredTest {
 
     @BeforeEach
     void init() {
-        manfred = new Manfred(0, 0);
+        MapCollider colliderMock = mock(MapCollider.class);
+        when(colliderMock.collides(0,0,0,0)).thenReturn(true);
+
+        manfred = new Manfred(0, 0, colliderMock);
         controls = new KeyControls(manfred);
     }
 

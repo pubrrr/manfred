@@ -29,8 +29,8 @@ public class GameContext {
     }
 
     @Bean
-    public Manfred manfred() {
-        return new Manfred(GamePanel.PIXEL_BLOCK_SIZE * 3, GamePanel.PIXEL_BLOCK_SIZE * 3);
+    public Manfred manfred(MapCollider collider) {
+        return new Manfred(GamePanel.PIXEL_BLOCK_SIZE * 3, GamePanel.PIXEL_BLOCK_SIZE * 3, collider);
     }
 
     @Bean

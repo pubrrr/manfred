@@ -16,15 +16,19 @@ public class KeyControls implements KeyListener {
     public void keyPressed(KeyEvent event) {
         switch (event.getKeyCode()) {
             case KeyEvent.VK_A:
+                System.out.println("a");
                 manfred.left();
                 break;
             case KeyEvent.VK_D:
+                System.out.println("d");
                 manfred.right();
                 break;
             case KeyEvent.VK_S:
+                System.out.println("s");
                 manfred.down();
                 break;
             case KeyEvent.VK_W:
+                System.out.println("w");
                 manfred.up();
                 break;
         }

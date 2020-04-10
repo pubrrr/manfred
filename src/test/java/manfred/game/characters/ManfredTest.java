@@ -3,6 +3,8 @@ package manfred.game.characters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.mockito.Mockito.mock;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ManfredTest {
@@ -10,7 +12,9 @@ class ManfredTest {
 
     @BeforeEach
     void init() {
-        manfred = new Manfred(0, 0);
+        MapCollider colliderMock = mock(MapCollider.class);
+
+        manfred = new Manfred(0, 0, colliderMock);
     }
 
     @Test
