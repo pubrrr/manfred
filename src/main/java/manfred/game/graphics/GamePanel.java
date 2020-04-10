@@ -1,6 +1,7 @@
 package manfred.game.graphics;
 
 import manfred.game.Manfred;
+import manfred.game.controls.KeyControls;
 import manfred.game.map.Map;
 
 import javax.swing.*;
@@ -15,8 +16,12 @@ public class GamePanel extends JPanel {
 
     private List<Paintable> paintables = new LinkedList<>();
 
-    public GamePanel(Map map, Manfred manfred) {
+    public GamePanel(Map map, Manfred manfred, KeyControls keyControls) {
         super();
+        setFocusable(true);
+        requestFocus();
+        addKeyListener(keyControls);
+
         registerPaintable(map);
         registerPaintable(manfred);
     }

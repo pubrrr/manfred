@@ -1,22 +1,22 @@
 package manfred.game;
 
-import manfred.game.graphics.GraphicsManager;
+import manfred.game.graphics.ManfredWindow;
 
 public class GameRunner implements Runnable {
     final static int REPAINT_PERIOD = 30;
 
-    private GraphicsManager graphicsManager;
+    private ManfredWindow window;
     private Manfred manfred;
 
-    public GameRunner(GraphicsManager graphicsManager, Manfred manfred) {
-        this.graphicsManager = graphicsManager;
+    public GameRunner(ManfredWindow window, Manfred manfred) {
+        this.window = window;
         this.manfred = manfred;
     }
 
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
             move();
-            graphicsManager.paint();
+            window.repaint();
             try {
                 Thread.sleep(REPAINT_PERIOD);
             } catch (InterruptedException e) {

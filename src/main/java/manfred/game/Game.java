@@ -1,24 +1,16 @@
 package manfred.game;
 
-import manfred.game.exception.InvalidInputException;
-
-import java.io.IOException;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Game {
+    public static final String PATH_DATA = "data\\";
+
     private Thread graphicsPainterThread;
 
     public static void main(String[] args) {
-        GameFactory factory = new GameFactory();
-        try {
-            factory.create().run();
-        } catch (InvalidInputException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        } catch (IOException e) {
-            String message = "Could not read map: " + e.getMessage();
-            System.out.println(message);
-            e.printStackTrace();
-        }
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(GameContext.class);
+        Game game = context.getBean(Game.class, "W");
+        game.run();
     }
 
     public Game(Thread graphicsPainterThread) {

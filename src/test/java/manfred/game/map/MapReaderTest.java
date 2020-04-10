@@ -61,7 +61,7 @@ public class MapReaderTest {
     public void readAndConvert() throws InvalidInputException, IOException {
         String[][] expectedMap = {{"opa", "0"}, {"1", "1"}, {"a", "5"}};
 
-        String json = underTest.read("src\\test\\java\\game\\map\\test.json");
+        String json = underTest.read("src\\test\\java\\manfred\\game\\map\\test.json");
         Map result = underTest.convert(json);
 
         assertEquals("test", result.getName());
