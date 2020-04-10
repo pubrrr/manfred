@@ -32,7 +32,7 @@ public class GameContext {
     }
 
     @Bean
-    public GamePanel gamePanel(Map map, Manfred manfred, KeyControls keyControls) {
+    public GamePanel gamePanel(MapWrapper map, Manfred manfred, KeyControls keyControls) {
         return new GamePanel(map, manfred, keyControls);
     }
 
