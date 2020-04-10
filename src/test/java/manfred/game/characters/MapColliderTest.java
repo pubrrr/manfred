@@ -10,6 +10,8 @@ import manfred.game.map.MapWrapper;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.util.HashMap;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -21,7 +23,7 @@ class MapColliderTest {
     private static MapCollider underTest;
 
     void initMap(String[][] mapArray) {
-        Map map = new Map("test", mapArray);
+        Map map = new Map("test", mapArray, new HashMap<>());
 
         MapWrapper mapWrapperMock = mock(MapWrapper.class);
         when(mapWrapperMock.getMap()).thenReturn(map);

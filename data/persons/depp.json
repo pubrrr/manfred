@@ -1,0 +1,26 @@
+{
+  "name": "Depp",
+  "gelaber": [
+    {
+      "type": "gelaber",
+      "text": "Argharararararharharharharharhar-/harharharharharharharharharharhar-/harharharharharharharharharhar-/hihihihuhuhuhuhuhahahahahaaaaaa!/Du hast mich also gefunden, Manfred!/Nun gut, dazu gehört wohl mehr als/nur fett zu sein, ich werde dich belohnen./Nimm dies Geschenk!//...///....../...//Du erhältst:/Nichts"
+    },
+    {
+      "type": "gelaber",
+      "text": "Nutze es weise!"
+    },
+    {
+      "type": "choices",
+      "text": "Was willst du von mir?",
+      "choices": [
+        "Halt die Fresse!",
+        "Stirb!",
+        "Was hast du gesagt?"
+      ]
+    },
+    {
+      "type": "gelaber",
+      "text": "Ich bin doch schon lange tot!/Argharararararharharharharharhar-/harharharharharharharharharharhar-/harharharharharharharharharhar-/hihihihuhuhuhuhuhahahahahaaaaaa!/Manni, du alter Witzbold."
+    }
+  ]
+}

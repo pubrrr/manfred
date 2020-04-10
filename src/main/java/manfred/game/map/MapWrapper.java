@@ -1,6 +1,5 @@
 package manfred.game.map;
 
-import manfred.game.Game;
 import manfred.game.exception.InvalidInputException;
 
 import java.io.IOException;
@@ -19,6 +18,6 @@ public class MapWrapper {
     }
 
     public void loadMap(String name) throws InvalidInputException, IOException {
-        this.map = mapReader.loadMap(name);
+        this.map = mapReader.load(name);
     }
 }

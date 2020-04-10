@@ -2,6 +2,8 @@ package manfred.game.map;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -9,7 +11,7 @@ public class MapTest {
     @Test
     public void isAccessible() {
         String[][] map = {{"0", "1"}};
-        Map unterTest = new Map("test", map);
+        Map unterTest = new Map("test", map, new HashMap<>());
 
         assertFalse(unterTest.isAccessible(0, 0));
         assertTrue(unterTest.isAccessible(0, 1));
