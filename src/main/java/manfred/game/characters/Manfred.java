@@ -17,6 +17,7 @@ public class Manfred implements Paintable {
     private boolean movesRight = false;
     private boolean movesUp = false;
     private boolean movesDown = false;
+    private Direction viewDirection = Direction.down;
 
     private final int sizeX;
     private final int sizeY;
@@ -41,6 +42,7 @@ public class Manfred implements Paintable {
 
     public void left() {
         if (!movesLeft) {
+            viewDirection = Direction.left;
             movesLeft = true;
             currentSpeedX -= SPEED;
         }
@@ -48,6 +50,7 @@ public class Manfred implements Paintable {
 
     public void right() {
         if (!movesRight) {
+            viewDirection = Direction.right;
             movesRight = true;
             currentSpeedX += SPEED;
         }
@@ -55,6 +58,7 @@ public class Manfred implements Paintable {
 
     public void up() {
         if (!movesUp) {
+            viewDirection = Direction.up;
             movesUp = true;
             // y-Achse ist invertiert: kleiner Werte werden weiter oben gezeichnet
             currentSpeedY -= SPEED;
@@ -63,6 +67,7 @@ public class Manfred implements Paintable {
 
     public void down() {
         if (!movesDown) {
+            viewDirection = Direction.down;
             movesDown = true;
             currentSpeedY += SPEED;
         }
@@ -104,5 +109,21 @@ public class Manfred implements Paintable {
     public void paint(Graphics g) {
         g.setColor(Color.GREEN);
         g.fillRect(getX(), getY(), sizeX, sizeY);
+
+        g.setColor(Color.BLACK);
+        switch (viewDirection) {
+            case up:
+                g.fillRect(x + sizeX/2, y, 10, 10);
+                break;
+            case down:
+                g.fillRect(x + sizeX/2, y + sizeY, 10, 10);
+                break;
+            case left:
+                g.fillRect(x, y + sizeY / 2, 10, 10);
+                break;
+            case right:
+                g.fillRect(x + sizeX, y + sizeY / 2, 10, 10);
+                break;
+        }
     }
 }

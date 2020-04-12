@@ -18,4 +18,9 @@ public class Person implements Interact{
     public Gelaber getGelaber() {
         return this.gelaber;
     }
+
+    @Override
+    public void interact() {
+
+    }
 }
