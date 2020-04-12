@@ -9,7 +9,7 @@ public class Game {
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(GameContext.class);
-        Game game = context.getBean(Game.class, "W");
+        Game game = context.getBean(Game.class);
         game.run();
     }
 

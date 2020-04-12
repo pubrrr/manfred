@@ -41,8 +41,15 @@ public class Map implements Paintable {
 
         for (int x = 0; x < getArray().length; x++) {
             for (int y = 0; y < getArray()[0].length; y++) {
+
+                if (mapArray[x][y].equals("Opa")) {
+                    g.setColor(Color.YELLOW);
+                }
                 if (!isAccessible(x, y)) {
                     g.fillRect(GamePanel.PIXEL_BLOCK_SIZE * x, GamePanel.PIXEL_BLOCK_SIZE * y, GamePanel.PIXEL_BLOCK_SIZE, GamePanel.PIXEL_BLOCK_SIZE);
+                }
+                if (mapArray[x][y].equals("Opa")) {
+                    g.setColor(Color.RED);
                 }
             }
         }
