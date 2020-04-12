@@ -1,23 +1,36 @@
 package manfred.game.interact;
 
 import manfred.game.exception.InvalidInputException;
-import org.junit.jupiter.api.BeforeAll;
+import manfred.game.interact.gelaber.GelaberReader;
+import org.json.JSONArray;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 class PersonReaderTest {
-    private static PersonReader underTest;
+    private GelaberReader gelaberReaderMock;
+    private PersonReader underTest;
 
-    @BeforeAll
-    static void init() {
-        underTest = new PersonReader();
+    @BeforeEach
+    void init() {
+        gelaberReaderMock = mock(GelaberReader.class);
+
+        underTest = new PersonReader(gelaberReaderMock);
     }
 
     @Test
     void convertsName() throws InvalidInputException {
-        Person result = underTest.convert("{\"name\":\"testName\"}");
+        Person result = underTest.convert("{name: testName, gelaber: []}");
 
         assertEquals("testName", result.getName());
+    }
+
+    @Test
+    void triggersGelaberConversion() throws InvalidInputException {
+        underTest.convert("{name: testName, gelaber: []}");
+
+        verify(gelaberReaderMock).convert(any(JSONArray.class));
     }
 }

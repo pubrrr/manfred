@@ -71,7 +71,12 @@ public class GameContext {
     }
 
     @Bean
-    public PersonReader personReader() {
-        return new PersonReader();
+    public PersonReader personReader(GelaberReader gelaberReader) {
+        return new PersonReader(gelaberReader);
+    }
+
+    @Bean
+    public GelaberReader gelaberReader() {
+        return new GelaberReader();
     }
 }

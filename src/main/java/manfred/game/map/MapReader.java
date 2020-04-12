@@ -96,7 +96,7 @@ public class MapReader {
         while (!interactsFoundInMap.empty()) {
             String interactId = interactsFoundInMap.pop();
             String interactType = jsonInteracts.getString(interactId);
-            if (interactType == "Person") {
+            if (interactType.equals("Person")) {
                 result.put(interactId, personReader.load(interactId));
             }
         }

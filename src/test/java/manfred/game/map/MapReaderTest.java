@@ -25,7 +25,7 @@ public class MapReaderTest {
 
     @Test
     void convert() throws InvalidInputException {
-        Map result = underTest.convert("{\"name\":\"test\",\"map\":[[]]}");
+        Map result = underTest.convert("{name: test, map: [[]]}");
 
         assertEquals("test", result.getName());
         assertArrayEquals(new String[1][0], result.getArray());
@@ -33,7 +33,7 @@ public class MapReaderTest {
 
     @Test
     void convertsMapWithString() throws InvalidInputException {
-        String jsonWithStrings = "{\"name\":\"test\",\"map\":[[\"1\", \"0\"]]}";
+        String jsonWithStrings = "{name: test, map: [['1', '0']]}";
         String[][] expectedMap = {{"1", "0"}};
 
         Map result = underTest.convert(jsonWithStrings);
@@ -44,7 +44,7 @@ public class MapReaderTest {
 
     @Test
     void convertsMapWithInt() throws InvalidInputException {
-        String jsonWithIntMap = "{\"name\":\"test\",\"map\":[[0, 1], [1, 0]]}";
+        String jsonWithIntMap = "{name : test, map :[[0, 1], [1, 0]]}";
         String[][] expectedMap = {{"0", "1"}, {"1", "0"}};
 
         Map result = underTest.convert(jsonWithIntMap);
@@ -55,7 +55,7 @@ public class MapReaderTest {
 
     @Test
     void convertsMapWithStringAndInt() throws InvalidInputException {
-        String jsonWithStrings = "{\"name\":\"test\",\"map\":[[\"0\", 0], [1,1], [\"1\", 1]]}";
+        String jsonWithStrings = "{name: test ,map: [['0', 0], [1,1], ['1', 1]]}";
         String[][] expectedMap = {{"0", "0"}, {"1", "1"}, {"1", "1"}};
 
         Map result = underTest.convert(jsonWithStrings);
@@ -77,7 +77,7 @@ public class MapReaderTest {
 
     @Test
     void expectsRectangularMap() {
-        final String invalidJson = "{\"name\":\"test\",\"map\":[[0, 1], [0]]}";
+        final String invalidJson = "{name: test, map: [[0, 1], [0]]}";
 
         assertThrows(InvalidInputException.class, () -> underTest.convert(invalidJson));
     }
