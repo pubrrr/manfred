@@ -41,7 +41,6 @@ public class Map implements Paintable {
 
         for (int x = 0; x < getArray().length; x++) {
             for (int y = 0; y < getArray()[0].length; y++) {
-
                 if (mapArray[x][y].equals("Opa")) {
                     g.setColor(Color.YELLOW);
                 }

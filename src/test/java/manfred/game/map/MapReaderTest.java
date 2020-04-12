@@ -28,13 +28,13 @@ public class MapReaderTest {
         Map result = underTest.convert("{name: test, map: [[]]}");
 
         assertEquals("test", result.getName());
-        assertArrayEquals(new String[1][0], result.getArray());
+        assertArrayEquals(new String[0][1], result.getArray());
     }
 
     @Test
     void convertsMapWithString() throws InvalidInputException {
         String jsonWithStrings = "{name: test, map: [['1', '0']]}";
-        String[][] expectedMap = {{"1", "0"}};
+        String[][] expectedMap = {{"1"}, {"0"}};
 
         Map result = underTest.convert(jsonWithStrings);
 
@@ -56,7 +56,7 @@ public class MapReaderTest {
     @Test
     void convertsMapWithStringAndInt() throws InvalidInputException {
         String jsonWithStrings = "{name: test ,map: [['0', 0], [1,1], ['1', 1]]}";
-        String[][] expectedMap = {{"0", "0"}, {"1", "1"}, {"1", "1"}};
+        String[][] expectedMap = {{"0", "1", "1"}, {"0", "1", "1"}};
 
         Map result = underTest.convert(jsonWithStrings);
 
@@ -66,7 +66,7 @@ public class MapReaderTest {
 
     @Test
     void readAndConvert() throws InvalidInputException, IOException {
-        String[][] expectedMap = {{"opa", "0"}, {"1", "1"}, {"0", "1"}};
+        String[][] expectedMap = {{"opa", "1", "0"}, {"0", "1", "1"}};
 
         String json = underTest.read("src\\test\\java\\manfred\\game\\map\\test.json");
         Map result = underTest.convert(json);

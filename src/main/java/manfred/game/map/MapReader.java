@@ -59,24 +59,38 @@ public class MapReader {
         int lengthVertical = jsonMap.length();
         int lengthHorizontal = jsonMap.getJSONArray(0).length();
 
-        String[][] arrayMap = new String[lengthVertical][lengthHorizontal];
-        for (int i = 0; i < lengthVertical; i++) {
-            JSONArray horizontalLine = jsonMap.getJSONArray(i);
+        String[][] transposedArrayMap = new String[lengthVertical][lengthHorizontal];
+        for (int y = 0; y < lengthVertical; y++) {
+            JSONArray horizontalLine = jsonMap.getJSONArray(y);
             if (horizontalLine.length() != lengthHorizontal) {
-                throw new InvalidInputException("Map needs to be rectangular. First line: " + lengthHorizontal + ", line: " + i + " " + horizontalLine.length());
+                throw new InvalidInputException("Map needs to be rectangular. First line: " + lengthHorizontal + ", line: " + y + " " + horizontalLine.length());
             }
-            arrayMap[i] = convertHorizontalMapLine(horizontalLine);
+            transposedArrayMap[y] = convertHorizontalMapLine(horizontalLine);
         }
+
+        String[][] arrayMap = new String[lengthHorizontal][lengthVertical];
+        arrayMap = transposeToGetIntuitiveXAndYRight(transposedArrayMap, lengthVertical, lengthHorizontal);
+
         return arrayMap;
+    }
+
+    private String[][] transposeToGetIntuitiveXAndYRight(String[][] original, int lengthVertical, int lengthHorizontal) {
+        String[][] transposed = new String[lengthHorizontal][lengthVertical];
+        for (int x = 0; x < lengthHorizontal; x++) {
+            for (int y = 0; y < lengthVertical; y++) {
+                transposed[x][y] = original[y][x];
+            }
+        }
+        return transposed;
     }
 
     private String[] convertHorizontalMapLine(JSONArray horizontalJsonLine) throws InvalidInputException {
         String[] arrayLine = new String[horizontalJsonLine.length()];
-        for (int j = 0; j < horizontalJsonLine.length(); j++) {
-            Object mapElement = horizontalJsonLine.get(j);
+        for (int x = 0; x < horizontalJsonLine.length(); x++) {
+            Object mapElement = horizontalJsonLine.get(x);
             if (mapElement instanceof String || mapElement instanceof Integer) {
-                arrayLine[j] = "" + mapElement;
-                rememberInteract(arrayLine[j]);
+                arrayLine[x] = "" + mapElement;
+                rememberInteract(arrayLine[x]);
             } else {
                 throw new InvalidInputException("Map array element was neither string nor int. Is: " + mapElement.toString());
             }
