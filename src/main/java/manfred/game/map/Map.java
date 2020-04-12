@@ -1,5 +1,6 @@
 package manfred.game.map;
 
+import com.sun.istack.internal.Nullable;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.Paintable;
 import manfred.game.interact.Interact;
@@ -31,8 +32,8 @@ public class Map implements Paintable {
 
     public boolean isAccessible(int x, int y) {
         return x >= 0 && x < mapArray.length
-            && y >= 0 && y < mapArray[0].length
-            && mapArray[x][y].equals(Map.ACCESSIBLE);
+                && y >= 0 && y < mapArray[0].length
+                && mapArray[x][y].equals(Map.ACCESSIBLE);
     }
 
     @Override
@@ -52,5 +53,10 @@ public class Map implements Paintable {
                 }
             }
         }
+    }
+
+    @Nullable
+    public Interact getInteract(int x, int y) {
+        return null;
     }
 }

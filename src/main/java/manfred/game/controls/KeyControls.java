@@ -27,6 +27,9 @@ public class KeyControls implements KeyListener {
             case KeyEvent.VK_W:
                 manfred.up();
                 break;
+            case KeyEvent.VK_ENTER:
+                manfred.interact();
+                break;
         }
     }
 
@@ -46,5 +49,6 @@ public class KeyControls implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
+
     }
 }

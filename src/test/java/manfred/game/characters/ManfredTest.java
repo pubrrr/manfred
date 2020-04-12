@@ -1,5 +1,6 @@
 package manfred.game.characters;
 
+import manfred.game.map.MapWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,8 +14,9 @@ class ManfredTest {
     @BeforeEach
     void init() {
         MapCollider colliderMock = mock(MapCollider.class);
+        MapWrapper mapWrapperMock = mock(MapWrapper.class);
 
-        manfred = new Manfred(0, 0, colliderMock);
+        manfred = new Manfred(0, 0, colliderMock, mapWrapperMock);
     }
 
     @Test

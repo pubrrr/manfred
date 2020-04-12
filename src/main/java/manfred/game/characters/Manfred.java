@@ -2,11 +2,14 @@ package manfred.game.characters;
 
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.Paintable;
+import manfred.game.interact.Interact;
+import manfred.game.map.MapWrapper;
 
 import java.awt.*;
 
 public class Manfred implements Paintable {
     private static final int SPEED = 2;
+    private static final int INTERACT_DISTANCE = 10;
 
     private int x;
     private int y;
@@ -23,13 +26,15 @@ public class Manfred implements Paintable {
     private final int sizeY;
 
     private MapCollider collider;
+    private MapWrapper mapWrapper;
 
-    public Manfred(int x, int y, MapCollider collider) {
+    public Manfred(int x, int y, MapCollider collider, MapWrapper mapWrapper) {
         this.x = x;
         this.y = y;
         sizeX = GamePanel.PIXEL_BLOCK_SIZE;
         sizeY = GamePanel.PIXEL_BLOCK_SIZE;
         this.collider = collider;
+        this.mapWrapper = mapWrapper;
     }
 
     public int getX() {
@@ -125,5 +130,9 @@ public class Manfred implements Paintable {
                 g.fillRect(x + sizeX, y + sizeY / 2, 10, 10);
                 break;
         }
+    }
+
+    public void interact() {
+        Interact interact = mapWrapper.getMap().getInteract(x, y);
     }
 }
