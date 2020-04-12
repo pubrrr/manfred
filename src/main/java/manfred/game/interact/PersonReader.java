@@ -27,7 +27,9 @@ public class PersonReader {
         try {
             JSONObject jsonInput = new JSONObject(jsonString);
 
-            return new Person();
+            String name = jsonInput.getString("name");
+
+            return new Person(name);
         } catch (JSONException $e) {
             throw new InvalidInputException($e.getMessage());
         }

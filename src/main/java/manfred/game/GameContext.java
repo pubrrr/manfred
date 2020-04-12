@@ -7,6 +7,7 @@ import manfred.game.exception.InvalidInputException;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.ManfredWindow;
 import manfred.game.interact.PersonReader;
+import manfred.game.interact.gelaber.GelaberReader;
 import manfred.game.map.Map;
 import manfred.game.map.MapReader;
 import manfred.game.map.MapWrapper;
