@@ -31,9 +31,16 @@ public class Map implements Paintable {
     }
 
     public boolean isAccessible(int x, int y) {
+        return isInBounds(x, y)  && mapArray[x][y].equals(Map.ACCESSIBLE);
+    }
+
+    public boolean isSpecialField(int x, int y) {
+        return isInBounds(x, y) && !mapArray[x][y].equals(Map.ACCESSIBLE) && !mapArray[x][y].equals(Map.NOT_ACCESSIBLE);
+    }
+
+    private boolean isInBounds(int x, int y) {
         return x >= 0 && x < mapArray.length
-                && y >= 0 && y < mapArray[0].length
-                && mapArray[x][y].equals(Map.ACCESSIBLE);
+                && y >= 0 && y < mapArray[0].length;
     }
 
     @Override
@@ -57,6 +64,9 @@ public class Map implements Paintable {
 
     @Nullable
     public Interact getInteract(int x, int y) {
-        return null;
+        if (!isSpecialField(x, y)) {
+            return null;
+        }
+        return interacts.get(mapArray[x][y]);
     }
 }

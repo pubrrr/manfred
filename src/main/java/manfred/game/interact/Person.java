@@ -21,6 +21,6 @@ public class Person implements Interact{
 
     @Override
     public void interact() {
-
+        System.out.println("Hallo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
 }

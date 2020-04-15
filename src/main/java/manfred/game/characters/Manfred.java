@@ -133,6 +133,32 @@ public class Manfred implements Paintable {
     }
 
     public void interact() {
-        Interact interact = mapWrapper.getMap().getInteract(x, y);
+        int triggerInteractPositionX = 0;
+        int triggerInteractPositionY = 0;
+
+        switch (viewDirection) {
+            case up:
+                triggerInteractPositionX = x + sizeX / 2;
+                triggerInteractPositionY = y - INTERACT_DISTANCE;
+                break;
+            case down:
+                triggerInteractPositionX = x + sizeX / 2;
+                triggerInteractPositionY = y + sizeY + INTERACT_DISTANCE;
+                break;
+            case left:
+                triggerInteractPositionX = x - INTERACT_DISTANCE;
+                triggerInteractPositionY = y + sizeY / 2;
+                break;
+            case right:
+                triggerInteractPositionX = x + sizeX + INTERACT_DISTANCE;
+                triggerInteractPositionY = y + sizeY / 2;
+                break;
+        }
+        int onMapGridX = triggerInteractPositionX / GamePanel.PIXEL_BLOCK_SIZE;
+        int onMapGridY = triggerInteractPositionY / GamePanel.PIXEL_BLOCK_SIZE;
+        Interact interact = mapWrapper.getMap().getInteract(onMapGridX, onMapGridY);
+        if (interact != null) {
+            interact.interact();
+        }
     }
 }

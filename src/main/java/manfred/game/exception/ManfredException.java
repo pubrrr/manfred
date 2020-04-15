@@ -1,9 +1,7 @@
 package manfred.game.exception;
 
-abstract public class ManfredException extends Exception {
-    protected final static String type = "ManfredException";
-
-    public ManfredException(String type, String message) {
-        super(type + ": " + message);
+public class ManfredException extends Exception {
+    public ManfredException(String message) {
+        super(message);
     }
 }
