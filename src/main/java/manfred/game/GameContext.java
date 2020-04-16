@@ -2,7 +2,9 @@ package manfred.game;
 
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
+import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
+import manfred.game.controls.ManfredController;
 import manfred.game.exception.InvalidInputException;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.ManfredWindow;
@@ -46,8 +48,11 @@ public class GameContext {
     }
 
     @Bean
-    public KeyControls keyControls(Manfred manfred) {
-        return new KeyControls(manfred);
+    public KeyControls keyControls(ManfredController manfredController, GelaberController gelaberController) {
+        KeyControls keyControls = new KeyControls(manfredController, gelaberController);
+        manfredController.setKeyControls(keyControls);
+        gelaberController.setKeyControls(keyControls);
+        return keyControls;
     }
 
     @Bean
@@ -78,5 +83,15 @@ public class GameContext {
     @Bean
     public GelaberReader gelaberReader() {
         return new GelaberReader();
+    }
+
+    @Bean
+    public ManfredController manfredController(Manfred manfred) {
+        return new ManfredController(manfred);
+    }
+
+    @Bean
+    public GelaberController gelaberController() {
+        return new GelaberController();
     }
 }

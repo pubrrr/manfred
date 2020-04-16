@@ -1,7 +1,10 @@
-package manfred.game.controls;
+package componentTests;
 
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
+import manfred.game.controls.GelaberController;
+import manfred.game.controls.KeyControls;
+import manfred.game.controls.ManfredController;
 import manfred.game.interact.Interact;
 import manfred.game.interact.Person;
 import manfred.game.map.Map;
@@ -17,10 +20,12 @@ import static org.mockito.Mockito.*;
 
 class ControlsMovesManfredTest {
     private Manfred manfred;
+    private Manfred manfredSpy;
     private KeyControls controls;
     private MapWrapper mapWrapperMock;
 
     static Interact getInteractAnswer;
+    static Interact manfredGetInteractAnswer;
 
     @BeforeEach
     void init() {
@@ -30,7 +35,16 @@ class ControlsMovesManfredTest {
         mapWrapperMock = mock(MapWrapper.class);
 
         manfred = new Manfred(0, 0, colliderMock, mapWrapperMock);
-        controls = new KeyControls(manfred);
+        manfredSpy = spy(manfred);
+
+        setupControllerWithManfred(manfred);
+    }
+
+    private void setupControllerWithManfred(Manfred manfred) {
+        ManfredController manfredController = new ManfredController(manfred);
+        GelaberController gelaberController = new GelaberController();
+        controls = new KeyControls(manfredController, gelaberController);
+        manfredController.setKeyControls(controls);
     }
 
     @Test
@@ -130,7 +144,21 @@ class ControlsMovesManfredTest {
     }
 
     @Test
-    void interactWithInteract() {
+    void interactReturnsInteract_andTurnsOffManfredControls() {
+        Person opaMock = setupMapWithOpaAndManfredSpy();
+
+        KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_ENTER);
+        controls.keyPressed(eventMock);
+
+        assertSame(opaMock, manfredGetInteractAnswer);
+
+        KeyEvent eventMock2 = mockEventWithKey(KeyEvent.VK_W);
+        controls.keyPressed(eventMock2);
+
+        verify(manfredSpy, never()).up();
+    }
+
+    private Person setupMapWithOpaAndManfredSpy() {
         Person opaMock = mock(Person.class);
         HashMap interactsMock = mock(HashMap.class);
         when(interactsMock.get("Opa")).thenReturn(opaMock);
@@ -138,9 +166,13 @@ class ControlsMovesManfredTest {
         Map map = new Map("test", new String[][]{{"1", "Opa"}}, interactsMock);
         when(mapWrapperMock.getMap()).thenReturn(map);
 
-        KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_ENTER);
-        controls.keyPressed(eventMock);
+        doAnswer(invocationOnMock -> {
+            Object result = invocationOnMock.callRealMethod();
+            ControlsMovesManfredTest.manfredGetInteractAnswer = (Interact) result;
+            return result;
+        }).when(manfredSpy).getInteract();
 
-        verify(opaMock).interact();
+        setupControllerWithManfred(manfredSpy);
+        return opaMock;
     }
 }

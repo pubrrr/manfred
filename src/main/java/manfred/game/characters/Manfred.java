@@ -4,6 +4,7 @@ import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.Paintable;
 import manfred.game.interact.Interact;
 import manfred.game.map.MapWrapper;
+import org.springframework.lang.Nullable;
 
 import java.awt.*;
 
@@ -132,7 +133,8 @@ public class Manfred implements Paintable {
         }
     }
 
-    public void interact() {
+    @Nullable
+    public Interact getInteract() {
         int triggerInteractPositionX = 0;
         int triggerInteractPositionY = 0;
 
@@ -156,9 +158,6 @@ public class Manfred implements Paintable {
         }
         int onMapGridX = triggerInteractPositionX / GamePanel.PIXEL_BLOCK_SIZE;
         int onMapGridY = triggerInteractPositionY / GamePanel.PIXEL_BLOCK_SIZE;
-        Interact interact = mapWrapper.getMap().getInteract(onMapGridX, onMapGridY);
-        if (interact != null) {
-            interact.interact();
-        }
+        return mapWrapper.getMap().getInteract(onMapGridX, onMapGridY);
     }
 }
