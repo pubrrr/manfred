@@ -1,17 +1,22 @@
 package manfred.game.controls;
 
+import manfred.game.graphics.GamePanel;
+import manfred.game.interact.gelaber.Gelaber;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyControls implements KeyListener {
     private ManfredController manfredController;
     private GelaberController gelaberController;
+    private GamePanel gamePanel;
 
     private ControllerInterface activeController;
 
-    public KeyControls(ManfredController manfredController, GelaberController gelaberController) {
+    public KeyControls(ManfredController manfredController, GelaberController gelaberController, GamePanel panel) {
         this.manfredController = manfredController;
         this.gelaberController = gelaberController;
+        this.gamePanel = panel;
 
         activeController = manfredController;
     }
@@ -34,7 +39,10 @@ public class KeyControls implements KeyListener {
         activeController = manfredController;
     }
 
-    void controlGelaber() {
+    void controlGelaber(Gelaber gelaber) {
         activeController = gelaberController;
+
+        gamePanel.registerPaintable(gelaber);
+        gelaberController.setGelaber(gelaber);
     }
 }

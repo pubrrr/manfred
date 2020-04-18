@@ -4,29 +4,84 @@ import manfred.game.exception.InvalidInputException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.lang.Nullable;
+
+import java.util.*;
 
 public class GelaberReader {
+    private int charactersPerLine;
+
+    public GelaberReader(int charactersPerLine) {
+        this.charactersPerLine = charactersPerLine;
+    }
+
     public Gelaber convert(JSONArray jsonGelaber) throws InvalidInputException {
         try {
-            TextLine[] textLines = new TextLine[jsonGelaber.length()];
+            GelaberText[] texts = new GelaberText[jsonGelaber.length()];
             for (int i = 0; i < jsonGelaber.length(); i++) {
                 JSONObject jsonTextLine = jsonGelaber.getJSONObject(i);
-                textLines[i] = convertTextLine(jsonTextLine);
+                texts[i] = convertText(jsonTextLine);
             }
-            return new Gelaber(textLines);
+            return new Gelaber(texts);
         } catch (JSONException $e) {
             throw new InvalidInputException($e.getMessage());
         }
     }
 
-    private TextLine convertTextLine(JSONObject jsonTextLine) throws InvalidInputException {
-        String text = jsonTextLine.getString("text");
+    private GelaberText convertText(JSONObject jsonTextLine) throws InvalidInputException {
+        String wholeText = jsonTextLine.getString("text");
+        String[] lines = splitIntoTextLinesFittingIntoTextBox(wholeText);
         GelaberType type;
         try {
             type = GelaberType.valueOf(jsonTextLine.getString("type"));
         } catch (IllegalArgumentException e) {
             throw new InvalidInputException(e.getMessage());
         }
-        return new TextLine(text, type);
+        return new GelaberText(lines, type);
+    }
+
+    private String[] splitIntoTextLinesFittingIntoTextBox(String wholeText) {
+        LinkedList<String> words = new LinkedList(Arrays.asList(wholeText.split("\\s+")));
+        words = cutWordsThatAreTooLongForOneLine(words);
+
+        List<String> result = new ArrayList<>();
+
+        StringBuilder currentLineBuilder = new StringBuilder(charactersPerLine);
+        String currentWord = words.poll();
+        while (!words.isEmpty()) {
+            if (fitsCombinedIntoOneLine(currentLineBuilder, currentWord)) {
+                currentLineBuilder.append(currentWord + " ");
+                currentWord = words.poll();
+            } else {
+                result.add(currentLineBuilder.toString());
+                currentLineBuilder = new StringBuilder(charactersPerLine);
+            }
+        }
+
+        if (fitsCombinedIntoOneLine(currentLineBuilder, currentWord)) {
+            currentLineBuilder.append(currentWord);
+            result.add(currentLineBuilder.toString());
+        } else {
+            result.add(currentLineBuilder.toString());
+            result.add(currentWord);
+        }
+
+        return result.toArray(new String[0]); // the argument is to tell the function to return String[] instead of Object[]
+    }
+
+    private LinkedList<String> cutWordsThatAreTooLongForOneLine(LinkedList<String> words) {
+        for (int idx = 0; idx < words.size(); idx++) {
+            String currentWord = words.get(idx);
+            if (currentWord.length() > charactersPerLine) {
+                words.remove(idx);
+                words.add(idx, currentWord.substring(0, charactersPerLine));
+                words.add(idx + 1, currentWord.substring(charactersPerLine));
+            }
+        }
+        return words;
+    }
+
+    private boolean fitsCombinedIntoOneLine(StringBuilder currentLineBuilder, @Nullable String currentWord) {
+        return currentWord == null || currentLineBuilder.length() + currentWord.length() <= charactersPerLine;
     }
 }

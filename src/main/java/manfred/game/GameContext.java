@@ -9,6 +9,7 @@ import manfred.game.exception.InvalidInputException;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.ManfredWindow;
 import manfred.game.interact.PersonReader;
+import manfred.game.interact.gelaber.Gelaber;
 import manfred.game.interact.gelaber.GelaberReader;
 import manfred.game.map.Map;
 import manfred.game.map.MapReader;
@@ -38,8 +39,8 @@ public class GameContext {
     }
 
     @Bean
-    public GamePanel gamePanel(MapWrapper map, Manfred manfred, KeyControls keyControls) {
-        return new GamePanel(map, manfred, keyControls);
+    public GamePanel gamePanel(MapWrapper map, Manfred manfred) {
+        return new GamePanel(map, manfred);
     }
 
     @Bean
@@ -48,8 +49,9 @@ public class GameContext {
     }
 
     @Bean
-    public KeyControls keyControls(ManfredController manfredController, GelaberController gelaberController) {
-        KeyControls keyControls = new KeyControls(manfredController, gelaberController);
+    public KeyControls keyControls(ManfredController manfredController, GelaberController gelaberController, GamePanel panel) {
+        KeyControls keyControls = new KeyControls(manfredController, gelaberController, panel);
+        panel.addKeyListener(keyControls);
         manfredController.setKeyControls(keyControls);
         gelaberController.setKeyControls(keyControls);
         return keyControls;
@@ -82,7 +84,7 @@ public class GameContext {
 
     @Bean
     public GelaberReader gelaberReader() {
-        return new GelaberReader();
+        return new GelaberReader((Gelaber.TEXT_BOX_WIDTH - 2 * Gelaber.TEXT_DISTANCE_TO_BOX) / Gelaber.TEXT_POINT_SIZE);
     }
 
     @Bean

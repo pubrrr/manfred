@@ -5,6 +5,7 @@ import manfred.game.characters.MapCollider;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
+import manfred.game.graphics.GamePanel;
 import manfred.game.interact.Interact;
 import manfred.game.interact.Person;
 import manfred.game.map.Map;
@@ -43,7 +44,9 @@ class ControlsMovesManfredTest {
     private void setupControllerWithManfred(Manfred manfred) {
         ManfredController manfredController = new ManfredController(manfred);
         GelaberController gelaberController = new GelaberController();
-        controls = new KeyControls(manfredController, gelaberController);
+        GamePanel panel = mock(GamePanel.class);
+
+        controls = new KeyControls(manfredController, gelaberController, panel);
         manfredController.setKeyControls(controls);
     }
 

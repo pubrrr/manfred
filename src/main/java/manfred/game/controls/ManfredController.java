@@ -1,6 +1,7 @@
 package manfred.game.controls;
 
 import manfred.game.characters.Manfred;
+import manfred.game.interact.Person;
 
 import java.awt.event.KeyEvent;
 
@@ -33,8 +34,10 @@ public class ManfredController implements ControllerInterface {
                 manfred.up();
                 break;
             case KeyEvent.VK_ENTER:
-                manfred.getInteract();
-                keyControls.controlGelaber();
+                Person person = (Person) manfred.getInteract();
+                if (person != null) {
+                    keyControls.controlGelaber(person.getGelaber());
+                }
                 break;
         }
     }

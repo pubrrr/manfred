@@ -9,7 +9,7 @@ import org.springframework.lang.Nullable;
 import java.awt.*;
 
 public class Manfred implements Paintable {
-    private static final int SPEED = 2;
+    private static final int SPEED = 10;
     private static final int INTERACT_DISTANCE = 10;
 
     private int x;

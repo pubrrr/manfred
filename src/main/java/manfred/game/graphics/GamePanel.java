@@ -10,17 +10,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class GamePanel extends JPanel {
-    private static final int WIDTH = 1600;
-    private static final int HEIGHT = 1200;
+    public static final int WIDTH = 1600;
+    public static final int HEIGHT = 1200;
     public static final int PIXEL_BLOCK_SIZE = 40;
 
     private List<Paintable> paintables = new LinkedList<>();
 
-    public GamePanel(MapWrapper mapWrapper, Manfred manfred, KeyControls keyControls) {
+    public GamePanel(MapWrapper mapWrapper, Manfred manfred) {
         super();
         setFocusable(true);
         requestFocus();
-        addKeyListener(keyControls);
 
         registerPaintable(mapWrapper.getMap());
         registerPaintable(manfred);
