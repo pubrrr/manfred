@@ -43,7 +43,7 @@ class ControlsMovesManfredTest {
 
     private void setupControllerWithManfred(Manfred manfred) {
         ManfredController manfredController = new ManfredController(manfred);
-        GelaberController gelaberController = new GelaberController();
+        GelaberController gelaberController = new GelaberController(mock(GamePanel.class));
         GamePanel panel = mock(GamePanel.class);
 
         controls = new KeyControls(manfredController, gelaberController, panel);

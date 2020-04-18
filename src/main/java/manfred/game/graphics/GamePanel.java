@@ -1,7 +1,6 @@
 package manfred.game.graphics;
 
 import manfred.game.characters.Manfred;
-import manfred.game.controls.KeyControls;
 import manfred.game.map.MapWrapper;
 
 import javax.swing.*;
@@ -40,5 +39,9 @@ public class GamePanel extends JPanel {
         for (Paintable paintable : paintables) {
             paintable.paint(g);
         }
+    }
+
+    public void deletePaintable(Paintable paintable) {
+        paintables.remove(paintable);
     }
 }

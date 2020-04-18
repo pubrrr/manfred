@@ -93,7 +93,7 @@ public class GameContext {
     }
 
     @Bean
-    public GelaberController gelaberController() {
-        return new GelaberController();
+    public GelaberController gelaberController(GamePanel panel) {
+        return new GelaberController(panel);
     }
 }

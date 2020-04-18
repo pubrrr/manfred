@@ -33,12 +33,6 @@ public class ManfredController implements ControllerInterface {
             case KeyEvent.VK_W:
                 manfred.up();
                 break;
-            case KeyEvent.VK_ENTER:
-                Person person = (Person) manfred.getInteract();
-                if (person != null) {
-                    keyControls.controlGelaber(person.getGelaber());
-                }
-                break;
         }
     }
 
@@ -52,6 +46,12 @@ public class ManfredController implements ControllerInterface {
             case KeyEvent.VK_S:
             case KeyEvent.VK_W:
                 manfred.stopY();
+                break;
+            case KeyEvent.VK_ENTER:
+                Person person = (Person) manfred.getInteract();
+                if (person != null) {
+                    keyControls.controlGelaber(person.getGelaber());
+                }
                 break;
         }
     }
