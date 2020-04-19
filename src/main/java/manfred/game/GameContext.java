@@ -84,7 +84,7 @@ public class GameContext {
 
     @Bean
     public GelaberReader gelaberReader() {
-        return new GelaberReader((Gelaber.TEXT_BOX_WIDTH - 2 * Gelaber.TEXT_DISTANCE_TO_BOX) / Gelaber.TEXT_POINT_SIZE);
+        return new GelaberReader((Gelaber.TEXT_BOX_WIDTH - 2 * Gelaber.TEXT_DISTANCE_TO_BOX) / (Gelaber.TEXT_POINT_SIZE / 2));
     }
 
     @Bean
