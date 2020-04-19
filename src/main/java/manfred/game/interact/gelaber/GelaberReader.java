@@ -51,7 +51,11 @@ public class GelaberReader {
 
         HashMap<String, AbstractGelaberText> result = new HashMap<>();
         for (String key : keys) {
-            result.put(key, convertText(choices.getJSONObject(key)));
+            if (Objects.equals(choices.get(key), null)) {
+                result.put(key, null);
+            } else {
+                result.put(key, convertText(choices.getJSONObject(key)));
+            }
         }
         return result;
     }

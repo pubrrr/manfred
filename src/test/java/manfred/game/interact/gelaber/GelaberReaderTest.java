@@ -151,4 +151,17 @@ class GelaberReaderTest {
         assertTrue(((GelaberChoices) result.getTexts()[0]).getChoices().get("answer1") instanceof GelaberText);
         assertTrue(((GelaberChoices) result.getTexts()[0]).getChoices().get("answer2") instanceof GelaberChoices);
     }
+
+    @Test
+    void convertsChoicesWithNullValueAnswers() throws InvalidInputException {
+        JSONArray input = new JSONArray(
+                "[{text: text, type: choices, choices: {answer1: null}}]"
+        );
+
+        Gelaber result = underTest.convert(input);
+
+        assertEquals(1, result.getTexts().length);
+        assertEquals(1, ((GelaberChoices) result.getTexts()[0]).getChoices().size());
+        assertNull(((GelaberChoices) result.getTexts()[0]).getChoices().get("answer1"));
+    }
 }
