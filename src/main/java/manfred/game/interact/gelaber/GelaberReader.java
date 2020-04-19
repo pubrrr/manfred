@@ -17,7 +17,7 @@ public class GelaberReader {
 
     public Gelaber convert(JSONArray jsonGelaber) throws InvalidInputException {
         try {
-            GelaberText[] texts = new GelaberText[jsonGelaber.length()];
+            AbstractGelaberText[] texts = new AbstractGelaberText[jsonGelaber.length()];
             for (int i = 0; i < jsonGelaber.length(); i++) {
                 JSONObject jsonTextLine = jsonGelaber.getJSONObject(i);
                 texts[i] = convertText(jsonTextLine);
@@ -28,7 +28,7 @@ public class GelaberReader {
         }
     }
 
-    private GelaberText convertText(JSONObject jsonTextLine) throws InvalidInputException {
+    private AbstractGelaberText convertText(JSONObject jsonTextLine) throws InvalidInputException {
         String wholeText = jsonTextLine.getString("text");
         String[] lines = splitIntoTextLinesFittingIntoTextBox(wholeText);
         GelaberType type;
@@ -37,7 +37,23 @@ public class GelaberReader {
         } catch (IllegalArgumentException e) {
             throw new InvalidInputException(e.getMessage());
         }
-        return new GelaberText(lines, type);
+
+        if (type == GelaberType.gelaber) {
+            return new GelaberText(lines);
+        }
+
+        HashMap<String, AbstractGelaberText> choices = convertChoices(jsonTextLine.getJSONObject("choices"));
+        return new GelaberChoices(lines, choices);
+    }
+
+    private HashMap<String, AbstractGelaberText> convertChoices(JSONObject choices) throws InvalidInputException {
+        Set<String> keys = choices.keySet();
+
+        HashMap<String, AbstractGelaberText> result = new HashMap<>();
+        for (String key : keys) {
+            result.put(key, convertText(choices.getJSONObject(key)));
+        }
+        return result;
     }
 
     private String[] splitIntoTextLinesFittingIntoTextBox(String wholeText) {

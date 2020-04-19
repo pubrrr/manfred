@@ -16,13 +16,6 @@ class GelaberReaderTest {
     }
 
     @Test
-    void convertEmptyArray() throws InvalidInputException {
-        Gelaber result = underTest.convert(new JSONArray("[]"));
-
-        assertEquals(0, result.getTexts().length);
-    }
-
-    @Test
     void throwsExceptionWhenElementsAreNoJsonObjects() {
         JSONArray invalidJson = new JSONArray("[1]");
 
@@ -31,13 +24,13 @@ class GelaberReaderTest {
 
     @Test
     void convertsType() throws InvalidInputException {
-        JSONArray input = new JSONArray("[{text: testGelaber, type: gelaber}, {text: testChoicesText, type: choices}]");
+        JSONArray input = new JSONArray("[{text: testGelaber, type: gelaber}, {text: testChoicesText, type: choices, choices: {possibleAnswer: {text: testGelaber, type: gelaber}}}]");
 
         Gelaber result = underTest.convert(input);
 
         assertEquals(GelaberType.values().length, result.getTexts().length);
-        assertEquals(GelaberType.gelaber, result.getTexts()[0].getType());
-        assertEquals(GelaberType.choices, result.getTexts()[1].getType());
+        assertTrue(result.getTexts()[0] instanceof GelaberText);
+        assertTrue(result.getTexts()[1] instanceof GelaberChoices);
     }
 
     @Test
@@ -140,5 +133,22 @@ class GelaberReaderTest {
         assertEquals("12345 ", result.getTexts()[0].getLines()[0]);
         assertEquals("_2345 ", result.getTexts()[0].getLines()[1]);
         assertEquals("_23", result.getTexts()[0].getLines()[2]);
+    }
+
+    @Test
+    void convertsChoicesWithPossibleAnswers() throws InvalidInputException {
+        JSONArray input = new JSONArray(
+                "[{text: text, type: choices, choices: {" +
+                        "answer1: {text: test, type: gelaber}," +
+                        "answer2: {text: test, type: choices, choices: {nestedAnswer: {text: test, type: gelaber}}}" +
+                        "}}]"
+        );
+
+        Gelaber result = underTest.convert(input);
+
+        assertEquals(1, result.getTexts().length);
+        assertEquals(2, ((GelaberChoices) result.getTexts()[0]).getChoices().size());
+        assertTrue(((GelaberChoices) result.getTexts()[0]).getChoices().get("answer1") instanceof GelaberText);
+        assertTrue(((GelaberChoices) result.getTexts()[0]).getChoices().get("answer2") instanceof GelaberChoices);
     }
 }

@@ -20,11 +20,11 @@ public class Gelaber implements Paintable {
     public final int DISTANCE_BETWEEN_LINES;
     private final int NUMBER_OF_TEXT_LINES;
 
-    private GelaberText[] texts;
+    private AbstractGelaberText[] texts;
     private LinkedList<String[]> lineGroupsToPaintQueue;
     private String[] lineGroupsToPaint;
 
-    public Gelaber(GelaberText[] texts) {
+    public Gelaber(AbstractGelaberText[] texts) {
         this.texts = texts;
 
         DISTANCE_BETWEEN_LINES = 20;
@@ -34,15 +34,15 @@ public class Gelaber implements Paintable {
         TEXT_BOX_POSITION_Y = GamePanel.HEIGHT * 2 / 3;
         NUMBER_OF_TEXT_LINES = (TEXT_BOX_HEIGHT - 2 * TEXT_DISTANCE_TO_BOX) / (TEXT_POINT_SIZE + DISTANCE_BETWEEN_LINES);
 
-        lineGroupsToPaintQueue = fillLinesToPaintQueue(texts[0]);
+        lineGroupsToPaintQueue = setLinesToPaintQueue(texts[0]);
         lineGroupsToPaint = lineGroupsToPaintQueue.poll();
     }
 
-    public GelaberText[] getTexts() {
+    public AbstractGelaberText[] getTexts() {
         return texts;
     }
 
-    private LinkedList<String[]> fillLinesToPaintQueue(GelaberText text) {
+    private LinkedList<String[]> setLinesToPaintQueue(AbstractGelaberText text) {
         String[] lines = text.getLines();
         int numberOfLineGroups = lines.length % NUMBER_OF_TEXT_LINES == 0
                 ? lines.length / NUMBER_OF_TEXT_LINES
