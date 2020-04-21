@@ -19,7 +19,7 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class ControlsMovesManfredTest {
+class ControlsMovesManfredTest extends ControllerTestCase{
     private Manfred manfred;
     private Manfred manfredSpy;
     private KeyControls controls;
@@ -120,12 +120,6 @@ class ControlsMovesManfredTest {
 
         assertSame(afterMoveX, manfred.getX());
         assertSame(afterMoveY, manfred.getY());
-    }
-
-    private KeyEvent mockEventWithKey(int keyPressed) {
-        KeyEvent eventMock = mock(KeyEvent.class);
-        when(eventMock.getKeyCode()).thenReturn(keyPressed);
-        return eventMock;
     }
 
     @Test

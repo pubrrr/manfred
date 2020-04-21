@@ -31,4 +31,8 @@ abstract public class AbstractGelaberText {
         linesPosition += Gelaber.NUMBER_OF_TEXT_LINES - 1;
         return linesPosition < lines.length;
     }
+
+    public abstract void up();
+
+    public abstract void down();
 }

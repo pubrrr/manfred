@@ -20,12 +20,20 @@ public class GelaberController implements ControllerInterface {
 
     @Override
     public void keyReleased(KeyEvent event) {
-        if (event.getKeyCode() == KeyEvent.VK_ENTER) {
-            boolean foundNext = gelaber.next();
-            if (!foundNext) {
-                panel.deletePaintable(gelaber);
-                keyControls.controlManfred();
-            }
+        switch (event.getKeyCode()) {
+            case KeyEvent.VK_ENTER:
+                boolean foundNext = gelaber.next();
+                if (!foundNext) {
+                    panel.deletePaintable(gelaber);
+                    keyControls.controlManfred();
+                }
+                break;
+            case KeyEvent.VK_S:
+                gelaber.down();
+                break;
+            case KeyEvent.VK_W:
+                gelaber.up();
+                break;
         }
     }
 

@@ -39,6 +39,14 @@ public class Gelaber implements Paintable {
         return currentText.next();
     }
 
+    public void down() {
+        currentText.down();
+    }
+
+    public void up() {
+        currentText.up();
+    }
+
     @Override
     public void paint(Graphics g) {
         currentText.paint(g);

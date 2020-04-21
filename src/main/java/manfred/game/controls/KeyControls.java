@@ -35,11 +35,11 @@ public class KeyControls implements KeyListener {
     public void keyTyped(KeyEvent e) {
     }
 
-    void controlManfred() {
+    public void controlManfred() {
         activeController = manfredController;
     }
 
-    void controlGelaber(Gelaber gelaber) {
+    public void controlGelaber(Gelaber gelaber) {
         activeController = gelaberController;
 
         gamePanel.registerPaintable(gelaber);

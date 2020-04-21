@@ -17,9 +17,11 @@ public class GelaberChoices extends AbstractGelaberText {
             Gelaber.GELABER_BOX_POSITION_Y + Gelaber.TEXT_DISTANCE_TO_BOX + Gelaber.TEXT_POINT_SIZE / 6 + Gelaber.TEXT_POINT_SIZE / 2,
             Gelaber.GELABER_BOX_POSITION_Y + Gelaber.TEXT_DISTANCE_TO_BOX + Gelaber.TEXT_POINT_SIZE / 6
     };
+    public final static int SELECTION_MOVEMENT_DISTANCE = Gelaber.TEXT_POINT_SIZE + Gelaber.DISTANCE_BETWEEN_LINES;
 
     private boolean showChoiceBox = false;
     private Polygon selectionMarker;
+    private int selection;
 
     public GelaberChoices(String[] lines, HashMap<String, AbstractGelaberText> choices) {
         this.lines = lines;
@@ -38,10 +40,31 @@ public class GelaberChoices extends AbstractGelaberText {
         } else if (!showChoiceBox) {
             showChoiceBox = true;
             selectionMarker = new Polygon(SELECTION_MARKER_CORNERS_X, SELECTION_MARKER_CORNERS_Y, 3);
+            selection = 0;
             return true;
         } else {
             return false;
         }
+    }
+
+    @Override
+    public void up() {
+        int initialSelection = selection;
+        selection--;
+        if (selection < 0) {
+            selection = choices.size() - 1;
+        }
+        selectionMarker.translate(0, SELECTION_MOVEMENT_DISTANCE * (selection - initialSelection));
+    }
+
+    @Override
+    public void down() {
+        int initialSelection = selection;
+        selection++;
+        if (selection >= choices.size()) {
+            selection = 0;
+        }
+        selectionMarker.translate(0, SELECTION_MOVEMENT_DISTANCE * (selection - initialSelection));
     }
 
     @Override
