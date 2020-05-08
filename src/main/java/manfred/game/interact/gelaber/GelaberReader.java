@@ -6,6 +6,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.lang.Nullable;
 
+import java.awt.*;
+import java.util.List;
 import java.util.*;
 
 public class GelaberReader {
@@ -43,7 +45,7 @@ public class GelaberReader {
         }
 
         HashMap<String, AbstractGelaberText> choices = convertChoices(jsonTextLine.getJSONObject("choices"));
-        return new GelaberChoices(lines, choices);
+        return new GelaberChoices(lines, choices, new Polygon(GelaberChoices.SELECTION_MARKER_CORNERS_X, GelaberChoices.SELECTION_MARKER_CORNERS_Y, 3));
     }
 
     private HashMap<String, AbstractGelaberText> convertChoices(JSONObject choices) throws InvalidInputException {

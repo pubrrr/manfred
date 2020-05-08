@@ -23,9 +23,10 @@ public class GelaberChoices extends AbstractGelaberText {
     private Polygon selectionMarker;
     private int selection;
 
-    public GelaberChoices(String[] lines, HashMap<String, AbstractGelaberText> choices) {
+    public GelaberChoices(String[] lines, HashMap<String, AbstractGelaberText> choices, Polygon selectionMarker) {
         this.lines = lines;
         this.choices = choices;
+        this.selectionMarker = selectionMarker;
     }
 
     public HashMap<String, AbstractGelaberText> getChoices() {
@@ -39,7 +40,6 @@ public class GelaberChoices extends AbstractGelaberText {
             return true;
         } else if (!showChoiceBox) {
             showChoiceBox = true;
-            selectionMarker = new Polygon(SELECTION_MARKER_CORNERS_X, SELECTION_MARKER_CORNERS_Y, 3);
             selection = 0;
             return true;
         } else {
@@ -49,22 +49,26 @@ public class GelaberChoices extends AbstractGelaberText {
 
     @Override
     public void up() {
-        int initialSelection = selection;
-        selection--;
-        if (selection < 0) {
-            selection = choices.size() - 1;
+        if (showChoiceBox) {
+            int initialSelection = selection;
+            selection--;
+            if (selection < 0) {
+                selection = choices.size() - 1;
+            }
+            selectionMarker.translate(0, SELECTION_MOVEMENT_DISTANCE * (selection - initialSelection));
         }
-        selectionMarker.translate(0, SELECTION_MOVEMENT_DISTANCE * (selection - initialSelection));
     }
 
     @Override
     public void down() {
-        int initialSelection = selection;
-        selection++;
-        if (selection >= choices.size()) {
-            selection = 0;
+        if (showChoiceBox) {
+            int initialSelection = selection;
+            selection++;
+            if (selection >= choices.size()) {
+                selection = 0;
+            }
+            selectionMarker.translate(0, SELECTION_MOVEMENT_DISTANCE * (selection - initialSelection));
         }
-        selectionMarker.translate(0, SELECTION_MOVEMENT_DISTANCE * (selection - initialSelection));
     }
 
     @Override
