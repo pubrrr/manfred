@@ -27,10 +27,7 @@ abstract public class AbstractGelaberText {
         }
     }
 
-    public GelaberNextResponse next() {
-        linesPosition += Gelaber.NUMBER_OF_TEXT_LINES - 1;
-        return new GelaberNextResponse(linesPosition < lines.length);
-    }
+    public abstract GelaberNextResponse next();
 
     public abstract void up();
 

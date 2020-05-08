@@ -22,12 +22,11 @@ public class Gelaber implements Paintable {
     public final static int NUMBER_OF_TEXT_LINES = (TEXT_BOX_HEIGHT - 2 * TEXT_DISTANCE_TO_BOX) / (TEXT_POINT_SIZE + DISTANCE_BETWEEN_LINES);
 
     private AbstractGelaberText[] texts;
-
     private AbstractGelaberText currentText;
+    private int nextTextPointer = 0;
 
     public Gelaber(AbstractGelaberText[] texts) {
         this.texts = texts;
-
         currentText = texts[0];
     }
 
@@ -41,8 +40,15 @@ public class Gelaber implements Paintable {
             currentText = gelaberNextResponse.getNextGelaber();
             return true;
         }
+        if (gelaberNextResponse.continueTalking()) {
+            return true;
+        }
 
-        return gelaberNextResponse.continueTalking();
+        if (nextTextPointer < texts.length - 1) {
+            nextTextPointer++;
+        }
+        currentText = texts[nextTextPointer];
+        return false;
     }
 
     public void down() {

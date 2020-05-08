@@ -12,7 +12,7 @@ import static org.mockito.Mockito.*;
 
 class GelaberChoicesTest {
     private GelaberChoices underTest;
-    private Polygon selectionMarkerMock;
+    private SelectionMarker selectionMarkerMock;
 
     @BeforeEach
     void init() {
@@ -23,7 +23,7 @@ class GelaberChoicesTest {
         when(choices.keySet()).thenReturn(keySet);
         when(choices.get("choicesKey")).thenReturn(null);
 
-        selectionMarkerMock = mock(Polygon.class);
+        selectionMarkerMock = mock(SelectionMarker.class);
 
         underTest = new GelaberChoices(new String[]{"line1"}, choices, selectionMarkerMock);
     }
@@ -41,7 +41,8 @@ class GelaberChoicesTest {
         verify(selectionMarkerMock, times(2)).translate(anyInt(), anyInt());
 
         GelaberNextResponse reponse = underTest.next();
-        assertFalse(underTest.next().continueTalking());
+        assertFalse(reponse.continueTalking());
         assertNull(reponse.getNextGelaber());
+        verify(selectionMarkerMock).resetToTop();
     }
 }

@@ -45,7 +45,7 @@ public class GelaberReader {
         }
 
         HashMap<String, AbstractGelaberText> choices = convertChoices(jsonTextLine.getJSONObject("choices"));
-        return new GelaberChoices(lines, choices, new Polygon(GelaberChoices.SELECTION_MARKER_CORNERS_X, GelaberChoices.SELECTION_MARKER_CORNERS_Y, 3));
+        return new GelaberChoices(lines, choices, new SelectionMarker());
     }
 
     private HashMap<String, AbstractGelaberText> convertChoices(JSONObject choices) throws InvalidInputException {

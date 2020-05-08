@@ -6,6 +6,16 @@ public class GelaberText extends AbstractGelaberText {
     }
 
     @Override
+    public GelaberNextResponse next() {
+        linesPosition += Gelaber.NUMBER_OF_TEXT_LINES - 1;
+        boolean continueTalking = linesPosition < lines.length;
+        if (!continueTalking) {
+            linesPosition = 0;
+        }
+        return new GelaberNextResponse(continueTalking);
+    }
+
+    @Override
     public void up() {
     }
 

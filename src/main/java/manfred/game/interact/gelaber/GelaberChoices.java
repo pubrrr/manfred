@@ -6,24 +6,13 @@ import java.util.HashMap;
 public class GelaberChoices extends AbstractGelaberText {
     HashMap<String, AbstractGelaberText> choices;
 
-    // TODO: hübsche Geometrie: Berechne Koordinaten anhand von offsetX, offsetY, heigt, width (Basis bis zur rechten Ecke)
-    public final static int[] SELECTION_MARKER_CORNERS_X = new int[]{
-            Gelaber.GELABER_BOX_POSITION_X + Gelaber.TEXT_DISTANCE_TO_BOX / 2,
-            Gelaber.GELABER_BOX_POSITION_X + Gelaber.TEXT_DISTANCE_TO_BOX / 2,
-            Gelaber.GELABER_BOX_POSITION_X + Gelaber.TEXT_DISTANCE_TO_BOX * 4 / 5
-    };
-    public final static int[] SELECTION_MARKER_CORNERS_Y = new int[]{
-            Gelaber.GELABER_BOX_POSITION_Y + Gelaber.TEXT_DISTANCE_TO_BOX + Gelaber.TEXT_POINT_SIZE / 6 - Gelaber.TEXT_POINT_SIZE / 2,
-            Gelaber.GELABER_BOX_POSITION_Y + Gelaber.TEXT_DISTANCE_TO_BOX + Gelaber.TEXT_POINT_SIZE / 6 + Gelaber.TEXT_POINT_SIZE / 2,
-            Gelaber.GELABER_BOX_POSITION_Y + Gelaber.TEXT_DISTANCE_TO_BOX + Gelaber.TEXT_POINT_SIZE / 6
-    };
     public final static int SELECTION_MOVEMENT_DISTANCE = Gelaber.TEXT_POINT_SIZE + Gelaber.DISTANCE_BETWEEN_LINES;
 
     private boolean showChoiceBox = false;
-    private Polygon selectionMarker;
+    private SelectionMarker selectionMarker;
     private int selection;
 
-    public GelaberChoices(String[] lines, HashMap<String, AbstractGelaberText> choices, Polygon selectionMarker) {
+    public GelaberChoices(String[] lines, HashMap<String, AbstractGelaberText> choices, SelectionMarker selectionMarker) {
         this.lines = lines;
         this.choices = choices;
         this.selectionMarker = selectionMarker;
@@ -35,16 +24,22 @@ public class GelaberChoices extends AbstractGelaberText {
 
     @Override
     public GelaberNextResponse next() {
-        GelaberNextResponse gelaberNextResponse = super.next();
-        if (gelaberNextResponse.continueTalking()) {
-            return gelaberNextResponse;
+        boolean continueTalking = linesPosition + Gelaber.NUMBER_OF_TEXT_LINES - 1 < lines.length;
+
+        if (continueTalking) {
+            linesPosition += Gelaber.NUMBER_OF_TEXT_LINES - 1;
+            return new GelaberNextResponse(true);
         } else if (!showChoiceBox) {
             showChoiceBox = true;
-            selection = 0;
             return new GelaberNextResponse(true);
         } else {
+            showChoiceBox = false;
             String selectedChoice = choices.keySet().toArray(new String[]{})[selection];
             AbstractGelaberText nextGelaber = choices.get(selectedChoice);
+
+            selectionMarker.resetToTop();
+            linesPosition = 0;
+            selection = 0;
             return new GelaberNextResponse(nextGelaber != null, nextGelaber);
         }
     }
