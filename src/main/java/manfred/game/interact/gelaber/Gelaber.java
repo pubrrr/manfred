@@ -36,7 +36,13 @@ public class Gelaber implements Paintable {
     }
 
     public boolean next() {
-        return currentText.next();
+        GelaberNextResponse gelaberNextResponse = currentText.next();
+        if (gelaberNextResponse.getNextGelaber() != null) {
+            currentText = gelaberNextResponse.getNextGelaber();
+            return true;
+        }
+
+        return gelaberNextResponse.continueTalking();
     }
 
     public void down() {

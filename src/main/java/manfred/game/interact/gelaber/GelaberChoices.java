@@ -34,16 +34,18 @@ public class GelaberChoices extends AbstractGelaberText {
     }
 
     @Override
-    public boolean next() {
-        boolean superFoundNextLine = super.next();
-        if (superFoundNextLine) {
-            return true;
+    public GelaberNextResponse next() {
+        GelaberNextResponse gelaberNextResponse = super.next();
+        if (gelaberNextResponse.continueTalking()) {
+            return gelaberNextResponse;
         } else if (!showChoiceBox) {
             showChoiceBox = true;
             selection = 0;
-            return true;
+            return new GelaberNextResponse(true);
         } else {
-            return false;
+            String selectedChoice = choices.keySet().toArray(new String[]{})[selection];
+            AbstractGelaberText nextGelaber = choices.get(selectedChoice);
+            return new GelaberNextResponse(nextGelaber != null, nextGelaber);
         }
     }
 

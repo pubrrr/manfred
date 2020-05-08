@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class GelaberChoicesTest {
@@ -16,7 +16,13 @@ class GelaberChoicesTest {
 
     @BeforeEach
     void init() {
+        Set<String> keySet = mock(Set.class);
+        when(keySet.toArray(any())).thenReturn(new String[]{"choiceskey"});
+
         HashMap<String, AbstractGelaberText> choices = mock(HashMap.class);
+        when(choices.keySet()).thenReturn(keySet);
+        when(choices.get("choicesKey")).thenReturn(null);
+
         selectionMarkerMock = mock(Polygon.class);
 
         underTest = new GelaberChoices(new String[]{"line1"}, choices, selectionMarkerMock);
@@ -28,12 +34,14 @@ class GelaberChoicesTest {
         underTest.down();
         verify(selectionMarkerMock, never()).translate(anyInt(), anyInt());
 
-        assertTrue(underTest.next());
+        assertTrue(underTest.next().continueTalking());
 
         underTest.up();
         underTest.down();
         verify(selectionMarkerMock, times(2)).translate(anyInt(), anyInt());
 
-        assertFalse(underTest.next());
+        GelaberNextResponse reponse = underTest.next();
+        assertFalse(underTest.next().continueTalking());
+        assertNull(reponse.getNextGelaber());
     }
 }
