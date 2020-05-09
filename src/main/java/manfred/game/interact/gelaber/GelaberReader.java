@@ -6,8 +6,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.lang.Nullable;
 
-import java.awt.*;
-import java.util.List;
 import java.util.*;
 
 public class GelaberReader {
@@ -63,8 +61,8 @@ public class GelaberReader {
     }
 
     private String[] splitIntoTextLinesFittingIntoTextBox(String wholeText) {
-        LinkedList<String> words = new LinkedList(Arrays.asList(wholeText.split("\\s+")));
-        words = cutWordsThatAreTooLongForOneLine(words);
+        LinkedList<String> originalWords = new LinkedList(Arrays.asList(wholeText.split("\\s+")));
+        LinkedList<String> words = cutWordsThatAreTooLongForOneLine(originalWords);
 
         List<String> result = new ArrayList<>();
 

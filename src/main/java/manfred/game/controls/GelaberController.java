@@ -29,9 +29,11 @@ public class GelaberController implements ControllerInterface {
                 }
                 break;
             case KeyEvent.VK_S:
+            case KeyEvent.VK_DOWN:
                 gelaber.down();
                 break;
             case KeyEvent.VK_W:
+            case KeyEvent.VK_UP:
                 gelaber.up();
                 break;
         }
