@@ -41,7 +41,7 @@ class ControlsMovesManfredTest extends ControllerTestCase{
 
     private void setupControllerWithManfred(Manfred manfred) {
         ManfredController manfredController = new ManfredController(manfred);
-        GelaberController gelaberController = new GelaberController(mock(GamePanel.class));
+        GelaberController gelaberController = new GelaberController();
         GamePanel panel = mock(GamePanel.class);
 
         controls = new KeyControls(manfredController, gelaberController, panel);

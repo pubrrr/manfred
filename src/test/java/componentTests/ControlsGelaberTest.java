@@ -5,14 +5,13 @@ import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
 import manfred.game.graphics.GamePanel;
-import manfred.game.interact.gelaber.AbstractGelaberText;
-import manfred.game.interact.gelaber.Gelaber;
-import manfred.game.interact.gelaber.GelaberNextResponse;
-import manfred.game.interact.gelaber.GelaberText;
+import manfred.game.interact.gelaber.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -27,7 +26,7 @@ public class ControlsGelaberTest extends ControllerTestCase {
     void init() {
         manfredControllerMock = mock(ManfredController.class);
 
-        gelaberController = new GelaberController(mock(GamePanel.class));
+        gelaberController = new GelaberController();
 
         controls = new KeyControls(manfredControllerMock, gelaberController, mock(GamePanel.class));
         controls.controlGelaber(mock(Gelaber.class));
@@ -65,12 +64,54 @@ public class ControlsGelaberTest extends ControllerTestCase {
         verify(manfredControllerMock).keyPressed(any());
     }
 
-    // TODO: test for choices: press enter once more. Accepts up and down.
+    @Test
+    void selectChoicesSequence() {
+        SelectionMarker selectionMarkerSpy = spy(new SelectionMarker());
+        HashMap choicesMock = setupChoicesMock("key", "line");
+        ResultCaptor<GelaberNextResponse> resultCaptor = new ResultCaptor<>();
+
+        AbstractGelaberText gelaberChoicesSpy = setupControllerWithGelaberTextSpy(
+                new GelaberChoices(new String[]{"line1"}, choicesMock, selectionMarkerSpy)
+        );
+
+        controls.keyReleased(mockEventWithKey(KeyEvent.VK_S));
+        verify(selectionMarkerSpy, never()).translate(anyInt(), anyInt());
+
+        doAnswer(resultCaptor).when(gelaberChoicesSpy).next();
+        controls.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
+        assertTrue(resultCaptor.getResult().continueTalking());
+
+        controls.keyReleased(mockEventWithKey(KeyEvent.VK_S));
+        verify(selectionMarkerSpy, atLeastOnce()).translate(anyInt(), anyInt());
+
+        doAnswer(resultCaptor).when(gelaberChoicesSpy).next();
+        controls.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
+        assertTrue(resultCaptor.getResult().continueTalking());
+
+        controls.keyReleased(mockEventWithKey(KeyEvent.VK_S));
+        verify(selectionMarkerSpy, atMostOnce()).translate(anyInt(), anyInt());
+
+        controls.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
+
+        verify(manfredControllerMock, never()).keyReleased(any());
+        controls.keyReleased(mockEventWithKey(KeyEvent.VK_S));
+        verify(manfredControllerMock, atLeastOnce()).keyReleased(any());
+    }
 
     private AbstractGelaberText setupControllerWithGelaberTextSpy(AbstractGelaberText gelaberText) {
         AbstractGelaberText gelaberTextSpy = spy(gelaberText);
         Gelaber gelaber = new Gelaber(new AbstractGelaberText[]{gelaberTextSpy});
         gelaberController.setGelaber(gelaber);
         return gelaberTextSpy;
+    }
+
+    private HashMap setupChoicesMock(String key, String line) {
+        Set<String> keySetMock = mock(Set.class);
+        when(keySetMock.toArray(any())).thenReturn(new String[]{key});
+
+        HashMap choicesMock = mock(HashMap.class);
+        when(choicesMock.keySet()).thenReturn(keySetMock);
+        when(choicesMock.get(key)).thenReturn(new GelaberText(new String[]{line}));
+        return choicesMock;
     }
 }

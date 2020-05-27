@@ -14,12 +14,16 @@ public class KeyControls implements KeyListener {
 
     private ControllerInterface activeController;
 
-    public KeyControls(ManfredController manfredController, GelaberController gelaberController, GamePanel panel) {
+    public KeyControls(ManfredController manfredController, GelaberController gelaberController, GamePanel gamePanel) {
         this.manfredController = manfredController;
         this.gelaberController = gelaberController;
-        this.gamePanel = panel;
+        this.gamePanel = gamePanel;
 
         activeController = manfredController;
+    }
+
+    public GamePanel getGamePanel() {
+        return gamePanel;
     }
 
     @Override

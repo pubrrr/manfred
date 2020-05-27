@@ -1,6 +1,5 @@
 package manfred.game.controls;
 
-import manfred.game.graphics.GamePanel;
 import manfred.game.interact.gelaber.Gelaber;
 import org.springframework.lang.Nullable;
 
@@ -9,11 +8,6 @@ import java.util.function.Consumer;
 
 public class GelaberController implements ControllerInterface {
     private Gelaber gelaber;
-    private GamePanel panel;
-
-    public GelaberController(GamePanel panel) {
-        this.panel = panel;
-    }
 
     @Override
     public void keyPressed(KeyEvent event) {
@@ -26,8 +20,10 @@ public class GelaberController implements ControllerInterface {
             case KeyEvent.VK_ENTER:
                 boolean foundNext = gelaber.next();
                 if (!foundNext) {
-                    panel.deletePaintable(gelaber);
-                    return KeyControls::controlManfred;
+                    return keyControls -> {
+                        keyControls.controlManfred();
+                        keyControls.getGamePanel().deletePaintable(gelaber);
+                    };
                 }
                 break;
             case KeyEvent.VK_S:
