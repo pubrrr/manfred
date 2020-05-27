@@ -7,6 +7,7 @@ import manfred.game.interact.Interact;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.function.Consumer;
 
 public class Map implements Paintable {
     public static final String ACCESSIBLE = "1";

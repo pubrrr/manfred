@@ -7,6 +7,7 @@ import manfred.game.controls.ManfredController;
 import manfred.game.graphics.GamePanel;
 import manfred.game.interact.gelaber.AbstractGelaberText;
 import manfred.game.interact.gelaber.Gelaber;
+import manfred.game.interact.gelaber.GelaberNextResponse;
 import manfred.game.interact.gelaber.GelaberText;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,6 @@ public class ControlsGelaberTest extends ControllerTestCase {
 
         controls = new KeyControls(manfredControllerMock, gelaberController, mock(GamePanel.class));
         controls.controlGelaber(mock(Gelaber.class));
-        gelaberController.setKeyControls(controls);
     }
 
     @Test
@@ -39,12 +39,12 @@ public class ControlsGelaberTest extends ControllerTestCase {
                 new GelaberText(new String[]{"line1", "line2", "line3", "line4", "line5"})
         );
 
-        ResultCaptor<Boolean> resultCaptor = new ResultCaptor<>();
+        ResultCaptor<GelaberNextResponse> resultCaptor = new ResultCaptor<>();
         doAnswer(resultCaptor).when(gelaberTextSpy).next();
 
         controls.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
 
-        assertTrue(resultCaptor.getResult());
+        assertTrue(resultCaptor.getResult().continueTalking());
     }
 
     @Test
@@ -53,12 +53,12 @@ public class ControlsGelaberTest extends ControllerTestCase {
                 new GelaberText(new String[]{"line1"})
         );
 
-        ResultCaptor<Boolean> resultCaptor = new ResultCaptor<>();
+        ResultCaptor<GelaberNextResponse> resultCaptor = new ResultCaptor<>();
         doAnswer(resultCaptor).when(gelaberTextSpy).next();
 
         controls.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
 
-        assertFalse(resultCaptor.getResult());
+        assertFalse(resultCaptor.getResult().continueTalking());
 
         controls.keyPressed(mockEventWithKey(KeyEvent.VK_S));
 

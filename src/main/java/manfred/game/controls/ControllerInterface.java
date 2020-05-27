@@ -1,11 +1,13 @@
 package manfred.game.controls;
 
+import org.springframework.lang.Nullable;
+
 import java.awt.event.KeyEvent;
+import java.util.function.Consumer;
 
 public interface ControllerInterface {
     void keyPressed(KeyEvent event);
 
-    void keyReleased(KeyEvent event);
-
-    void setKeyControls(KeyControls keyControls);
+    @Nullable
+    Consumer<KeyControls> keyReleased(KeyEvent event);
 }

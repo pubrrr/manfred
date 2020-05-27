@@ -5,6 +5,7 @@ import manfred.game.interact.gelaber.Gelaber;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.function.Consumer;
 
 public class KeyControls implements KeyListener {
     private ManfredController manfredController;
@@ -28,7 +29,10 @@ public class KeyControls implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent event) {
-        activeController.keyReleased(event);
+        Consumer<KeyControls> callback = activeController.keyReleased(event);
+        if (callback != null) {
+            callback.accept(this);
+        }
     }
 
     @Override

@@ -1,21 +1,16 @@
 package manfred.game.controls;
 
 import manfred.game.characters.Manfred;
-import manfred.game.interact.Person;
+import org.springframework.lang.Nullable;
 
 import java.awt.event.KeyEvent;
+import java.util.function.Consumer;
 
 public class ManfredController implements ControllerInterface {
     private Manfred manfred;
 
-    private KeyControls keyControls;
-
     public ManfredController(Manfred manfred) {
         this.manfred = manfred;
-    }
-
-    public void setKeyControls(KeyControls keyControls) {
-        this.keyControls = keyControls;
     }
 
     @Override
@@ -37,7 +32,8 @@ public class ManfredController implements ControllerInterface {
     }
 
     @Override
-    public void keyReleased(KeyEvent event) {
+    @Nullable
+    public Consumer<KeyControls> keyReleased(KeyEvent event) {
         switch (event.getKeyCode()) {
             case KeyEvent.VK_A:
             case KeyEvent.VK_D:
@@ -48,11 +44,8 @@ public class ManfredController implements ControllerInterface {
                 manfred.stopY();
                 break;
             case KeyEvent.VK_ENTER:
-                Person person = (Person) manfred.getInteract();
-                if (person != null) {
-                    keyControls.controlGelaber(person.getGelaber());
-                }
-                break;
+                return manfred.interact();
         }
+        return null;
     }
 }

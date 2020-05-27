@@ -52,8 +52,6 @@ public class GameContext {
     public KeyControls keyControls(ManfredController manfredController, GelaberController gelaberController, GamePanel panel) {
         KeyControls keyControls = new KeyControls(manfredController, gelaberController, panel);
         panel.addKeyListener(keyControls);
-        manfredController.setKeyControls(keyControls);
-        gelaberController.setKeyControls(keyControls);
         return keyControls;
     }
 

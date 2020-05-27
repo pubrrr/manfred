@@ -1,6 +1,9 @@
 package manfred.game.interact;
 
+import manfred.game.controls.KeyControls;
 import manfred.game.interact.gelaber.Gelaber;
+
+import java.util.function.Consumer;
 
 public class Person implements Interact{
     private String name;
@@ -20,7 +23,7 @@ public class Person implements Interact{
     }
 
     @Override
-    public void interact() {
-        System.out.println("Hallo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    public Consumer<KeyControls> interact() {
+        return keyControls -> keyControls.controlGelaber(this.gelaber);
     }
 }
