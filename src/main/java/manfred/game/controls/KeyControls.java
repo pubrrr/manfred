@@ -49,8 +49,6 @@ public class KeyControls implements KeyListener {
 
     public void controlGelaber(Gelaber gelaber) {
         activeController = gelaberController;
-
-        gamePanel.registerPaintable(gelaber);
         gelaberController.setGelaber(gelaber);
     }
 }

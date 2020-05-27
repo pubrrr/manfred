@@ -1,11 +1,15 @@
 package manfred.game.interact.gelaber;
 
+import manfred.game.controls.KeyControls;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.Paintable;
+import org.springframework.lang.Nullable;
 
 import java.awt.*;
+import java.util.function.Consumer;
 
 public class Gelaber implements Paintable {
+    private AbstractGelaberText[] texts;
     public final static int TEXT_DISTANCE_TO_BOX = 50;
     public final static int TEXT_POINT_SIZE = 30;
 
@@ -15,13 +19,12 @@ public class Gelaber implements Paintable {
 
     public final static int TEXT_BOX_POSITION_X = TEXT_BOX_DISTANCE_TO_BORDER;
     public final static int TEXT_BOX_POSITION_Y = GamePanel.HEIGHT * 2 / 3;
-    public static final int GELABER_BOX_POSITION_X = 100;
-    public static final int GELABER_BOX_POSITION_Y = 100;
+    public final static int GELABER_BOX_POSITION_X = 100;
+    public final static int GELABER_BOX_POSITION_Y = 100;
 
     public final static int DISTANCE_BETWEEN_LINES = 20;
     public final static int NUMBER_OF_TEXT_LINES = (TEXT_BOX_HEIGHT - 2 * TEXT_DISTANCE_TO_BOX) / (TEXT_POINT_SIZE + DISTANCE_BETWEEN_LINES);
 
-    private AbstractGelaberText[] texts;
     private AbstractGelaberText currentText;
     private int nextTextPointer = 0;
 
@@ -34,21 +37,26 @@ public class Gelaber implements Paintable {
         return texts;
     }
 
-    public boolean next() {
+    @Nullable
+    public Consumer<KeyControls> next() {
         GelaberNextResponse gelaberNextResponse = currentText.next();
         if (gelaberNextResponse.getNextGelaber() != null) {
             currentText = gelaberNextResponse.getNextGelaber();
-            return true;
+            return null;
         }
         if (gelaberNextResponse.continueTalking()) {
-            return true;
+            return null;
         }
 
         if (nextTextPointer < texts.length - 1) {
             nextTextPointer++;
         }
         currentText = texts[nextTextPointer];
-        return false;
+
+        return keyControls -> {
+            keyControls.controlManfred();
+            keyControls.getGamePanel().deletePaintable(this);
+        };
     }
 
     public void down() {

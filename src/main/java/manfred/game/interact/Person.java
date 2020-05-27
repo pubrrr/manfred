@@ -24,6 +24,9 @@ public class Person implements Interact{
 
     @Override
     public Consumer<KeyControls> interact() {
-        return keyControls -> keyControls.controlGelaber(this.gelaber);
+        return keyControls -> {
+            keyControls.controlGelaber(this.gelaber);
+            keyControls.getGamePanel().registerPaintable(this.gelaber);
+        };
     }
 }

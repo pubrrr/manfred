@@ -18,14 +18,7 @@ public class GelaberController implements ControllerInterface {
     public Consumer<KeyControls> keyReleased(KeyEvent event) {
         switch (event.getKeyCode()) {
             case KeyEvent.VK_ENTER:
-                boolean foundNext = gelaber.next();
-                if (!foundNext) {
-                    return keyControls -> {
-                        keyControls.controlManfred();
-                        keyControls.getGamePanel().deletePaintable(gelaber);
-                    };
-                }
-                break;
+                return gelaber.next();
             case KeyEvent.VK_S:
             case KeyEvent.VK_DOWN:
                 gelaber.down();
