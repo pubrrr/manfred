@@ -3,7 +3,7 @@
   "gelaber": [
     {
       "type": "gelaber",
-      "text": "Argharararararharharharharharhar-/harharharharharharharharharharhar-/harharharharharharharharharhar-/hihihihuhuhuhuhuhahahahahaaaaaa!/Du hast mich also gefunden, Manfred!/Nun gut, dazu gehört wohl mehr als/nur fett zu sein, ich werde dich belohnen./Nimm dies Geschenk!//...///....../...//Du erhältst:/Nichts"
+      "text": "Argharararararharharharharharharharharharharharharharharharharharharharharharharharharharharharhihihihuhuhuhuhuhahahahahaaaaaa!\nDu hast mich also gefunden, Manfred!\nNun gut, dazu gehört wohl mehr als nur fett zu sein, ich werde dich belohnen. Nimm dies Geschenk!\n ...\n\n\n......\n...\n\nDu erhältst:\nNichts"
     },
     {
       "type": "gelaber",
@@ -12,15 +12,14 @@
     {
       "type": "choices",
       "text": "Was willst du von mir?",
-      "choices": [
-        "Halt die Fresse!",
-        "Stirb!",
-        "Was hast du gesagt?"
-      ]
-    },
-    {
-      "type": "gelaber",
-      "text": "Ich bin doch schon lange tot!/Argharararararharharharharharhar-/harharharharharharharharharharhar-/harharharharharharharharharhar-/hihihihuhuhuhuhuhahahahahaaaaaa!/Manni, du alter Witzbold."
+      "choices": {
+        "Halt die Fresse!": null,
+        "Stirb!": {
+          "type": "gelaber",
+          "text": "Ich bin doch schon lange tot!\nArgharararararharharharharharharharharharharharharharharharharharharharharharharharharharharharhihihihuhuhuhuhuhahahahahaaaaaa!\nManni, du alter Witzbold."
+        },
+        "Was hast du gesagt?": null
+      }
     }
   ]
 }
