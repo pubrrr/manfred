@@ -1,27 +1,29 @@
 package manfred.game.interact.gelaber;
 
+import manfred.game.controls.KeyControls;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 class GelaberChoicesTest {
     private GelaberChoices underTest;
     private SelectionMarker selectionMarkerMock;
+    private HashMap choices;
 
     @BeforeEach
-    void init() {
+    void setupWithNextGelaber() {
         Set<String> keySet = mock(Set.class);
-        when(keySet.toArray(any())).thenReturn(new String[]{"choiceskey"});
+        when(keySet.toArray(any())).thenReturn(new String[]{"key"});
 
-        HashMap<String, AbstractGelaberText> choices = mock(HashMap.class);
+        choices = mock(HashMap.class);
         when(choices.keySet()).thenReturn(keySet);
-        when(choices.get("choicesKey")).thenReturn(null);
 
         selectionMarkerMock = mock(SelectionMarker.class);
 
@@ -29,20 +31,43 @@ class GelaberChoicesTest {
     }
 
     @Test
-    void textAndChoiceSequence_upAndDownOnlyWorksAfterNoLinesRemaining() {
+    void textAndChoiceSequence_givenNoNextGelaber_upAndDownOnlyWorksAfterNoLinesRemainingAndControlsSwitchedToManfred() {
+        when(choices.get("key")).thenReturn(null);
+
+        Gelaber gelaberMock = mock(Gelaber.class);
+
         underTest.up();
         underTest.down();
         verify(selectionMarkerMock, never()).translate(anyInt(), anyInt());
 
-        assertTrue(underTest.next().continueTalking());
+        Function<Gelaber, Consumer<KeyControls>> response1 = underTest.next();
+        assertNull(response1.apply(gelaberMock));
 
         underTest.up();
         underTest.down();
         verify(selectionMarkerMock, times(2)).translate(anyInt(), anyInt());
 
-        GelaberNextResponse reponse = underTest.next();
-        assertFalse(reponse.continueTalking());
-        assertNull(reponse.getNextGelaber());
+        Function<Gelaber, Consumer<KeyControls>> response2 = underTest.next();
+
         verify(selectionMarkerMock).resetToTop();
+        response2.apply(gelaberMock);
+        verify(gelaberMock).switchControlsBackToManfred();
+    }
+
+    @Test
+    void textAndChoiceSequence_givenNextGelaber_thenControlsNotSwitchedToManfred() {
+        AbstractGelaberText gelaberTextMock = new GelaberText(new String[]{"line"});
+        when(choices.get("key")).thenReturn(gelaberTextMock);
+
+        Gelaber gelaberMock = mock(Gelaber.class);
+
+        Function<Gelaber, Consumer<KeyControls>> response1 = underTest.next();
+        assertNull(response1.apply(gelaberMock));
+
+        Function<Gelaber, Consumer<KeyControls>> response2 = underTest.next();
+
+        verify(selectionMarkerMock).resetToTop();
+        response2.apply(gelaberMock);
+        verify(gelaberMock).setCurrentText(gelaberTextMock);
     }
 }

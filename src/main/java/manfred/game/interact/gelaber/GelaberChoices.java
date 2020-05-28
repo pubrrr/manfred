@@ -1,7 +1,11 @@
 package manfred.game.interact.gelaber;
 
+import manfred.game.controls.KeyControls;
+
 import java.awt.*;
 import java.util.HashMap;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class GelaberChoices extends AbstractGelaberText {
     HashMap<String, AbstractGelaberText> choices;
@@ -23,25 +27,36 @@ public class GelaberChoices extends AbstractGelaberText {
     }
 
     @Override
-    public GelaberNextResponse next() {
+    public Function<Gelaber, Consumer<KeyControls>> next() {
         boolean continueTalking = linesPosition + Gelaber.NUMBER_OF_TEXT_LINES - 1 < lines.length;
 
         if (continueTalking) {
             linesPosition += Gelaber.NUMBER_OF_TEXT_LINES - 1;
-            return new GelaberNextResponse(true);
+            return gelaber -> null;
         } else if (!showChoiceBox) {
             showChoiceBox = true;
-            return new GelaberNextResponse(true);
-        } else {
-            showChoiceBox = false;
-            String selectedChoice = choices.keySet().toArray(new String[]{})[selection];
-            AbstractGelaberText nextGelaber = choices.get(selectedChoice);
-
-            selectionMarker.resetToTop();
-            linesPosition = 0;
-            selection = 0;
-            return new GelaberNextResponse(nextGelaber != null, nextGelaber);
+            return gelaber -> null;
         }
+
+        String selectedChoice = choices.keySet().toArray(new String[]{})[selection];
+        AbstractGelaberText nextGelaber = choices.get(selectedChoice);
+
+        resetSelection();
+
+        if (nextGelaber == null) {
+            return Gelaber::switchControlsBackToManfred;
+        }
+        return gelaber -> {
+            gelaber.setCurrentText(nextGelaber);
+            return null;
+        };
+    }
+
+    private void resetSelection() {
+        showChoiceBox = false;
+        selectionMarker.resetToTop();
+        linesPosition = 0;
+        selection = 0;
     }
 
     @Override

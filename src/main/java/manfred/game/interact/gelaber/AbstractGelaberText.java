@@ -1,6 +1,10 @@
 package manfred.game.interact.gelaber;
 
+import manfred.game.controls.KeyControls;
+
 import java.awt.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 abstract public class AbstractGelaberText {
     protected String[] lines;
@@ -27,7 +31,7 @@ abstract public class AbstractGelaberText {
         }
     }
 
-    public abstract GelaberNextResponse next();
+    public abstract Function<Gelaber, Consumer<KeyControls>> next();
 
     public abstract void up();
 

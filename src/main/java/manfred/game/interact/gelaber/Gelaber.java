@@ -7,6 +7,7 @@ import org.springframework.lang.Nullable;
 
 import java.awt.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class Gelaber implements Paintable {
     private AbstractGelaberText[] texts;
@@ -39,15 +40,15 @@ public class Gelaber implements Paintable {
 
     @Nullable
     public Consumer<KeyControls> next() {
-        GelaberNextResponse gelaberNextResponse = currentText.next();
-        if (gelaberNextResponse.getNextGelaber() != null) {
-            currentText = gelaberNextResponse.getNextGelaber();
-            return null;
-        }
-        if (gelaberNextResponse.continueTalking()) {
-            return null;
-        }
+        Function<Gelaber, Consumer<KeyControls>> callback = currentText.next();
+        return callback.apply(this);
+    }
 
+    void setCurrentText(AbstractGelaberText currentText) {
+        this.currentText = currentText;
+    }
+
+    Consumer<KeyControls> switchControlsBackToManfred() {
         if (nextTextPointer < texts.length - 1) {
             nextTextPointer++;
         }
