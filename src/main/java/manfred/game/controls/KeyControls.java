@@ -1,5 +1,6 @@
 package manfred.game.controls;
 
+import manfred.game.characters.Manfred;
 import manfred.game.exception.InvalidInputException;
 import manfred.game.graphics.GamePanel;
 import manfred.game.interact.gelaber.Gelaber;
@@ -13,6 +14,7 @@ import java.util.function.Consumer;
 public class KeyControls implements KeyListener {
     private ManfredController manfredController;
     private GelaberController gelaberController;
+    private Manfred manfred;
     private GamePanel gamePanel;
     private MapWrapper mapWrapper;
 
@@ -21,11 +23,13 @@ public class KeyControls implements KeyListener {
     public KeyControls(
             ManfredController manfredController,
             GelaberController gelaberController,
+            Manfred manfred,
             GamePanel gamePanel,
             MapWrapper mapWrapper
     ) {
         this.manfredController = manfredController;
         this.gelaberController = gelaberController;
+        this.manfred = manfred;
         this.gamePanel = gamePanel;
         this.mapWrapper = mapWrapper;
 
@@ -69,5 +73,10 @@ public class KeyControls implements KeyListener {
             System.out.println("ERROR: Failed to load map " + name + "\n");
             e.printStackTrace();
         }
+    }
+
+    public void resetManfredPositionTo(int x, int y) {
+        this.manfred.setX(GamePanel.PIXEL_BLOCK_SIZE * x);
+        this.manfred.setY(GamePanel.PIXEL_BLOCK_SIZE * y);
     }
 }

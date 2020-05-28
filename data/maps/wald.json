@@ -38,8 +38,8 @@
     },
     "Baum": {
       "type": "Door",
-      "targetSpawnX": 1,
-      "targetSpawnY": 1
+      "targetSpawnX": 5,
+      "targetSpawnY": 10
     }
   }
 }

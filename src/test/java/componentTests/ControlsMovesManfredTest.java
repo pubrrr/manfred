@@ -44,7 +44,7 @@ class ControlsMovesManfredTest extends ControllerTestCase{
         GelaberController gelaberController = new GelaberController();
         GamePanel panel = mock(GamePanel.class);
 
-        controls = new KeyControls(manfredController, gelaberController, panel, mapWrapperMock);
+        controls = new KeyControls(manfredController, gelaberController, mock(Manfred.class), panel, mapWrapperMock);
     }
 
     @Test

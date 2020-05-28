@@ -17,6 +17,9 @@ public class Door implements Interactable {
 
     @Override
     public Consumer<KeyControls> interact() {
-        return keyControls -> keyControls.loadMap(this.targetName);
+        return keyControls -> {
+            keyControls.loadMap(this.targetName);
+            keyControls.resetManfredPositionTo(this.targetSpawnX, this.targetSpawnY);
+        };
     }
 }

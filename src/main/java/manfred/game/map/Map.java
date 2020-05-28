@@ -8,7 +8,7 @@ import manfred.game.interact.Interactable;
 import java.awt.*;
 import java.util.HashMap;
 
-public class Map implements Paintable {
+public class Map {
     public static final String ACCESSIBLE = "1";
     public static final String NOT_ACCESSIBLE = "0";
 
@@ -43,19 +43,18 @@ public class Map implements Paintable {
                 && y >= 0 && y < mapArray[0].length;
     }
 
-    @Override
     public void paint(Graphics g) {
         g.setColor(Color.RED);
 
         for (int x = 0; x < getArray().length; x++) {
             for (int y = 0; y < getArray()[0].length; y++) {
-                if (mapArray[x][y].equals("Opa")) {
+                if (isSpecialField(x, y)) {
                     g.setColor(Color.YELLOW);
                 }
                 if (!isAccessible(x, y)) {
                     g.fillRect(GamePanel.PIXEL_BLOCK_SIZE * x, GamePanel.PIXEL_BLOCK_SIZE * y, GamePanel.PIXEL_BLOCK_SIZE, GamePanel.PIXEL_BLOCK_SIZE);
                 }
-                if (mapArray[x][y].equals("Opa")) {
+                if (isSpecialField(x, y)) {
                     g.setColor(Color.RED);
                 }
             }

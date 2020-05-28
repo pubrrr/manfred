@@ -1,10 +1,12 @@
 package manfred.game.map;
 
 import manfred.game.exception.InvalidInputException;
+import manfred.game.graphics.Paintable;
 
+import java.awt.*;
 import java.io.IOException;
 
-public class MapWrapper {
+public class MapWrapper implements Paintable {
     private MapReader mapReader;
     private Map map;
 
@@ -19,5 +21,10 @@ public class MapWrapper {
 
     public void loadMap(String name) throws InvalidInputException, IOException {
         this.map = mapReader.load(name);
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        this.map.paint(g);
     }
 }

@@ -52,10 +52,11 @@ public class GameContext {
     public KeyControls keyControls(
             ManfredController manfredController,
             GelaberController gelaberController,
+            Manfred manfred,
             GamePanel panel,
             MapWrapper mapWrapper
     ) {
-        KeyControls keyControls = new KeyControls(manfredController, gelaberController, panel, mapWrapper);
+        KeyControls keyControls = new KeyControls(manfredController, gelaberController, manfred, panel, mapWrapper);
         panel.addKeyListener(keyControls);
         return keyControls;
     }

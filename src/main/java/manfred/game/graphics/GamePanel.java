@@ -20,7 +20,7 @@ public class GamePanel extends JPanel {
         setFocusable(true);
         requestFocus();
 
-        registerPaintable(mapWrapper.getMap());
+        registerPaintable(mapWrapper);
         registerPaintable(manfred);
     }
 
