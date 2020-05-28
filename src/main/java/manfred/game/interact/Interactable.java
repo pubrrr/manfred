@@ -4,6 +4,6 @@ import manfred.game.controls.KeyControls;
 
 import java.util.function.Consumer;
 
-public interface Interact {
+public interface Interactable {
     Consumer<KeyControls> interact();
 }

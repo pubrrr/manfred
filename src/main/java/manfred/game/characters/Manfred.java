@@ -3,7 +3,7 @@ package manfred.game.characters;
 import manfred.game.controls.KeyControls;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.Paintable;
-import manfred.game.interact.Interact;
+import manfred.game.interact.Interactable;
 import manfred.game.map.MapWrapper;
 import org.springframework.lang.Nullable;
 
@@ -161,7 +161,10 @@ public class Manfred implements Paintable {
         int onMapGridX = triggerInteractPositionX / GamePanel.PIXEL_BLOCK_SIZE;
         int onMapGridY = triggerInteractPositionY / GamePanel.PIXEL_BLOCK_SIZE;
 
-        Interact interact = mapWrapper.getMap().getInteract(onMapGridX, onMapGridY);
-        return interact.interact();
+        Interactable interactable = mapWrapper.getMap().getInteractable(onMapGridX, onMapGridY);
+        if (interactable == null) {
+            return null;
+        }
+        return interactable.interact();
     }
 }

@@ -5,7 +5,7 @@ import manfred.game.interact.gelaber.Gelaber;
 
 import java.util.function.Consumer;
 
-public class Person implements Interact{
+public class Person implements Interactable {
     private String name;
     private Gelaber gelaber;
 

@@ -2,7 +2,7 @@ package manfred.game.map;
 
 import manfred.game.Game;
 import manfred.game.exception.InvalidInputException;
-import manfred.game.interact.Interact;
+import manfred.game.interact.Interactable;
 import manfred.game.interact.PersonReader;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,12 +44,12 @@ public class MapReader {
 
             String name = jsonInput.getString("name");
             String[][] map = convertMap(jsonInput.getJSONArray("map"));
-            HashMap<String, Interact> interacts = new HashMap<>();
+            HashMap<String, Interactable> interactables = new HashMap<>();
             if (!interactsFoundInMap.empty()) {
-                interacts = convertInteracts(jsonInput.getJSONObject("interacts"));
+                interactables = convertInteracts(jsonInput.getJSONObject("interactables"));
             }
 
-            return new Map(name, map, interacts);
+            return new Map(name, map, interactables);
         } catch (JSONException | IOException $e) {
             throw new InvalidInputException($e.getMessage());
         }
@@ -68,10 +68,7 @@ public class MapReader {
             transposedArrayMap[y] = convertHorizontalMapLine(horizontalLine);
         }
 
-        String[][] arrayMap = new String[lengthHorizontal][lengthVertical];
-        arrayMap = transposeToGetIntuitiveXAndYRight(transposedArrayMap, lengthVertical, lengthHorizontal);
-
-        return arrayMap;
+        return transposeToGetIntuitiveXAndYRight(transposedArrayMap, lengthVertical, lengthHorizontal);
     }
 
     private String[][] transposeToGetIntuitiveXAndYRight(String[][] original, int lengthVertical, int lengthHorizontal) {
@@ -104,8 +101,8 @@ public class MapReader {
         }
     }
 
-    private HashMap<String, Interact> convertInteracts(JSONObject jsonInteracts) throws InvalidInputException, IOException {
-        HashMap<String, Interact> result = new HashMap<>(interactsFoundInMap.size());
+    private HashMap<String, Interactable> convertInteracts(JSONObject jsonInteracts) throws InvalidInputException, IOException {
+        HashMap<String, Interactable> result = new HashMap<>(interactsFoundInMap.size());
 
         while (!interactsFoundInMap.empty()) {
             String interactId = interactsFoundInMap.pop();

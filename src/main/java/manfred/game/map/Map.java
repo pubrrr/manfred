@@ -3,11 +3,10 @@ package manfred.game.map;
 import com.sun.istack.internal.Nullable;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.Paintable;
-import manfred.game.interact.Interact;
+import manfred.game.interact.Interactable;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.function.Consumer;
 
 public class Map implements Paintable {
     public static final String ACCESSIBLE = "1";
@@ -15,12 +14,12 @@ public class Map implements Paintable {
 
     private String name;
     private String[][] mapArray;
-    private HashMap<String, Interact> interacts;
+    private HashMap<String, Interactable> interactables;
 
-    public Map(String name, String[][] map, HashMap<String, Interact> interacts) {
+    public Map(String name, String[][] map, HashMap<String, Interactable> interactables) {
         this.name = name;
         this.mapArray = map;
-        this.interacts = interacts;
+        this.interactables = interactables;
     }
 
     public String getName() {
@@ -64,10 +63,10 @@ public class Map implements Paintable {
     }
 
     @Nullable
-    public Interact getInteract(int x, int y) {
+    public Interactable getInteractable(int x, int y) {
         if (!isSpecialField(x, y)) {
             return null;
         }
-        return interacts.get(mapArray[x][y]);
+        return interactables.get(mapArray[x][y]);
     }
 }

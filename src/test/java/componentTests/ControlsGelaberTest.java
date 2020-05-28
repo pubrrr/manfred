@@ -5,6 +5,7 @@ import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
 import manfred.game.graphics.GamePanel;
 import manfred.game.interact.gelaber.*;
+import manfred.game.map.MapWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +26,7 @@ public class ControlsGelaberTest extends ControllerTestCase {
 
         gelaberController = new GelaberController();
 
-        KeyControls controls = new KeyControls(manfredControllerMock, gelaberController, mock(GamePanel.class));
+        KeyControls controls = new KeyControls(manfredControllerMock, gelaberController, mock(GamePanel.class), mock(MapWrapper.class));
         controls.controlGelaber(mock(Gelaber.class));
 
         controlsSpy = spy(controls);

@@ -49,8 +49,13 @@ public class GameContext {
     }
 
     @Bean
-    public KeyControls keyControls(ManfredController manfredController, GelaberController gelaberController, GamePanel panel) {
-        KeyControls keyControls = new KeyControls(manfredController, gelaberController, panel);
+    public KeyControls keyControls(
+            ManfredController manfredController,
+            GelaberController gelaberController,
+            GamePanel panel,
+            MapWrapper mapWrapper
+    ) {
+        KeyControls keyControls = new KeyControls(manfredController, gelaberController, panel, mapWrapper);
         panel.addKeyListener(keyControls);
         return keyControls;
     }

@@ -7,7 +7,7 @@ import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
 import manfred.game.graphics.GamePanel;
-import manfred.game.interact.Interact;
+import manfred.game.interact.Interactable;
 import manfred.game.interact.Person;
 import manfred.game.map.Map;
 import manfred.game.map.MapWrapper;
@@ -44,7 +44,7 @@ class ControlsMovesManfredTest extends ControllerTestCase{
         GelaberController gelaberController = new GelaberController();
         GamePanel panel = mock(GamePanel.class);
 
-        controls = new KeyControls(manfredController, gelaberController, panel);
+        controls = new KeyControls(manfredController, gelaberController, panel, mapWrapperMock);
     }
 
     @Test
@@ -125,11 +125,10 @@ class ControlsMovesManfredTest extends ControllerTestCase{
         Map mapSpy = spy(map);
         when(mapWrapperMock.getMap()).thenReturn(mapSpy);
 
-        ResultCaptor<Interact> resultCaptor = new ResultCaptor<>();
-        doAnswer(resultCaptor).when(mapSpy).getInteract(anyInt(), anyInt());
+        ResultCaptor<Interactable> resultCaptor = new ResultCaptor<>();
+        doAnswer(resultCaptor).when(mapSpy).getInteractable(anyInt(), anyInt());
 
-        KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_ENTER);
-        controls.keyPressed(eventMock);
+        controls.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
 
         assertNull(resultCaptor.getResult());
     }
@@ -138,8 +137,7 @@ class ControlsMovesManfredTest extends ControllerTestCase{
     void interactReturnsInteract_andTurnsOffManfredControls() {
         Person opaMock = setupMapWithOpaAndManfredSpy();
 
-        KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_ENTER);
-        controls.keyReleased(eventMock);
+        controls.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
 
         verify(opaMock, atLeastOnce()).interact();
 
@@ -153,10 +151,10 @@ class ControlsMovesManfredTest extends ControllerTestCase{
         Person opaMock = mock(Person.class);
         when(opaMock.interact()).thenCallRealMethod();
 
-        HashMap interactsMock = mock(HashMap.class);
-        when(interactsMock.get("Opa")).thenReturn(opaMock);
+        HashMap interactablesMock = mock(HashMap.class);
+        when(interactablesMock.get("Opa")).thenReturn(opaMock);
 
-        Map map = new Map("test", new String[][]{{"1", "Opa"}}, interactsMock);
+        Map map = new Map("test", new String[][]{{"1", "Opa"}}, interactablesMock);
         when(mapWrapperMock.getMap()).thenReturn(map);
 
         setupControllerWithManfred(manfredSpy);
