@@ -33,8 +33,14 @@
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
   ],
   "interactables": {
-    "Opa": "Person",
-    "Baum": "Door"
+    "Opa": {
+      "type": "Person"
+    },
+    "Baum": {
+      "type": "Door",
+      "targetSpawnX": 1,
+      "targetSpawnY": 1
+    }
   }
 }
 

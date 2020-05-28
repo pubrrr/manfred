@@ -1,6 +1,7 @@
 package manfred.game.map;
 
 import manfred.game.exception.InvalidInputException;
+import manfred.game.interact.Door;
 import manfred.game.interact.PersonReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -88,5 +89,13 @@ public class MapReaderTest {
         underTest.convert(json);
 
         verify(personReaderMock).load("opa");
+    }
+
+    @Test
+    void loadsDoor() throws InvalidInputException {
+        String jsonWithDoor = "{name: test, map: [[door]], interactables: {door :{ type: Door, targetSpawnX: 1, targetSpawnY: 1}}}";
+        Map result = underTest.convert(jsonWithDoor);
+
+        assertTrue(result.getInteractable(0, 0) instanceof Door);
     }
 }

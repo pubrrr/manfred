@@ -66,7 +66,7 @@ public class KeyControls implements KeyListener {
         try {
             mapWrapper.loadMap(name);
         } catch (InvalidInputException | IOException e) {
-            System.out.println("Failed to load map " + name);
+            System.out.println("ERROR: Failed to load map " + name + "\n");
             e.printStackTrace();
         }
     }

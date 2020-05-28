@@ -2,6 +2,7 @@ package manfred.game.map;
 
 import manfred.game.Game;
 import manfred.game.exception.InvalidInputException;
+import manfred.game.interact.Door;
 import manfred.game.interact.Interactable;
 import manfred.game.interact.PersonReader;
 import org.json.JSONArray;
@@ -20,7 +21,7 @@ public class MapReader {
 
     private PersonReader personReader;
 
-    private Stack<String> interactsFoundInMap;
+    private Stack<String> interactablesFoundInMap;
 
     public MapReader(PersonReader personReader) {
         this.personReader = personReader;
@@ -37,7 +38,7 @@ public class MapReader {
     }
 
     Map convert(String jsonString) throws InvalidInputException {
-        this.interactsFoundInMap = new Stack<>();
+        this.interactablesFoundInMap = new Stack<>();
 
         try {
             JSONObject jsonInput = new JSONObject(jsonString);
@@ -45,8 +46,8 @@ public class MapReader {
             String name = jsonInput.getString("name");
             String[][] map = convertMap(jsonInput.getJSONArray("map"));
             HashMap<String, Interactable> interactables = new HashMap<>();
-            if (!interactsFoundInMap.empty()) {
-                interactables = convertInteracts(jsonInput.getJSONObject("interactables"));
+            if (!this.interactablesFoundInMap.empty()) {
+                interactables = convertInteractables(jsonInput.getJSONObject("interactables"));
             }
 
             return new Map(name, map, interactables);
@@ -97,20 +98,29 @@ public class MapReader {
 
     private void rememberInteract(String mapElement) {
         if (!mapElement.equals("1") && !mapElement.equals("0")) {
-            interactsFoundInMap.push(mapElement);
+            this.interactablesFoundInMap.push(mapElement);
         }
     }
 
-    private HashMap<String, Interactable> convertInteracts(JSONObject jsonInteracts) throws InvalidInputException, IOException {
-        HashMap<String, Interactable> result = new HashMap<>(interactsFoundInMap.size());
+    private HashMap<String, Interactable> convertInteractables(JSONObject jsonInteractables) throws InvalidInputException, IOException {
+        HashMap<String, Interactable> result = new HashMap<>(this.interactablesFoundInMap.size());
 
-        while (!interactsFoundInMap.empty()) {
-            String interactId = interactsFoundInMap.pop();
-            String interactType = jsonInteracts.getString(interactId);
-            if (interactType.equals("Person")) {
-                result.put(interactId, personReader.load(interactId));
+        while (!this.interactablesFoundInMap.empty()) {
+            String interactableId = this.interactablesFoundInMap.pop();
+            JSONObject interactable = jsonInteractables.getJSONObject(interactableId);
+            String interactableType = interactable.getString("type");
+            switch (interactableType) {
+                case "Person":
+                    result.put(interactableId, personReader.load(interactableId));
+                    break;
+                case "Door":
+                    result.put(interactableId, convertDoor(interactableId, interactable));
             }
         }
         return result;
+    }
+
+    private Door convertDoor(String targetName, JSONObject interactable) {
+        return new Door(targetName, interactable.getInt("targetSpawnX"), interactable.getInt("targetSpawnY"));
     }
 }
