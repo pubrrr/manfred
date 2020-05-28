@@ -1,6 +1,7 @@
 package componentTests;
 
 import manfred.game.characters.Manfred;
+import manfred.game.controls.DoNothingController;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
@@ -30,9 +31,11 @@ public class ControlsGelaberTest extends ControllerTestCase {
         KeyControls controls = new KeyControls(
                 manfredControllerMock,
                 gelaberController,
+                mock(DoNothingController.class),
                 mock(Manfred.class),
                 mock(GamePanel.class),
-                mock(MapWrapper.class));
+                mock(MapWrapper.class)
+        );
         controls.controlGelaber(mock(Gelaber.class));
 
         controlsSpy = spy(controls);

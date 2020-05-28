@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 public class KeyControls implements KeyListener {
     private ManfredController manfredController;
     private GelaberController gelaberController;
+    private DoNothingController doNothingController;
     private Manfred manfred;
     private GamePanel gamePanel;
     private MapWrapper mapWrapper;
@@ -23,12 +24,14 @@ public class KeyControls implements KeyListener {
     public KeyControls(
             ManfredController manfredController,
             GelaberController gelaberController,
+            DoNothingController doNothingController,
             Manfred manfred,
             GamePanel gamePanel,
             MapWrapper mapWrapper
     ) {
         this.manfredController = manfredController;
         this.gelaberController = gelaberController;
+        this.doNothingController = doNothingController;
         this.manfred = manfred;
         this.gamePanel = gamePanel;
         this.mapWrapper = mapWrapper;
@@ -64,6 +67,10 @@ public class KeyControls implements KeyListener {
     public void controlGelaber(Gelaber gelaber) {
         activeController = gelaberController;
         gelaberController.setGelaber(gelaber);
+    }
+
+    public void turnOffControls() {
+        activeController = doNothingController;
     }
 
     public void loadMap(String name) {

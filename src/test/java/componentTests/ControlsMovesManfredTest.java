@@ -3,6 +3,7 @@ package componentTests;
 import helpers.ResultCaptor;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
+import manfred.game.controls.DoNothingController;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
@@ -20,7 +21,7 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class ControlsMovesManfredTest extends ControllerTestCase{
+class ControlsMovesManfredTest extends ControllerTestCase {
     private Manfred manfred;
     private Manfred manfredSpy;
     private KeyControls controls;
@@ -44,7 +45,13 @@ class ControlsMovesManfredTest extends ControllerTestCase{
         GelaberController gelaberController = new GelaberController();
         GamePanel panel = mock(GamePanel.class);
 
-        controls = new KeyControls(manfredController, gelaberController, mock(Manfred.class), panel, mapWrapperMock);
+        controls = new KeyControls(manfredController,
+                gelaberController,
+                mock(DoNothingController.class),
+                mock(Manfred.class),
+                panel,
+                mapWrapperMock
+        );
     }
 
     @Test
@@ -146,6 +153,8 @@ class ControlsMovesManfredTest extends ControllerTestCase{
 
         verify(manfredSpy, never()).up();
     }
+
+    // TODO add test for Door
 
     private Person setupMapWithOpaAndManfredSpy() {
         Person opaMock = mock(Person.class);

@@ -12,7 +12,10 @@ public class GamePanel extends JPanel {
     public static final int WIDTH = 1600;
     public static final int HEIGHT = 1200;
     public static final int PIXEL_BLOCK_SIZE = 40;
+    public static final int FADE_PERIOD = 40;
+    public static final int FADE_TRANSPARENCY_INTERVAL = 20;
 
+    private int fadeTransparency = 0;
     private List<Paintable> paintables = new LinkedList<>();
 
     public GamePanel(MapWrapper mapWrapper, Manfred manfred) {
@@ -39,9 +42,38 @@ public class GamePanel extends JPanel {
         for (Paintable paintable : paintables) {
             paintable.paint(g);
         }
+
+        if (fadeTransparency > 0) {
+            g.setColor(new Color(255, 255, 255, fadeTransparency));
+            g.fillRect(0, 0, WIDTH, HEIGHT);
+        }
     }
 
     public void deletePaintable(Paintable paintable) {
         paintables.remove(paintable);
+    }
+
+    public void fadeOut() {
+        while (fadeTransparency + FADE_TRANSPARENCY_INTERVAL < 255) {
+            fadeTransparency += FADE_TRANSPARENCY_INTERVAL;
+            try {
+                Thread.sleep(FADE_PERIOD);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        fadeTransparency = 255;
+    }
+
+    public void fadeIn() {
+        while (fadeTransparency > FADE_TRANSPARENCY_INTERVAL) {
+            fadeTransparency -= FADE_TRANSPARENCY_INTERVAL;
+            try {
+                Thread.sleep(FADE_PERIOD);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        fadeTransparency = 0;
     }
 }

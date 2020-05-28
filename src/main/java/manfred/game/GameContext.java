@@ -2,6 +2,7 @@ package manfred.game;
 
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
+import manfred.game.controls.DoNothingController;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
@@ -52,11 +53,18 @@ public class GameContext {
     public KeyControls keyControls(
             ManfredController manfredController,
             GelaberController gelaberController,
+            DoNothingController doNothingController,
             Manfred manfred,
             GamePanel panel,
             MapWrapper mapWrapper
     ) {
-        KeyControls keyControls = new KeyControls(manfredController, gelaberController, manfred, panel, mapWrapper);
+        KeyControls keyControls = new KeyControls(manfredController,
+                gelaberController,
+                doNothingController,
+                manfred,
+                panel,
+                mapWrapper
+        );
         panel.addKeyListener(keyControls);
         return keyControls;
     }
@@ -99,5 +107,10 @@ public class GameContext {
     @Bean
     public GelaberController gelaberController() {
         return new GelaberController();
+    }
+
+    @Bean
+    public DoNothingController doNothingController() {
+        return new DoNothingController();
     }
 }
