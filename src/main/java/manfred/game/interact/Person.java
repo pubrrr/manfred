@@ -29,4 +29,9 @@ public class Person implements Interactable {
             keyControls.getGamePanel().registerPaintable(this.gelaber);
         };
     }
+
+    @Override
+    public boolean isAccessible() {
+        return false;
+    }
 }

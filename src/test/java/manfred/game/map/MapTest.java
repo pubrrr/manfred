@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class MapTest {
     @Test
     public void isAccessible() {
-        String[][] map = {{"0", "1"}};
-        Map unterTest = new Map("test", map, new HashMap<>());
+        MapTile[][] map = {{new NotAccessible(), new Accessible()}};
+        Map unterTest = new Map("test", map);
 
         assertFalse(unterTest.isAccessible(0, 0));
         assertTrue(unterTest.isAccessible(0, 1));

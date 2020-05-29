@@ -38,4 +38,9 @@ public class Door extends SwingWorker<Void, Void> implements Interactable {
         this.keyControls = keyControls;
         super.execute();
     }
+
+    @Override
+    public boolean isAccessible() {
+        return false;
+    }
 }

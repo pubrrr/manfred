@@ -1,6 +1,7 @@
 package componentTests;
 
 import helpers.ResultCaptor;
+import helpers.TestMapFactory;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
 import manfred.game.controls.DoNothingController;
@@ -131,7 +132,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
 
     @Test
     void interactDoesNothingWhenNoInteractInReach() {
-        Map map = new Map("test", new String[][]{{"1", "1"}}, null);
+        Map map = TestMapFactory.create(new String[][]{{"1", "1"}}, null);
         Map mapSpy = spy(map);
         when(mapWrapperMock.getMap()).thenReturn(mapSpy);
 
@@ -175,10 +176,10 @@ class ControlsMovesManfredTest extends ControllerTestCase {
     private void setupMapWithDoor(String targetName, int targetSpawnX, int targetSpawnY) {
         Door door = new Door(targetName, targetSpawnX, targetSpawnY);
 
-        HashMap interactablesMock = mock(HashMap.class);
-        when(interactablesMock.get("testDoor")).thenReturn(door);
+        HashMap<String, Interactable> interactables = new HashMap();
+        interactables.put("testDoor", door);
 
-        Map map = new Map("test", new String[][]{{"1", "testDoor"}}, interactablesMock);
+        Map map = TestMapFactory.create(new String[][]{{"1", "testDoor"}}, interactables);
         when(mapWrapperMock.getMap()).thenReturn(map);
 
         setupControllerWithManfred(manfred);
@@ -188,10 +189,10 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         Person opaMock = mock(Person.class);
         when(opaMock.interact()).thenCallRealMethod();
 
-        HashMap interactablesMock = mock(HashMap.class);
-        when(interactablesMock.get("Opa")).thenReturn(opaMock);
+        HashMap<String, Interactable> interactables = new HashMap();
+        interactables.put("Opa", opaMock);
 
-        Map map = new Map("test", new String[][]{{"1", "Opa"}}, interactablesMock);
+        Map map = TestMapFactory.create(new String[][]{{"1", "Opa"}}, interactables);
         when(mapWrapperMock.getMap()).thenReturn(map);
 
         setupControllerWithManfred(manfredSpy);

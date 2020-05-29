@@ -4,6 +4,7 @@ import com.tngtech.junit.dataprovider.DataProvider;
 import com.tngtech.junit.dataprovider.DataProviderExtension;
 import com.tngtech.junit.dataprovider.UseDataProvider;
 import com.tngtech.junit.dataprovider.UseDataProviderExtension;
+import helpers.TestMapFactory;
 import manfred.game.graphics.GamePanel;
 import manfred.game.map.Map;
 import manfred.game.map.MapWrapper;
@@ -23,7 +24,7 @@ class MapColliderTest {
     private static MapCollider underTest;
 
     void initMap(String[][] mapArray) {
-        Map map = new Map("test", mapArray, new HashMap<>());
+        Map map = TestMapFactory.create(mapArray, new HashMap<>());
 
         MapWrapper mapWrapperMock = mock(MapWrapper.class);
         when(mapWrapperMock.getMap()).thenReturn(map);
@@ -53,9 +54,9 @@ class MapColliderTest {
     @UseDataProvider("provideNonAccessibleCoords")
     public void collidesOnNotAccessibleField(int left, int right, int top, int bottom) {
         initMap(new String[][]{
-                {"0", "0", "0"},
-                {"0", "1", "0"},
-                {"0", "0", "0"},
+                {"1", "1", "1"},
+                {"1", "0", "1"},
+                {"1", "1", "1"},
         });
 
         assertTrue(underTest.collides(left, right, top, bottom), "accessible");
@@ -64,8 +65,8 @@ class MapColliderTest {
     @DataProvider
     static Object[][] provideNonAccessibleCoords() {
         return new Object[][]{
-                {0, GamePanel.PIXEL_BLOCK_SIZE - 1, 0, GamePanel.PIXEL_BLOCK_SIZE - 1}, // top left block only
-                // circle around the mid 1-block
+                getBoundaryCoordsByHalfBlockSize(2, 2), // mid block only
+                // circle around the mid 0-block
                 getBoundaryCoordsByHalfBlockSize(1, 1), // top left
                 getBoundaryCoordsByHalfBlockSize(2, 1), // top
                 getBoundaryCoordsByHalfBlockSize(3, 1), // top right

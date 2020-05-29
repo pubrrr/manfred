@@ -2,59 +2,49 @@ package manfred.game.map;
 
 import com.sun.istack.internal.Nullable;
 import manfred.game.graphics.GamePanel;
-import manfred.game.graphics.Paintable;
 import manfred.game.interact.Interactable;
 
 import java.awt.*;
-import java.util.HashMap;
 
 public class Map {
-    public static final String ACCESSIBLE = "1";
-    public static final String NOT_ACCESSIBLE = "0";
-
     private String name;
-    private String[][] mapArray;
-    private HashMap<String, Interactable> interactables;
+    private MapTile[][] mapTiles;
 
-    public Map(String name, String[][] map, HashMap<String, Interactable> interactables) {
+    public Map(String name, MapTile[][] mapTiles) {
         this.name = name;
-        this.mapArray = map;
-        this.interactables = interactables;
+        this.mapTiles = mapTiles;
     }
 
+    // TODO necessary?
     public String getName() {
         return name;
     }
 
-    public String[][] getArray() {
-        return mapArray;
+    public MapTile[][] getArray() {
+        return mapTiles;
     }
 
     public boolean isAccessible(int x, int y) {
-        return isInBounds(x, y)  && mapArray[x][y].equals(Map.ACCESSIBLE);
-    }
-
-    public boolean isSpecialField(int x, int y) {
-        return isInBounds(x, y) && !mapArray[x][y].equals(Map.ACCESSIBLE) && !mapArray[x][y].equals(Map.NOT_ACCESSIBLE);
+        return isInBounds(x, y) && mapTiles[x][y].isAccessible();
     }
 
     private boolean isInBounds(int x, int y) {
-        return x >= 0 && x < mapArray.length
-                && y >= 0 && y < mapArray[0].length;
+        return x >= 0 && x < mapTiles.length
+                && y >= 0 && y < mapTiles[0].length;
     }
 
     public void paint(Graphics g) {
         g.setColor(Color.RED);
 
-        for (int x = 0; x < getArray().length; x++) {
-            for (int y = 0; y < getArray()[0].length; y++) {
-                if (isSpecialField(x, y)) {
+        for (int x = 0; x < mapTiles.length; x++) {
+            for (int y = 0; y < mapTiles[0].length; y++) {
+                if (mapTiles[x][y] instanceof Interactable) {
                     g.setColor(Color.YELLOW);
                 }
                 if (!isAccessible(x, y)) {
                     g.fillRect(GamePanel.PIXEL_BLOCK_SIZE * x, GamePanel.PIXEL_BLOCK_SIZE * y, GamePanel.PIXEL_BLOCK_SIZE, GamePanel.PIXEL_BLOCK_SIZE);
                 }
-                if (isSpecialField(x, y)) {
+                if (mapTiles[x][y] instanceof Interactable) {
                     g.setColor(Color.RED);
                 }
             }
@@ -63,9 +53,8 @@ public class Map {
 
     @Nullable
     public Interactable getInteractable(int x, int y) {
-        if (!isSpecialField(x, y)) {
-            return null;
-        }
-        return interactables.get(mapArray[x][y]);
+        return mapTiles[x][y] instanceof Interactable
+                ? (Interactable) mapTiles[x][y]
+                : null;
     }
 }
