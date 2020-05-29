@@ -56,24 +56,25 @@ public class GamePanel extends JPanel {
     public void fadeOut() {
         while (fadeTransparency + FADE_TRANSPARENCY_INTERVAL < 255) {
             fadeTransparency += FADE_TRANSPARENCY_INTERVAL;
-            try {
-                Thread.sleep(FADE_PERIOD);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            sleep();
         }
         fadeTransparency = 255;
+        sleep();
     }
 
     public void fadeIn() {
         while (fadeTransparency > FADE_TRANSPARENCY_INTERVAL) {
             fadeTransparency -= FADE_TRANSPARENCY_INTERVAL;
-            try {
-                Thread.sleep(FADE_PERIOD);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            sleep();
         }
         fadeTransparency = 0;
+    }
+
+    private void sleep() {
+        try {
+            Thread.sleep(FADE_PERIOD);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -7,7 +7,9 @@ import manfred.game.controls.DoNothingController;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
+import manfred.game.exception.InvalidInputException;
 import manfred.game.graphics.GamePanel;
+import manfred.game.interact.Door;
 import manfred.game.interact.Interactable;
 import manfred.game.interact.Person;
 import manfred.game.map.Map;
@@ -16,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,7 +51,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         controls = new KeyControls(manfredController,
                 gelaberController,
                 mock(DoNothingController.class),
-                mock(Manfred.class),
+                manfred,
                 panel,
                 mapWrapperMock
         );
@@ -136,7 +139,6 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         doAnswer(resultCaptor).when(mapSpy).getInteractable(anyInt(), anyInt());
 
         controls.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
-
         assertNull(resultCaptor.getResult());
     }
 
@@ -145,16 +147,42 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         Person opaMock = setupMapWithOpaAndManfredSpy();
 
         controls.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
-
         verify(opaMock, atLeastOnce()).interact();
 
-        KeyEvent eventMock2 = mockEventWithKey(KeyEvent.VK_W);
-        controls.keyPressed(eventMock2);
-
+        controls.keyPressed(mockEventWithKey(KeyEvent.VK_W));
         verify(manfredSpy, never()).up();
     }
 
-    // TODO add test for Door
+    @Test
+    void interactWithDoor() throws InvalidInputException, IOException, InterruptedException {
+        String targetName = "target";
+        int targetSpawnX = 5;
+        int targetSpawnY = 66;
+        setupMapWithDoor(targetName, targetSpawnX, targetSpawnY);
+
+        KeyControls controlsSpy = spy(controls);
+        controlsSpy.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
+
+        Thread.sleep(1000); // Wait for swing worker to finish
+
+        verify(controlsSpy).turnOffControls();
+        verify(controlsSpy).controlManfred();
+        verify(mapWrapperMock).loadMap(targetName);
+        assertEquals(GamePanel.PIXEL_BLOCK_SIZE * targetSpawnX, manfred.getX());
+        assertEquals(GamePanel.PIXEL_BLOCK_SIZE * targetSpawnY, manfred.getY());
+    }
+
+    private void setupMapWithDoor(String targetName, int targetSpawnX, int targetSpawnY) {
+        Door door = new Door(targetName, targetSpawnX, targetSpawnY);
+
+        HashMap interactablesMock = mock(HashMap.class);
+        when(interactablesMock.get("testDoor")).thenReturn(door);
+
+        Map map = new Map("test", new String[][]{{"1", "testDoor"}}, interactablesMock);
+        when(mapWrapperMock.getMap()).thenReturn(map);
+
+        setupControllerWithManfred(manfred);
+    }
 
     private Person setupMapWithOpaAndManfredSpy() {
         Person opaMock = mock(Person.class);
