@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 public class Manfred implements Paintable {
     private static final int SPEED = 10;
     private static final int INTERACT_DISTANCE = 10;
+    private static final int ON_TILE_TOLERANCE = GamePanel.PIXEL_BLOCK_SIZE / 8;
 
     private int x;
     private int y;
@@ -119,6 +120,28 @@ public class Manfred implements Paintable {
         )) {
             y += currentSpeedY;
         }
+
+        Point mainTile = checkForTileManfredStandMainlyOn();
+        if (mainTile != null) {
+            mapWrapper.getMap().stepOn(mainTile.x, mainTile.y);
+        }
+    }
+
+    private Point checkForTileManfredStandMainlyOn() {
+        int leftBorder = x + ON_TILE_TOLERANCE;
+        int rightBorder = x + sizeX - ON_TILE_TOLERANCE;
+        int topBorder = y + ON_TILE_TOLERANCE;
+        int bottomBorder = y + sizeY - ON_TILE_TOLERANCE;
+
+        int tileOfLeftBorder = leftBorder / GamePanel.PIXEL_BLOCK_SIZE;
+        int tileOfRightBorder = rightBorder / GamePanel.PIXEL_BLOCK_SIZE;
+        int tileOfTopBorder = topBorder / GamePanel.PIXEL_BLOCK_SIZE;
+        int tileOfBottomBorder = bottomBorder / GamePanel.PIXEL_BLOCK_SIZE;
+
+        if (tileOfLeftBorder != tileOfRightBorder || tileOfTopBorder != tileOfBottomBorder) {
+            return null;
+        }
+        return new Point(tileOfLeftBorder, tileOfTopBorder);
     }
 
     @Override

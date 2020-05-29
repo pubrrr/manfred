@@ -57,4 +57,8 @@ public class Map {
                 ? (Interactable) mapTiles[x][y]
                 : null;
     }
+
+    public void stepOn(int x, int y) {
+        mapTiles[x][y].onStep();
+    }
 }
