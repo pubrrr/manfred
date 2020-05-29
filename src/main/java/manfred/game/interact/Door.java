@@ -25,7 +25,6 @@ public class Door extends SwingWorker<Void, Void> implements Interactable {
 
     @Override
     protected Void doInBackground() {
-        keyControls.turnOffControls();
         keyControls.getGamePanel().fadeOut();
         keyControls.loadMap(this.targetName);
         keyControls.resetManfredPositionTo(this.targetSpawnX, this.targetSpawnY);
@@ -35,6 +34,7 @@ public class Door extends SwingWorker<Void, Void> implements Interactable {
     }
 
     public void triggerLoadMapInWorkerThread(KeyControls keyControls) {
+        keyControls.turnOffControls();
         this.keyControls = keyControls;
         super.execute();
     }

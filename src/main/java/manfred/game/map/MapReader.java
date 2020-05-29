@@ -40,7 +40,7 @@ public class MapReader {
             JSONObject jsonInput = new JSONObject(jsonString);
 
             String name = jsonInput.getString("name");
-            MapTile[][] mapTiles = convertMap(jsonInput.getJSONArray("map"), jsonInput.getJSONObject("interactables"));
+            MapTile[][] mapTiles = convertMap(jsonInput.getJSONArray("map"), jsonInput.optJSONObject("interactables"));
 
             return new Map(name, mapTiles);
         } catch (JSONException | IOException $e) {
@@ -90,9 +90,9 @@ public class MapReader {
     private MapTile convertMapTile(String tileValue, JSONObject jsonInteractables) throws InvalidInputException, IOException {
         switch (tileValue) {
             case ACCESSIBLE:
-                return new Accessible();
+                return Accessible.getInstance();
             case NOT_ACCESSIBLE:
-                return new NotAccessible();
+                return NotAccessible.getInstance();
             default:
                 return convertInteractable(tileValue, jsonInteractables);
         }

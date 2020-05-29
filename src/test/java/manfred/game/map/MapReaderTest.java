@@ -35,18 +35,18 @@ public class MapReaderTest {
     @Test
     void convertsMapWithString() throws InvalidInputException {
         String jsonWithStrings = "{name: test, map: [['1', '0']]}";
-        String[][] expectedMap = {{"1"}, {"0"}};
 
         Map result = underTest.convert(jsonWithStrings);
 
         assertEquals("test", result.getName());
-        assertArrayEquals(expectedMap, result.getArray());
+        assertTrue(result.getArray()[0][0] instanceof Accessible);
+        assertTrue(result.getArray()[1][0] instanceof NotAccessible);
     }
 
     @Test
     void convertsMapWithInt() throws InvalidInputException {
         String jsonWithIntMap = "{name : test, map :[[0, 1], [1, 0]]}";
-        String[][] expectedMap = {{"0", "1"}, {"1", "0"}};
+        MapTile[][] expectedMap = {{NotAccessible.getInstance(), Accessible.getInstance()}, {Accessible.getInstance(), NotAccessible.getInstance()}};
 
         Map result = underTest.convert(jsonWithIntMap);
 
@@ -57,7 +57,10 @@ public class MapReaderTest {
     @Test
     void convertsMapWithStringAndInt() throws InvalidInputException {
         String jsonWithStrings = "{name: test ,map: [['0', 0], [1,1], ['1', 1]]}";
-        String[][] expectedMap = {{"0", "1", "1"}, {"0", "1", "1"}};
+        MapTile[][] expectedMap = {
+                {NotAccessible.getInstance(), Accessible.getInstance(), Accessible.getInstance()},
+                {NotAccessible.getInstance(), Accessible.getInstance(), Accessible.getInstance()}
+        };
 
         Map result = underTest.convert(jsonWithStrings);
 
@@ -73,7 +76,8 @@ public class MapReaderTest {
         Map result = underTest.convert(json);
 
         assertEquals("test", result.getName());
-        assertArrayEquals(expectedMap, result.getArray());
+        assertSame(Accessible.getInstance(), result.getArray()[1][1]);
+        verify(personReaderMock).load("opa");
     }
 
     @Test

@@ -5,7 +5,9 @@
     [1,1],
     ["0", 1]
   ],
-  "interacts": {
-    "opa": "Person"
+  "interactables": {
+    "opa": {
+      "type": "Person"
+    }
   }
 }

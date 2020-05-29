@@ -70,6 +70,8 @@ public class KeyControls implements KeyListener {
     }
 
     public void turnOffControls() {
+        manfred.stopX();
+        manfred.stopY();
         activeController = doNothingController;
     }
 
