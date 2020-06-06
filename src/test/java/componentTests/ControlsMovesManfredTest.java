@@ -13,6 +13,7 @@ import manfred.game.graphics.GamePanel;
 import manfred.game.interact.Door;
 import manfred.game.interact.Interactable;
 import manfred.game.interact.Person;
+import manfred.game.interact.Portal;
 import manfred.game.map.Map;
 import manfred.game.map.MapWrapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -52,7 +54,8 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         GelaberController gelaberController = new GelaberController();
         GamePanel panel = mock(GamePanel.class);
 
-        controls = new KeyControls(manfredController,
+        controls = new KeyControls(
+                manfredController,
                 gelaberController,
                 mock(DoNothingController.class),
                 manfred,
@@ -162,7 +165,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         String targetName = "target";
         int targetSpawnX = 5;
         int targetSpawnY = 66;
-        setupMapWithDoor(targetName, targetSpawnX, targetSpawnY);
+        setupMapWithDoorOrPortal(new Door(targetName, targetSpawnX, targetSpawnY));
 
         KeyControls controlsSpy = spy(controls);
         controlsSpy.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
@@ -176,13 +179,33 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         assertEquals(GamePanel.PIXEL_BLOCK_SIZE * targetSpawnY, manfred.getY());
     }
 
-    private void setupMapWithDoor(String targetName, int targetSpawnX, int targetSpawnY) {
-        Door door = new Door(targetName, targetSpawnX, targetSpawnY);
+    @Test
+    void stepOnPortal() throws InterruptedException, InvalidInputException, IOException {
+        String targetName = "target";
+        int targetSpawnX = 5;
+        int targetSpawnY = 66;
+        setupMapWithDoorOrPortal(new Portal(targetName, targetSpawnX, targetSpawnY));
 
+        manfred.setY(GamePanel.PIXEL_BLOCK_SIZE);
+        Consumer<KeyControls> result = manfred.move();
+
+        KeyControls controlsSpy = spy(controls);
+        result.accept(controlsSpy);
+
+        Thread.sleep(1000); // Wait for swing worker to finish
+
+        verify(controlsSpy).turnOffControls();
+        verify(controlsSpy).controlManfred();
+        verify(mapWrapperMock).loadMap(targetName);
+        assertEquals(GamePanel.PIXEL_BLOCK_SIZE * targetSpawnX, manfred.getX());
+        assertEquals(GamePanel.PIXEL_BLOCK_SIZE * targetSpawnY, manfred.getY());
+    }
+
+    private void setupMapWithDoorOrPortal(Interactable doorOrPortal) {
         HashMap<String, Interactable> interactables = new HashMap();
-        interactables.put("testDoor", door);
+        interactables.put("doorOrPortal", doorOrPortal);
 
-        Map map = TestMapFactory.create(new String[][]{{"1", "testDoor"}}, interactables);
+        Map map = TestMapFactory.create(new String[][]{{"1", "doorOrPortal"}}, interactables);
         when(mapWrapperMock.getMap()).thenReturn(map);
 
         setupControllerWithManfred(manfred);
