@@ -8,8 +8,11 @@ import manfred.game.graphics.Paintable;
 import java.awt.*;
 
 public class Enemy extends MovingObject implements Paintable {
-    protected Enemy(int speed, int x, int y, int healthPoints, MapCollider collider) {
+    private String name;
+
+    protected Enemy(String name, int speed, int x, int y, int healthPoints, MapCollider collider) {
         super(speed, x, y, GamePanel.PIXEL_BLOCK_SIZE, GamePanel.PIXEL_BLOCK_SIZE, healthPoints, collider);
+        this.name = name;
     }
 
     @Override

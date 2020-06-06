@@ -9,6 +9,7 @@ abstract public class MovingObject {
     protected int x;
     protected int y;
     protected final int speed;
+    private int healthPoints;
 
     protected boolean movesLeft = false;
     protected boolean movesRight = false;
@@ -30,6 +31,7 @@ abstract public class MovingObject {
         this.y = y;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
+        this.healthPoints = healthPoints;
         this.collider = collider;
     }
 
@@ -87,7 +89,7 @@ abstract public class MovingObject {
     }
 
     @Nullable
-    protected Consumer<KeyControls> move() {
+    public Consumer<KeyControls> move() {
         if (!collider.collides(
                 x + currentSpeedX,
                 x + currentSpeedX + (sizeX - 1),
@@ -106,5 +108,9 @@ abstract public class MovingObject {
             y += currentSpeedY;
         }
         return null;
+    }
+
+    public int getHealthPoints() {
+        return healthPoints;
     }
 }
