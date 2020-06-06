@@ -37,7 +37,7 @@
       "type": "Person"
     },
     "Baum": {
-      "type": "Door",
+      "type": "Portal",
       "targetSpawnX": 5,
       "targetSpawnY": 10
     }

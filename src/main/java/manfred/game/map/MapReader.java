@@ -5,6 +5,7 @@ import manfred.game.exception.InvalidInputException;
 import manfred.game.interact.Door;
 import manfred.game.interact.Interactable;
 import manfred.game.interact.PersonReader;
+import manfred.game.interact.Portal;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -106,6 +107,8 @@ public class MapReader {
                 return personReader.load(interactableId);
             case "Door":
                 return convertDoor(interactableId, interactable);
+            case "Portal":
+                return convertPortal(interactableId, interactable);
             default:
                 throw new InvalidInputException("Unknown interactable type: " + interactableType + " for interactable " + interactableId);
         }
@@ -113,5 +116,9 @@ public class MapReader {
 
     private Door convertDoor(String targetName, JSONObject interactable) {
         return new Door(targetName, interactable.getInt("targetSpawnX"), interactable.getInt("targetSpawnY"));
+    }
+
+    private Portal convertPortal(String targetName, JSONObject interactable) {
+        return new Portal(targetName, interactable.getInt("targetSpawnX"), interactable.getInt("targetSpawnY"));
     }
 }
