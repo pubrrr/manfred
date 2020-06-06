@@ -2,6 +2,7 @@ package manfred.game.interact;
 
 import manfred.game.controls.KeyControls;
 import manfred.game.interact.gelaber.Gelaber;
+import org.springframework.lang.Nullable;
 
 import java.util.function.Consumer;
 
@@ -33,5 +34,11 @@ public class Person implements Interactable {
     @Override
     public boolean isAccessible() {
         return false;
+    }
+
+    @Override
+    @Nullable
+    public Consumer<KeyControls> onStep() {
+        return null;
     }
 }

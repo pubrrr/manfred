@@ -30,8 +30,8 @@ public class GameContext {
     }
 
     @Bean
-    public GameRunner gameRunner(ManfredWindow window, Manfred manfred) {
-        return new GameRunner(window, manfred);
+    public GameRunner gameRunner(KeyControls keyControls, ManfredWindow window, Manfred manfred) {
+        return new GameRunner(keyControls, window, manfred);
     }
 
     @Bean

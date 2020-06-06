@@ -13,7 +13,6 @@ import java.util.function.Consumer;
 public class Manfred implements Paintable {
     private static final int SPEED = 10;
     private static final int INTERACT_DISTANCE = 10;
-    private static final int ON_TILE_TOLERANCE = GamePanel.PIXEL_BLOCK_SIZE / 8;
 
     private int x;
     private int y;
@@ -102,7 +101,8 @@ public class Manfred implements Paintable {
         currentSpeedY = 0;
     }
 
-    public void move() {
+    @Nullable
+    public Consumer<KeyControls> move() {
         if (!collider.collides(
                 x + currentSpeedX,
                 x + currentSpeedX + (sizeX - 1),
@@ -122,26 +122,14 @@ public class Manfred implements Paintable {
         }
 
         Point mainTile = checkForTileManfredStandMainlyOn();
-        if (mainTile != null) {
-            mapWrapper.getMap().stepOn(mainTile.x, mainTile.y);
-        }
+        return mapWrapper.getMap().stepOn(mainTile.x, mainTile.y);
     }
 
     private Point checkForTileManfredStandMainlyOn() {
-        int leftBorder = x + ON_TILE_TOLERANCE;
-        int rightBorder = x + sizeX - ON_TILE_TOLERANCE;
-        int topBorder = y + ON_TILE_TOLERANCE;
-        int bottomBorder = y + sizeY - ON_TILE_TOLERANCE;
+        int centerX = x + sizeX / 2;
+        int centerY = y + sizeY / 2;
 
-        int tileOfLeftBorder = leftBorder / GamePanel.PIXEL_BLOCK_SIZE;
-        int tileOfRightBorder = rightBorder / GamePanel.PIXEL_BLOCK_SIZE;
-        int tileOfTopBorder = topBorder / GamePanel.PIXEL_BLOCK_SIZE;
-        int tileOfBottomBorder = bottomBorder / GamePanel.PIXEL_BLOCK_SIZE;
-
-        if (tileOfLeftBorder != tileOfRightBorder || tileOfTopBorder != tileOfBottomBorder) {
-            return null;
-        }
-        return new Point(tileOfLeftBorder, tileOfTopBorder);
+        return new Point(centerX / GamePanel.PIXEL_BLOCK_SIZE, centerY / GamePanel.PIXEL_BLOCK_SIZE);
     }
 
     @Override
@@ -152,10 +140,10 @@ public class Manfred implements Paintable {
         g.setColor(Color.BLACK);
         switch (viewDirection) {
             case up:
-                g.fillRect(x + sizeX/2, y, 10, 10);
+                g.fillRect(x + sizeX / 2, y, 10, 10);
                 break;
             case down:
-                g.fillRect(x + sizeX/2, y + sizeY, 10, 10);
+                g.fillRect(x + sizeX / 2, y + sizeY, 10, 10);
                 break;
             case left:
                 g.fillRect(x, y + sizeY / 2, 10, 10);

@@ -1,10 +1,12 @@
 package manfred.game.map;
 
 import com.sun.istack.internal.Nullable;
+import manfred.game.controls.KeyControls;
 import manfred.game.graphics.GamePanel;
 import manfred.game.interact.Interactable;
 
 import java.awt.*;
+import java.util.function.Consumer;
 
 public class Map {
     private String name;
@@ -58,7 +60,8 @@ public class Map {
                 : null;
     }
 
-    public void stepOn(int x, int y) {
-        mapTiles[x][y].onStep();
+    @Nullable
+    public Consumer<KeyControls> stepOn(int x, int y) {
+        return mapTiles[x][y].onStep();
     }
 }

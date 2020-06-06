@@ -1,32 +1,107 @@
 package manfred.game.characters;
 
+import com.tngtech.junit.dataprovider.DataProvider;
+import com.tngtech.junit.dataprovider.DataProviderExtension;
+import com.tngtech.junit.dataprovider.UseDataProvider;
+import com.tngtech.junit.dataprovider.UseDataProviderExtension;
+import helpers.TestMapFactory;
+import manfred.game.controls.KeyControls;
+import manfred.game.graphics.GamePanel;
+import manfred.game.map.Accessible;
+import manfred.game.map.Map;
+import manfred.game.map.MapTile;
 import manfred.game.map.MapWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestTemplate;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.mockito.Mockito.mock;
+import java.util.function.Consumer;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(DataProviderExtension.class)
+@ExtendWith(UseDataProviderExtension.class)
 class ManfredTest {
-    private Manfred manfred;
+    private Manfred underTest;
+
+    private MapWrapper mapWrapperMock;
 
     @BeforeEach
     void init() {
         MapCollider colliderMock = mock(MapCollider.class);
-        MapWrapper mapWrapperMock = mock(MapWrapper.class);
+        mapWrapperMock = mock(MapWrapper.class);
 
-        manfred = new Manfred(0, 0, colliderMock, mapWrapperMock);
+        underTest = new Manfred(0, 0, colliderMock, mapWrapperMock);
     }
 
     @Test
     void whenNoKeyPressed_thenDoesNotMove() {
-        int initialX = manfred.getX();
-        int initialY = manfred.getY();
+        Map map = TestMapFactory.create(new String[][]{{"1"}}, null);
+        when(mapWrapperMock.getMap()).thenReturn(map);
 
-        manfred.move();
+        int initialX = underTest.getX();
+        int initialY = underTest.getY();
 
-        assertEquals(initialX, manfred.getX());
-        assertEquals(initialY, manfred.getY());
+        underTest.move();
+
+        assertEquals(initialX, underTest.getX());
+        assertEquals(initialY, underTest.getY());
+    }
+
+    @TestTemplate
+    @UseDataProvider("provideInitialManfredCoordinates")
+    public void triggerOnStep(int manfredX, int manfredY, boolean expectTriggerStepOn) {
+        underTest.setX(manfredX);
+        underTest.setY(manfredY);
+
+        Consumer<KeyControls> nonZeroLambda = keyControls -> {};
+        setup4x4MapMockWithOnStepCallbackTopLeftTile(nonZeroLambda);
+
+        Consumer<KeyControls> result = underTest.move();
+
+        assertEquals(expectTriggerStepOn, result != null);
+    }
+
+    @DataProvider
+    static Object[][] provideInitialManfredCoordinates() {
+        int halfBlockSize = GamePanel.PIXEL_BLOCK_SIZE / 2;
+        return new Object[][]{
+                {0, 0, true},
+                {halfBlockSize - 1, 0, true},
+                {0, halfBlockSize - 1, true},
+                {halfBlockSize - 1, halfBlockSize - 1, true},
+                {halfBlockSize, 0, false},
+                {0, halfBlockSize, false},
+                {halfBlockSize, halfBlockSize, false},
+        };
+    }
+
+    private void setup4x4MapMockWithOnStepCallbackTopLeftTile(Consumer<KeyControls> nonZeroLambda) {
+        MapTile mapTileMock = mock(MapTile.class);
+        when(mapTileMock.onStep()).thenReturn(nonZeroLambda);
+        Map map = new Map("test", new MapTile[][]{{mapTileMock, Accessible.getInstance()}, {Accessible.getInstance(), Accessible.getInstance()}});
+        when(mapWrapperMock.getMap()).thenReturn(map);
+    }
+
+    @Test
+    void noGapBetweenTwoNeighboringOnStepTiles() {
+        Consumer<KeyControls> nonZeroLambda = keyControls -> {};
+
+        MapTile mapTileMock = mock(MapTile.class);
+        when(mapTileMock.onStep()).thenReturn(nonZeroLambda);
+        Map map = new Map("test", new MapTile[][]{{mapTileMock, mapTileMock}});
+        Map mapSpy = spy(map);
+        when(mapWrapperMock.getMap()).thenReturn(mapSpy);
+
+        underTest.down();
+
+        while (underTest.getY() <= GamePanel.PIXEL_BLOCK_SIZE) {
+            Consumer<KeyControls> result = underTest.move();
+            assertNotNull(result);
+        }
+        verify(mapSpy, atLeastOnce()).stepOn(0, 0);
+        verify(mapSpy, atLeastOnce()).stepOn(0, 1);
     }
 }

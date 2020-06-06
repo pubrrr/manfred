@@ -1,6 +1,7 @@
 package manfred.game.interact;
 
 import manfred.game.controls.KeyControls;
+import org.springframework.lang.Nullable;
 
 import javax.swing.*;
 import java.util.function.Consumer;
@@ -42,5 +43,11 @@ public class Door extends SwingWorker<Void, Void> implements Interactable {
     @Override
     public boolean isAccessible() {
         return false;
+    }
+
+    @Override
+    @Nullable
+    public Consumer<KeyControls> onStep() {
+        return null;
     }
 }

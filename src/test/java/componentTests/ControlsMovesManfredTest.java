@@ -36,7 +36,10 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         MapCollider colliderMock = mock(MapCollider.class);
         when(colliderMock.collides(0, 0, 0, 0)).thenReturn(true);
 
+        Map mapMock = mock(Map.class);
+        when(mapMock.stepOn(anyInt(), anyInt())).thenReturn(null);
         mapWrapperMock = mock(MapWrapper.class);
+        when(mapWrapperMock.getMap()).thenReturn(mapMock);
 
         manfred = new Manfred(0, 0, colliderMock, mapWrapperMock);
         manfredSpy = spy(manfred);
