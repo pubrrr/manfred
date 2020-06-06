@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(DataProviderExtension.class)
 @ExtendWith(UseDataProviderExtension.class)
 class MapColliderTest {
-    private static MapCollider underTest;
+    private MapCollider underTest;
 
     void initMap(String[][] mapArray) {
         Map map = TestMapFactory.create(mapArray, new HashMap<>());

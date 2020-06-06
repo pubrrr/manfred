@@ -1,5 +1,5 @@
 {
   "name": "Mongo",
-  "healtPoints": 20,
+  "healthPoints": 20,
   "speed": 5
 }

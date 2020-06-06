@@ -1,6 +1,8 @@
 package manfred.game.map;
 
 import manfred.game.Game;
+import manfred.game.enemy.EnemyReader;
+import manfred.game.enemy.EnemyStack;
 import manfred.game.exception.InvalidInputException;
 import manfred.game.interact.Door;
 import manfred.game.interact.Interactable;
@@ -9,6 +11,7 @@ import manfred.game.interact.Portal;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.lang.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,9 +24,11 @@ public class MapReader {
     public static final String PATH_MAPS = Game.PATH_DATA + "maps\\";
 
     private PersonReader personReader;
+    private EnemyReader enemyReader;
 
-    public MapReader(PersonReader personReader) {
+    public MapReader(PersonReader personReader, EnemyReader enemyReader) {
         this.personReader = personReader;
+        this.enemyReader = enemyReader;
     }
 
     public Map load(String name) throws InvalidInputException, IOException {
@@ -42,6 +47,7 @@ public class MapReader {
 
             String name = jsonInput.getString("name");
             MapTile[][] mapTiles = convertMap(jsonInput.getJSONArray("map"), jsonInput.optJSONObject("interactables"));
+            EnemyStack enemies = convertEnemies(jsonInput.optJSONArray("enemies"));
 
             return new Map(name, mapTiles);
         } catch (JSONException | IOException $e) {
@@ -120,5 +126,23 @@ public class MapReader {
 
     private Portal convertPortal(String targetName, JSONObject interactable) {
         return new Portal(targetName, interactable.getInt("targetSpawnX"), interactable.getInt("targetSpawnY"));
+    }
+
+    private EnemyStack convertEnemies(@Nullable JSONArray enemies) throws InvalidInputException, IOException {
+        EnemyStack enemyStack = new EnemyStack();
+        if (enemies == null) {
+            return enemyStack;
+        }
+
+        for (Object enemy: enemies) {
+            if (!(enemy instanceof JSONObject)) {
+                throw new InvalidInputException("Enemy was not a JSONObject: " + enemy.toString());
+            }
+            String name = ((JSONObject) enemy).getString("name");
+            int spawnX = ((JSONObject) enemy).getInt("spawnX");
+            int spawnY = ((JSONObject) enemy).getInt("spawnY");
+            enemyStack.add(enemyReader.load(name, spawnX, spawnY));
+        }
+        return enemyStack;
     }
 }

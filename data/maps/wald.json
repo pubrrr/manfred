@@ -41,6 +41,13 @@
       "targetSpawnX": 5,
       "targetSpawnY": 10
     }
-  }
+  },
+  "enemies": [
+    {
+      "name": "mongo",
+      "spawnX": 9,
+      "spawnY": 9
+    }
+  ]
 }
 

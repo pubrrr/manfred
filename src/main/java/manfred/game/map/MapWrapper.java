@@ -8,14 +8,23 @@ import java.io.IOException;
 
 public class MapWrapper implements Paintable {
     private MapReader mapReader;
+    private String initialMapName;
+
     private Map map;
 
-    public MapWrapper(MapReader mapReader, Map initialMap) {
+    public MapWrapper(MapReader mapReader, String initialMapName) {
         this.mapReader = mapReader;
-        this.map = initialMap;
+        this.initialMapName = initialMapName;
     }
 
     public Map getMap() {
+        if (map == null) {
+            try {
+                loadMap(initialMapName);
+            } catch (InvalidInputException | IOException e) {
+                e.printStackTrace();
+            }
+        }
         return map;
     }
 
@@ -25,6 +34,6 @@ public class MapWrapper implements Paintable {
 
     @Override
     public void paint(Graphics g) {
-        this.map.paint(g);
+        this.getMap().paint(g);
     }
 }

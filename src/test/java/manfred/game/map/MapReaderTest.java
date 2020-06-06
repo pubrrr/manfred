@@ -1,5 +1,6 @@
 package manfred.game.map;
 
+import manfred.game.enemy.EnemyReader;
 import manfred.game.exception.InvalidInputException;
 import manfred.game.interact.Door;
 import manfred.game.interact.PersonReader;
@@ -15,13 +16,14 @@ import static org.mockito.Mockito.verify;
 public class MapReaderTest {
     private MapReader underTest;
     private PersonReader personReaderMock;
-
+    private EnemyReader enemyReaderMock;
 
     @BeforeEach
     void init() {
         personReaderMock = mock(PersonReader.class);
+        enemyReaderMock = mock(EnemyReader.class);
 
-        underTest = new MapReader(personReaderMock);
+        underTest = new MapReader(personReaderMock, enemyReaderMock);
     }
 
     @Test
@@ -101,5 +103,13 @@ public class MapReaderTest {
         Map result = underTest.convert(jsonWithDoor);
 
         assertTrue(result.getInteractable(0, 0) instanceof Door);
+    }
+
+    @Test
+    void triggersLoadEnemies() throws InvalidInputException, IOException {
+        String jsonWithEnemy = "{name: test, map: [[0]], enemies: [{name: testEnemy, spawnX: 0, spawnY: 55}]}";
+        underTest.convert(jsonWithEnemy);
+
+        verify(enemyReaderMock).load("testEnemy", 0, 55);
     }
 }

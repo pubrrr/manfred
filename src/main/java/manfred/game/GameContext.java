@@ -6,19 +6,17 @@ import manfred.game.controls.DoNothingController;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
-import manfred.game.exception.InvalidInputException;
+import manfred.game.enemy.EnemyReader;
+import manfred.game.enemy.MapColliderProvider;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.ManfredWindow;
 import manfred.game.interact.PersonReader;
 import manfred.game.interact.gelaber.Gelaber;
 import manfred.game.interact.gelaber.GelaberReader;
-import manfred.game.map.Map;
 import manfred.game.map.MapReader;
 import manfred.game.map.MapWrapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.io.IOException;
 
 @Configuration
 public class GameContext {
@@ -70,18 +68,13 @@ public class GameContext {
     }
 
     @Bean
-    public MapWrapper mapWrapper(MapReader mapReader, Map initialMap) {
-        return new MapWrapper(mapReader, initialMap);
+    public MapWrapper mapWrapper(MapReader mapReader) {
+        return new MapWrapper(mapReader, "Wald");
     }
 
     @Bean
-    public MapReader mapReader(PersonReader personReader) {
-        return new MapReader(personReader);
-    }
-
-    @Bean
-    public Map map(MapReader mapReader) throws InvalidInputException, IOException {
-        return mapReader.load("Wald");
+    public MapReader mapReader(PersonReader personReader, EnemyReader enemyReader) {
+        return new MapReader(personReader, enemyReader);
     }
 
     @Bean
@@ -112,5 +105,15 @@ public class GameContext {
     @Bean
     public DoNothingController doNothingController() {
         return new DoNothingController();
+    }
+
+    @Bean
+    public EnemyReader enemyReader(MapColliderProvider mapColliderProvider) {
+        return new EnemyReader(mapColliderProvider);
+    }
+
+    @Bean
+    public MapColliderProvider mapColliderProvider() {
+        return new MapColliderProvider();
     }
 }

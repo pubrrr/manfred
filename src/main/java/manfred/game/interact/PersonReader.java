@@ -39,8 +39,8 @@ public class PersonReader {
             Gelaber gelaber = gelaberReader.convert(jsonInput.getJSONArray("gelaber"));
 
             return new Person(name, gelaber);
-        } catch (JSONException $e) {
-            throw new InvalidInputException($e.getMessage());
+        } catch (JSONException e) {
+            throw new InvalidInputException(e.getMessage());
         }
     }
 }

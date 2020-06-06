@@ -1,9 +1,7 @@
 package manfred.game.enemy;
 
 import manfred.game.Game;
-import manfred.game.characters.MapCollider;
 import manfred.game.exception.InvalidInputException;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -13,11 +11,10 @@ import java.util.List;
 
 public class EnemyReader {
     public static final String PATH_ENEMIES = Game.PATH_DATA + "enemies\\";
+    private MapColliderProvider mapColliderProvider;
 
-    private MapCollider mapCollider;
-
-    public EnemyReader(MapCollider mapCollider) {
-        this.mapCollider = mapCollider;
+    public EnemyReader(MapColliderProvider mapColliderProvider) {
+        this.mapColliderProvider = mapColliderProvider;
     }
 
     public Enemy load(String name, int spawnX, int spawnY) throws InvalidInputException, IOException {
@@ -38,9 +35,9 @@ public class EnemyReader {
             int healthPoints = jsonInput.getInt("healthPoints");
             int speed = jsonInput.getInt("speed");
 
-            return new Enemy(name, speed, spawnX, spawnY, healthPoints, this.mapCollider);
-        } catch (JSONException $e) {
-            throw new InvalidInputException($e.getMessage());
+            return new Enemy(name, speed, spawnX, spawnY, healthPoints, mapColliderProvider.provide());
+        } catch (Exception e) {
+            throw new InvalidInputException(e.getMessage());
         }
     }
 }

@@ -4,19 +4,22 @@ import manfred.game.characters.MapCollider;
 import manfred.game.exception.InvalidInputException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class EnemyReaderTest {
     private EnemyReader underTest;
 
     @BeforeEach
-    void init() {
+    void init() throws Exception {
         MapCollider mapColliderMock = mock(MapCollider.class);
         when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
-        underTest = new EnemyReader(mapColliderMock);
+
+        MapColliderProvider mapColliderProviderMock = mock(MapColliderProvider.class);
+        when(mapColliderProviderMock.provide()).thenReturn(mapColliderMock);
+
+        underTest = new EnemyReader(mapColliderProviderMock);
     }
 
     @Test
