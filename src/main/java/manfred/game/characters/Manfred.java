@@ -10,33 +10,12 @@ import org.springframework.lang.Nullable;
 import java.awt.*;
 import java.util.function.Consumer;
 
-public class Manfred implements Paintable {
-    private static final int SPEED = 10;
+public class Manfred extends MovingObject implements Paintable {
     private static final int INTERACT_DISTANCE = 10;
-
-    private int x;
-    private int y;
-
-    private int currentSpeedX = 0;
-    private int currentSpeedY = 0;
-    private boolean movesLeft = false;
-    private boolean movesRight = false;
-    private boolean movesUp = false;
-    private boolean movesDown = false;
-    private Direction viewDirection = Direction.down;
-
-    private final int sizeX;
-    private final int sizeY;
-
-    private MapCollider collider;
     private MapWrapper mapWrapper;
 
-    public Manfred(int x, int y, MapCollider collider, MapWrapper mapWrapper) {
-        this.x = x;
-        this.y = y;
-        sizeX = GamePanel.PIXEL_BLOCK_SIZE;
-        sizeY = GamePanel.PIXEL_BLOCK_SIZE;
-        this.collider = collider;
+    public Manfred(int speed, int x, int y, int healthPoints, MapCollider collider, MapWrapper mapWrapper) {
+        super(speed, x, y, GamePanel.PIXEL_BLOCK_SIZE, GamePanel.PIXEL_BLOCK_SIZE, healthPoints, collider);
         this.mapWrapper = mapWrapper;
     }
 
@@ -48,78 +27,10 @@ public class Manfred implements Paintable {
         this.y = y;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void left() {
-        if (!movesLeft) {
-            viewDirection = Direction.left;
-            movesLeft = true;
-            currentSpeedX -= SPEED;
-        }
-    }
-
-    public void right() {
-        if (!movesRight) {
-            viewDirection = Direction.right;
-            movesRight = true;
-            currentSpeedX += SPEED;
-        }
-    }
-
-    public void up() {
-        if (!movesUp) {
-            viewDirection = Direction.up;
-            movesUp = true;
-            // y-Achse ist invertiert: kleiner Werte werden weiter oben gezeichnet
-            currentSpeedY -= SPEED;
-        }
-    }
-
-    public void down() {
-        if (!movesDown) {
-            viewDirection = Direction.down;
-            movesDown = true;
-            currentSpeedY += SPEED;
-        }
-    }
-
-    public void stopX() {
-        movesRight = false;
-        movesLeft = false;
-        currentSpeedX = 0;
-    }
-
-    public void stopY() {
-        movesUp = false;
-        movesDown = false;
-        currentSpeedY = 0;
-    }
-
+    @Override
     @Nullable
     public Consumer<KeyControls> move() {
-        if (!collider.collides(
-                x + currentSpeedX,
-                x + currentSpeedX + (sizeX - 1),
-                y,
-                y + (sizeY - 1)
-        )) {
-            x += currentSpeedX;
-        }
-
-        if (!collider.collides(
-                x,
-                x + (sizeX - 1),
-                y + currentSpeedY,
-                y + currentSpeedY + (sizeY - 1)
-        )) {
-            y += currentSpeedY;
-        }
+        super.move();
 
         Point mainTile = checkForTileManfredStandMainlyOn();
         return mapWrapper.getMap().stepOn(mainTile.x, mainTile.y);

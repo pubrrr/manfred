@@ -33,7 +33,7 @@ class ManfredTest {
         MapCollider colliderMock = mock(MapCollider.class);
         mapWrapperMock = mock(MapWrapper.class);
 
-        underTest = new Manfred(0, 0, colliderMock, mapWrapperMock);
+        underTest = new Manfred(10, 0, 0, 1, colliderMock, mapWrapperMock);
     }
 
     @Test

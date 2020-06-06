@@ -43,7 +43,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         mapWrapperMock = mock(MapWrapper.class);
         when(mapWrapperMock.getMap()).thenReturn(mapMock);
 
-        manfred = new Manfred(0, 0, colliderMock, mapWrapperMock);
+        manfred = new Manfred(10, 0, 0, 1, colliderMock, mapWrapperMock);
         manfredSpy = spy(manfred);
 
         setupControllerWithManfred(manfred);
