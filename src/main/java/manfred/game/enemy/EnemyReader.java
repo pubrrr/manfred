@@ -42,7 +42,8 @@ public class EnemyReader {
                     GamePanel.PIXEL_BLOCK_SIZE * spawnX,
                     GamePanel.PIXEL_BLOCK_SIZE * spawnY,
                     healthPoints,
-                    mapColliderProvider.provide()
+                    mapColliderProvider.provide(),
+                    GamePanel.PIXEL_BLOCK_SIZE * 5
             );
         } catch (Exception e) {
             throw new InvalidInputException(e.getMessage());

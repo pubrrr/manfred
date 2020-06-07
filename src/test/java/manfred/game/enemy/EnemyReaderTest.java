@@ -2,6 +2,7 @@ package manfred.game.enemy;
 
 import manfred.game.characters.MapCollider;
 import manfred.game.exception.InvalidInputException;
+import manfred.game.graphics.GamePanel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,12 +29,12 @@ class EnemyReaderTest {
 
         Enemy result = underTest.convert(input, 1, 22);
 
-        assertEquals(1, result.getX());
-        assertEquals(22, result.getY());
+        assertEquals(GamePanel.PIXEL_BLOCK_SIZE, result.getX());
+        assertEquals(GamePanel.PIXEL_BLOCK_SIZE * 22, result.getY());
         assertEquals(100, result.getHealthPoints());
 
         result.right();
         result.move();
-        assertEquals(2, result.getX());
+        assertEquals(GamePanel.PIXEL_BLOCK_SIZE + 1, result.getX());
     }
 }

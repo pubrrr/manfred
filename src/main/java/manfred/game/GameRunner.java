@@ -42,7 +42,7 @@ public class GameRunner implements Runnable {
         }
 
         for (Enemy enemy : enemiesWrapper.getEnemies()) {
-            enemy.move();
+            enemy.move(manfred);
         }
     }
 }
