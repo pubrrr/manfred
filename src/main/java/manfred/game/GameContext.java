@@ -1,7 +1,9 @@
 package manfred.game;
 
+import manfred.game.attack.AttacksContainer;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
+import manfred.game.characters.SkillSet;
 import manfred.game.controls.DoNothingController;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
@@ -29,18 +31,27 @@ public class GameContext {
     }
 
     @Bean
-    public GameRunner gameRunner(KeyControls keyControls, ManfredWindow window, Manfred manfred, EnemiesWrapper enemiesWrapper) {
-        return new GameRunner(keyControls, window, manfred, enemiesWrapper);
+    public GameRunner gameRunner(KeyControls keyControls, ManfredWindow window, Manfred manfred, EnemiesWrapper enemiesWrapper, AttacksContainer attacksContainer) {
+        return new GameRunner(keyControls, window, manfred, enemiesWrapper, attacksContainer);
     }
 
     @Bean
-    public Manfred manfred(MapCollider collider, MapWrapper mapWrapper) {
-        return new Manfred(10, GamePanel.PIXEL_BLOCK_SIZE * 3, GamePanel.PIXEL_BLOCK_SIZE * 3, 100, collider, mapWrapper);
+    public Manfred manfred(MapCollider collider, MapWrapper mapWrapper, AttacksContainer attacksContainer, SkillSet skillSet) {
+        return new Manfred(
+                10,
+                GamePanel.PIXEL_BLOCK_SIZE * 3,
+                GamePanel.PIXEL_BLOCK_SIZE * 3,
+                100,
+                collider,
+                mapWrapper,
+                attacksContainer,
+                skillSet
+        );
     }
 
     @Bean
-    public GamePanel gamePanel(MapWrapper map, Manfred manfred, EnemiesWrapper enemiesWrapper) {
-        return new GamePanel(map, manfred, enemiesWrapper);
+    public GamePanel gamePanel(MapWrapper map, Manfred manfred, EnemiesWrapper enemiesWrapper, AttacksContainer attacksContainer) {
+        return new GamePanel(map, manfred, enemiesWrapper, attacksContainer);
     }
 
     @Bean
@@ -121,5 +132,15 @@ public class GameContext {
     @Bean
     public EnemiesWrapper enemiesWrapper() {
         return new EnemiesWrapper();
+    }
+
+    @Bean
+    public AttacksContainer attacksContainer() {
+        return new AttacksContainer();
+    }
+
+    @Bean
+    public SkillSet skillSet() {
+        return new SkillSet();
     }
 }

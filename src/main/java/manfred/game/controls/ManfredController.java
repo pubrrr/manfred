@@ -4,10 +4,14 @@ import manfred.game.characters.Manfred;
 import org.springframework.lang.Nullable;
 
 import java.awt.event.KeyEvent;
+import java.util.Stack;
 import java.util.function.Consumer;
 
 public class ManfredController implements ControllerInterface {
     private Manfred manfred;
+
+    private boolean castMode = false;
+    private Stack<String> attackCombination = new Stack<>();
 
     public ManfredController(Manfred manfred) {
         this.manfred = manfred;
@@ -18,16 +22,23 @@ public class ManfredController implements ControllerInterface {
         switch (event.getKeyCode()) {
             case KeyEvent.VK_A:
                 manfred.left();
-                break;
+                return;
             case KeyEvent.VK_D:
                 manfred.right();
-                break;
+                return;
             case KeyEvent.VK_S:
                 manfred.down();
-                break;
+                return;
             case KeyEvent.VK_W:
                 manfred.up();
-                break;
+                return;
+            case KeyEvent.VK_SPACE:
+                if (castMode) {
+                    manfred.cast(this.attackCombination);
+                } else {
+                    castMode = true;
+                }
+                return;
         }
     }
 

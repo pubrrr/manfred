@@ -2,8 +2,10 @@ package componentTests;
 
 import helpers.ResultCaptor;
 import helpers.TestMapFactory;
+import manfred.game.attack.AttacksContainer;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
+import manfred.game.characters.SkillSet;
 import manfred.game.controls.DoNothingController;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
@@ -32,6 +34,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
     private Manfred manfredSpy;
     private KeyControls controls;
     private MapWrapper mapWrapperMock;
+    private SkillSet skillSetMock;
 
     @BeforeEach
     void init() {
@@ -43,7 +46,9 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         mapWrapperMock = mock(MapWrapper.class);
         when(mapWrapperMock.getMap()).thenReturn(mapMock);
 
-        manfred = new Manfred(10, 0, 0, 1, colliderMock, mapWrapperMock);
+        skillSetMock = mock(SkillSet.class);
+
+        manfred = new Manfred(10, 0, 0, 1, colliderMock, mapWrapperMock, mock(AttacksContainer.class), skillSetMock);
         manfredSpy = spy(manfred);
 
         setupControllerWithManfred(manfred);
@@ -199,6 +204,17 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         verify(mapWrapperMock).loadMap(targetName);
         assertEquals(GamePanel.PIXEL_BLOCK_SIZE * targetSpawnX, manfred.getX());
         assertEquals(GamePanel.PIXEL_BLOCK_SIZE * targetSpawnY, manfred.getY());
+    }
+
+    @Test
+    void triggerEmtpyAttack() {
+        setupControllerWithManfred(manfredSpy);
+
+        controls.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
+        verify(manfredSpy, never()).cast(any());
+
+        controls.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
+        verify(manfredSpy, atLeastOnce()).cast(any());
     }
 
     private void setupMapWithDoorOrPortal(Interactable doorOrPortal) {

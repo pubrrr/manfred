@@ -1,5 +1,6 @@
 package manfred.game;
 
+import manfred.game.attack.AttacksContainer;
 import manfred.game.characters.Manfred;
 import manfred.game.controls.KeyControls;
 import manfred.game.enemy.EnemiesWrapper;
@@ -15,12 +16,14 @@ public class GameRunner implements Runnable {
     private ManfredWindow window;
     private Manfred manfred;
     private EnemiesWrapper enemiesWrapper;
+    private AttacksContainer attacksContainer;
 
-    public GameRunner(KeyControls keyControls, ManfredWindow window, Manfred manfred, EnemiesWrapper enemiesWrapper) {
+    public GameRunner(KeyControls keyControls, ManfredWindow window, Manfred manfred, EnemiesWrapper enemiesWrapper, AttacksContainer attacksContainer) {
         this.keyControls = keyControls;
         this.window = window;
         this.manfred = manfred;
         this.enemiesWrapper = enemiesWrapper;
+        this.attacksContainer = attacksContainer;
     }
 
     public void run() {

@@ -1,5 +1,7 @@
 package manfred.game.characters;
 
+import manfred.game.attack.AttackGenerator;
+import manfred.game.attack.AttacksContainer;
 import manfred.game.controls.KeyControls;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.Paintable;
@@ -8,15 +10,20 @@ import manfred.game.map.MapWrapper;
 import org.springframework.lang.Nullable;
 
 import java.awt.*;
+import java.util.Stack;
 import java.util.function.Consumer;
 
 public class Manfred extends MovingObject implements Paintable {
     private static final int INTERACT_DISTANCE = 10;
     private MapWrapper mapWrapper;
+    private AttacksContainer attacksContainer;
+    private SkillSet skillSet;
 
-    public Manfred(int speed, int x, int y, int healthPoints, MapCollider collider, MapWrapper mapWrapper) {
+    public Manfred(int speed, int x, int y, int healthPoints, MapCollider collider, MapWrapper mapWrapper, AttacksContainer attacksContainer, SkillSet skillSet) {
         super(speed, x, y, GamePanel.PIXEL_BLOCK_SIZE, GamePanel.PIXEL_BLOCK_SIZE, healthPoints, collider);
         this.mapWrapper = mapWrapper;
+        this.attacksContainer = attacksContainer;
+        this.skillSet = skillSet;
     }
 
     public void setX(int x) {
@@ -96,5 +103,15 @@ public class Manfred extends MovingObject implements Paintable {
             return null;
         }
         return interactable.interact();
+    }
+
+    public void cast(Stack<String> attackCombination) {
+        StringBuilder stringBuilder = new StringBuilder();
+        attackCombination.forEach(stringBuilder::append);
+        AttackGenerator attackGenerator = skillSet.get(stringBuilder.toString());
+
+        if (attackGenerator != null) {
+            attacksContainer.add(attackGenerator.generate());
+        }
     }
 }

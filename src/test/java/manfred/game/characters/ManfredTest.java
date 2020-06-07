@@ -5,6 +5,9 @@ import com.tngtech.junit.dataprovider.DataProviderExtension;
 import com.tngtech.junit.dataprovider.UseDataProvider;
 import com.tngtech.junit.dataprovider.UseDataProviderExtension;
 import helpers.TestMapFactory;
+import manfred.game.attack.Attack;
+import manfred.game.attack.AttackGenerator;
+import manfred.game.attack.AttacksContainer;
 import manfred.game.controls.KeyControls;
 import manfred.game.graphics.GamePanel;
 import manfred.game.map.Accessible;
@@ -16,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.util.Stack;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,13 +31,17 @@ class ManfredTest {
     private Manfred underTest;
 
     private MapWrapper mapWrapperMock;
+    private AttacksContainer attacksContainerMock;
+    private SkillSet skillSetMock;
 
     @BeforeEach
     void init() {
         MapCollider colliderMock = mock(MapCollider.class);
         mapWrapperMock = mock(MapWrapper.class);
+        attacksContainerMock = mock(AttacksContainer.class);
+        skillSetMock = mock(SkillSet.class);
 
-        underTest = new Manfred(10, 0, 0, 1, colliderMock, mapWrapperMock);
+        underTest = new Manfred(10, 0, 0, 1, colliderMock, mapWrapperMock, attacksContainerMock, skillSetMock);
     }
 
     @Test
@@ -103,5 +111,37 @@ class ManfredTest {
         }
         verify(mapSpy, atLeastOnce()).stepOn(0, 0);
         verify(mapSpy, atLeastOnce()).stepOn(0, 1);
+    }
+
+    @Test
+    void givenKnownAttackCombination_addsAttackToContainer() {
+        Stack<String> attackCombination = new Stack<>();
+        attackCombination.push("a");
+        attackCombination.push("b");
+        attackCombination.push("c");
+
+        Attack attackMock = mock(Attack.class);
+        AttackGenerator attackGeneratorMock = mock(AttackGenerator.class);
+        when(attackGeneratorMock.generate()).thenReturn(attackMock);
+
+        when(skillSetMock.get("abc")).thenReturn(attackGeneratorMock);
+
+        underTest.cast(attackCombination);
+
+        verify(attacksContainerMock).add(attackMock);
+    }
+
+    @Test
+    void givenUnkownAttackCombination_doesNotAddAttack() {
+        Stack<String> attackCombination = new Stack<>();
+        attackCombination.push("a");
+        attackCombination.push("b");
+        attackCombination.push("c");
+
+        when(skillSetMock.get("abc")).thenReturn(null);
+
+        underTest.cast(attackCombination);
+
+        verify(attacksContainerMock, never()).add(any());
     }
 }
