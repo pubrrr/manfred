@@ -2,6 +2,8 @@ package manfred.game;
 
 import manfred.game.characters.Manfred;
 import manfred.game.controls.KeyControls;
+import manfred.game.enemy.EnemiesWrapper;
+import manfred.game.enemy.Enemy;
 import manfred.game.graphics.ManfredWindow;
 
 import java.util.function.Consumer;
@@ -12,11 +14,13 @@ public class GameRunner implements Runnable {
     private KeyControls keyControls;
     private ManfredWindow window;
     private Manfred manfred;
+    private EnemiesWrapper enemiesWrapper;
 
-    public GameRunner(KeyControls keyControls, ManfredWindow window, Manfred manfred) {
+    public GameRunner(KeyControls keyControls, ManfredWindow window, Manfred manfred, EnemiesWrapper enemiesWrapper) {
         this.keyControls = keyControls;
         this.window = window;
         this.manfred = manfred;
+        this.enemiesWrapper = enemiesWrapper;
     }
 
     public void run() {
@@ -35,6 +39,10 @@ public class GameRunner implements Runnable {
         Consumer<KeyControls> callback = this.manfred.move();
         if (callback != null) {
             callback.accept(this.keyControls);
+        }
+
+        for (Enemy enemy : enemiesWrapper.getEnemies()) {
+            enemy.move();
         }
     }
 }

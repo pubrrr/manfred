@@ -2,6 +2,7 @@ package manfred.game.enemy;
 
 import manfred.game.Game;
 import manfred.game.exception.InvalidInputException;
+import manfred.game.graphics.GamePanel;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -35,7 +36,14 @@ public class EnemyReader {
             int healthPoints = jsonInput.getInt("healthPoints");
             int speed = jsonInput.getInt("speed");
 
-            return new Enemy(name, speed, spawnX, spawnY, healthPoints, mapColliderProvider.provide());
+            return new Enemy(
+                    name,
+                    speed,
+                    GamePanel.PIXEL_BLOCK_SIZE * spawnX,
+                    GamePanel.PIXEL_BLOCK_SIZE * spawnY,
+                    healthPoints,
+                    mapColliderProvider.provide()
+            );
         } catch (Exception e) {
             throw new InvalidInputException(e.getMessage());
         }

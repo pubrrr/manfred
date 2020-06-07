@@ -1,6 +1,7 @@
 package manfred.game.graphics;
 
 import manfred.game.characters.Manfred;
+import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.map.MapWrapper;
 
 import javax.swing.*;
@@ -18,13 +19,14 @@ public class GamePanel extends JPanel {
     private int fadeTransparency = 0;
     private List<Paintable> paintables = new LinkedList<>();
 
-    public GamePanel(MapWrapper mapWrapper, Manfred manfred) {
+    public GamePanel(MapWrapper mapWrapper, Manfred manfred, EnemiesWrapper enemiesWrapper) {
         super();
         setFocusable(true);
         requestFocus();
 
         registerPaintable(mapWrapper);
         registerPaintable(manfred);
+        registerPaintable(enemiesWrapper);
     }
 
     public Dimension getPreferredSize() {

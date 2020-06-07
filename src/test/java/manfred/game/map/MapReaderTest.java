@@ -1,5 +1,6 @@
 package manfred.game.map;
 
+import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.enemy.EnemyReader;
 import manfred.game.exception.InvalidInputException;
 import manfred.game.interact.Door;
@@ -10,20 +11,21 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class MapReaderTest {
     private MapReader underTest;
     private PersonReader personReaderMock;
     private EnemyReader enemyReaderMock;
+    private EnemiesWrapper enemiesWrapperMock;
 
     @BeforeEach
     void init() {
         personReaderMock = mock(PersonReader.class);
         enemyReaderMock = mock(EnemyReader.class);
+        enemiesWrapperMock = mock(EnemiesWrapper.class);
 
-        underTest = new MapReader(personReaderMock, enemyReaderMock);
+        underTest = new MapReader(personReaderMock, enemyReaderMock, enemiesWrapperMock);
     }
 
     @Test
@@ -111,5 +113,6 @@ public class MapReaderTest {
         underTest.convert(jsonWithEnemy);
 
         verify(enemyReaderMock).load("testEnemy", 0, 55);
+        verify(enemiesWrapperMock).setEnemies(any());
     }
 }

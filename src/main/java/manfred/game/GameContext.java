@@ -6,6 +6,7 @@ import manfred.game.controls.DoNothingController;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
+import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.enemy.EnemyReader;
 import manfred.game.enemy.MapColliderProvider;
 import manfred.game.graphics.GamePanel;
@@ -28,8 +29,8 @@ public class GameContext {
     }
 
     @Bean
-    public GameRunner gameRunner(KeyControls keyControls, ManfredWindow window, Manfred manfred) {
-        return new GameRunner(keyControls, window, manfred);
+    public GameRunner gameRunner(KeyControls keyControls, ManfredWindow window, Manfred manfred, EnemiesWrapper enemiesWrapper) {
+        return new GameRunner(keyControls, window, manfred, enemiesWrapper);
     }
 
     @Bean
@@ -38,8 +39,8 @@ public class GameContext {
     }
 
     @Bean
-    public GamePanel gamePanel(MapWrapper map, Manfred manfred) {
-        return new GamePanel(map, manfred);
+    public GamePanel gamePanel(MapWrapper map, Manfred manfred, EnemiesWrapper enemiesWrapper) {
+        return new GamePanel(map, manfred, enemiesWrapper);
     }
 
     @Bean
@@ -73,8 +74,8 @@ public class GameContext {
     }
 
     @Bean
-    public MapReader mapReader(PersonReader personReader, EnemyReader enemyReader) {
-        return new MapReader(personReader, enemyReader);
+    public MapReader mapReader(PersonReader personReader, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper) {
+        return new MapReader(personReader, enemyReader, enemiesWrapper);
     }
 
     @Bean
@@ -115,5 +116,10 @@ public class GameContext {
     @Bean
     public MapColliderProvider mapColliderProvider() {
         return new MapColliderProvider();
+    }
+
+    @Bean
+    public EnemiesWrapper enemiesWrapper() {
+        return new EnemiesWrapper();
     }
 }

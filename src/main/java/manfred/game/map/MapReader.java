@@ -1,6 +1,7 @@
 package manfred.game.map;
 
 import manfred.game.Game;
+import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.enemy.EnemyReader;
 import manfred.game.enemy.EnemyStack;
 import manfred.game.exception.InvalidInputException;
@@ -25,10 +26,12 @@ public class MapReader {
 
     private PersonReader personReader;
     private EnemyReader enemyReader;
+    private EnemiesWrapper enemiesWrapper;
 
-    public MapReader(PersonReader personReader, EnemyReader enemyReader) {
+    public MapReader(PersonReader personReader, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper) {
         this.personReader = personReader;
         this.enemyReader = enemyReader;
+        this.enemiesWrapper = enemiesWrapper;
     }
 
     public Map load(String name) throws InvalidInputException, IOException {
@@ -48,6 +51,7 @@ public class MapReader {
             String name = jsonInput.getString("name");
             MapTile[][] mapTiles = convertMap(jsonInput.getJSONArray("map"), jsonInput.optJSONObject("interactables"));
             EnemyStack enemies = convertEnemies(jsonInput.optJSONArray("enemies"));
+            enemiesWrapper.setEnemies(enemies);
 
             return new Map(name, mapTiles);
         } catch (JSONException | IOException $e) {
