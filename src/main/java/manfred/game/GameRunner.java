@@ -5,7 +5,6 @@ import manfred.game.attack.AttacksContainer;
 import manfred.game.characters.Manfred;
 import manfred.game.controls.KeyControls;
 import manfred.game.enemy.EnemiesWrapper;
-import manfred.game.enemy.Enemy;
 import manfred.game.graphics.ManfredWindow;
 
 import java.util.function.Consumer;
@@ -47,5 +46,9 @@ public class GameRunner implements Runnable {
 
         enemiesWrapper.forEach(enemy -> enemy.move(manfred));
         attacksContainer.forEach(Attack::move);
+
+        enemiesWrapper.forEach(enemy -> attacksContainer.hit(enemy));
+        enemiesWrapper.removeKilled();
+        attacksContainer.removeResolved();
     }
 }

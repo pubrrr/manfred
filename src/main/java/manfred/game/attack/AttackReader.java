@@ -36,8 +36,10 @@ public class AttackReader {
             int speed = jsonInput.getInt("speed");
             int sizeX = jsonInput.getInt("sizeX");
             int sizeY = jsonInput.getInt("sizeY");
+            int damage = jsonInput.getInt("damage");
+            int range = jsonInput.getInt("range");
 
-            return new AttackGenerator(speed, sizeX, sizeY, mapColliderProvider.provide());
+            return new AttackGenerator(speed, sizeX, sizeY, mapColliderProvider.provide(), damage, range);
         } catch (Exception e) {
             throw new InvalidInputException(e.getMessage());
         }

@@ -48,5 +48,9 @@ public class Enemy extends MovingObject implements Paintable {
     public int getHealthPoints() {
         return healthPoints;
     }
+
+    public void takeDamage(int damage) {
+        this.healthPoints -= damage;
+    }
 }
 

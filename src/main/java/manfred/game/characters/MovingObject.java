@@ -3,6 +3,7 @@ package manfred.game.characters;
 import manfred.game.controls.KeyControls;
 import org.springframework.lang.Nullable;
 
+import java.awt.*;
 import java.util.function.Consumer;
 
 abstract public class MovingObject {
@@ -99,5 +100,9 @@ abstract public class MovingObject {
             this.sprite.translate(0, currentSpeedY);
         }
         return null;
+    }
+
+    public boolean intersectsSprite(Sprite otherSprite) {
+        return this.sprite.intersects(otherSprite);
     }
 }

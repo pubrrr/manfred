@@ -23,4 +23,12 @@ public class EnemiesWrapper implements Paintable, Iterable<Enemy> {
     public Iterator<Enemy> iterator() {
         return enemies.iterator();
     }
+
+    public void removeKilled() {
+        forEach(enemy -> {
+            if (enemy.getHealthPoints() <= 0) {
+                enemies.remove(enemy);
+            }
+        });
+    }
 }

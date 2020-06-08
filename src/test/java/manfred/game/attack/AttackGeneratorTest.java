@@ -23,7 +23,7 @@ class AttackGeneratorTest {
         MapCollider mapColliderMock = mock(MapCollider.class);
         when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
 
-        underTest = new AttackGenerator(SPEED, SIZE, SIZE, mapColliderMock);
+        underTest = new AttackGenerator(SPEED, SIZE, SIZE, mapColliderMock, 3, 4);
     }
 
     @Test
