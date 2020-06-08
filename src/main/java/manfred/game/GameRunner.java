@@ -45,9 +45,7 @@ public class GameRunner implements Runnable {
             callback.accept(this.keyControls);
         }
 
-        for (Enemy enemy : enemiesWrapper.getEnemies()) {
-            enemy.move(manfred);
-        }
+        enemiesWrapper.forEach(enemy -> enemy.move(manfred));
         attacksContainer.forEach(Attack::move);
     }
 }
