@@ -11,11 +11,13 @@ import java.awt.*;
 public class Enemy extends MovingObject implements Paintable {
     private String name;
 
+    private int healthPoints;
     private int aggroRadius;
 
     protected Enemy(String name, int speed, int x, int y, int healthPoints, MapCollider collider, int aggroRadius) {
-        super(speed, x, y, GamePanel.PIXEL_BLOCK_SIZE, GamePanel.PIXEL_BLOCK_SIZE, healthPoints, collider);
+        super(speed, x, y, GamePanel.PIXEL_BLOCK_SIZE, GamePanel.PIXEL_BLOCK_SIZE, collider);
         this.name = name;
+        this.healthPoints = healthPoints;
         this.aggroRadius = aggroRadius;
     }
 
@@ -41,6 +43,10 @@ public class Enemy extends MovingObject implements Paintable {
         }
 
         super.move();
+    }
+
+    public int getHealthPoints() {
+        return healthPoints;
     }
 }
 

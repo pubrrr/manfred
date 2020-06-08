@@ -9,7 +9,6 @@ abstract public class MovingObject {
     protected int x;
     protected int y;
     protected final int speed;
-    private int healthPoints;
 
     protected boolean movesLeft = false;
     protected boolean movesRight = false;
@@ -25,13 +24,12 @@ abstract public class MovingObject {
     protected int currentSpeedX = 0;
     protected int currentSpeedY = 0;
 
-    protected MovingObject(int speed, int x, int y, int sizeX, int sizeY, int healthPoints, MapCollider collider) {
+    protected MovingObject(int speed, int x, int y, int sizeX, int sizeY, MapCollider collider) {
         this.speed = speed;
         this.x = x;
         this.y = y;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
-        this.healthPoints = healthPoints;
         this.collider = collider;
     }
 
@@ -108,9 +106,5 @@ abstract public class MovingObject {
             y += currentSpeedY;
         }
         return null;
-    }
-
-    public int getHealthPoints() {
-        return healthPoints;
     }
 }

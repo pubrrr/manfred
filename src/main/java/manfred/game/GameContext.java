@@ -1,5 +1,6 @@
 package manfred.game;
 
+import manfred.game.attack.AttackReader;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
@@ -11,6 +12,7 @@ import manfred.game.controls.ManfredController;
 import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.enemy.EnemyReader;
 import manfred.game.enemy.MapColliderProvider;
+import manfred.game.exception.InvalidInputException;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.ManfredWindow;
 import manfred.game.interact.PersonReader;
@@ -20,6 +22,8 @@ import manfred.game.map.MapReader;
 import manfred.game.map.MapWrapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.io.IOException;
 
 @Configuration
 public class GameContext {
@@ -80,8 +84,8 @@ public class GameContext {
     }
 
     @Bean
-    public MapWrapper mapWrapper(MapReader mapReader) {
-        return new MapWrapper(mapReader, "Wald");
+    public MapWrapper mapWrapper(MapReader mapReader, AttacksContainer attacksContainer) {
+        return new MapWrapper(mapReader, "Wald", attacksContainer);
     }
 
     @Bean
@@ -140,7 +144,14 @@ public class GameContext {
     }
 
     @Bean
-    public SkillSet skillSet() {
-        return new SkillSet();
+    public SkillSet skillSet(AttackReader attackReader) throws InvalidInputException, IOException {
+        SkillSet skillSet = new SkillSet();
+        skillSet.put("lurul", attackReader.load("throwBlock"));
+        return skillSet;
+    }
+
+    @Bean
+    public AttackReader attackReader(MapColliderProvider mapColliderProvider) {
+        return new AttackReader(mapColliderProvider);
     }
 }

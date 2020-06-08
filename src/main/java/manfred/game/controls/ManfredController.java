@@ -34,11 +34,30 @@ public class ManfredController implements ControllerInterface {
                 return;
             case KeyEvent.VK_SPACE:
                 if (castMode) {
+                    castMode = false;
                     manfred.cast(this.attackCombination);
                 } else {
+                    attackCombination = new Stack<>();
                     castMode = true;
                 }
                 return;
+        }
+
+        if (castMode) {
+            switch (event.getKeyCode()) {
+                case KeyEvent.VK_LEFT:
+                    attackCombination.push("l");
+                    return;
+                case KeyEvent.VK_RIGHT:
+                    attackCombination.push("r");
+                    return;
+                case KeyEvent.VK_UP:
+                    attackCombination.push("u");
+                    return;
+                case KeyEvent.VK_DOWN:
+                    attackCombination.push("d");
+                    return;
+            }
         }
     }
 

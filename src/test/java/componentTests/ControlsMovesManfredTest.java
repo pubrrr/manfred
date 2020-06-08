@@ -2,6 +2,8 @@ package componentTests;
 
 import helpers.ResultCaptor;
 import helpers.TestMapFactory;
+import manfred.game.attack.Attack;
+import manfred.game.attack.AttackGenerator;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
@@ -35,6 +37,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
     private KeyControls controls;
     private MapWrapper mapWrapperMock;
     private SkillSet skillSetMock;
+    private AttacksContainer attacksContainerMock;
 
     @BeforeEach
     void init() {
@@ -47,8 +50,9 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         when(mapWrapperMock.getMap()).thenReturn(mapMock);
 
         skillSetMock = mock(SkillSet.class);
+        attacksContainerMock = mock(AttacksContainer.class);
 
-        manfred = new Manfred(10, 0, 0, 1, colliderMock, mapWrapperMock, mock(AttacksContainer.class), skillSetMock);
+        manfred = new Manfred(10, 0, 0, 1, colliderMock, mapWrapperMock, attacksContainerMock, skillSetMock);
         manfredSpy = spy(manfred);
 
         setupControllerWithManfred(manfred);
@@ -215,6 +219,37 @@ class ControlsMovesManfredTest extends ControllerTestCase {
 
         controls.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
         verify(manfredSpy, atLeastOnce()).cast(any());
+    }
+
+    @Test
+    void givenCorrectCombination_thenTriggersAttack() {
+        Attack attackMock = mockSkillSetWithCombination("l");
+
+        controls.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
+        controls.keyPressed(mockEventWithKey(KeyEvent.VK_LEFT));
+        controls.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
+
+        verify(attacksContainerMock).add(attackMock);
+    }
+
+    @Test
+    void givenWrongCombination_thenDoesNotTriggerAttack() {
+        Attack attackMock = mockSkillSetWithCombination("ll");
+
+        controls.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
+        controls.keyPressed(mockEventWithKey(KeyEvent.VK_LEFT));
+        controls.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
+
+        verify(attacksContainerMock, never()).add(attackMock);
+    }
+
+    private Attack mockSkillSetWithCombination(String combination) {
+        Attack attackMock = mock(Attack.class);
+        AttackGenerator attacksGeneratorMock = mock(AttackGenerator.class);
+        when(attacksGeneratorMock.generate(anyInt(), anyInt(), any())).thenReturn(attackMock);
+
+        when(skillSetMock.get(combination)).thenReturn(attacksGeneratorMock);
+        return attackMock;
     }
 
     private void setupMapWithDoorOrPortal(Interactable doorOrPortal) {

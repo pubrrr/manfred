@@ -1,5 +1,6 @@
 package manfred.game.characters;
 
+import manfred.game.attack.Attack;
 import manfred.game.attack.AttackGenerator;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.controls.KeyControls;
@@ -15,12 +16,14 @@ import java.util.function.Consumer;
 
 public class Manfred extends MovingObject implements Paintable {
     private static final int INTERACT_DISTANCE = 10;
+    private int healthPoints;
     private MapWrapper mapWrapper;
     private AttacksContainer attacksContainer;
     private SkillSet skillSet;
 
     public Manfred(int speed, int x, int y, int healthPoints, MapCollider collider, MapWrapper mapWrapper, AttacksContainer attacksContainer, SkillSet skillSet) {
-        super(speed, x, y, GamePanel.PIXEL_BLOCK_SIZE, GamePanel.PIXEL_BLOCK_SIZE, healthPoints, collider);
+        super(speed, x, y, GamePanel.PIXEL_BLOCK_SIZE, GamePanel.PIXEL_BLOCK_SIZE, collider);
+        this.healthPoints = healthPoints;
         this.mapWrapper = mapWrapper;
         this.attacksContainer = attacksContainer;
         this.skillSet = skillSet;
@@ -111,7 +114,8 @@ public class Manfred extends MovingObject implements Paintable {
         AttackGenerator attackGenerator = skillSet.get(stringBuilder.toString());
 
         if (attackGenerator != null) {
-            attacksContainer.add(attackGenerator.generate());
+            Attack attack = attackGenerator.generate(this.x + sizeX / 2, this.y + sizeY / 2, this.viewDirection);
+            attacksContainer.add(attack);
         }
     }
 }

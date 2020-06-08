@@ -1,5 +1,6 @@
 package manfred.game;
 
+import manfred.game.attack.Attack;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.characters.Manfred;
 import manfred.game.controls.KeyControls;
@@ -47,5 +48,6 @@ public class GameRunner implements Runnable {
         for (Enemy enemy : enemiesWrapper.getEnemies()) {
             enemy.move(manfred);
         }
+        attacksContainer.forEach(Attack::move);
     }
 }
