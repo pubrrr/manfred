@@ -24,12 +24,12 @@ public class Enemy extends MovingObject implements Paintable {
     @Override
     public void paint(Graphics g) {
         g.setColor(Color.BLACK);
-        g.fillRect(x, y, sizeX, sizeY);
+        g.fillPolygon(this.sprite.toPaint());
     }
 
     public void move(Manfred manfred) {
-        long distanceX = manfred.getX() - this.x;
-        long distanceY = manfred.getY() - this.y;
+        long distanceX = manfred.getX() - this.sprite.x;
+        long distanceY = manfred.getY() - this.sprite.y;
         long distanceSquared = distanceX * distanceX + distanceY * distanceY;
 
         if (distanceSquared <= aggroRadius * aggroRadius) {

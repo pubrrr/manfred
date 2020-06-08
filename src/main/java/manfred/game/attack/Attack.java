@@ -14,6 +14,6 @@ public class Attack extends MovingObject implements Paintable {
     @Override
     public void paint(Graphics g) {
         g.setColor(Color.MAGENTA);
-        g.fillRect(this.x, this.y, this.sizeX, this.sizeY);
+        g.fillPolygon(this.sprite.toPaint());
     }
 }

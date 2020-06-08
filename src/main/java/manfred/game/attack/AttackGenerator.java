@@ -3,6 +3,8 @@ package manfred.game.attack;
 import manfred.game.characters.Direction;
 import manfred.game.characters.MapCollider;
 
+import java.awt.*;
+
 public class AttackGenerator {
     private final int speed;
     private final int sizeX;
@@ -16,8 +18,8 @@ public class AttackGenerator {
         this.mapCollider = mapCollider;
     }
 
-    public Attack generate(int x, int y, Direction castDirection) {
-        Attack attack = new Attack(this.speed, x - this.sizeX / 2, y - this.sizeY / 2, this.sizeX, this.sizeY, mapCollider);
+    public Attack generate(Point center, Direction castDirection) {
+        Attack attack = new Attack(this.speed, center.x - this.sizeX / 2, center.y - this.sizeY / 2, this.sizeX, this.sizeY, mapCollider);
         switch (castDirection) {
             case up:
                 attack.up();

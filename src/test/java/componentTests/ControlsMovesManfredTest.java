@@ -246,7 +246,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
     private Attack mockSkillSetWithCombination(String combination) {
         Attack attackMock = mock(Attack.class);
         AttackGenerator attacksGeneratorMock = mock(AttackGenerator.class);
-        when(attacksGeneratorMock.generate(anyInt(), anyInt(), any())).thenReturn(attackMock);
+        when(attacksGeneratorMock.generate(any(), any())).thenReturn(attackMock);
 
         when(skillSetMock.get(combination)).thenReturn(attacksGeneratorMock);
         return attackMock;

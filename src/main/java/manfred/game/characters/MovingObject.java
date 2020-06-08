@@ -6,8 +6,7 @@ import org.springframework.lang.Nullable;
 import java.util.function.Consumer;
 
 abstract public class MovingObject {
-    protected int x;
-    protected int y;
+    protected Sprite sprite;
     protected final int speed;
 
     protected boolean movesLeft = false;
@@ -16,9 +15,6 @@ abstract public class MovingObject {
     protected boolean movesDown = false;
     protected Direction viewDirection = Direction.down;
 
-    protected final int sizeX;
-    protected final int sizeY;
-
     protected MapCollider collider;
 
     protected int currentSpeedX = 0;
@@ -26,19 +22,16 @@ abstract public class MovingObject {
 
     protected MovingObject(int speed, int x, int y, int sizeX, int sizeY, MapCollider collider) {
         this.speed = speed;
-        this.x = x;
-        this.y = y;
-        this.sizeX = sizeX;
-        this.sizeY = sizeY;
+        this.sprite = new Sprite(x, y, sizeX, sizeY);
         this.collider = collider;
     }
 
     public int getX() {
-        return x;
+        return this.sprite.x;
     }
 
     public int getY() {
-        return y;
+        return this.sprite.y;
     }
 
     public void left() {
@@ -89,21 +82,21 @@ abstract public class MovingObject {
     @Nullable
     public Consumer<KeyControls> move() {
         if (!collider.collides(
-                x + currentSpeedX,
-                x + currentSpeedX + (sizeX - 1),
-                y,
-                y + (sizeY - 1)
+                this.sprite.left() + currentSpeedX,
+                this.sprite.right() - 1 + currentSpeedX,
+                this.sprite.top(),
+                this.sprite.bottom() - 1
         )) {
-            x += currentSpeedX;
+            this.sprite.translate(currentSpeedX, 0);
         }
 
         if (!collider.collides(
-                x,
-                x + (sizeX - 1),
-                y + currentSpeedY,
-                y + currentSpeedY + (sizeY - 1)
+                this.sprite.left(),
+                this.sprite.right() - 1,
+                this.sprite.top() + currentSpeedY,
+                this.sprite.bottom() - 1 + currentSpeedY
         )) {
-            y += currentSpeedY;
+            this.sprite.translate(0, currentSpeedY);
         }
         return null;
     }

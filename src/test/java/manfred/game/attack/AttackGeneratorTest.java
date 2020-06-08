@@ -5,6 +5,8 @@ import manfred.game.characters.MapCollider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.awt.*;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -12,6 +14,7 @@ import static org.mockito.Mockito.when;
 
 class AttackGeneratorTest {
     private final static int SPEED = 10;
+    public static final int SIZE = 5;
 
     AttackGenerator underTest;
 
@@ -20,12 +23,12 @@ class AttackGeneratorTest {
         MapCollider mapColliderMock = mock(MapCollider.class);
         when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
 
-        underTest = new AttackGenerator(SPEED, 5, 5, mapColliderMock);
+        underTest = new AttackGenerator(SPEED, SIZE, SIZE, mapColliderMock);
     }
 
     @Test
     void generateMovingLeft() {
-        Attack result = underTest.generate(0, 0, Direction.left);
+        Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.left);
 
         result.move();
         assertEquals(-SPEED, result.getX());
@@ -34,7 +37,7 @@ class AttackGeneratorTest {
 
     @Test
     void generateMovingRight() {
-        Attack result = underTest.generate(0, 0, Direction.right);
+        Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.right);
 
         result.move();
         assertEquals(SPEED, result.getX());
@@ -43,7 +46,7 @@ class AttackGeneratorTest {
 
     @Test
     void generateMovingUp() {
-        Attack result = underTest.generate(0, 0, Direction.up);
+        Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.up);
 
         result.move();
         assertEquals(0, result.getX());
@@ -52,7 +55,7 @@ class AttackGeneratorTest {
 
     @Test
     void generateMovingDown() {
-        Attack result = underTest.generate(0, 0, Direction.down);
+        Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.down);
 
         result.move();
         assertEquals(0, result.getX());

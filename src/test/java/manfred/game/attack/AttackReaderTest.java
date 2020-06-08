@@ -6,10 +6,12 @@ import manfred.game.enemy.MapColliderProvider;
 import manfred.game.exception.InvalidInputException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import java.awt.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class AttackReaderTest {
     private AttackReader underTest;
@@ -24,11 +26,11 @@ class AttackReaderTest {
 
     @Test
     void convert() throws InvalidInputException {
-        String input = "{speed: 1, sizeX: 5, sizeY: 5}";
+        String input = "{speed: 1, sizeX: 0, sizeY: 0}";
 
         AttackGenerator result = underTest.convert(input);
 
-        Attack attack = result.generate(0, 0, Direction.right);
+        Attack attack = result.generate(new Point(0,0), Direction.right);
         attack.move();
         assertEquals(1, attack.getX());
         assertEquals(0, attack.getY());

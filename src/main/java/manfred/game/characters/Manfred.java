@@ -30,11 +30,11 @@ public class Manfred extends MovingObject implements Paintable {
     }
 
     public void setX(int x) {
-        this.x = x;
+        this.sprite.x = x;
     }
 
     public void setY(int y) {
-        this.y = y;
+        this.sprite.y = y;
     }
 
     @Override
@@ -47,30 +47,29 @@ public class Manfred extends MovingObject implements Paintable {
     }
 
     private Point checkForTileManfredStandMainlyOn() {
-        int centerX = x + sizeX / 2;
-        int centerY = y + sizeY / 2;
-
-        return new Point(centerX / GamePanel.PIXEL_BLOCK_SIZE, centerY / GamePanel.PIXEL_BLOCK_SIZE);
+        Point center = this.sprite.getCenter();
+        return new Point(center.x / GamePanel.PIXEL_BLOCK_SIZE, center.y / GamePanel.PIXEL_BLOCK_SIZE);
     }
 
     @Override
     public void paint(Graphics g) {
         g.setColor(Color.GREEN);
-        g.fillRect(getX(), getY(), sizeX, sizeY);
+        g.fillPolygon(this.sprite.toPaint());
 
         g.setColor(Color.BLACK);
+        Point center = this.sprite.getCenter();
         switch (viewDirection) {
             case up:
-                g.fillRect(x + sizeX / 2, y, 10, 10);
+                g.fillRect(center.x, this.sprite.top(), 10, 10);
                 break;
             case down:
-                g.fillRect(x + sizeX / 2, y + sizeY, 10, 10);
+                g.fillRect(center.x, this.sprite.bottom(), 10, 10);
                 break;
             case left:
-                g.fillRect(x, y + sizeY / 2, 10, 10);
+                g.fillRect(this.sprite.left(), center.y, 10, 10);
                 break;
             case right:
-                g.fillRect(x + sizeX, y + sizeY / 2, 10, 10);
+                g.fillRect(this.sprite.right(), center.y, 10, 10);
                 break;
         }
     }
@@ -80,22 +79,23 @@ public class Manfred extends MovingObject implements Paintable {
         int triggerInteractPositionX = 0;
         int triggerInteractPositionY = 0;
 
+        Point center = this.sprite.getCenter();
         switch (viewDirection) {
             case up:
-                triggerInteractPositionX = x + sizeX / 2;
-                triggerInteractPositionY = y - INTERACT_DISTANCE;
+                triggerInteractPositionX = center.x;
+                triggerInteractPositionY = this.sprite.top() - INTERACT_DISTANCE;
                 break;
             case down:
-                triggerInteractPositionX = x + sizeX / 2;
-                triggerInteractPositionY = y + sizeY + INTERACT_DISTANCE;
+                triggerInteractPositionX = center.x;
+                triggerInteractPositionY = this.sprite.bottom() + INTERACT_DISTANCE;
                 break;
             case left:
-                triggerInteractPositionX = x - INTERACT_DISTANCE;
-                triggerInteractPositionY = y + sizeY / 2;
+                triggerInteractPositionX = this.sprite.left() - INTERACT_DISTANCE;
+                triggerInteractPositionY = center.y;
                 break;
             case right:
-                triggerInteractPositionX = x + sizeX + INTERACT_DISTANCE;
-                triggerInteractPositionY = y + sizeY / 2;
+                triggerInteractPositionX = this.sprite.right() + INTERACT_DISTANCE;
+                triggerInteractPositionY = center.y;
                 break;
         }
         int onMapGridX = triggerInteractPositionX / GamePanel.PIXEL_BLOCK_SIZE;
@@ -114,7 +114,7 @@ public class Manfred extends MovingObject implements Paintable {
         AttackGenerator attackGenerator = skillSet.get(stringBuilder.toString());
 
         if (attackGenerator != null) {
-            Attack attack = attackGenerator.generate(this.x + sizeX / 2, this.y + sizeY / 2, this.viewDirection);
+            Attack attack = attackGenerator.generate(this.sprite.getCenter(), this.viewDirection);
             attacksContainer.add(attack);
         }
     }

@@ -122,7 +122,7 @@ class ManfredTest {
 
         Attack attackMock = mock(Attack.class);
         AttackGenerator attackGeneratorMock = mock(AttackGenerator.class);
-        when(attackGeneratorMock.generate(anyInt(), anyInt(), any())).thenReturn(attackMock);
+        when(attackGeneratorMock.generate(any(), any())).thenReturn(attackMock);
 
         when(skillSetMock.get("abc")).thenReturn(attackGeneratorMock);
 
