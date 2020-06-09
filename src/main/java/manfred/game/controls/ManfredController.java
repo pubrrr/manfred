@@ -39,6 +39,7 @@ public class ManfredController implements ControllerInterface {
                 } else {
                     attackCombination = new Stack<>();
                     castMode = true;
+                    manfred.castMode();
                 }
                 return;
         }

@@ -20,6 +20,7 @@ public class Manfred extends MovingObject implements Paintable {
     private MapWrapper mapWrapper;
     private AttacksContainer attacksContainer;
     private SkillSet skillSet;
+    private boolean castMode;
 
     public Manfred(int speed, int x, int y, int healthPoints, MapCollider collider, MapWrapper mapWrapper, AttacksContainer attacksContainer, SkillSet skillSet) {
         super(speed, x, y, GamePanel.PIXEL_BLOCK_SIZE, GamePanel.PIXEL_BLOCK_SIZE, collider);
@@ -53,7 +54,11 @@ public class Manfred extends MovingObject implements Paintable {
 
     @Override
     public void paint(Graphics g) {
-        g.setColor(Color.GREEN);
+        if (this.castMode) {
+            g.setColor(Color.CYAN);
+        } else {
+            g.setColor(Color.GREEN);
+        }
         g.fillPolygon(this.sprite.toPaint());
 
         g.setColor(Color.BLACK);
@@ -109,6 +114,8 @@ public class Manfred extends MovingObject implements Paintable {
     }
 
     public void cast(Stack<String> attackCombination) {
+        this.castMode = false;
+
         StringBuilder stringBuilder = new StringBuilder();
         attackCombination.forEach(stringBuilder::append);
         AttackGenerator attackGenerator = skillSet.get(stringBuilder.toString());
@@ -117,5 +124,9 @@ public class Manfred extends MovingObject implements Paintable {
             Attack attack = attackGenerator.generate(this.sprite.getCenter(), this.viewDirection);
             attacksContainer.add(attack);
         }
+    }
+
+    public void castMode() {
+        this.castMode = true;
     }
 }
