@@ -44,7 +44,7 @@ class AttackReaderTest {
 
         Attack attack = result.generate(new Point(0,0), Direction.right);
         Enemy enemyMock = mock(Enemy.class);
-        attack.hit(enemyMock);
+        attack.checkHit(enemyMock);
         verify(enemyMock).takeDamage(100);
     }
 

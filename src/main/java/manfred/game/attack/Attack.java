@@ -25,6 +25,12 @@ public class Attack extends MovingObject implements Paintable {
 
     @Override
     public Consumer<KeyControls> move() {
+        if (collidesVertically() || collidesHorizontally()) {
+            resolve();
+        }
+        this.sprite.translate(currentSpeedX, 0);
+        this.sprite.translate(0, currentSpeedY);
+
         if (castPosition.distance(this.sprite.getCenter()) > range) {
             this.resolve();
         }
@@ -37,7 +43,7 @@ public class Attack extends MovingObject implements Paintable {
         g.fillPolygon(this.sprite.toPaint());
     }
 
-    public void hit(Enemy enemy) {
+    public void checkHit(Enemy enemy) {
         if (enemy.intersectsSprite(this.sprite)) {
             enemy.takeDamage(this.damage);
             this.resolve();

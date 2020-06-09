@@ -47,7 +47,11 @@ public class GameRunner implements Runnable {
         enemiesWrapper.forEach(enemy -> enemy.move(manfred));
         attacksContainer.forEach(Attack::move);
 
-        enemiesWrapper.forEach(enemy -> attacksContainer.hit(enemy));
+        enemiesWrapper.forEach(
+                enemy -> attacksContainer.forEach(
+                        attack -> attack.checkHit(enemy)
+                )
+        );
         enemiesWrapper.removeKilled();
         attacksContainer.removeResolved();
     }

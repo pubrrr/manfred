@@ -3,7 +3,6 @@ package manfred.game.characters;
 import manfred.game.controls.KeyControls;
 import org.springframework.lang.Nullable;
 
-import java.awt.*;
 import java.util.function.Consumer;
 
 abstract public class MovingObject {
@@ -82,24 +81,32 @@ abstract public class MovingObject {
 
     @Nullable
     public Consumer<KeyControls> move() {
-        if (!collider.collides(
+        if (!collidesVertically()) {
+            this.sprite.translate(currentSpeedX, 0);
+        }
+
+        if (!collidesHorizontally()) {
+            this.sprite.translate(0, currentSpeedY);
+        }
+        return null;
+    }
+
+    protected boolean collidesVertically() {
+        return collider.collides(
                 this.sprite.left() + currentSpeedX,
                 this.sprite.right() - 1 + currentSpeedX,
                 this.sprite.top(),
                 this.sprite.bottom() - 1
-        )) {
-            this.sprite.translate(currentSpeedX, 0);
-        }
+        );
+    }
 
-        if (!collider.collides(
+    protected boolean collidesHorizontally() {
+        return collider.collides(
                 this.sprite.left(),
                 this.sprite.right() - 1,
                 this.sprite.top() + currentSpeedY,
                 this.sprite.bottom() - 1 + currentSpeedY
-        )) {
-            this.sprite.translate(0, currentSpeedY);
-        }
-        return null;
+        );
     }
 
     public boolean intersectsSprite(Sprite otherSprite) {

@@ -14,7 +14,7 @@ public class Enemy extends MovingObject implements Paintable {
     private int healthPoints;
     private int aggroRadius;
 
-    protected Enemy(String name, int speed, int x, int y, int healthPoints, MapCollider collider, int aggroRadius) {
+    public Enemy(String name, int speed, int x, int y, int healthPoints, MapCollider collider, int aggroRadius) {
         super(speed, x, y, GamePanel.PIXEL_BLOCK_SIZE, GamePanel.PIXEL_BLOCK_SIZE, collider);
         this.name = name;
         this.healthPoints = healthPoints;
