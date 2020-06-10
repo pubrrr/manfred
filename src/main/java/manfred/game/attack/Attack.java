@@ -38,13 +38,13 @@ public class Attack extends MovingObject implements Paintable {
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void paint(Graphics g, Point offset) {
         g.setColor(Color.MAGENTA);
-        g.fillPolygon(this.sprite.toPaint());
+        g.fillPolygon(this.sprite.toPaint(offset));
     }
 
     public void checkHit(Enemy enemy) {
-        if (enemy.intersectsSprite(this.sprite)) {
+        if (enemy.getSprite().intersects(this.sprite)) {
             enemy.takeDamage(this.damage);
             this.resolve();
         }

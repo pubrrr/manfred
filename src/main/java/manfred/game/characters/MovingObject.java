@@ -93,23 +93,23 @@ abstract public class MovingObject {
 
     protected boolean collidesVertically() {
         return collider.collides(
-                this.sprite.left() + currentSpeedX,
-                this.sprite.right() - 1 + currentSpeedX,
-                this.sprite.top(),
-                this.sprite.bottom() - 1
+                this.sprite.getLeft() + currentSpeedX,
+                this.sprite.getRight() - 1 + currentSpeedX,
+                this.sprite.getTop(),
+                this.sprite.getBottom() - 1
         );
     }
 
     protected boolean collidesHorizontally() {
         return collider.collides(
-                this.sprite.left(),
-                this.sprite.right() - 1,
-                this.sprite.top() + currentSpeedY,
-                this.sprite.bottom() - 1 + currentSpeedY
+                this.sprite.getLeft(),
+                this.sprite.getRight() - 1,
+                this.sprite.getTop() + currentSpeedY,
+                this.sprite.getBottom() - 1 + currentSpeedY
         );
     }
 
-    public boolean intersectsSprite(Sprite otherSprite) {
-        return this.sprite.intersects(otherSprite);
+    public Sprite getSprite() {
+        return sprite;
     }
 }

@@ -13,6 +13,7 @@ import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.enemy.EnemyReader;
 import manfred.game.enemy.MapColliderProvider;
 import manfred.game.exception.InvalidInputException;
+import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.ManfredWindow;
 import manfred.game.interact.PersonReader;
@@ -54,8 +55,8 @@ public class GameContext {
     }
 
     @Bean
-    public GamePanel gamePanel(MapWrapper map, Manfred manfred, EnemiesWrapper enemiesWrapper, AttacksContainer attacksContainer) {
-        return new GamePanel(map, manfred, enemiesWrapper, attacksContainer);
+    public GamePanel gamePanel(MapWrapper map, Manfred manfred, EnemiesWrapper enemiesWrapper, AttacksContainer attacksContainer, BackgroundScroller backgroundScroller) {
+        return new GamePanel(map, manfred, enemiesWrapper, attacksContainer, backgroundScroller);
     }
 
     @Bean
@@ -153,5 +154,10 @@ public class GameContext {
     @Bean
     public AttackReader attackReader(MapColliderProvider mapColliderProvider) {
         return new AttackReader(mapColliderProvider);
+    }
+
+    @Bean
+    public BackgroundScroller backgroundScroller(Manfred manfred, MapWrapper mapWrapper) {
+        return new BackgroundScroller(Math.min(GamePanel.HEIGHT, GamePanel.WIDTH) / 3, manfred, mapWrapper);
     }
 }

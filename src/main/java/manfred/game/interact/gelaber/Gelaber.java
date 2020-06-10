@@ -69,7 +69,7 @@ public class Gelaber implements Paintable {
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void paint(Graphics g, Point offset) {
         currentText.paint(g);
     }
 }

@@ -37,7 +37,7 @@ public class MapWrapper implements Paintable {
     }
 
     @Override
-    public void paint(Graphics g) {
-        this.getMap().paint(g);
+    public void paint(Graphics g, Point offset) {
+        this.getMap().paint(g, offset);
     }
 }

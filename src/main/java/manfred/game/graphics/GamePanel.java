@@ -17,13 +17,23 @@ public class GamePanel extends JPanel {
     public static final int FADE_PERIOD = 40;
     public static final int FADE_TRANSPARENCY_INTERVAL = 20;
 
+    private final BackgroundScroller backgroundScroller;
+
     private int fadeTransparency = 0;
     private List<Paintable> paintables = new LinkedList<>();
 
-    public GamePanel(MapWrapper mapWrapper, Manfred manfred, EnemiesWrapper enemiesWrapper, AttacksContainer attacksContainer) {
+    public GamePanel(
+            MapWrapper mapWrapper,
+            Manfred manfred,
+            EnemiesWrapper enemiesWrapper,
+            AttacksContainer attacksContainer,
+            BackgroundScroller backgroundScroller
+    ) {
         super();
         setFocusable(true);
         requestFocus();
+
+        this.backgroundScroller = backgroundScroller;
 
         registerPaintable(mapWrapper);
         registerPaintable(manfred);
@@ -43,8 +53,9 @@ public class GamePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         // TODO add some way to determine the order in which the elements get painted
+        Point offset = backgroundScroller.getOffset();
         for (Paintable paintable : paintables) {
-            paintable.paint(g);
+            paintable.paint(g, offset);
         }
 
         if (fadeTransparency > 0) {

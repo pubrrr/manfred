@@ -53,28 +53,28 @@ public class Manfred extends MovingObject implements Paintable {
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void paint(Graphics g, Point offset) {
         if (this.castMode) {
             g.setColor(Color.CYAN);
         } else {
             g.setColor(Color.GREEN);
         }
-        g.fillPolygon(this.sprite.toPaint());
+        g.fillPolygon(this.sprite.toPaint(offset));
 
         g.setColor(Color.BLACK);
         Point center = this.sprite.getCenter();
         switch (viewDirection) {
             case up:
-                g.fillRect(center.x, this.sprite.top(), 10, 10);
+                g.fillRect(center.x - offset.x, this.sprite.getTop() - offset.y, 10, 10);
                 break;
             case down:
-                g.fillRect(center.x, this.sprite.bottom(), 10, 10);
+                g.fillRect(center.x - offset.x, this.sprite.getBottom() - offset.y, 10, 10);
                 break;
             case left:
-                g.fillRect(this.sprite.left(), center.y, 10, 10);
+                g.fillRect(this.sprite.getLeft() - offset.x, center.y - offset.y, 10, 10);
                 break;
             case right:
-                g.fillRect(this.sprite.right(), center.y, 10, 10);
+                g.fillRect(this.sprite.getRight() - offset.x, center.y - offset.y, 10, 10);
                 break;
         }
     }
@@ -88,18 +88,18 @@ public class Manfred extends MovingObject implements Paintable {
         switch (viewDirection) {
             case up:
                 triggerInteractPositionX = center.x;
-                triggerInteractPositionY = this.sprite.top() - INTERACT_DISTANCE;
+                triggerInteractPositionY = this.sprite.getTop() - INTERACT_DISTANCE;
                 break;
             case down:
                 triggerInteractPositionX = center.x;
-                triggerInteractPositionY = this.sprite.bottom() + INTERACT_DISTANCE;
+                triggerInteractPositionY = this.sprite.getBottom() + INTERACT_DISTANCE;
                 break;
             case left:
-                triggerInteractPositionX = this.sprite.left() - INTERACT_DISTANCE;
+                triggerInteractPositionX = this.sprite.getLeft() - INTERACT_DISTANCE;
                 triggerInteractPositionY = center.y;
                 break;
             case right:
-                triggerInteractPositionX = this.sprite.right() + INTERACT_DISTANCE;
+                triggerInteractPositionX = this.sprite.getRight() + INTERACT_DISTANCE;
                 triggerInteractPositionY = center.y;
                 break;
         }

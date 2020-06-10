@@ -13,10 +13,8 @@ public class EnemiesWrapper implements Paintable, Iterable<Enemy> {
     }
 
     @Override
-    public void paint(Graphics g) {
-        for (Enemy enemy : enemies) {
-            enemy.paint(g);
-        }
+    public void paint(Graphics g, Point offset) {
+        enemies.forEach(enemy -> enemy.paint(g, offset));
     }
 
     @Override

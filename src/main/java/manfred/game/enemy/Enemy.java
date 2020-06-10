@@ -22,9 +22,9 @@ public class Enemy extends MovingObject implements Paintable {
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void paint(Graphics g, Point offset) {
         g.setColor(Color.BLACK);
-        g.fillPolygon(this.sprite.toPaint());
+        g.fillPolygon(this.sprite.toPaint(offset));
     }
 
     public void move(Manfred manfred) {

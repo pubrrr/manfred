@@ -35,7 +35,7 @@ public class Map {
                 && y >= 0 && y < mapTiles[0].length;
     }
 
-    public void paint(Graphics g) {
+    public void paint(Graphics g, Point offset) {
         g.setColor(Color.RED);
 
         for (int x = 0; x < mapTiles.length; x++) {
@@ -44,7 +44,12 @@ public class Map {
                     g.setColor(Color.YELLOW);
                 }
                 if (!isAccessible(x, y)) {
-                    g.fillRect(GamePanel.PIXEL_BLOCK_SIZE * x, GamePanel.PIXEL_BLOCK_SIZE * y, GamePanel.PIXEL_BLOCK_SIZE, GamePanel.PIXEL_BLOCK_SIZE);
+                    g.fillRect(
+                            GamePanel.PIXEL_BLOCK_SIZE * x - offset.x,
+                            GamePanel.PIXEL_BLOCK_SIZE * y - offset.y,
+                            GamePanel.PIXEL_BLOCK_SIZE,
+                            GamePanel.PIXEL_BLOCK_SIZE
+                    );
                 }
                 if (mapTiles[x][y] instanceof Interactable) {
                     g.setColor(Color.RED);
