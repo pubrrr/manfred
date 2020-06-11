@@ -13,7 +13,7 @@ import java.util.List;
 public class GamePanel extends JPanel {
     public static final int WIDTH = 1600;
     public static final int HEIGHT = 1200;
-    public static final int PIXEL_BLOCK_SIZE = 40;
+    public static final int PIXEL_BLOCK_SIZE = 60;
     public static final int FADE_PERIOD = 40;
     public static final int FADE_TRANSPARENCY_INTERVAL = 20;
 

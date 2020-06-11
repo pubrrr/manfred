@@ -25,6 +25,14 @@ public class Enemy extends MovingObject implements Paintable {
     public void paint(Graphics g, Point offset) {
         g.setColor(Color.BLACK);
         g.fillPolygon(this.sprite.toPaint(offset));
+
+        g.setFont(new Font("Palatino Linotype", Font.BOLD, this.sprite.height / 2));
+
+        g.setColor(Color.RED);
+        g.drawString(String.valueOf(this.healthPoints), this.sprite.x + this.sprite.width / 4 - offset.x, this.sprite.y + (this.sprite.height * 3 / 4) - offset.y);
+
+        g.setColor(Color.BLACK);
+        g.drawString(this.name, this.sprite.x + this.sprite.width / 4 - offset.x , this.sprite.y - (this.sprite.height / 4) - offset.y);
     }
 
     public void move(Manfred manfred) {
