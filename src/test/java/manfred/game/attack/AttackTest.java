@@ -48,7 +48,7 @@ class AttackTest {
         int healthPoints = 2;
 
         underTest = new Attack(0, 0, 0, 5, 5, mock(MapCollider.class), damage, 0);
-        Enemy enemy = new Enemy("test", 0, 3, 3, healthPoints, mock(MapCollider.class), 0);
+        Enemy enemy = new Enemy("test", 0, 3, 3, healthPoints, null, mock(MapCollider.class), 0);
 
         underTest.checkHit(enemy);
 
@@ -62,7 +62,7 @@ class AttackTest {
         int healthPoints = 2;
 
         underTest = new Attack(0, 0, 0, 5, 5, mock(MapCollider.class), damage, 0);
-        Enemy enemy = new Enemy("test", 0, 8, 8, healthPoints, mock(MapCollider.class), 0);
+        Enemy enemy = new Enemy("test", 0, 8, 8, healthPoints, null, mock(MapCollider.class), 0);
 
         underTest.checkHit(enemy);
 

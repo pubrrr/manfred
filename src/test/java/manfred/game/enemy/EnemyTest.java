@@ -19,7 +19,7 @@ class EnemyTest {
         MapCollider mapColliderMock = mock(MapCollider.class);
         when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
 
-        underTest = new Enemy("name", SPEED, 0, 0, 100, mapColliderMock, AGGRO_RADIUS);
+        underTest = new Enemy("name", SPEED, 0, 0, 100, null, mapColliderMock, AGGRO_RADIUS);
     }
 
     @Test

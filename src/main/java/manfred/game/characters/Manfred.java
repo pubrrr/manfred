@@ -23,7 +23,7 @@ public class Manfred extends MovingObject implements Paintable {
     private boolean castMode;
 
     public Manfred(int speed, int x, int y, int healthPoints, MapCollider collider, MapWrapper mapWrapper, AttacksContainer attacksContainer, SkillSet skillSet) {
-        super(speed, x, y, GamePanel.PIXEL_BLOCK_SIZE, GamePanel.PIXEL_BLOCK_SIZE, collider);
+        super(speed, x, y, GamePanel.PIXEL_BLOCK_SIZE, GamePanel.PIXEL_BLOCK_SIZE, null, collider);
         this.healthPoints = healthPoints;
         this.mapWrapper = mapWrapper;
         this.attacksContainer = attacksContainer;

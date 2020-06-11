@@ -7,6 +7,7 @@ import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.Paintable;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Enemy extends MovingObject implements Paintable {
     private String name;
@@ -14,8 +15,8 @@ public class Enemy extends MovingObject implements Paintable {
     private int healthPoints;
     private int aggroRadius;
 
-    public Enemy(String name, int speed, int x, int y, int healthPoints, MapCollider collider, int aggroRadius) {
-        super(speed, x, y, GamePanel.PIXEL_BLOCK_SIZE, GamePanel.PIXEL_BLOCK_SIZE, collider);
+    public Enemy(String name, int speed, int x, int y, int healthPoints, BufferedImage image, MapCollider collider, int aggroRadius) {
+        super(speed, x, y, 2 * GamePanel.PIXEL_BLOCK_SIZE, 2 * GamePanel.PIXEL_BLOCK_SIZE, image, collider);
         this.name = name;
         this.healthPoints = healthPoints;
         this.aggroRadius = aggroRadius;
@@ -23,16 +24,15 @@ public class Enemy extends MovingObject implements Paintable {
 
     @Override
     public void paint(Graphics g, Point offset) {
-        g.setColor(Color.BLACK);
-        g.fillPolygon(this.sprite.toPaint(offset));
+        sprite.paint(g, offset);
 
-        g.setFont(new Font("Palatino Linotype", Font.BOLD, this.sprite.height / 2));
-
-        g.setColor(Color.RED);
-        g.drawString(String.valueOf(this.healthPoints), this.sprite.x + this.sprite.width / 4 - offset.x, this.sprite.y + (this.sprite.height * 3 / 4) - offset.y);
+        g.setFont(new Font("Palatino Linotype", Font.BOLD, GamePanel.PIXEL_BLOCK_SIZE / 2));
 
         g.setColor(Color.BLACK);
-        g.drawString(this.name, this.sprite.x + this.sprite.width / 4 - offset.x , this.sprite.y - (this.sprite.height / 4) - offset.y);
+        g.drawString(String.valueOf(this.healthPoints), this.sprite.x + this.sprite.width / 4 - offset.x, this.sprite.getBottom() + (this.sprite.height / 2) - offset.y);
+
+        g.setColor(Color.BLACK);
+        g.drawString(this.name, this.sprite.x + this.sprite.width / 4 - offset.x, this.sprite.y - (this.sprite.height / 4) - offset.y);
     }
 
     public void move(Manfred manfred) {

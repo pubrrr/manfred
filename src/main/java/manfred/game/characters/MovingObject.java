@@ -1,11 +1,14 @@
 package manfred.game.characters;
 
 import manfred.game.controls.KeyControls;
+import manfred.game.graphics.Paintable;
 import org.springframework.lang.Nullable;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
-abstract public class MovingObject {
+abstract public class MovingObject implements Paintable {
     protected Sprite sprite;
     protected final int speed;
 
@@ -20,9 +23,9 @@ abstract public class MovingObject {
     protected int currentSpeedX = 0;
     protected int currentSpeedY = 0;
 
-    protected MovingObject(int speed, int x, int y, int sizeX, int sizeY, MapCollider collider) {
+    protected MovingObject(int speed, int x, int y, int sizeX, int sizeY, BufferedImage image, MapCollider collider) {
         this.speed = speed;
-        this.sprite = new Sprite(x, y, sizeX, sizeY);
+        this.sprite = new Sprite(x, y, sizeX, sizeY, image);
         this.collider = collider;
     }
 
@@ -112,4 +115,10 @@ abstract public class MovingObject {
     public Sprite getSprite() {
         return sprite;
     }
+
+    @Override
+    public void paint(Graphics g, Point offset) {
+        this.sprite.paint(g, offset);
+    }
 }
+

@@ -1,10 +1,16 @@
 package manfred.game.characters;
 
-import java.awt.*;
+import manfred.game.graphics.Paintable;
 
-public class Sprite extends Rectangle {
-    public Sprite(int x, int y, int sizeX, int sizeY) {
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
+public class Sprite extends Rectangle implements Paintable {
+    private BufferedImage image;
+
+    public Sprite(int x, int y, int sizeX, int sizeY, BufferedImage image) {
         super(x, y, sizeX, sizeY);
+        this.image = image;
     }
 
     public Point getCenter() {
@@ -33,5 +39,10 @@ public class Sprite extends Rectangle {
 
     public int getBottom() {
         return this.y + this.height;
+    }
+
+    @Override
+    public void paint(Graphics g, Point offset) {
+        g.drawImage(image, x - offset.x, y - offset.y, width, height, null);
     }
 }
