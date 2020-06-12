@@ -166,4 +166,14 @@ public class GameContext {
     public ImageLoader imageLoader() {
         return new ImageLoader();
     }
+
+    @Bean
+    public GameConfig gameConfig(ConfigReader configReader) throws InvalidInputException, IOException {
+        return configReader.load();
+    }
+
+    @Bean
+    public ConfigReader configReader() {
+        return new ConfigReader();
+    }
 }
