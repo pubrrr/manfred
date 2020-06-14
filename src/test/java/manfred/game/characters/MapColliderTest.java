@@ -45,10 +45,10 @@ class MapColliderTest {
     @DataProvider
     static Object[][] provideAccessibleCoords() {
         return new Object[][]{
-                getBoundaryCoordsByHalfBlockSize(0, 0), // top left block only
-                getBoundaryCoordsByHalfBlockSize(1, 0), // two blocks horizontal
-                getBoundaryCoordsByHalfBlockSize(0, 1), // two blocks vertical
-                getBoundaryCoordsByHalfBlockSize(1, 1), // four blocks
+                getBoundaryCoordsByHalfBlockSize(0, 0, PIXEL_BLOCK_SIZE), // top left block only
+                getBoundaryCoordsByHalfBlockSize(1, 0, PIXEL_BLOCK_SIZE), // two blocks horizontal
+                getBoundaryCoordsByHalfBlockSize(0, 1, PIXEL_BLOCK_SIZE), // two blocks vertical
+                getBoundaryCoordsByHalfBlockSize(1, 1, PIXEL_BLOCK_SIZE), // four blocks
         };
     }
 
@@ -67,16 +67,19 @@ class MapColliderTest {
     @DataProvider
     static Object[][] provideNonAccessibleCoords() {
         return new Object[][]{
-                getBoundaryCoordsByHalfBlockSize(2, 2), // mid block only
+                getBoundaryCoordsByHalfBlockSize(2, 2, PIXEL_BLOCK_SIZE), // mid block only
                 // circle around the mid 0-block
-                getBoundaryCoordsByHalfBlockSize(1, 1), // top left
-                getBoundaryCoordsByHalfBlockSize(2, 1), // top
-                getBoundaryCoordsByHalfBlockSize(3, 1), // top right
-                getBoundaryCoordsByHalfBlockSize(3, 2), // right
-                getBoundaryCoordsByHalfBlockSize(3, 3), // bottom right
-                getBoundaryCoordsByHalfBlockSize(2, 3), // bottom
-                getBoundaryCoordsByHalfBlockSize(1, 3), // bottom left
-                getBoundaryCoordsByHalfBlockSize(1, 2), // left
+                getBoundaryCoordsByHalfBlockSize(1, 1, PIXEL_BLOCK_SIZE), // top left
+                getBoundaryCoordsByHalfBlockSize(2, 1, PIXEL_BLOCK_SIZE), // top
+                getBoundaryCoordsByHalfBlockSize(3, 1, PIXEL_BLOCK_SIZE), // top right
+                getBoundaryCoordsByHalfBlockSize(3, 2, PIXEL_BLOCK_SIZE), // right
+                getBoundaryCoordsByHalfBlockSize(3, 3, PIXEL_BLOCK_SIZE), // bottom right
+                getBoundaryCoordsByHalfBlockSize(2, 3, PIXEL_BLOCK_SIZE), // bottom
+                getBoundaryCoordsByHalfBlockSize(1, 3, PIXEL_BLOCK_SIZE), // bottom left
+                getBoundaryCoordsByHalfBlockSize(1, 2, PIXEL_BLOCK_SIZE), // left
+                // bigger than one block
+                getBoundaryCoordsByHalfBlockSize(1, 1, 2 * PIXEL_BLOCK_SIZE),
+                getBoundaryCoordsByHalfBlockSize(0, 0, 5 * PIXEL_BLOCK_SIZE / 2),
         };
     }
 
@@ -98,14 +101,14 @@ class MapColliderTest {
         };
     }
 
-    private static Object[] getBoundaryCoordsByHalfBlockSize(int halfBlocksX, int halfBlocksY) {
+    private static Object[] getBoundaryCoordsByHalfBlockSize(int halfBlocksX, int halfBlocksY, int size) {
         int x = halfBlocksX * PIXEL_BLOCK_SIZE / 2;
         int y = halfBlocksY * PIXEL_BLOCK_SIZE / 2;
         return new Object[]{
                 x,
-                x + PIXEL_BLOCK_SIZE - 1,
+                x + size - 1,
                 y,
-                y + PIXEL_BLOCK_SIZE - 1
+                y + size - 1
         };
     }
 }

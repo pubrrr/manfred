@@ -18,18 +18,20 @@ public class MapCollider {
     }
 
     public boolean collides(int leftBorder, int rightBorder, int topBorder, int bottomBorder) {
-        int onMapGripLeft = leftBorder / gameConfig.getPixelBlockSize();
-        int onMapGripRight = rightBorder / gameConfig.getPixelBlockSize();
-        int onMapGripTop = topBorder / gameConfig.getPixelBlockSize();
-        int onMapGripBottom = bottomBorder / gameConfig.getPixelBlockSize();
+        int leftMapTile = leftBorder / gameConfig.getPixelBlockSize();
+        int rightMapTile = rightBorder / gameConfig.getPixelBlockSize();
+        int topMapTile = topBorder / gameConfig.getPixelBlockSize();
+        int bottomMapTile = bottomBorder / gameConfig.getPixelBlockSize();
 
         Map map = mapWrapper.getMap();
-        return !(
-                map.isAccessible(onMapGripLeft, onMapGripTop)
-                        && map.isAccessible(onMapGripRight, onMapGripTop)
-                        && map.isAccessible(onMapGripLeft, onMapGripBottom)
-                        && map.isAccessible(onMapGripRight, onMapGripBottom)
-        );
+        for (int x = leftMapTile; x <= rightMapTile; x++) {
+            for (int y = topMapTile; y <= bottomMapTile; y++) {
+                if (!map.isAccessible(x, y)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static MapCollider getInstance() throws Exception {
