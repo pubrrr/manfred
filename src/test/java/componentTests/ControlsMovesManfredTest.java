@@ -14,6 +14,7 @@ import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
 import manfred.game.exception.InvalidInputException;
+import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.interact.Door;
 import manfred.game.interact.Interactable;
@@ -42,6 +43,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
     private SkillSet skillSetMock;
     private AttacksContainer attacksContainerMock;
     private TestGameConfig testGameConfig;
+    private BackgroundScroller backgroundScrollerMock;
 
     @BeforeEach
     void init() {
@@ -58,8 +60,12 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         skillSetMock = mock(SkillSet.class);
         attacksContainerMock = mock(AttacksContainer.class);
 
+        backgroundScrollerMock = mock(BackgroundScroller.class);
+
         manfred = new Manfred(10, 0, 0, 1, colliderMock, mapWrapperMock, attacksContainerMock, skillSetMock, testGameConfig);
         manfredSpy = spy(manfred);
+
+
 
         setupControllerWithManfred(manfred);
     }
@@ -76,7 +82,9 @@ class ControlsMovesManfredTest extends ControllerTestCase {
                 manfred,
                 panel,
                 mapWrapperMock,
-                testGameConfig);
+                testGameConfig,
+                backgroundScrollerMock
+        );
     }
 
     @Test
@@ -190,6 +198,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         verify(controlsSpy).turnOffControls();
         verify(controlsSpy).controlManfred();
         verify(mapWrapperMock).loadMap(targetName);
+        verify(backgroundScrollerMock).centerTo(manfred.getSprite().getCenter());
         assertEquals(PIXEL_BLOCK_SIZE * targetSpawnX, manfred.getX());
         assertEquals(PIXEL_BLOCK_SIZE * targetSpawnY, manfred.getY());
     }
@@ -212,6 +221,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         verify(controlsSpy).turnOffControls();
         verify(controlsSpy).controlManfred();
         verify(mapWrapperMock).loadMap(targetName);
+        verify(backgroundScrollerMock).centerTo(manfred.getSprite().getCenter());
         assertEquals(PIXEL_BLOCK_SIZE * targetSpawnX, manfred.getX());
         assertEquals(PIXEL_BLOCK_SIZE * targetSpawnY, manfred.getY());
     }

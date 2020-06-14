@@ -3,6 +3,7 @@ package manfred.game.controls;
 import manfred.game.GameConfig;
 import manfred.game.characters.Manfred;
 import manfred.game.exception.InvalidInputException;
+import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.interact.gelaber.Gelaber;
 import manfred.game.map.MapWrapper;
@@ -20,6 +21,7 @@ public class KeyControls implements KeyListener {
     private GamePanel gamePanel;
     private MapWrapper mapWrapper;
     private GameConfig gameConfig;
+    private BackgroundScroller backgroundScroller;
 
     private ControllerInterface activeController;
 
@@ -30,7 +32,8 @@ public class KeyControls implements KeyListener {
             Manfred manfred,
             GamePanel gamePanel,
             MapWrapper mapWrapper,
-            GameConfig gameConfig
+            GameConfig gameConfig,
+            BackgroundScroller backgroundScroller
     ) {
         this.manfredController = manfredController;
         this.gelaberController = gelaberController;
@@ -39,6 +42,7 @@ public class KeyControls implements KeyListener {
         this.gamePanel = gamePanel;
         this.mapWrapper = mapWrapper;
         this.gameConfig = gameConfig;
+        this.backgroundScroller = backgroundScroller;
 
         activeController = manfredController;
     }
@@ -91,5 +95,6 @@ public class KeyControls implements KeyListener {
     public void resetManfredPositionTo(int x, int y) {
         this.manfred.setX(gameConfig.getPixelBlockSize() * x);
         this.manfred.setY(gameConfig.getPixelBlockSize() * y);
+        backgroundScroller.centerTo(manfred.getSprite().getCenter());
     }
 }

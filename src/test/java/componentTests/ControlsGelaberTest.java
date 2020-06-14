@@ -6,6 +6,7 @@ import manfred.game.controls.DoNothingController;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
+import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.interact.gelaber.*;
 import manfred.game.map.MapWrapper;
@@ -40,7 +41,9 @@ public class ControlsGelaberTest extends ControllerTestCase {
                 mock(Manfred.class),
                 mock(GamePanel.class),
                 mock(MapWrapper.class),
-                testGameConfig);
+                testGameConfig,
+                mock(BackgroundScroller.class)
+        );
         controls.controlGelaber(mock(Gelaber.class));
 
         controlsSpy = spy(controls);

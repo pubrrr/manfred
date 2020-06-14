@@ -30,7 +30,7 @@ public class BackgroundScroller {
     private void updateX() {
         int mapSizeX = mapWrapper.getMap().getArray().length * gameConfig.getPixelBlockSize();
         if (mapSizeX < gameConfig.getWindowWidth()) {
-            offset.x = - (gameConfig.getWindowWidth() - mapSizeX) / 2;
+            offset.x = -(gameConfig.getWindowWidth() - mapSizeX) / 2;
             return;
         }
 
@@ -53,7 +53,7 @@ public class BackgroundScroller {
     private void updateY() {
         int mapSizeY = mapWrapper.getMap().getArray()[0].length * gameConfig.getPixelBlockSize();
         if (mapSizeY < gameConfig.getWindowHeight()) {
-            offset.y = - (gameConfig.getWindowHeight() - mapSizeY) / 2;
+            offset.y = -(gameConfig.getWindowHeight() - mapSizeY) / 2;
             return;
         }
 
@@ -70,6 +70,34 @@ public class BackgroundScroller {
                     offset.y + (triggerScrollDistanceToBorder - distanceToBottomBorder),
                     mapSizeY - gameConfig.getWindowHeight()
             );
+        }
+    }
+
+    public void centerTo(Point center) {
+        int mapSizeX = mapWrapper.getMap().getArray().length * gameConfig.getPixelBlockSize();
+        if (mapSizeX > gameConfig.getWindowWidth()) {
+            offset.x = Math.max(
+                    center.x - gameConfig.getWindowWidth() / 2,
+                    0
+            );
+            if (offset.x + gameConfig.getWindowWidth() > mapSizeX) {
+                offset.x = mapSizeX - gameConfig.getWindowWidth();
+            }
+        } else {
+            offset.x = -(gameConfig.getWindowWidth() - mapSizeX) / 2;
+        }
+
+        int mapSizeY = mapWrapper.getMap().getArray()[0].length * gameConfig.getPixelBlockSize();
+        if (mapSizeY > gameConfig.getWindowHeight()) {
+            offset.y = Math.max(
+                    center.y - gameConfig.getWindowHeight() / 2,
+                    0
+            );
+            if (offset.y + gameConfig.getWindowHeight() > mapSizeY) {
+                offset.y = mapSizeY - gameConfig.getWindowHeight();
+            }
+        } else {
+            offset.y = -(gameConfig.getWindowHeight() - mapSizeY) / 2;
         }
     }
 }

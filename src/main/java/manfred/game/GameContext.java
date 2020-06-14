@@ -73,7 +73,8 @@ public class GameContext {
             Manfred manfred,
             GamePanel panel,
             MapWrapper mapWrapper,
-            GameConfig gameConfig
+            GameConfig gameConfig,
+            BackgroundScroller backgroundScroller
     ) {
         KeyControls keyControls = new KeyControls(manfredController,
                 gelaberController,
@@ -81,7 +82,8 @@ public class GameContext {
                 manfred,
                 panel,
                 mapWrapper,
-                gameConfig
+                gameConfig,
+                backgroundScroller
         );
         panel.addKeyListener(keyControls);
         return keyControls;

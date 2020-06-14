@@ -181,6 +181,96 @@ class BackgroundScrollerTest {
         assertEquals(TRIGGER_SCROLL_DISTANCE_TO_BORDER / 2, result2.y);
     }
 
+    @Test
+    void givenManfredInMiddleOfMap_thenCentersToIt() {
+        int initialPosition = 4 * PIXEL_BLOCK_SIZE;
+        int screenSize = 3 * PIXEL_BLOCK_SIZE;
+
+        setupMapWithDimensions(8, 8);
+        testGameConfig.setWindowWidth(screenSize);
+        testGameConfig.setWindowHeight(screenSize);
+        manfredPosition.x = initialPosition;
+        manfredPosition.y = initialPosition;
+
+        underTest.centerTo(manfredPosition.getCenter());
+        Point result = underTest.getOffset();
+
+        assertEquals(initialPosition - screenSize / 2, result.x);
+        assertEquals(initialPosition - screenSize / 2, result.y);
+    }
+
+    @Test
+    void givenManfredMidLeft_thenCentersVerticallyToIt() {
+        int initialPosition = 4 * PIXEL_BLOCK_SIZE;
+        int screenSize = 3 * PIXEL_BLOCK_SIZE;
+
+        setupMapWithDimensions(8, 8);
+        testGameConfig.setWindowWidth(screenSize);
+        testGameConfig.setWindowHeight(screenSize);
+        manfredPosition.x = 0;
+        manfredPosition.y = initialPosition;
+
+        underTest.centerTo(manfredPosition.getCenter());
+        Point result = underTest.getOffset();
+
+        assertEquals(0, result.x);
+        assertEquals(initialPosition - screenSize / 2, result.y);
+    }
+
+    @Test
+    void givenManfredMidRight_thenCentersVerticallyToIt() {
+        int initialPosition = 4 * PIXEL_BLOCK_SIZE;
+        int screenSize = 3 * PIXEL_BLOCK_SIZE;
+
+        setupMapWithDimensions(8, 8);
+        testGameConfig.setWindowWidth(screenSize);
+        testGameConfig.setWindowHeight(screenSize);
+        manfredPosition.x = 8 * PIXEL_BLOCK_SIZE - 1;
+        manfredPosition.y = initialPosition;
+
+        underTest.centerTo(manfredPosition.getCenter());
+        Point result = underTest.getOffset();
+
+        assertEquals(8 * PIXEL_BLOCK_SIZE - screenSize, result.x);
+        assertEquals(initialPosition - screenSize / 2, result.y);
+    }
+
+    @Test
+    void givenManfredMidTop_thenCentersHorizontallyToIt() {
+        int initialPosition = 4 * PIXEL_BLOCK_SIZE;
+        int screenSize = 3 * PIXEL_BLOCK_SIZE;
+
+        setupMapWithDimensions(8, 8);
+        testGameConfig.setWindowWidth(screenSize);
+        testGameConfig.setWindowHeight(screenSize);
+        manfredPosition.x = initialPosition;
+        manfredPosition.y = 0;
+
+        underTest.centerTo(manfredPosition.getCenter());
+        Point result = underTest.getOffset();
+
+        assertEquals(initialPosition - screenSize / 2, result.x);
+        assertEquals(0, result.y);
+    }
+
+    @Test
+    void givenManfredMidBottom_thenCentersHorizontallyToIt() {
+        int initialPosition = 4 * PIXEL_BLOCK_SIZE;
+        int screenSize = 3 * PIXEL_BLOCK_SIZE;
+
+        setupMapWithDimensions(8, 8);
+        testGameConfig.setWindowWidth(screenSize);
+        testGameConfig.setWindowHeight(screenSize);
+        manfredPosition.x = initialPosition;
+        manfredPosition.y = 8 * PIXEL_BLOCK_SIZE - 1;
+
+        underTest.centerTo(manfredPosition.getCenter());
+        Point result = underTest.getOffset();
+
+        assertEquals(initialPosition - screenSize / 2, result.x);
+        assertEquals(8 * PIXEL_BLOCK_SIZE - screenSize, result.y);
+    }
+
     private void setupMapWithDimensions(int x, int y) {
         // lazy way to initialize a String[][] with "0" values
         String[][] mapAsString = Arrays.stream(new int[x][y]).map(
