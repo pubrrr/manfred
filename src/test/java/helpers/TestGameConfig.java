@@ -13,7 +13,9 @@ public class TestGameConfig extends GameConfig {
     public static final int STANDARD_TEST_GELABER_BOX_POSITION_Y = 100;
 
     private Integer testPixelBlockSize = null;
-    private Integer numberOfTextLines = null;
+    private Integer testNumberOfTextLines = null;
+    private Integer testWindowHeight = null;
+    private Integer testWindowWidth = null;
 
     public TestGameConfig() {
         super(
@@ -28,7 +30,7 @@ public class TestGameConfig extends GameConfig {
         );
     }
 
-    public TestGameConfig withPixelBlockSize(int pixelBlockSize) {
+    public TestGameConfig setPixelBlockSize(int pixelBlockSize) {
         this.testPixelBlockSize = pixelBlockSize;
         return this;
     }
@@ -41,16 +43,42 @@ public class TestGameConfig extends GameConfig {
         return testPixelBlockSize;
     }
 
-    public TestGameConfig withNumberOfTextLines(int numberOfTextLines) {
-        this.numberOfTextLines = numberOfTextLines;
+    public TestGameConfig setNumberOfTextLines(int testNumberOfTextLines) {
+        this.testNumberOfTextLines = testNumberOfTextLines;
         return this;
     }
 
     @Override
     public int getNumberOfTextLines() {
-        if (numberOfTextLines == null) {
+        if (testNumberOfTextLines == null) {
             return super.getNumberOfTextLines();
         }
-        return numberOfTextLines;
+        return testNumberOfTextLines;
+    }
+
+    public TestGameConfig setWindowHeight(int height) {
+        this.testWindowHeight = height;
+        return this;
+    }
+
+    @Override
+    public int getWindowHeight() {
+        if (testWindowHeight == null) {
+            return super.getWindowHeight();
+        }
+        return testWindowHeight;
+    }
+
+    public TestGameConfig setWindowWidth(int width) {
+        this.testWindowWidth = width;
+        return this;
+    }
+
+    @Override
+    public int getWindowWidth() {
+        if (testWindowWidth == null) {
+            return super.getWindowWidth();
+        }
+        return testWindowWidth;
     }
 }

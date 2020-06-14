@@ -31,7 +31,7 @@ class MapColliderTest {
         MapWrapper mapWrapperMock = mock(MapWrapper.class);
         when(mapWrapperMock.getMap()).thenReturn(map);
 
-        underTest = new MapCollider(mapWrapperMock, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
+        underTest = new MapCollider(mapWrapperMock, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE));
     }
 
     @TestTemplate

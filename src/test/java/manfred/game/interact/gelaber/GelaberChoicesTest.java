@@ -30,7 +30,7 @@ class GelaberChoicesTest {
 
         selectionMarkerMock = mock(SelectionMarker.class);
 
-        underTest = new GelaberChoices(new String[]{"line1"}, choices, selectionMarkerMock, (new TestGameConfig()).withNumberOfTextLines(NUMBER_OF_TEXT_LINES));
+        underTest = new GelaberChoices(new String[]{"line1"}, choices, selectionMarkerMock, (new TestGameConfig()).setNumberOfTextLines(NUMBER_OF_TEXT_LINES));
     }
 
     @Test
@@ -59,7 +59,7 @@ class GelaberChoicesTest {
 
     @Test
     void textAndChoiceSequence_givenNextGelaber_thenControlsNotSwitchedToManfred() {
-        AbstractGelaberText gelaberTextMock = new GelaberText(new String[]{"line"}, (new TestGameConfig()).withNumberOfTextLines(NUMBER_OF_TEXT_LINES));
+        AbstractGelaberText gelaberTextMock = new GelaberText(new String[]{"line"}, (new TestGameConfig()).setNumberOfTextLines(NUMBER_OF_TEXT_LINES));
         when(choices.get("key")).thenReturn(gelaberTextMock);
 
         Gelaber gelaberMock = mock(Gelaber.class);

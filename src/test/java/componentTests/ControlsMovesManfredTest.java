@@ -45,7 +45,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
 
     @BeforeEach
     void init() {
-        testGameConfig = (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE);
+        testGameConfig = (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE);
 
         MapCollider colliderMock = mock(MapCollider.class);
         when(colliderMock.collides(0, 0, 0, 0)).thenReturn(true);

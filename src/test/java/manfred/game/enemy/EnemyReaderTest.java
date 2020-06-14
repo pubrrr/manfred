@@ -28,7 +28,7 @@ class EnemyReaderTest {
 
         imageLoaderMock = mock(ImageLoader.class);
 
-        underTest = new EnemyReader(mapColliderProviderMock, imageLoaderMock, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
+        underTest = new EnemyReader(mapColliderProviderMock, imageLoaderMock, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE));
     }
 
     @Test

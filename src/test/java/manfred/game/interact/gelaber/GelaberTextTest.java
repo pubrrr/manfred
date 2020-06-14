@@ -18,7 +18,7 @@ class GelaberTextTest {
 
     @Test
     void givenOnlyOneLine_thenEnterTriggersControllingManfred() {
-        underTest = new GelaberText(new String[]{"line1"}, (new TestGameConfig()).withNumberOfTextLines(NUMBER_OF_TEXT_LINES));
+        underTest = new GelaberText(new String[]{"line1"}, (new TestGameConfig()).setNumberOfTextLines(NUMBER_OF_TEXT_LINES));
 
         Function<Gelaber, Consumer<KeyControls>> response = underTest.next();
 
@@ -29,7 +29,7 @@ class GelaberTextTest {
 
     @Test
     void givenEnoughLines_thenEnterDoesNotTriggerControllingManfred() {
-        underTest = new GelaberText(new String[]{"line1", "line2", "line3", "line4", "line5", "line6", "line7", "line8"}, (new TestGameConfig()).withNumberOfTextLines(NUMBER_OF_TEXT_LINES));
+        underTest = new GelaberText(new String[]{"line1", "line2", "line3", "line4", "line5", "line6", "line7", "line8"}, (new TestGameConfig()).setNumberOfTextLines(NUMBER_OF_TEXT_LINES));
 
         Function<Gelaber, Consumer<KeyControls>> response = underTest.next();
 

@@ -31,7 +31,7 @@ public class ControlsGelaberTest extends ControllerTestCase {
         manfredControllerMock = mock(ManfredController.class);
 
         gelaberController = new GelaberController();
-        testGameConfig = (new TestGameConfig()).withNumberOfTextLines(NUMBER_OF_TEXT_LINES);
+        testGameConfig = (new TestGameConfig()).setNumberOfTextLines(NUMBER_OF_TEXT_LINES);
 
         KeyControls controls = new KeyControls(
                 manfredControllerMock,
