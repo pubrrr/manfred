@@ -1,5 +1,6 @@
 package manfred.game.attack;
 
+import helpers.TestGameConfig;
 import manfred.game.characters.MapCollider;
 import manfred.game.enemy.Enemy;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class AttackTest {
+    private static final int PIXEL_BLOCK_SIZE = 40;
+
     private Attack underTest;
 
     @Test
@@ -48,7 +51,7 @@ class AttackTest {
         int healthPoints = 2;
 
         underTest = new Attack(0, 0, 0, 5, 5, mock(MapCollider.class), damage, 0);
-        Enemy enemy = new Enemy("test", 0, 3, 3, healthPoints, null, mock(MapCollider.class), 0);
+        Enemy enemy = new Enemy("test", 0, 3, 3, healthPoints, null, mock(MapCollider.class), 0, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
 
         underTest.checkHit(enemy);
 
@@ -62,7 +65,7 @@ class AttackTest {
         int healthPoints = 2;
 
         underTest = new Attack(0, 0, 0, 5, 5, mock(MapCollider.class), damage, 0);
-        Enemy enemy = new Enemy("test", 0, 8, 8, healthPoints, null, mock(MapCollider.class), 0);
+        Enemy enemy = new Enemy("test", 0, 8, 8, healthPoints, null, mock(MapCollider.class), 0, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
 
         underTest.checkHit(enemy);
 

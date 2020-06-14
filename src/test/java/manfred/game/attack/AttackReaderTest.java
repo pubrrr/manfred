@@ -2,6 +2,7 @@ package manfred.game.attack;
 
 import manfred.game.characters.Direction;
 import manfred.game.characters.MapCollider;
+import manfred.game.characters.Sprite;
 import manfred.game.enemy.Enemy;
 import manfred.game.enemy.MapColliderProvider;
 import manfred.game.exception.InvalidInputException;
@@ -43,14 +44,19 @@ class AttackReaderTest {
         AttackGenerator result = underTest.convert(input);
 
         Attack attack = result.generate(new Point(0,0), Direction.right);
+
+        Sprite enemySpriteMock = mock(Sprite.class);
+        when(enemySpriteMock.intersects(any())).thenReturn(true);
         Enemy enemyMock = mock(Enemy.class);
+        when(enemyMock.getSprite()).thenReturn(enemySpriteMock);
+
         attack.checkHit(enemyMock);
         verify(enemyMock).takeDamage(100);
     }
 
     @Test
     void convertRange() throws InvalidInputException {
-        String input = "{speed: 2, sizeX: 0, sizeY: 0, damage: 100, range: 1}";
+        String input = "{speed: 1, sizeX: 0, sizeY: 0, damage: 100, range: 1}";
 
         AttackGenerator result = underTest.convert(input);
 

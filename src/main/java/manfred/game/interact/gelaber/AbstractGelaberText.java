@@ -1,5 +1,6 @@
 package manfred.game.interact.gelaber;
 
+import manfred.game.GameConfig;
 import manfred.game.controls.KeyControls;
 
 import java.awt.*;
@@ -10,23 +11,28 @@ abstract public class AbstractGelaberText {
     protected String[] lines;
 
     protected int linesPosition = 0;
+    protected GameConfig gameConfig;
 
     public String[] getLines() {
         return this.lines;
     }
 
+    public AbstractGelaberText(GameConfig gameConfig){
+        this.gameConfig = gameConfig;
+    }
+
     public void paint(Graphics g) {
         g.setColor(Color.YELLOW);
-        g.fillRect(Gelaber.TEXT_BOX_POSITION_X, Gelaber.TEXT_BOX_POSITION_Y, Gelaber.TEXT_BOX_WIDTH, Gelaber.TEXT_BOX_HEIGHT);
+        g.fillRect(gameConfig.getTextBoxPositionX(), gameConfig.getTextBoxPositionY(), gameConfig.getTextBoxWidth(), gameConfig.getTextBoxHeight());
 
         g.setColor(Color.BLACK);
-        g.setFont(new Font("Palatino Linotype", Font.BOLD, Gelaber.TEXT_POINT_SIZE));
+        g.setFont(new Font("Palatino Linotype", Font.BOLD, gameConfig.getTextPointSize()));
 
-        for (int idx = 0; idx < Gelaber.NUMBER_OF_TEXT_LINES; idx++) {
+        for (int idx = 0; idx < gameConfig.getNumberOfTextLines(); idx++) {
             g.drawString(
                     linesPosition + idx < lines.length ? lines[linesPosition + idx] : "",
-                    Gelaber.TEXT_BOX_POSITION_X + Gelaber.TEXT_DISTANCE_TO_BOX,
-                    Gelaber.TEXT_BOX_POSITION_Y + Gelaber.TEXT_DISTANCE_TO_BOX + idx * (Gelaber.TEXT_POINT_SIZE + Gelaber.DISTANCE_BETWEEN_LINES) + Gelaber.TEXT_POINT_SIZE / 2
+                    gameConfig.getTextBoxPositionX() + gameConfig.getTextDistanceToBox(),
+                    gameConfig.getTextBoxPositionY() + gameConfig.getTextDistanceToBox() + idx * (gameConfig.getTextPointSize() + gameConfig.getDistanceBetweenLines()) + gameConfig.getTextPointSize() / 2
             );
         }
     }

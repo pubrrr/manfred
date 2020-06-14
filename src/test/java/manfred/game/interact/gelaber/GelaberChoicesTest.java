@@ -1,5 +1,6 @@
 package manfred.game.interact.gelaber;
 
+import helpers.TestGameConfig;
 import manfred.game.controls.KeyControls;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 class GelaberChoicesTest {
+    private static final int NUMBER_OF_TEXT_LINES = 5;
+
     private GelaberChoices underTest;
     private SelectionMarker selectionMarkerMock;
     private HashMap choices;
@@ -27,7 +30,7 @@ class GelaberChoicesTest {
 
         selectionMarkerMock = mock(SelectionMarker.class);
 
-        underTest = new GelaberChoices(new String[]{"line1"}, choices, selectionMarkerMock);
+        underTest = new GelaberChoices(new String[]{"line1"}, choices, selectionMarkerMock, (new TestGameConfig()).withNumberOfTextLines(NUMBER_OF_TEXT_LINES));
     }
 
     @Test
@@ -56,7 +59,7 @@ class GelaberChoicesTest {
 
     @Test
     void textAndChoiceSequence_givenNextGelaber_thenControlsNotSwitchedToManfred() {
-        AbstractGelaberText gelaberTextMock = new GelaberText(new String[]{"line"});
+        AbstractGelaberText gelaberTextMock = new GelaberText(new String[]{"line"}, (new TestGameConfig()).withNumberOfTextLines(NUMBER_OF_TEXT_LINES));
         when(choices.get("key")).thenReturn(gelaberTextMock);
 
         Gelaber gelaberMock = mock(Gelaber.class);

@@ -1,6 +1,7 @@
 package manfred.game.map;
 
 import manfred.game.Game;
+import manfred.game.GameConfig;
 import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.enemy.EnemyReader;
 import manfred.game.enemy.EnemyStack;
@@ -27,11 +28,13 @@ public class MapReader {
     private PersonReader personReader;
     private EnemyReader enemyReader;
     private EnemiesWrapper enemiesWrapper;
+    private GameConfig gameConfig;
 
-    public MapReader(PersonReader personReader, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper) {
+    public MapReader(PersonReader personReader, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper, GameConfig gameConfig) {
         this.personReader = personReader;
         this.enemyReader = enemyReader;
         this.enemiesWrapper = enemiesWrapper;
+        this.gameConfig = gameConfig;
     }
 
     public Map load(String name) throws InvalidInputException, IOException {
@@ -53,7 +56,7 @@ public class MapReader {
             EnemyStack enemies = convertEnemies(jsonInput.optJSONArray("enemies"));
             enemiesWrapper.setEnemies(enemies);
 
-            return new Map(name, mapTiles);
+            return new Map(name, mapTiles, gameConfig);
         } catch (JSONException | IOException $e) {
             throw new InvalidInputException($e.getMessage());
         }
@@ -138,7 +141,7 @@ public class MapReader {
             return enemyStack;
         }
 
-        for (Object enemy: enemies) {
+        for (Object enemy : enemies) {
             if (!(enemy instanceof JSONObject)) {
                 throw new InvalidInputException("Enemy was not a JSONObject: " + enemy.toString());
             }

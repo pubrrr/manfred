@@ -1,13 +1,13 @@
 package manfred.game.graphics;
 
+import manfred.game.GameConfig;
 import manfred.game.characters.Manfred;
 import manfred.game.map.Map;
 import manfred.game.map.MapWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -16,6 +16,7 @@ class BackgroundScrollerTest {
 
     private Manfred manfredMock;
     private Map mapMock;
+    private GameConfig gameConfigMock;
 
     @BeforeEach
     void init() {
@@ -25,7 +26,9 @@ class BackgroundScrollerTest {
         MapWrapper mapWrapperMock = mock(MapWrapper.class);
         when(mapWrapperMock.getMap()).thenReturn(mapMock);
 
-        underTest = new BackgroundScroller(5, manfredMock, mapWrapperMock);
+        gameConfigMock = mock(GameConfig.class);
+
+        underTest = new BackgroundScroller(5, manfredMock, mapWrapperMock, gameConfigMock);
     }
 
     @Test

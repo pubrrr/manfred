@@ -18,7 +18,6 @@ import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.ImageLoader;
 import manfred.game.graphics.ManfredWindow;
 import manfred.game.interact.PersonReader;
-import manfred.game.interact.gelaber.Gelaber;
 import manfred.game.interact.gelaber.GelaberReader;
 import manfred.game.map.MapReader;
 import manfred.game.map.MapWrapper;
@@ -42,22 +41,23 @@ public class GameContext {
     }
 
     @Bean
-    public Manfred manfred(MapCollider collider, MapWrapper mapWrapper, AttacksContainer attacksContainer, SkillSet skillSet) {
+    public Manfred manfred(MapCollider collider, MapWrapper mapWrapper, AttacksContainer attacksContainer, SkillSet skillSet, GameConfig gameConfig) {
         return new Manfred(
                 10,
-                GamePanel.PIXEL_BLOCK_SIZE * 3,
-                GamePanel.PIXEL_BLOCK_SIZE * 3,
+                gameConfig.getPixelBlockSize() * 3,
+                gameConfig.getPixelBlockSize() * 3,
                 100,
                 collider,
                 mapWrapper,
                 attacksContainer,
-                skillSet
+                skillSet,
+                gameConfig
         );
     }
 
     @Bean
-    public GamePanel gamePanel(MapWrapper map, Manfred manfred, EnemiesWrapper enemiesWrapper, AttacksContainer attacksContainer, BackgroundScroller backgroundScroller) {
-        return new GamePanel(map, manfred, enemiesWrapper, attacksContainer, backgroundScroller);
+    public GamePanel gamePanel(MapWrapper map, Manfred manfred, EnemiesWrapper enemiesWrapper, AttacksContainer attacksContainer, BackgroundScroller backgroundScroller, GameConfig gameConfig) {
+        return new GamePanel(map, manfred, enemiesWrapper, attacksContainer, backgroundScroller, gameConfig);
     }
 
     @Bean
@@ -72,14 +72,16 @@ public class GameContext {
             DoNothingController doNothingController,
             Manfred manfred,
             GamePanel panel,
-            MapWrapper mapWrapper
+            MapWrapper mapWrapper,
+            GameConfig gameConfig
     ) {
         KeyControls keyControls = new KeyControls(manfredController,
                 gelaberController,
                 doNothingController,
                 manfred,
                 panel,
-                mapWrapper
+                mapWrapper,
+                gameConfig
         );
         panel.addKeyListener(keyControls);
         return keyControls;
@@ -91,13 +93,13 @@ public class GameContext {
     }
 
     @Bean
-    public MapReader mapReader(PersonReader personReader, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper) {
-        return new MapReader(personReader, enemyReader, enemiesWrapper);
+    public MapReader mapReader(PersonReader personReader, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper, GameConfig gameConfig) {
+        return new MapReader(personReader, enemyReader, enemiesWrapper, gameConfig);
     }
 
     @Bean
-    public MapCollider mapCollider(MapWrapper mapWrapper) {
-        return new MapCollider(mapWrapper);
+    public MapCollider mapCollider(MapWrapper mapWrapper, GameConfig gameConfig) {
+        return new MapCollider(mapWrapper, gameConfig);
     }
 
     @Bean
@@ -106,8 +108,8 @@ public class GameContext {
     }
 
     @Bean
-    public GelaberReader gelaberReader() {
-        return new GelaberReader((Gelaber.TEXT_BOX_WIDTH - 2 * Gelaber.TEXT_DISTANCE_TO_BOX) / (Gelaber.TEXT_POINT_SIZE / 2));
+    public GelaberReader gelaberReader(GameConfig gameConfig) {
+        return new GelaberReader(gameConfig);
     }
 
     @Bean
@@ -126,8 +128,8 @@ public class GameContext {
     }
 
     @Bean
-    public EnemyReader enemyReader(MapColliderProvider mapColliderProvider, ImageLoader imageLoader) {
-        return new EnemyReader(mapColliderProvider, imageLoader);
+    public EnemyReader enemyReader(MapColliderProvider mapColliderProvider, ImageLoader imageLoader, GameConfig gameConfig) {
+        return new EnemyReader(mapColliderProvider, imageLoader, gameConfig);
     }
 
     @Bean
@@ -158,8 +160,9 @@ public class GameContext {
     }
 
     @Bean
-    public BackgroundScroller backgroundScroller(Manfred manfred, MapWrapper mapWrapper) {
-        return new BackgroundScroller(Math.min(GamePanel.HEIGHT, GamePanel.WIDTH) / 3, manfred, mapWrapper);
+    public BackgroundScroller backgroundScroller(Manfred manfred, MapWrapper mapWrapper, GameConfig gameConfig) {
+        int triggerScrollDistanceToBorder = Math.min(gameConfig.getWindowHeight(), gameConfig.getWindowWidth()) / 3;
+        return new BackgroundScroller(triggerScrollDistanceToBorder, manfred, mapWrapper, gameConfig);
     }
 
     @Bean

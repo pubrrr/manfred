@@ -1,29 +1,44 @@
 package manfred.game.interact.gelaber;
 
+import manfred.game.GameConfig;
+
 import java.awt.*;
 import java.util.Arrays;
 
-public class SelectionMarker extends Polygon {
-    // TODO: hübsche Geometrie: Berechne Koordinaten anhand von offsetX, offsetY, heigt, width (Basis bis zur rechten Ecke)
-    public final static int[] SELECTION_MARKER_CORNERS_X = new int[]{
-            Gelaber.GELABER_BOX_POSITION_X + Gelaber.TEXT_DISTANCE_TO_BOX / 2,
-            Gelaber.GELABER_BOX_POSITION_X + Gelaber.TEXT_DISTANCE_TO_BOX / 2,
-            Gelaber.GELABER_BOX_POSITION_X + Gelaber.TEXT_DISTANCE_TO_BOX * 4 / 5
-    };
-    public final static int[] SELECTION_MARKER_CORNERS_Y = new int[]{
-            Gelaber.GELABER_BOX_POSITION_Y + Gelaber.TEXT_DISTANCE_TO_BOX + Gelaber.TEXT_POINT_SIZE / 6 - Gelaber.TEXT_POINT_SIZE / 2,
-            Gelaber.GELABER_BOX_POSITION_Y + Gelaber.TEXT_DISTANCE_TO_BOX + Gelaber.TEXT_POINT_SIZE / 6 + Gelaber.TEXT_POINT_SIZE / 2,
-            Gelaber.GELABER_BOX_POSITION_Y + Gelaber.TEXT_DISTANCE_TO_BOX + Gelaber.TEXT_POINT_SIZE / 6
-    };
+public class SelectionMarker {
+    public final int[] selectionMarkerCornersY;
 
-    public SelectionMarker() {
-        super(SELECTION_MARKER_CORNERS_X, SELECTION_MARKER_CORNERS_Y, 3);
+    private Polygon marker;
+    public final int[] selectionMarkerCornersX;
+
+    public SelectionMarker(GameConfig gameConfig) {
+        // TODO: hübsche Geometrie: Berechne Koordinaten anhand von offsetX, offsetY, heigt, width (Basis bis zur rechten Ecke)
+        selectionMarkerCornersX = new int[]{
+                gameConfig.getGelaberBoxPositionX() + gameConfig.getTextDistanceToBox() / 2,
+                gameConfig.getGelaberBoxPositionX() + gameConfig.getTextDistanceToBox() / 2,
+                gameConfig.getGelaberBoxPositionX() + gameConfig.getTextDistanceToBox() * 4 / 5
+        };
+        selectionMarkerCornersY = new int[]{
+                gameConfig.getGelaberBoxPositionY() + gameConfig.getTextDistanceToBox() + gameConfig.getTextPointSize() / 6 - gameConfig.getTextPointSize() / 2,
+                gameConfig.getGelaberBoxPositionY() + gameConfig.getTextDistanceToBox() + gameConfig.getTextPointSize() / 6 + gameConfig.getTextPointSize() / 2,
+                gameConfig.getGelaberBoxPositionY() + gameConfig.getTextDistanceToBox() + gameConfig.getTextPointSize() / 6
+        };
+        marker = new Polygon(selectionMarkerCornersX, selectionMarkerCornersY, 3);
+    }
+
+    public void translate(int deltaX, int deltaY) {
+        marker.translate(deltaX, deltaY);
     }
 
     public void resetToTop() {
-        reset();
-        this.npoints = 3;
-        this.xpoints = Arrays.copyOf(SELECTION_MARKER_CORNERS_X, this.npoints);
-        this.ypoints = Arrays.copyOf(SELECTION_MARKER_CORNERS_Y, this.npoints);
+        marker.reset();
+        marker.npoints = 3;
+        marker.xpoints = Arrays.copyOf(selectionMarkerCornersX, marker.npoints);
+        marker.ypoints = Arrays.copyOf(selectionMarkerCornersY, marker.npoints);
+    }
+
+    public void paint(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.fillPolygon(marker);
     }
 }

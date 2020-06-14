@@ -1,5 +1,6 @@
 package manfred.game.controls;
 
+import manfred.game.GameConfig;
 import manfred.game.characters.Manfred;
 import manfred.game.exception.InvalidInputException;
 import manfred.game.graphics.GamePanel;
@@ -18,6 +19,7 @@ public class KeyControls implements KeyListener {
     private Manfred manfred;
     private GamePanel gamePanel;
     private MapWrapper mapWrapper;
+    private GameConfig gameConfig;
 
     private ControllerInterface activeController;
 
@@ -27,7 +29,8 @@ public class KeyControls implements KeyListener {
             DoNothingController doNothingController,
             Manfred manfred,
             GamePanel gamePanel,
-            MapWrapper mapWrapper
+            MapWrapper mapWrapper,
+            GameConfig gameConfig
     ) {
         this.manfredController = manfredController;
         this.gelaberController = gelaberController;
@@ -35,6 +38,7 @@ public class KeyControls implements KeyListener {
         this.manfred = manfred;
         this.gamePanel = gamePanel;
         this.mapWrapper = mapWrapper;
+        this.gameConfig = gameConfig;
 
         activeController = manfredController;
     }
@@ -85,7 +89,7 @@ public class KeyControls implements KeyListener {
     }
 
     public void resetManfredPositionTo(int x, int y) {
-        this.manfred.setX(GamePanel.PIXEL_BLOCK_SIZE * x);
-        this.manfred.setY(GamePanel.PIXEL_BLOCK_SIZE * y);
+        this.manfred.setX(gameConfig.getPixelBlockSize() * x);
+        this.manfred.setY(gameConfig.getPixelBlockSize() * y);
     }
 }

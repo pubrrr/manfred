@@ -1,9 +1,9 @@
 package manfred.game.enemy;
 
+import manfred.game.GameConfig;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.MovingObject;
-import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.Paintable;
 
 import java.awt.*;
@@ -11,22 +11,24 @@ import java.awt.image.BufferedImage;
 
 public class Enemy extends MovingObject implements Paintable {
     private String name;
+    private GameConfig gameConfig;
 
     private int healthPoints;
     private int aggroRadius;
 
-    public Enemy(String name, int speed, int x, int y, int healthPoints, BufferedImage image, MapCollider collider, int aggroRadius) {
-        super(speed, x, y, 2 * GamePanel.PIXEL_BLOCK_SIZE, 2 * GamePanel.PIXEL_BLOCK_SIZE, image, collider);
+    public Enemy(String name, int speed, int x, int y, int healthPoints, BufferedImage image, MapCollider collider, int aggroRadius, GameConfig gameConfig) {
+        super(speed, x, y, 2 * gameConfig.getPixelBlockSize(), 2 * gameConfig.getPixelBlockSize(), image, collider);
         this.name = name;
         this.healthPoints = healthPoints;
         this.aggroRadius = aggroRadius;
+        this.gameConfig = gameConfig;
     }
 
     @Override
     public void paint(Graphics g, Point offset) {
         sprite.paint(g, offset);
 
-        g.setFont(new Font("Palatino Linotype", Font.BOLD, GamePanel.PIXEL_BLOCK_SIZE / 2));
+        g.setFont(new Font("Palatino Linotype", Font.BOLD, gameConfig.getPixelBlockSize() / 2));
 
         g.setColor(Color.BLACK);
         g.drawString(String.valueOf(this.healthPoints), this.sprite.x + this.sprite.width / 4 - offset.x, this.sprite.getBottom() + (this.sprite.height / 2) - offset.y);

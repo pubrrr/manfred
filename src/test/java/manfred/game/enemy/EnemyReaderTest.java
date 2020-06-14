@@ -1,8 +1,8 @@
 package manfred.game.enemy;
 
+import helpers.TestGameConfig;
 import manfred.game.characters.MapCollider;
 import manfred.game.exception.InvalidInputException;
-import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.ImageLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class EnemyReaderTest {
+    private static final int PIXEL_BLOCK_SIZE = 40;
+
     private EnemyReader underTest;
     private ImageLoader imageLoaderMock;
 
@@ -26,7 +28,7 @@ class EnemyReaderTest {
 
         imageLoaderMock = mock(ImageLoader.class);
 
-        underTest = new EnemyReader(mapColliderProviderMock, imageLoaderMock);
+        underTest = new EnemyReader(mapColliderProviderMock, imageLoaderMock, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
     }
 
     @Test
@@ -36,12 +38,12 @@ class EnemyReaderTest {
         Enemy result = underTest.convert(input, 1, 22);
 
         verify(imageLoaderMock).load("data\\enemies\\testName.png");
-        assertEquals(GamePanel.PIXEL_BLOCK_SIZE, result.getX());
-        assertEquals(GamePanel.PIXEL_BLOCK_SIZE * 22, result.getY());
+        assertEquals(PIXEL_BLOCK_SIZE, result.getX());
+        assertEquals(PIXEL_BLOCK_SIZE * 22, result.getY());
         assertEquals(100, result.getHealthPoints());
 
         result.right();
         result.move();
-        assertEquals(GamePanel.PIXEL_BLOCK_SIZE + 1, result.getX());
+        assertEquals(PIXEL_BLOCK_SIZE + 1, result.getX());
     }
 }

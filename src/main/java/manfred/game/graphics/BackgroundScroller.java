@@ -1,5 +1,6 @@
 package manfred.game.graphics;
 
+import manfred.game.GameConfig;
 import manfred.game.characters.Manfred;
 import manfred.game.map.MapWrapper;
 
@@ -9,13 +10,15 @@ public class BackgroundScroller {
     private final int triggerScrollDistanceToBorder;
     private final Manfred manfred;
     private final MapWrapper mapWrapper;
+    private GameConfig gameConfig;
 
     private Point offset = new Point(0, 0);
 
-    public BackgroundScroller(int triggerScrollDistanceToBorder, Manfred manfred, MapWrapper mapWrapper) {
+    public BackgroundScroller(int triggerScrollDistanceToBorder, Manfred manfred, MapWrapper mapWrapper, GameConfig gameConfig) {
         this.triggerScrollDistanceToBorder = triggerScrollDistanceToBorder;
         this.manfred = manfred;
         this.mapWrapper = mapWrapper;
+        this.gameConfig = gameConfig;
     }
 
     public Point getOffset() {
@@ -25,14 +28,14 @@ public class BackgroundScroller {
     }
 
     private void updateX() {
-        int mapSizeX = mapWrapper.getMap().getArray().length * GamePanel.PIXEL_BLOCK_SIZE;
-        if (mapSizeX < GamePanel.WIDTH) {
-            offset.x = - (GamePanel.WIDTH - mapSizeX) / 2;
+        int mapSizeX = mapWrapper.getMap().getArray().length * gameConfig.getPixelBlockSize();
+        if (mapSizeX < gameConfig.getWindowWidth()) {
+            offset.x = - (gameConfig.getWindowWidth() - mapSizeX) / 2;
             return;
         }
 
         int distanceToLeftBorder = manfred.getSprite().getLeft() - offset.x;
-        int distanceToRightBorder = GamePanel.WIDTH - (manfred.getSprite().getRight() - offset.x);
+        int distanceToRightBorder = gameConfig.getWindowWidth() - (manfred.getSprite().getRight() - offset.x);
 
         if (distanceToLeftBorder < triggerScrollDistanceToBorder) {
             offset.x = Math.max(
@@ -42,20 +45,20 @@ public class BackgroundScroller {
         } else if (distanceToRightBorder < triggerScrollDistanceToBorder) {
             offset.x = Math.min(
                     offset.x + (triggerScrollDistanceToBorder - distanceToRightBorder),
-                    mapSizeX - GamePanel.WIDTH
+                    mapSizeX - gameConfig.getWindowWidth()
             );
         }
     }
 
     private void updateY() {
-        int mapSizeY = mapWrapper.getMap().getArray()[0].length * GamePanel.PIXEL_BLOCK_SIZE;
-        if (mapSizeY < GamePanel.HEIGHT) {
-            offset.y = - (GamePanel.HEIGHT - mapSizeY) / 2;
+        int mapSizeY = mapWrapper.getMap().getArray()[0].length * gameConfig.getPixelBlockSize();
+        if (mapSizeY < gameConfig.getWindowHeight()) {
+            offset.y = - (gameConfig.getWindowHeight() - mapSizeY) / 2;
             return;
         }
 
         int distanceToTopBorder = manfred.getSprite().getTop() - offset.y;
-        int distanceToBottomBorder = GamePanel.HEIGHT - (manfred.getSprite().getBottom() - offset.y);
+        int distanceToBottomBorder = gameConfig.getWindowHeight() - (manfred.getSprite().getBottom() - offset.y);
 
         if (distanceToTopBorder < triggerScrollDistanceToBorder) {
             offset.y = Math.max(
@@ -65,7 +68,7 @@ public class BackgroundScroller {
         } else if (distanceToBottomBorder < triggerScrollDistanceToBorder) {
             offset.y = Math.min(
                     offset.y + (triggerScrollDistanceToBorder - distanceToBottomBorder),
-                    mapSizeY - GamePanel.HEIGHT
+                    mapSizeY - gameConfig.getWindowHeight()
             );
         }
     }

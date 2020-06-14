@@ -1,6 +1,7 @@
 package componentTests;
 
 import helpers.ResultCaptor;
+import helpers.TestGameConfig;
 import helpers.TestMapFactory;
 import manfred.game.attack.Attack;
 import manfred.game.attack.AttackGenerator;
@@ -32,15 +33,20 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class ControlsMovesManfredTest extends ControllerTestCase {
+    private static final int PIXEL_BLOCK_SIZE = 40;
+
     private Manfred manfred;
     private Manfred manfredSpy;
     private KeyControls controls;
     private MapWrapper mapWrapperMock;
     private SkillSet skillSetMock;
     private AttacksContainer attacksContainerMock;
+    private TestGameConfig testGameConfig;
 
     @BeforeEach
     void init() {
+        testGameConfig = (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE);
+
         MapCollider colliderMock = mock(MapCollider.class);
         when(colliderMock.collides(0, 0, 0, 0)).thenReturn(true);
 
@@ -52,7 +58,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         skillSetMock = mock(SkillSet.class);
         attacksContainerMock = mock(AttacksContainer.class);
 
-        manfred = new Manfred(10, 0, 0, 1, colliderMock, mapWrapperMock, attacksContainerMock, skillSetMock);
+        manfred = new Manfred(10, 0, 0, 1, colliderMock, mapWrapperMock, attacksContainerMock, skillSetMock, testGameConfig);
         manfredSpy = spy(manfred);
 
         setupControllerWithManfred(manfred);
@@ -69,8 +75,8 @@ class ControlsMovesManfredTest extends ControllerTestCase {
                 mock(DoNothingController.class),
                 manfred,
                 panel,
-                mapWrapperMock
-        );
+                mapWrapperMock,
+                testGameConfig);
     }
 
     @Test
@@ -184,8 +190,8 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         verify(controlsSpy).turnOffControls();
         verify(controlsSpy).controlManfred();
         verify(mapWrapperMock).loadMap(targetName);
-        assertEquals(GamePanel.PIXEL_BLOCK_SIZE * targetSpawnX, manfred.getX());
-        assertEquals(GamePanel.PIXEL_BLOCK_SIZE * targetSpawnY, manfred.getY());
+        assertEquals(PIXEL_BLOCK_SIZE * targetSpawnX, manfred.getX());
+        assertEquals(PIXEL_BLOCK_SIZE * targetSpawnY, manfred.getY());
     }
 
     @Test
@@ -195,7 +201,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         int targetSpawnY = 66;
         setupMapWithDoorOrPortal(new Portal(targetName, targetSpawnX, targetSpawnY));
 
-        manfred.setY(GamePanel.PIXEL_BLOCK_SIZE);
+        manfred.setY(PIXEL_BLOCK_SIZE);
         Consumer<KeyControls> result = manfred.move();
 
         KeyControls controlsSpy = spy(controls);
@@ -206,8 +212,8 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         verify(controlsSpy).turnOffControls();
         verify(controlsSpy).controlManfred();
         verify(mapWrapperMock).loadMap(targetName);
-        assertEquals(GamePanel.PIXEL_BLOCK_SIZE * targetSpawnX, manfred.getX());
-        assertEquals(GamePanel.PIXEL_BLOCK_SIZE * targetSpawnY, manfred.getY());
+        assertEquals(PIXEL_BLOCK_SIZE * targetSpawnX, manfred.getX());
+        assertEquals(PIXEL_BLOCK_SIZE * targetSpawnY, manfred.getY());
     }
 
     @Test

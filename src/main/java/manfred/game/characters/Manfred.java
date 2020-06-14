@@ -1,10 +1,10 @@
 package manfred.game.characters;
 
+import manfred.game.GameConfig;
 import manfred.game.attack.Attack;
 import manfred.game.attack.AttackGenerator;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.controls.KeyControls;
-import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.Paintable;
 import manfred.game.interact.Interactable;
 import manfred.game.map.MapWrapper;
@@ -20,14 +20,16 @@ public class Manfred extends MovingObject implements Paintable {
     private MapWrapper mapWrapper;
     private AttacksContainer attacksContainer;
     private SkillSet skillSet;
+    private GameConfig gameConfig;
     private boolean castMode;
 
-    public Manfred(int speed, int x, int y, int healthPoints, MapCollider collider, MapWrapper mapWrapper, AttacksContainer attacksContainer, SkillSet skillSet) {
-        super(speed, x, y, GamePanel.PIXEL_BLOCK_SIZE, GamePanel.PIXEL_BLOCK_SIZE, null, collider);
+    public Manfred(int speed, int x, int y, int healthPoints, MapCollider collider, MapWrapper mapWrapper, AttacksContainer attacksContainer, SkillSet skillSet, GameConfig gameConfig) {
+        super(speed, x, y, gameConfig.getPixelBlockSize(), gameConfig.getPixelBlockSize(), null, collider);
         this.healthPoints = healthPoints;
         this.mapWrapper = mapWrapper;
         this.attacksContainer = attacksContainer;
         this.skillSet = skillSet;
+        this.gameConfig = gameConfig;
     }
 
     public void setX(int x) {
@@ -49,7 +51,7 @@ public class Manfred extends MovingObject implements Paintable {
 
     private Point checkForTileManfredStandMainlyOn() {
         Point center = this.sprite.getCenter();
-        return new Point(center.x / GamePanel.PIXEL_BLOCK_SIZE, center.y / GamePanel.PIXEL_BLOCK_SIZE);
+        return new Point(center.x / gameConfig.getPixelBlockSize(), center.y / gameConfig.getPixelBlockSize());
     }
 
     @Override
@@ -103,8 +105,8 @@ public class Manfred extends MovingObject implements Paintable {
                 triggerInteractPositionY = center.y;
                 break;
         }
-        int onMapGridX = triggerInteractPositionX / GamePanel.PIXEL_BLOCK_SIZE;
-        int onMapGridY = triggerInteractPositionY / GamePanel.PIXEL_BLOCK_SIZE;
+        int onMapGridX = triggerInteractPositionX / gameConfig.getPixelBlockSize();
+        int onMapGridY = triggerInteractPositionY / gameConfig.getPixelBlockSize();
 
         Interactable interactable = mapWrapper.getMap().getInteractable(onMapGridX, onMapGridY);
         if (interactable == null) {

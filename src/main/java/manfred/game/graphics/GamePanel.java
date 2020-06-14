@@ -1,5 +1,6 @@
 package manfred.game.graphics;
 
+import manfred.game.GameConfig;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.characters.Manfred;
 import manfred.game.enemy.EnemiesWrapper;
@@ -11,13 +12,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class GamePanel extends JPanel {
-    public static final int WIDTH = 1600;
-    public static final int HEIGHT = 900;
-    public static final int PIXEL_BLOCK_SIZE = 60;
     public static final int FADE_PERIOD = 40;
     public static final int FADE_TRANSPARENCY_INTERVAL = 20;
 
     private final BackgroundScroller backgroundScroller;
+    private GameConfig gameConfig;
 
     private int fadeTransparency = 0;
     private List<Paintable> paintables = new LinkedList<>();
@@ -27,9 +26,11 @@ public class GamePanel extends JPanel {
             Manfred manfred,
             EnemiesWrapper enemiesWrapper,
             AttacksContainer attacksContainer,
-            BackgroundScroller backgroundScroller
+            BackgroundScroller backgroundScroller,
+            GameConfig gameConfig
     ) {
         super();
+        this.gameConfig = gameConfig;
         setFocusable(true);
         requestFocus();
 
@@ -42,7 +43,7 @@ public class GamePanel extends JPanel {
     }
 
     public Dimension getPreferredSize() {
-        return new Dimension(WIDTH, HEIGHT);
+        return new Dimension(gameConfig.getWindowWidth(), gameConfig.getWindowHeight());
     }
 
     public void registerPaintable(Paintable paintable) {
@@ -60,7 +61,7 @@ public class GamePanel extends JPanel {
 
         if (fadeTransparency > 0) {
             g.setColor(new Color(255, 255, 255, fadeTransparency));
-            g.fillRect(0, 0, WIDTH, HEIGHT);
+            g.fillRect(0, 0, gameConfig.getWindowWidth(), gameConfig.getWindowHeight());
         }
     }
 

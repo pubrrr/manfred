@@ -1,5 +1,6 @@
 package manfred.game.interact.gelaber;
 
+import manfred.game.GameConfig;
 import manfred.game.controls.KeyControls;
 
 import java.awt.*;
@@ -10,13 +11,12 @@ import java.util.function.Function;
 public class GelaberChoices extends AbstractGelaberText {
     HashMap<String, AbstractGelaberText> choices;
 
-    public final static int SELECTION_MOVEMENT_DISTANCE = Gelaber.TEXT_POINT_SIZE + Gelaber.DISTANCE_BETWEEN_LINES;
-
     private boolean showChoiceBox = false;
     private SelectionMarker selectionMarker;
     private int selection;
 
-    public GelaberChoices(String[] lines, HashMap<String, AbstractGelaberText> choices, SelectionMarker selectionMarker) {
+    public GelaberChoices(String[] lines, HashMap<String, AbstractGelaberText> choices, SelectionMarker selectionMarker, GameConfig gameConfig) {
+        super(gameConfig);
         this.lines = lines;
         this.choices = choices;
         this.selectionMarker = selectionMarker;
@@ -28,10 +28,10 @@ public class GelaberChoices extends AbstractGelaberText {
 
     @Override
     public Function<Gelaber, Consumer<KeyControls>> next() {
-        boolean continueTalking = linesPosition + Gelaber.NUMBER_OF_TEXT_LINES - 1 < lines.length;
+        boolean continueTalking = linesPosition + gameConfig.getNumberOfTextLines() - 1 < lines.length;
 
         if (continueTalking) {
-            linesPosition += Gelaber.NUMBER_OF_TEXT_LINES - 1;
+            linesPosition += gameConfig.getNumberOfTextLines() - 1;
             return gelaber -> null;
         } else if (!showChoiceBox) {
             showChoiceBox = true;
@@ -67,7 +67,7 @@ public class GelaberChoices extends AbstractGelaberText {
             if (selection < 0) {
                 selection = choices.size() - 1;
             }
-            selectionMarker.translate(0, SELECTION_MOVEMENT_DISTANCE * (selection - initialSelection));
+            selectionMarker.translate(0, gameConfig.getSelectionMovementDistance() * (selection - initialSelection));
         }
     }
 
@@ -79,7 +79,7 @@ public class GelaberChoices extends AbstractGelaberText {
             if (selection >= choices.size()) {
                 selection = 0;
             }
-            selectionMarker.translate(0, SELECTION_MOVEMENT_DISTANCE * (selection - initialSelection));
+            selectionMarker.translate(0, gameConfig.getSelectionMovementDistance() * (selection - initialSelection));
         }
     }
 
@@ -89,19 +89,20 @@ public class GelaberChoices extends AbstractGelaberText {
 
         if (showChoiceBox) {
             g.setColor(Color.YELLOW);
-            g.fillRect(Gelaber.GELABER_BOX_POSITION_X, Gelaber.GELABER_BOX_POSITION_Y, 500, 500);
+            g.fillRect(gameConfig.getGelaberBoxPositionX(), gameConfig.getGelaberBoxPositionY(), 500, 500);
 
             g.setColor(Color.BLACK);
-            g.setFont(new Font("Palatino Linotype", Font.BOLD, Gelaber.TEXT_POINT_SIZE));
+            g.setFont(new Font("Palatino Linotype", Font.BOLD, gameConfig.getTextPointSize()));
 
-            g.fillPolygon(selectionMarker);
+            selectionMarker.paint(g);
 
+            g.setColor(Color.BLACK);
             int idx = 0;
             for (String choice : choices.keySet()) {
                 g.drawString(
                         choice,
-                        Gelaber.GELABER_BOX_POSITION_X + Gelaber.TEXT_DISTANCE_TO_BOX,
-                        Gelaber.GELABER_BOX_POSITION_Y + Gelaber.TEXT_DISTANCE_TO_BOX + idx++ * (Gelaber.TEXT_POINT_SIZE + Gelaber.DISTANCE_BETWEEN_LINES) + Gelaber.TEXT_POINT_SIZE / 2);
+                        gameConfig.getGelaberBoxPositionX() + gameConfig.getTextDistanceToBox(),
+                        gameConfig.getGelaberBoxPositionY() + gameConfig.getTextDistanceToBox() + idx++ * (gameConfig.getTextPointSize() + gameConfig.getDistanceBetweenLines()) + gameConfig.getTextPointSize() / 2);
             }
         }
     }

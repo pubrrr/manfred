@@ -1,10 +1,13 @@
 package helpers;
 
+import manfred.game.GameConfig;
 import manfred.game.interact.Interactable;
 import manfred.game.map.*;
 import org.springframework.lang.Nullable;
 
 import java.util.HashMap;
+
+import static org.mockito.Mockito.mock;
 
 public class TestMapFactory {
     public static Map create(String[][] mapTilesAsStrings, @Nullable HashMap<String, Interactable> interactables) {
@@ -23,6 +26,6 @@ public class TestMapFactory {
                 }
             }
         }
-        return new Map("testName", mapTiles);
+        return new Map("testName", mapTiles, mock(GameConfig.class));
     }
 }

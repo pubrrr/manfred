@@ -1,5 +1,6 @@
 package componentTests;
 
+import helpers.TestGameConfig;
 import manfred.game.characters.Manfred;
 import manfred.game.controls.DoNothingController;
 import manfred.game.controls.GelaberController;
@@ -18,15 +19,19 @@ import java.util.Set;
 import static org.mockito.Mockito.*;
 
 public class ControlsGelaberTest extends ControllerTestCase {
+    private static final int NUMBER_OF_TEXT_LINES = 5;
+
     private KeyControls controlsSpy;
     private GelaberController gelaberController;
     private ManfredController manfredControllerMock;
+    private TestGameConfig testGameConfig;
 
     @BeforeEach
     void init() {
         manfredControllerMock = mock(ManfredController.class);
 
         gelaberController = new GelaberController();
+        testGameConfig = (new TestGameConfig()).withNumberOfTextLines(NUMBER_OF_TEXT_LINES);
 
         KeyControls controls = new KeyControls(
                 manfredControllerMock,
@@ -34,8 +39,8 @@ public class ControlsGelaberTest extends ControllerTestCase {
                 mock(DoNothingController.class),
                 mock(Manfred.class),
                 mock(GamePanel.class),
-                mock(MapWrapper.class)
-        );
+                mock(MapWrapper.class),
+                testGameConfig);
         controls.controlGelaber(mock(Gelaber.class));
 
         controlsSpy = spy(controls);
@@ -43,7 +48,7 @@ public class ControlsGelaberTest extends ControllerTestCase {
 
     @Test
     void nextLine_whenEnterPressed() {
-        setupControllerWithGelaberText(new GelaberText(new String[]{"line1", "line2", "line3", "line4", "line5"}));
+        setupControllerWithGelaberText(new GelaberText(new String[]{"line1", "line2", "line3", "line4", "line5"}, testGameConfig));
 
         controlsSpy.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
         verify(controlsSpy, never()).controlManfred();
@@ -51,7 +56,7 @@ public class ControlsGelaberTest extends ControllerTestCase {
 
     @Test
     void returnsControlsToManfred_whenEnterPressedAndNoFurtherText() {
-        setupControllerWithGelaberText(new GelaberText(new String[]{"line1"}));
+        setupControllerWithGelaberText(new GelaberText(new String[]{"line1"}, testGameConfig));
 
         controlsSpy.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
         verify(controlsSpy, atLeastOnce()).controlManfred();
@@ -62,10 +67,10 @@ public class ControlsGelaberTest extends ControllerTestCase {
 
     @Test
     void selectChoicesSequence() {
-        SelectionMarker selectionMarkerSpy = spy(new SelectionMarker());
+        SelectionMarker selectionMarkerSpy = spy(new SelectionMarker(testGameConfig));
         HashMap choicesMock = setupChoicesMock("key", "line");
 
-        setupControllerWithGelaberText(new GelaberChoices(new String[]{"line1"}, choicesMock, selectionMarkerSpy));
+        setupControllerWithGelaberText(new GelaberChoices(new String[]{"line1"}, choicesMock, selectionMarkerSpy, testGameConfig));
 
         assertNoSelectionYetPossible(selectionMarkerSpy);
         assertTriggerChoiceSelection(selectionMarkerSpy);
@@ -104,7 +109,7 @@ public class ControlsGelaberTest extends ControllerTestCase {
     }
 
     private void setupControllerWithGelaberText(AbstractGelaberText gelaberText) {
-        Gelaber gelaber = new Gelaber(new AbstractGelaberText[]{gelaberText});
+        Gelaber gelaber = new Gelaber(new AbstractGelaberText[]{gelaberText}, testGameConfig);
         gelaberController.setGelaber(gelaber);
     }
 
@@ -114,7 +119,7 @@ public class ControlsGelaberTest extends ControllerTestCase {
 
         HashMap choicesMock = mock(HashMap.class);
         when(choicesMock.keySet()).thenReturn(keySetMock);
-        when(choicesMock.get(key)).thenReturn(new GelaberText(new String[]{line}));
+        when(choicesMock.get(key)).thenReturn(new GelaberText(new String[]{line}, testGameConfig));
         return choicesMock;
     }
 }

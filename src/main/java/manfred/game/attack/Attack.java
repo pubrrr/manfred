@@ -34,7 +34,7 @@ public class Attack extends MovingObject implements Paintable {
         if (castPosition.distance(this.sprite.getCenter()) > range) {
             this.resolve();
         }
-        return super.move();
+        return null;
     }
 
     @Override

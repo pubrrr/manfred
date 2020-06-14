@@ -1,8 +1,8 @@
 package manfred.game.enemy;
 
 import manfred.game.Game;
+import manfred.game.GameConfig;
 import manfred.game.exception.InvalidInputException;
-import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.ImageLoader;
 import org.json.JSONObject;
 
@@ -16,10 +16,12 @@ public class EnemyReader {
 
     private MapColliderProvider mapColliderProvider;
     private ImageLoader imageLoader;
+    private GameConfig gameConfig;
 
-    public EnemyReader(MapColliderProvider mapColliderProvider, ImageLoader imageLoader) {
+    public EnemyReader(MapColliderProvider mapColliderProvider, ImageLoader imageLoader, GameConfig gameConfig) {
         this.mapColliderProvider = mapColliderProvider;
         this.imageLoader = imageLoader;
+        this.gameConfig = gameConfig;
     }
 
     public Enemy load(String name, int spawnX, int spawnY) throws InvalidInputException, IOException {
@@ -43,12 +45,13 @@ public class EnemyReader {
             return new Enemy(
                     name,
                     speed,
-                    GamePanel.PIXEL_BLOCK_SIZE * spawnX,
-                    GamePanel.PIXEL_BLOCK_SIZE * spawnY,
+                    gameConfig.getPixelBlockSize() * spawnX,
+                    gameConfig.getPixelBlockSize() * spawnY,
                     healthPoints,
                     imageLoader.load(PATH_ENEMIES + name + ".png"),
                     mapColliderProvider.provide(),
-                    GamePanel.PIXEL_BLOCK_SIZE * 5
+                    gameConfig.getPixelBlockSize() * 5,
+                    gameConfig
             );
         } catch (Exception e) {
             throw new InvalidInputException(e.getMessage());

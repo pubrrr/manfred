@@ -1,18 +1,26 @@
 package manfred.game.interact.gelaber;
 
+import manfred.game.GameConfig;
 import manfred.game.exception.InvalidInputException;
 import org.json.JSONArray;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class GelaberReaderTest {
+    private final static int CHARACTER_PER_LINE = 5;
+
     private static GelaberReader underTest;
 
     @BeforeAll
     static void init() {
-        underTest = new GelaberReader(5);
+        GameConfig gameConfigMock = mock(GameConfig.class);
+        when(gameConfigMock.getCharacterPerGelaberLine()).thenReturn(CHARACTER_PER_LINE);
+
+        underTest = new GelaberReader(gameConfigMock);
     }
 
     @Test

@@ -26,11 +26,17 @@ public class ConfigReader {
             JSONObject jsonInput = new JSONObject(jsonEnemy);
 
             JSONObject window = jsonInput.getJSONObject("window");
+            JSONObject gelaber = jsonInput.getJSONObject("gelaber");
 
             return new GameConfig(
                     window.getInt("width"),
                     window.getInt("height"),
-                    jsonInput.getInt("pixelBlockSize")
+                    jsonInput.getInt("pixelBlockSize"),
+                    jsonInput.getInt("textBoxDistanceToBorder"),
+                    jsonInput.getInt("textPointSize"),
+                    jsonInput.getInt("textDistanceToBox"),
+                    gelaber.getInt("boxPositionX"),
+                    gelaber.getInt("boxPositionY")
             );
         } catch (Exception e) {
             throw new InvalidInputException(e.getMessage());

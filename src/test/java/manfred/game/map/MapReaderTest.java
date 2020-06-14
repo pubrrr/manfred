@@ -1,5 +1,6 @@
 package manfred.game.map;
 
+import manfred.game.GameConfig;
 import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.enemy.EnemyReader;
 import manfred.game.exception.InvalidInputException;
@@ -25,7 +26,7 @@ public class MapReaderTest {
         enemyReaderMock = mock(EnemyReader.class);
         enemiesWrapperMock = mock(EnemiesWrapper.class);
 
-        underTest = new MapReader(personReaderMock, enemyReaderMock, enemiesWrapperMock);
+        underTest = new MapReader(personReaderMock, enemyReaderMock, enemiesWrapperMock, mock(GameConfig.class));
     }
 
     @Test

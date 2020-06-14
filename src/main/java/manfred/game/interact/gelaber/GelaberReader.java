@@ -1,5 +1,6 @@
 package manfred.game.interact.gelaber;
 
+import manfred.game.GameConfig;
 import manfred.game.exception.InvalidInputException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,9 +11,11 @@ import java.util.*;
 
 public class GelaberReader {
     private int charactersPerLine;
+    private GameConfig gameConfig;
 
-    public GelaberReader(int charactersPerLine) {
-        this.charactersPerLine = charactersPerLine;
+    public GelaberReader(GameConfig gameConfig) {
+        this.charactersPerLine = gameConfig.getCharacterPerGelaberLine();
+        this.gameConfig = gameConfig;
     }
 
     public Gelaber convert(JSONArray jsonGelaber) throws InvalidInputException {
@@ -22,7 +25,7 @@ public class GelaberReader {
                 JSONObject jsonTextLine = jsonGelaber.getJSONObject(i);
                 texts[i] = convertText(jsonTextLine);
             }
-            return new Gelaber(texts);
+            return new Gelaber(texts, gameConfig);
         } catch (JSONException $e) {
             throw new InvalidInputException($e.getMessage());
         }
@@ -39,11 +42,11 @@ public class GelaberReader {
         }
 
         if (type == GelaberType.gelaber) {
-            return new GelaberText(lines);
+            return new GelaberText(lines, gameConfig);
         }
 
         HashMap<String, AbstractGelaberText> choices = convertChoices(jsonTextLine.getJSONObject("choices"));
-        return new GelaberChoices(lines, choices, new SelectionMarker());
+        return new GelaberChoices(lines, choices, new SelectionMarker(gameConfig), gameConfig);
     }
 
     private HashMap<String, AbstractGelaberText> convertChoices(JSONObject choices) throws InvalidInputException {

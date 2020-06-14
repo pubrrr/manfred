@@ -1,5 +1,6 @@
 package manfred.game.enemy;
 
+import helpers.TestGameConfig;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import static org.mockito.Mockito.*;
 class EnemyTest {
     private final int AGGRO_RADIUS = 10;
     private final int SPEED = 4;
+    private static final int PIXEL_BLOCK_SIZE = 40;
 
     private Enemy underTest;
 
@@ -19,7 +21,7 @@ class EnemyTest {
         MapCollider mapColliderMock = mock(MapCollider.class);
         when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
 
-        underTest = new Enemy("name", SPEED, 0, 0, 100, null, mapColliderMock, AGGRO_RADIUS);
+        underTest = new Enemy("name", SPEED, 0, 0, 100, null, mapColliderMock, AGGRO_RADIUS, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
     }
 
     @Test

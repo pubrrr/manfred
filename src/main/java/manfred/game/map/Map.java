@@ -1,8 +1,8 @@
 package manfred.game.map;
 
 import com.sun.istack.internal.Nullable;
+import manfred.game.GameConfig;
 import manfred.game.controls.KeyControls;
-import manfred.game.graphics.GamePanel;
 import manfred.game.interact.Interactable;
 
 import java.awt.*;
@@ -11,10 +11,12 @@ import java.util.function.Consumer;
 public class Map {
     private String name;
     private MapTile[][] mapTiles;
+    private GameConfig gameConfig;
 
-    public Map(String name, MapTile[][] mapTiles) {
+    public Map(String name, MapTile[][] mapTiles, GameConfig gameConfig) {
         this.name = name;
         this.mapTiles = mapTiles;
+        this.gameConfig = gameConfig;
     }
 
     // TODO necessary?
@@ -45,10 +47,10 @@ public class Map {
                 }
                 if (!isAccessible(x, y)) {
                     g.fillRect(
-                            GamePanel.PIXEL_BLOCK_SIZE * x - offset.x,
-                            GamePanel.PIXEL_BLOCK_SIZE * y - offset.y,
-                            GamePanel.PIXEL_BLOCK_SIZE,
-                            GamePanel.PIXEL_BLOCK_SIZE
+                            gameConfig.getPixelBlockSize() * x - offset.x,
+                            gameConfig.getPixelBlockSize() * y - offset.y,
+                            gameConfig.getPixelBlockSize(),
+                            gameConfig.getPixelBlockSize()
                     );
                 }
                 if (mapTiles[x][y] instanceof Interactable) {

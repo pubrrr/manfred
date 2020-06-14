@@ -1,17 +1,17 @@
 package manfred.game.map;
 
+import manfred.game.GameConfig;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
 public class MapTest {
     @Test
     public void isAccessible() {
         MapTile[][] map = {{new NotAccessible(), new Accessible()}};
-        Map unterTest = new Map("test", map);
+        Map unterTest = new Map("test", map, mock(GameConfig.class));
 
         assertFalse(unterTest.isAccessible(0, 0));
         assertTrue(unterTest.isAccessible(0, 1));

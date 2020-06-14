@@ -4,8 +4,8 @@ import com.tngtech.junit.dataprovider.DataProvider;
 import com.tngtech.junit.dataprovider.DataProviderExtension;
 import com.tngtech.junit.dataprovider.UseDataProvider;
 import com.tngtech.junit.dataprovider.UseDataProviderExtension;
+import helpers.TestGameConfig;
 import helpers.TestMapFactory;
-import manfred.game.graphics.GamePanel;
 import manfred.game.map.Map;
 import manfred.game.map.MapWrapper;
 import org.junit.jupiter.api.TestTemplate;
@@ -21,6 +21,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(DataProviderExtension.class)
 @ExtendWith(UseDataProviderExtension.class)
 class MapColliderTest {
+    private static final int PIXEL_BLOCK_SIZE = 40;
+
     private MapCollider underTest;
 
     void initMap(String[][] mapArray) {
@@ -29,7 +31,7 @@ class MapColliderTest {
         MapWrapper mapWrapperMock = mock(MapWrapper.class);
         when(mapWrapperMock.getMap()).thenReturn(map);
 
-        underTest = new MapCollider(mapWrapperMock);
+        underTest = new MapCollider(mapWrapperMock, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
     }
 
     @TestTemplate
@@ -43,10 +45,10 @@ class MapColliderTest {
     @DataProvider
     static Object[][] provideAccessibleCoords() {
         return new Object[][]{
-                getBoundaryCoordsByHalfBlockSize(0,0), // top left block only
-                getBoundaryCoordsByHalfBlockSize(1,0), // two blocks horizontal
-                getBoundaryCoordsByHalfBlockSize(0,1), // two blocks vertical
-                getBoundaryCoordsByHalfBlockSize(1,1), // four blocks
+                getBoundaryCoordsByHalfBlockSize(0, 0), // top left block only
+                getBoundaryCoordsByHalfBlockSize(1, 0), // two blocks horizontal
+                getBoundaryCoordsByHalfBlockSize(0, 1), // two blocks vertical
+                getBoundaryCoordsByHalfBlockSize(1, 1), // four blocks
         };
     }
 
@@ -90,20 +92,20 @@ class MapColliderTest {
     static Object[][] provideOutOfBounds() {
         return new Object[][]{
                 {-1, 0, 0, 0,}, // out of bound left
-                {0, 5 * GamePanel.PIXEL_BLOCK_SIZE, 0, 0,}, // out of bound right
+                {0, 5 * PIXEL_BLOCK_SIZE, 0, 0,}, // out of bound right
                 {0, 0, -1, 0,}, // out of bound up
-                {0, 0, 0, 5 * GamePanel.PIXEL_BLOCK_SIZE,}, // out of bound down
+                {0, 0, 0, 5 * PIXEL_BLOCK_SIZE,}, // out of bound down
         };
     }
 
     private static Object[] getBoundaryCoordsByHalfBlockSize(int halfBlocksX, int halfBlocksY) {
-        int x = halfBlocksX * GamePanel.PIXEL_BLOCK_SIZE / 2;
-        int y = halfBlocksY * GamePanel.PIXEL_BLOCK_SIZE / 2;
+        int x = halfBlocksX * PIXEL_BLOCK_SIZE / 2;
+        int y = halfBlocksY * PIXEL_BLOCK_SIZE / 2;
         return new Object[]{
                 x,
-                x + GamePanel.PIXEL_BLOCK_SIZE -1,
+                x + PIXEL_BLOCK_SIZE - 1,
                 y,
-                y + GamePanel.PIXEL_BLOCK_SIZE -1
+                y + PIXEL_BLOCK_SIZE - 1
         };
     }
 }
