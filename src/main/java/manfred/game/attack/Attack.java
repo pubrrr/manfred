@@ -16,8 +16,8 @@ public class Attack extends MovingObject implements Paintable {
 
     private final Point castPosition;
 
-    protected Attack(int speed, int x, int y, int sizeX, int sizeY, MapCollider collider, int damage, int range) {
-        super(speed, x, y, sizeX, sizeY, null, collider);
+    protected Attack(int speed, int x, int y, int width, int height, MapCollider collider, int damage, int range) {
+        super(speed, x, y, width, height, height, null, collider);
         this.castPosition = this.sprite.getCenter();
         this.damage = damage;
         this.range = range;

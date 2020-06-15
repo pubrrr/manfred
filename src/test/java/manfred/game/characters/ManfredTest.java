@@ -45,7 +45,7 @@ class ManfredTest {
         attacksContainerMock = mock(AttacksContainer.class);
         skillSetMock = mock(SkillSet.class);
 
-        underTest = new Manfred(10, 0, 0, 1, colliderMock, mapWrapperMock, attacksContainerMock, skillSetMock, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE));
+        underTest = new Manfred(10, 0, 0, 1, colliderMock, mapWrapperMock, attacksContainerMock, skillSetMock, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE), null);
     }
 
     @Test

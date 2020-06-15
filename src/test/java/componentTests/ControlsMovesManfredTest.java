@@ -62,7 +62,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
 
         backgroundScrollerMock = mock(BackgroundScroller.class);
 
-        manfred = new Manfred(10, 0, 0, 1, colliderMock, mapWrapperMock, attacksContainerMock, skillSetMock, testGameConfig);
+        manfred = new Manfred(10, 0, 0, 1, colliderMock, mapWrapperMock, attacksContainerMock, skillSetMock, testGameConfig, null);
         manfredSpy = spy(manfred);
 
 

@@ -6,10 +6,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Sprite extends Rectangle implements Paintable {
+    private int baseHeight;
     private BufferedImage image;
 
-    public Sprite(int x, int y, int sizeX, int sizeY, BufferedImage image) {
-        super(x, y, sizeX, sizeY);
+    public Sprite(int x, int y, int width, int spriteHeight, int baseHeight, BufferedImage image) {
+        super(x, y, width, spriteHeight);
+        this.baseHeight = baseHeight;
         this.image = image;
     }
 
@@ -39,6 +41,14 @@ public class Sprite extends Rectangle implements Paintable {
 
     public int getBottom() {
         return this.y + this.height;
+    }
+
+    public int getBaseHeight() {
+        return this.baseHeight;
+    }
+
+    public int getBaseTop() {
+        return this.y + this.height - this.baseHeight;
     }
 
     @Override

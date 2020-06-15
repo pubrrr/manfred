@@ -23,9 +23,9 @@ abstract public class MovingObject implements Paintable {
     protected int currentSpeedX = 0;
     protected int currentSpeedY = 0;
 
-    protected MovingObject(int speed, int x, int y, int sizeX, int sizeY, BufferedImage image, MapCollider collider) {
+    protected MovingObject(int speed, int x, int y, int width, int spriteHeight, int baseHeight, BufferedImage image, MapCollider collider) {
         this.speed = speed;
-        this.sprite = new Sprite(x, y, sizeX, sizeY, image);
+        this.sprite = new Sprite(x, y, width, spriteHeight, baseHeight, image);
         this.collider = collider;
     }
 
@@ -98,7 +98,7 @@ abstract public class MovingObject implements Paintable {
         return collider.collides(
                 this.sprite.getLeft() + currentSpeedX,
                 this.sprite.getRight() - 1 + currentSpeedX,
-                this.sprite.getTop(),
+                this.sprite.getBaseTop(),
                 this.sprite.getBottom() - 1
         );
     }
@@ -107,7 +107,7 @@ abstract public class MovingObject implements Paintable {
         return collider.collides(
                 this.sprite.getLeft(),
                 this.sprite.getRight() - 1,
-                this.sprite.getTop() + currentSpeedY,
+                this.sprite.getBaseTop() + currentSpeedY,
                 this.sprite.getBottom() - 1 + currentSpeedY
         );
     }

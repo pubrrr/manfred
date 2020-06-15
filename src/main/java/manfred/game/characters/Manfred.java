@@ -11,25 +11,46 @@ import manfred.game.map.MapWrapper;
 import org.springframework.lang.Nullable;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.Stack;
 import java.util.function.Consumer;
 
 public class Manfred extends MovingObject implements Paintable {
+    public static final int ANIMATION_IMAGES_NUMBER = 8;
     private static final int INTERACT_DISTANCE = 10;
+    private static final int NEXT_ANIMATION_IMAGE_TRIGGER = 5;
+
     private int healthPoints;
     private MapWrapper mapWrapper;
     private AttacksContainer attacksContainer;
     private SkillSet skillSet;
     private GameConfig gameConfig;
-    private boolean castMode;
+    private HashMap<Direction, BufferedImage[]> walkAnimation;
 
-    public Manfred(int speed, int x, int y, int healthPoints, MapCollider collider, MapWrapper mapWrapper, AttacksContainer attacksContainer, SkillSet skillSet, GameConfig gameConfig) {
-        super(speed, x, y, gameConfig.getPixelBlockSize(), gameConfig.getPixelBlockSize(), null, collider);
+    private boolean castMode = false;
+    private int framesCounter = 0;
+    private int animationPosition = 0;
+
+    public Manfred(
+            int speed,
+            int x,
+            int y,
+            int healthPoints,
+            MapCollider collider,
+            MapWrapper mapWrapper,
+            AttacksContainer attacksContainer,
+            SkillSet skillSet,
+            GameConfig gameConfig,
+            HashMap<Direction, BufferedImage[]> walkAnimation
+    ) {
+        super(speed, x, y, gameConfig.getPixelBlockSize(), 2 * gameConfig.getPixelBlockSize(), gameConfig.getPixelBlockSize(), null, collider);
         this.healthPoints = healthPoints;
         this.mapWrapper = mapWrapper;
         this.attacksContainer = attacksContainer;
         this.skillSet = skillSet;
         this.gameConfig = gameConfig;
+        this.walkAnimation = walkAnimation;
     }
 
     public void setX(int x) {
@@ -56,28 +77,15 @@ public class Manfred extends MovingObject implements Paintable {
 
     @Override
     public void paint(Graphics g, Point offset) {
-        if (this.castMode) {
-            g.setColor(Color.CYAN);
-        } else {
-            g.setColor(Color.GREEN);
-        }
-        g.fillPolygon(this.sprite.toPaint(offset));
+        g.drawImage(walkAnimation.get(viewDirection)[animationPosition], sprite.x, sprite.y, sprite.width, sprite.height, null);
 
-        g.setColor(Color.BLACK);
-        Point center = this.sprite.getCenter();
-        switch (viewDirection) {
-            case up:
-                g.fillRect(center.x - offset.x, this.sprite.getTop() - offset.y, 10, 10);
-                break;
-            case down:
-                g.fillRect(center.x - offset.x, this.sprite.getBottom() - offset.y, 10, 10);
-                break;
-            case left:
-                g.fillRect(this.sprite.getLeft() - offset.x, center.y - offset.y, 10, 10);
-                break;
-            case right:
-                g.fillRect(this.sprite.getRight() - offset.x, center.y - offset.y, 10, 10);
-                break;
+        framesCounter++;
+        if (framesCounter >= NEXT_ANIMATION_IMAGE_TRIGGER) {
+            framesCounter = 0;
+            animationPosition++;
+            if (animationPosition >= ANIMATION_IMAGES_NUMBER) {
+                animationPosition = 0;
+            }
         }
     }
 
@@ -90,7 +98,7 @@ public class Manfred extends MovingObject implements Paintable {
         switch (viewDirection) {
             case up:
                 triggerInteractPositionX = center.x;
-                triggerInteractPositionY = this.sprite.getTop() - INTERACT_DISTANCE;
+                triggerInteractPositionY = this.sprite.getBaseTop() - INTERACT_DISTANCE;
                 break;
             case down:
                 triggerInteractPositionX = center.x;
@@ -128,7 +136,7 @@ public class Manfred extends MovingObject implements Paintable {
         }
     }
 
-    public void castMode() {
+    public void castModeOn() {
         this.castMode = true;
     }
 }

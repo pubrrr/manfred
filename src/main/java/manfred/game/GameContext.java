@@ -2,9 +2,7 @@ package manfred.game;
 
 import manfred.game.attack.AttackReader;
 import manfred.game.attack.AttacksContainer;
-import manfred.game.characters.Manfred;
-import manfred.game.characters.MapCollider;
-import manfred.game.characters.SkillSet;
+import manfred.game.characters.*;
 import manfred.game.controls.DoNothingController;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
@@ -41,7 +39,14 @@ public class GameContext {
     }
 
     @Bean
-    public Manfred manfred(MapCollider collider, MapWrapper mapWrapper, AttacksContainer attacksContainer, SkillSet skillSet, GameConfig gameConfig) {
+    public Manfred manfred(
+            MapCollider collider,
+            MapWrapper mapWrapper,
+            AttacksContainer attacksContainer,
+            SkillSet skillSet,
+            GameConfig gameConfig,
+            ManfredFramesLoader manfredFramesLoader
+    ) throws IOException {
         return new Manfred(
                 10,
                 gameConfig.getPixelBlockSize() * 3,
@@ -51,7 +56,8 @@ public class GameContext {
                 mapWrapper,
                 attacksContainer,
                 skillSet,
-                gameConfig
+                gameConfig,
+                manfredFramesLoader.load()
         );
     }
 
@@ -180,5 +186,10 @@ public class GameContext {
     @Bean
     public ConfigReader configReader() {
         return new ConfigReader();
+    }
+
+    @Bean
+    public ManfredFramesLoader manfredFramesLoader(ImageLoader imageLoader) {
+        return new ManfredFramesLoader(imageLoader);
     }
 }
