@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 public class Manfred extends MovingObject implements Paintable {
     public static final int ANIMATION_IMAGES_NUMBER = 8;
     private static final int INTERACT_DISTANCE = 10;
-    private static final int NEXT_ANIMATION_IMAGE_TRIGGER = 5;
+    private static final int NEXT_ANIMATION_IMAGE_TRIGGER = 4;
 
     private int healthPoints;
     private MapWrapper mapWrapper;
@@ -58,13 +58,30 @@ public class Manfred extends MovingObject implements Paintable {
     }
 
     public void setY(int y) {
-        this.sprite.y = y;
+        // TODO this needs to be reworked: one has to differentiate between the base y and the sprite y
+        // base y is the coordinate that should be used for collisions, so to say the projection to the floor
+        // the sprite y is the position of the top edge of the sprite
+        this.sprite.y = y + sprite.getBaseHeight() - sprite.getSpriteHeight();
     }
 
     @Override
     @Nullable
     public Consumer<KeyControls> move() {
         super.move();
+
+        if (currentSpeedX == 0 && currentSpeedY == 0) {
+            framesCounter = 0;
+            animationPosition = 0;
+        } else {
+            framesCounter++;
+            if (framesCounter >= NEXT_ANIMATION_IMAGE_TRIGGER) {
+                framesCounter = 0;
+                animationPosition++;
+                if (animationPosition >= ANIMATION_IMAGES_NUMBER) {
+                    animationPosition = 0;
+                }
+            }
+        }
 
         Point mainTile = checkForTileManfredStandMainlyOn();
         return mapWrapper.getMap().stepOn(mainTile.x, mainTile.y);
@@ -77,16 +94,7 @@ public class Manfred extends MovingObject implements Paintable {
 
     @Override
     public void paint(Graphics g, Point offset) {
-        g.drawImage(walkAnimation.get(viewDirection)[animationPosition], sprite.x, sprite.y, sprite.width, sprite.height, null);
-
-        framesCounter++;
-        if (framesCounter >= NEXT_ANIMATION_IMAGE_TRIGGER) {
-            framesCounter = 0;
-            animationPosition++;
-            if (animationPosition >= ANIMATION_IMAGES_NUMBER) {
-                animationPosition = 0;
-            }
-        }
+        g.drawImage(walkAnimation.get(viewDirection)[animationPosition], sprite.x - offset.x, sprite.y - offset.y, sprite.width, sprite.height, null);
     }
 
     @Nullable

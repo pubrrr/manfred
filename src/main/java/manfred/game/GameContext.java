@@ -48,7 +48,7 @@ public class GameContext {
             ManfredFramesLoader manfredFramesLoader
     ) throws IOException {
         return new Manfred(
-                10,
+                6,
                 gameConfig.getPixelBlockSize() * 3,
                 gameConfig.getPixelBlockSize() * 3,
                 100,

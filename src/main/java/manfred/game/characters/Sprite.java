@@ -51,6 +51,10 @@ public class Sprite extends Rectangle implements Paintable {
         return this.y + this.height - this.baseHeight;
     }
 
+    public int getSpriteHeight() {
+        return this.height;
+    }
+
     @Override
     public void paint(Graphics g, Point offset) {
         g.drawImage(image, x - offset.x, y - offset.y, width, height, null);

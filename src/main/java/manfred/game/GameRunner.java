@@ -10,7 +10,7 @@ import manfred.game.graphics.ManfredWindow;
 import java.util.function.Consumer;
 
 public class GameRunner implements Runnable {
-    final static int REPAINT_PERIOD = 30;
+    final static int REPAINT_PERIOD = 15;
 
     private KeyControls keyControls;
     private ManfredWindow window;
@@ -28,10 +28,17 @@ public class GameRunner implements Runnable {
 
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
+            long beforeTime = System.currentTimeMillis();
             move();
             window.repaint();
+
+            long timeNeeded = System.currentTimeMillis() - beforeTime;
             try {
-                Thread.sleep(REPAINT_PERIOD);
+                Thread.sleep(
+                        REPAINT_PERIOD - timeNeeded > 0
+                                ? REPAINT_PERIOD - timeNeeded
+                                : 1
+                );
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
