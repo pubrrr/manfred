@@ -121,7 +121,7 @@ public class MapReader {
             case "Door":
                 return convertDoor(interactableId, interactable);
             case "Portal":
-                return convertPortal(interactableId, interactable);
+                return convertPortal(interactable);
             default:
                 throw new InvalidInputException("Unknown interactable type: " + interactableType + " for interactable " + interactableId);
         }
@@ -131,8 +131,8 @@ public class MapReader {
         return new Door(targetName, interactable.getInt("targetSpawnX"), interactable.getInt("targetSpawnY"));
     }
 
-    private Portal convertPortal(String targetName, JSONObject interactable) {
-        return new Portal(targetName, interactable.getInt("targetSpawnX"), interactable.getInt("targetSpawnY"));
+    private Portal convertPortal(JSONObject interactable) {
+        return new Portal(interactable.getString("target"), interactable.getInt("targetSpawnX"), interactable.getInt("targetSpawnY"));
     }
 
     private EnemyStack convertEnemies(@Nullable JSONArray enemies) throws InvalidInputException, IOException {
