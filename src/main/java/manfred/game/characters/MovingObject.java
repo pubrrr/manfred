@@ -120,5 +120,21 @@ abstract public class MovingObject implements Paintable {
     public void paint(Graphics g, Point offset) {
         this.sprite.paint(g, offset);
     }
+
+    public void checkForVerticalViewDirection() {
+        if (currentSpeedY > 0) {
+            viewDirection = Direction.down;
+        } else if (currentSpeedY < 0) {
+            viewDirection = Direction.up;
+        }
+    }
+
+    public void checkForHorizontalViewDirection() {
+        if (currentSpeedX > 0) {
+            viewDirection = Direction.right;
+        } else if (currentSpeedX < 0) {
+            viewDirection = Direction.left;
+        }
+    }
 }
 

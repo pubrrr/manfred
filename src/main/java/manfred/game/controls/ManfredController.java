@@ -69,10 +69,12 @@ public class ManfredController implements ControllerInterface {
             case KeyEvent.VK_A:
             case KeyEvent.VK_D:
                 manfred.stopX();
+                manfred.checkForVerticalViewDirection();
                 break;
             case KeyEvent.VK_S:
             case KeyEvent.VK_W:
                 manfred.stopY();
+                manfred.checkForHorizontalViewDirection();
                 break;
             case KeyEvent.VK_ENTER:
                 return manfred.interact();
