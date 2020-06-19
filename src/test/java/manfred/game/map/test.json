@@ -1,13 +1,16 @@
 {
   "name": "test",
   "map": [
-    ["opa", 0],
+    [1, 0],
     [1,1],
     ["0", 1]
   ],
-  "interactables": {
-    "opa": {
-      "type": "Person"
+  "interactables": [
+    {
+      "type": "Person",
+      "name": "opa",
+      "positionX": 0,
+      "positionY": 0
     }
-  }
+  ]
 }

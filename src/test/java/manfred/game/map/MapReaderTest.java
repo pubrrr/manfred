@@ -6,6 +6,7 @@ import manfred.game.enemy.EnemyReader;
 import manfred.game.exception.InvalidInputException;
 import manfred.game.interact.Door;
 import manfred.game.interact.PersonReader;
+import manfred.game.interact.Portal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -102,10 +103,18 @@ public class MapReaderTest {
 
     @Test
     void loadsDoor() throws InvalidInputException {
-        String jsonWithDoor = "{name: test, map: [[door]], interactables: {door :{ type: Door, targetSpawnX: 1, targetSpawnY: 1}}}";
+        String jsonWithDoor = "{name: test, map: [[0, 0]], interactables: [{ type: Door, positionX: 1, positionY: 0, target: testTaraget, targetSpawnX: 1, targetSpawnY: 1}]}";
         Map result = underTest.convert(jsonWithDoor);
 
-        assertTrue(result.getInteractable(0, 0) instanceof Door);
+        assertTrue(result.getInteractable(1, 0) instanceof Door);
+    }
+
+    @Test
+    void loadsPortal() throws InvalidInputException {
+        String jsonWithPortal = "{name: test, map: [[0, 0]], interactables: [{ type: Portal, positionX: 1, positionY: 0, target: testTaraget, targetSpawnX: 1, targetSpawnY: 1}]}";
+        Map result = underTest.convert(jsonWithPortal);
+
+        assertTrue(result.getInteractable(1, 0) instanceof Portal);
     }
 
     @Test

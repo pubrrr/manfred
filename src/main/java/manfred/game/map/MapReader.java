@@ -52,17 +52,18 @@ public class MapReader {
             JSONObject jsonInput = new JSONObject(jsonString);
 
             String name = jsonInput.getString("name");
-            MapTile[][] mapTiles = convertMap(jsonInput.getJSONArray("map"), jsonInput.optJSONObject("interactables"));
+            MapTile[][] mapTiles = convertMap(jsonInput.getJSONArray("map"));
+            convertAndInsertInteractables(jsonInput.optJSONArray("interactables"), mapTiles);
             EnemyStack enemies = convertEnemies(jsonInput.optJSONArray("enemies"));
             enemiesWrapper.setEnemies(enemies);
 
             return new Map(name, mapTiles, gameConfig);
         } catch (JSONException | IOException $e) {
-            throw new InvalidInputException($e.getMessage());
+            throw new InvalidInputException($e.getMessage() + " in map " + jsonString);
         }
     }
 
-    private MapTile[][] convertMap(JSONArray jsonMap, JSONObject jsonInteractables) throws InvalidInputException, IOException {
+    private MapTile[][] convertMap(JSONArray jsonMap) throws InvalidInputException, IOException {
         int lengthVertical = jsonMap.length();
         int lengthHorizontal = jsonMap.getJSONArray(0).length();
 
@@ -72,7 +73,7 @@ public class MapReader {
             if (horizontalLine.length() != lengthHorizontal) {
                 throw new InvalidInputException("Map needs to be rectangular. First line: " + lengthHorizontal + ", line: " + y + " " + horizontalLine.length());
             }
-            transposedMapTiles[y] = convertHorizontalMapLine(horizontalLine, jsonInteractables);
+            transposedMapTiles[y] = convertHorizontalMapLine(horizontalLine);
         }
 
         return transposeToGetIntuitiveXAndYRight(transposedMapTiles, lengthVertical, lengthHorizontal);
@@ -88,12 +89,12 @@ public class MapReader {
         return transposed;
     }
 
-    private MapTile[] convertHorizontalMapLine(JSONArray horizontalJsonLine, JSONObject jsonInteractables) throws InvalidInputException, IOException {
+    private MapTile[] convertHorizontalMapLine(JSONArray horizontalJsonLine) throws InvalidInputException, IOException {
         MapTile[] mapTileLine = new MapTile[horizontalJsonLine.length()];
         for (int x = 0; x < horizontalJsonLine.length(); x++) {
             Object tileValue = horizontalJsonLine.get(x);
             if (tileValue instanceof String || tileValue instanceof Integer) {
-                mapTileLine[x] = convertMapTile("" + tileValue, jsonInteractables);
+                mapTileLine[x] = convertMapTile("" + tileValue);
             } else {
                 throw new InvalidInputException("Map array element was neither string nor int. Is: " + tileValue.toString());
             }
@@ -101,38 +102,61 @@ public class MapReader {
         return mapTileLine;
     }
 
-    private MapTile convertMapTile(String tileValue, JSONObject jsonInteractables) throws InvalidInputException, IOException {
+    private MapTile convertMapTile(String tileValue) throws InvalidInputException, IOException {
         switch (tileValue) {
             case ACCESSIBLE:
                 return Accessible.getInstance();
             case NOT_ACCESSIBLE:
                 return NotAccessible.getInstance();
             default:
-                return convertInteractable(tileValue, jsonInteractables);
+                throw new InvalidInputException("Found map tile that was not either 0 or 1");
         }
     }
 
-    private Interactable convertInteractable(String interactableId, JSONObject jsonInteractables) throws InvalidInputException, IOException {
-        JSONObject interactable = jsonInteractables.getJSONObject(interactableId);
-        String interactableType = interactable.getString("type");
+    private void convertAndInsertInteractables(@Nullable JSONArray interactables, MapTile[][] mapTiles) throws InvalidInputException, IOException {
+        if (interactables == null) {
+            return;
+        }
+        for (Object _jsonInteractable : interactables) {
+            if (!(_jsonInteractable instanceof JSONObject)) {
+                throw new InvalidInputException("Interactable was no JSON Object: " + _jsonInteractable.toString());
+            }
+            JSONObject jsonInteractable = (JSONObject) _jsonInteractable;
+
+            int positionX = jsonInteractable.getInt("positionX");
+            int positionY = jsonInteractable.getInt("positionY");
+            mapTiles[positionX][positionY] = convertInteractable(jsonInteractable);
+        }
+    }
+
+    private Interactable convertInteractable(JSONObject jsonInteractable) throws InvalidInputException, IOException {
+        String interactableType = jsonInteractable.getString("type");
         switch (interactableType) {
             case "Person":
-                return personReader.load(interactableId);
+                return personReader.load(jsonInteractable.getString("name"));
             case "Door":
-                return convertDoor(interactableId, interactable);
+                return convertDoor(jsonInteractable);
             case "Portal":
-                return convertPortal(interactable);
+                return convertPortal(jsonInteractable);
             default:
-                throw new InvalidInputException("Unknown interactable type: " + interactableType + " for interactable " + interactableId);
+                throw new InvalidInputException("Unknown interactable type: " + interactableType + " for interactable " + jsonInteractable.toString());
         }
     }
 
-    private Door convertDoor(String targetName, JSONObject interactable) {
-        return new Door(targetName, interactable.getInt("targetSpawnX"), interactable.getInt("targetSpawnY"));
+    private Door convertDoor(JSONObject interactable) {
+        return new Door(
+                interactable.getString("target"),
+                interactable.getInt("targetSpawnX"),
+                interactable.getInt("targetSpawnY")
+        );
     }
 
     private Portal convertPortal(JSONObject interactable) {
-        return new Portal(interactable.getString("target"), interactable.getInt("targetSpawnX"), interactable.getInt("targetSpawnY"));
+        return new Portal(
+                interactable.getString("target"),
+                interactable.getInt("targetSpawnX"),
+                interactable.getInt("targetSpawnY")
+        );
     }
 
     private EnemyStack convertEnemies(@Nullable JSONArray enemies) throws InvalidInputException, IOException {
