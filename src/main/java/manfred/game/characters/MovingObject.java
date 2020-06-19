@@ -34,7 +34,7 @@ abstract public class MovingObject implements Paintable {
     }
 
     public int getY() {
-        return this.sprite.y;
+        return this.sprite.y + sprite.getSpriteHeight() - sprite.getBaseHeight();
     }
 
     public void left() {

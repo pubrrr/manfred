@@ -45,7 +45,7 @@ class ManfredTest {
         attacksContainerMock = mock(AttacksContainer.class);
         skillSetMock = mock(SkillSet.class);
 
-        underTest = new Manfred(10, 0, 0, 1, colliderMock, mapWrapperMock, attacksContainerMock, skillSetMock, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE), null);
+        underTest = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, colliderMock, mapWrapperMock, attacksContainerMock, skillSetMock, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE), null);
     }
 
     @Test
@@ -68,7 +68,8 @@ class ManfredTest {
         underTest.setX(manfredX);
         underTest.setY(manfredY);
 
-        Consumer<KeyControls> nonZeroLambda = keyControls -> {};
+        Consumer<KeyControls> nonZeroLambda = keyControls -> {
+        };
         setup4x4MapMockWithOnStepCallbackTopLeftTile(nonZeroLambda);
 
         Consumer<KeyControls> result = underTest.move();
@@ -99,7 +100,8 @@ class ManfredTest {
 
     @Test
     void noGapBetweenTwoNeighboringOnStepTiles() {
-        Consumer<KeyControls> nonZeroLambda = keyControls -> {};
+        Consumer<KeyControls> nonZeroLambda = keyControls -> {
+        };
 
         MapTile mapTileMock = mock(MapTile.class);
         when(mapTileMock.onStep()).thenReturn(nonZeroLambda);

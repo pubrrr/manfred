@@ -6,6 +6,7 @@ import manfred.game.controls.KeyControls;
 import manfred.game.interact.Interactable;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
 public class Map {
@@ -42,21 +43,40 @@ public class Map {
 
         for (int x = 0; x < mapTiles.length; x++) {
             for (int y = 0; y < mapTiles[0].length; y++) {
-                if (mapTiles[x][y] instanceof Interactable) {
-                    g.setColor(Color.YELLOW);
-                }
-                if (!isAccessible(x, y)) {
-                    g.fillRect(
-                            gameConfig.getPixelBlockSize() * x - offset.x,
-                            gameConfig.getPixelBlockSize() * y - offset.y,
-                            gameConfig.getPixelBlockSize(),
-                            gameConfig.getPixelBlockSize()
-                    );
-                }
-                if (mapTiles[x][y] instanceof Interactable) {
-                    g.setColor(Color.RED);
-                }
+                paintTile(g, offset, x, y);
             }
+        }
+    }
+
+    private void paintTile(Graphics g, Point offset, int x, int y) {
+        BufferedImage tileImage = mapTiles[x][y].getImage();
+        if (tileImage != null) {
+            int imageWidth = gameConfig.getPixelBlockSize() * 2;
+            int imageHeight = tileImage.getHeight() * imageWidth / tileImage.getWidth();
+            g.drawImage(
+                    tileImage,
+                    gameConfig.getPixelBlockSize() * x - offset.x,
+                    gameConfig.getPixelBlockSize() * (y + 1) - offset.y - imageHeight,
+                    imageWidth,
+                    imageHeight,
+                    null
+            );
+            return;
+        }
+
+        if (mapTiles[x][y] instanceof Interactable) {
+            g.setColor(Color.YELLOW);
+        }
+        if (!isAccessible(x, y)) {
+            g.fillRect(
+                    gameConfig.getPixelBlockSize() * x - offset.x,
+                    gameConfig.getPixelBlockSize() * y - offset.y,
+                    gameConfig.getPixelBlockSize(),
+                    gameConfig.getPixelBlockSize()
+            );
+        }
+        if (mapTiles[x][y] instanceof Interactable) {
+            g.setColor(Color.RED);
         }
     }
 

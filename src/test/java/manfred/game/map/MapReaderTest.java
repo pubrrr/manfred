@@ -4,6 +4,7 @@ import manfred.game.GameConfig;
 import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.enemy.EnemyReader;
 import manfred.game.exception.InvalidInputException;
+import manfred.game.graphics.ImageLoader;
 import manfred.game.interact.Door;
 import manfred.game.interact.PersonReader;
 import manfred.game.interact.Portal;
@@ -20,14 +21,16 @@ public class MapReaderTest {
     private PersonReader personReaderMock;
     private EnemyReader enemyReaderMock;
     private EnemiesWrapper enemiesWrapperMock;
+    private ImageLoader imageLoaderMock;
 
     @BeforeEach
     void init() {
         personReaderMock = mock(PersonReader.class);
         enemyReaderMock = mock(EnemyReader.class);
         enemiesWrapperMock = mock(EnemiesWrapper.class);
+        imageLoaderMock = mock(ImageLoader.class);
 
-        underTest = new MapReader(personReaderMock, enemyReaderMock, enemiesWrapperMock, mock(GameConfig.class));
+        underTest = new MapReader(personReaderMock, enemyReaderMock, enemiesWrapperMock, mock(GameConfig.class), imageLoaderMock);
     }
 
     @Test
@@ -52,26 +55,26 @@ public class MapReaderTest {
     @Test
     void convertsMapWithInt() throws InvalidInputException {
         String jsonWithIntMap = "{name : test, map :[[0, 1], [1, 0]]}";
-        MapTile[][] expectedMap = {{NotAccessible.getInstance(), Accessible.getInstance()}, {Accessible.getInstance(), NotAccessible.getInstance()}};
 
         Map result = underTest.convert(jsonWithIntMap);
 
         assertEquals("test", result.getName());
-        assertArrayEquals(expectedMap, result.getArray());
+        MapTile[][] resultArray = result.getArray();
+        assertTrue(resultArray[0][0] instanceof NotAccessible);
+        assertTrue(resultArray[1][0] instanceof Accessible);
+        assertTrue(resultArray[0][1] instanceof Accessible);
+        assertTrue(resultArray[1][1] instanceof NotAccessible);
     }
 
     @Test
     void convertsMapWithStringAndInt() throws InvalidInputException {
         String jsonWithStrings = "{name: test ,map: [['0', 0], [1,1], ['1', 1]]}";
-        MapTile[][] expectedMap = {
-                {NotAccessible.getInstance(), Accessible.getInstance(), Accessible.getInstance()},
-                {NotAccessible.getInstance(), Accessible.getInstance(), Accessible.getInstance()}
-        };
 
         Map result = underTest.convert(jsonWithStrings);
 
         assertEquals("test", result.getName());
-        assertArrayEquals(expectedMap, result.getArray());
+        assertTrue(result.getArray()[1][0] instanceof NotAccessible);
+        assertTrue(result.getArray()[0][1] instanceof Accessible);
     }
 
     @Test
@@ -124,5 +127,13 @@ public class MapReaderTest {
 
         verify(enemyReaderMock).load("testEnemy", 0, 55);
         verify(enemiesWrapperMock).setEnemies(any());
+    }
+
+    @Test
+    void triggerLoadTileImage() throws InvalidInputException, IOException {
+        String input = "{name: test, map: [[tileName]]}";
+        underTest.convert(input);
+
+        verify(imageLoaderMock).load("data\\maps\\tiles\\tileName.png");
     }
 }

@@ -19,7 +19,7 @@ public class TestMapFactory {
                         mapTiles[x][y] = new Accessible();
                         break;
                     case MapReader.NOT_ACCESSIBLE:
-                        mapTiles[x][y] = new NotAccessible();
+                        mapTiles[x][y] = new NotAccessible(null);
                         break;
                     default:
                         mapTiles[x][y] = interactables.get(mapTilesAsStrings[x][y]);

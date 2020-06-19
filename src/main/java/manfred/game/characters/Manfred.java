@@ -36,6 +36,8 @@ public class Manfred extends MovingObject implements Paintable {
             int speed,
             int x,
             int y,
+            int spriteWidth,
+            int spriteHeight,
             int healthPoints,
             MapCollider collider,
             MapWrapper mapWrapper,
@@ -44,7 +46,7 @@ public class Manfred extends MovingObject implements Paintable {
             GameConfig gameConfig,
             HashMap<Direction, BufferedImage[]> walkAnimation
     ) {
-        super(speed, x, y, gameConfig.getPixelBlockSize(), 2 * gameConfig.getPixelBlockSize(), gameConfig.getPixelBlockSize(), null, collider);
+        super(speed, x, y, spriteWidth, spriteHeight, gameConfig.getPixelBlockSize(), null, collider);
         this.healthPoints = healthPoints;
         this.mapWrapper = mapWrapper;
         this.attacksContainer = attacksContainer;

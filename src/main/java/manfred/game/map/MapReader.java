@@ -6,6 +6,7 @@ import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.enemy.EnemyReader;
 import manfred.game.enemy.EnemyStack;
 import manfred.game.exception.InvalidInputException;
+import manfred.game.graphics.ImageLoader;
 import manfred.game.interact.Door;
 import manfred.game.interact.Interactable;
 import manfred.game.interact.PersonReader;
@@ -15,26 +16,33 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.lang.Nullable;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 
 public class MapReader {
     public static final String ACCESSIBLE = "1";
     public static final String NOT_ACCESSIBLE = "0";
     public static final String PATH_MAPS = Game.PATH_DATA + "maps\\";
+    public static final String PATH_MAPS_TILE_IMAGES = PATH_MAPS + "tiles\\";
 
     private PersonReader personReader;
     private EnemyReader enemyReader;
     private EnemiesWrapper enemiesWrapper;
     private GameConfig gameConfig;
+    private ImageLoader imageLoader;
 
-    public MapReader(PersonReader personReader, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper, GameConfig gameConfig) {
+    private HashMap<String, MapTile> notAccessibleTilesStorage = new HashMap<>();
+
+    public MapReader(PersonReader personReader, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper, GameConfig gameConfig, ImageLoader imageLoader) {
         this.personReader = personReader;
         this.enemyReader = enemyReader;
         this.enemiesWrapper = enemiesWrapper;
         this.gameConfig = gameConfig;
+        this.imageLoader = imageLoader;
     }
 
     public Map load(String name) throws InvalidInputException, IOException {
@@ -103,14 +111,23 @@ public class MapReader {
     }
 
     private MapTile convertMapTile(String tileValue) throws InvalidInputException, IOException {
-        switch (tileValue) {
-            case ACCESSIBLE:
-                return Accessible.getInstance();
-            case NOT_ACCESSIBLE:
-                return NotAccessible.getInstance();
-            default:
-                throw new InvalidInputException("Found map tile that was not either 0 or 1");
+        if (tileValue.equals(ACCESSIBLE)) {
+            return Accessible.getInstance();
         }
+
+        if (notAccessibleTilesStorage.containsKey(tileValue)) {
+            return notAccessibleTilesStorage.get(tileValue);
+        }
+
+        BufferedImage tileImage;
+        try {
+            tileImage = imageLoader.load(PATH_MAPS_TILE_IMAGES + tileValue + ".png");
+        } catch (IOException exception) {
+            tileImage = null;
+        }
+        NotAccessible notAccessibleTile = new NotAccessible(tileImage);
+        notAccessibleTilesStorage.put(tileValue, notAccessibleTile);
+        return notAccessibleTile;
     }
 
     private void convertAndInsertInteractables(@Nullable JSONArray interactables, MapTile[][] mapTiles) throws InvalidInputException, IOException {

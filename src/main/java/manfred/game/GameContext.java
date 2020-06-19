@@ -51,6 +51,8 @@ public class GameContext {
                 6,
                 gameConfig.getPixelBlockSize() * 3,
                 gameConfig.getPixelBlockSize() * 3,
+                gameConfig.getPixelBlockSize(),
+                2 * gameConfig.getPixelBlockSize(),
                 100,
                 collider,
                 mapWrapper,
@@ -101,8 +103,8 @@ public class GameContext {
     }
 
     @Bean
-    public MapReader mapReader(PersonReader personReader, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper, GameConfig gameConfig) {
-        return new MapReader(personReader, enemyReader, enemiesWrapper, gameConfig);
+    public MapReader mapReader(PersonReader personReader, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper, GameConfig gameConfig, ImageLoader imageLoader) {
+        return new MapReader(personReader, enemyReader, enemiesWrapper, gameConfig, imageLoader);
     }
 
     @Bean
