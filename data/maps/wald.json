@@ -26,10 +26,10 @@
     ["tree2_right",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,"tree2","_tree2","tree2","_tree2","tree2","_tree2",1],
     ["tree2","_tree2",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,"tree2","_tree2","tree2","_tree2","tree2","_tree2"],
     ["tree2","_tree2",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,"tree2","_tree2","tree2","_tree2",1],
-    ["tree2","_tree2",1,1,1,1,1,1,"tree2","_tree2",0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,"tree2","_tree2","tree2","_tree2",1],
-    ["tree2","_tree2",1,1,1,1,1,1,"tree2","_tree2",0,1,1,1,1,1,1,"tree2","_tree2",1,1,1,1,1,"tree2","_tree2","tree2","_tree2","tree2","_tree2"],
-    ["tree2","_tree2",1,1,1,"tree2","_tree2","tree2","_tree2",1,"tree2","_tree2",1,1,1,1,1,1,1,1,1,"tree2","_tree2",1,"tree2","_tree2","tree2","_tree2","tree2","_tree2"],
-    ["tree2_right",1,1,1,1,1,1,1,1,1,1,"tree2","_tree2",1,1,"tree2","_tree2",1,1,1,"tree2","_tree2","tree2","_tree2","tree2","_tree2","tree2","_tree2","tree2","_tree2"],
+    ["tree2","_tree2",1,1,1,1,1,1,"_spooky_tree","_spooky_tree",0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,"tree2","_tree2","tree2","_tree2",1],
+    ["tree2","_tree2",1,1,1,1,1,1,"_spooky_tree","_spooky_tree",0,1,1,1,1,1,1,"tree2","_tree2",1,1,1,1,1,"tree2","_tree2","tree2","_tree2","tree2","_tree2"],
+    ["tree2","_tree2",1,1,1,"spooky_tree","_spooky_tree","_spooky_tree","_spooky_tree",1,"tree2","_tree2",1,1,1,1,1,1,1,1,1,"tree2","_tree2",1,"tree2","_tree2","tree2","_tree2","tree2","_tree2"],
+    ["tree2_right",1,1,1,1,1,1,1,1,1,1,"_spooky_tree","_spooky_tree",1,1,"tree2","_tree2",1,1,1,"tree2","_tree2","tree2","_tree2","tree2","_tree2","tree2","_tree2","tree2","_tree2"],
     ["tree2","_tree2","tree2","_tree2","tree2","_tree2","tree2","_tree2","tree2","_tree2","tree2","_tree2","tree2","_tree2","tree2","_tree2","tree2","_tree2","tree2","_tree2","tree2","_tree2","tree2","_tree2","tree2","_tree2","tree2","_tree2","tree2","_tree2"]
   ],
   "interactables": [

@@ -12,11 +12,13 @@ public class NotAccessible implements MapTile {
     private BufferedImage tileImage;
     private GameConfig gameConfig;
     private int blocksWidth;
+    private int yOffset;
 
-    public NotAccessible(BufferedImage tileImage, GameConfig gameConfig, int blocksWidth) {
+    public NotAccessible(BufferedImage tileImage, GameConfig gameConfig, int blocksWidth, int yOffset) {
         this.tileImage = tileImage;
         this.gameConfig = gameConfig;
         this.blocksWidth = blocksWidth;
+        this.yOffset = yOffset;
     }
 
     @Override
@@ -41,22 +43,13 @@ public class NotAccessible implements MapTile {
             int imageWidth = gameConfig.getPixelBlockSize() * this.blocksWidth;
             int imageHeight = tileImage.getHeight() * imageWidth / tileImage.getWidth();
             g.drawImage(
-                    tileImage,
-                    x - offset.x,
-                    (y + gameConfig.getPixelBlockSize()) - offset.y - imageHeight,
-                    imageWidth,
-                    imageHeight,
-                    null
-            );
-            return;
-        }
-
-        g.setColor(Color.RED);
-        g.fillRect(
+                tileImage,
                 x - offset.x,
-                y - offset.y,
-                gameConfig.getPixelBlockSize(),
-                gameConfig.getPixelBlockSize()
-        );
+                (y + gameConfig.getPixelBlockSize()) + yOffset * gameConfig.getPixelBlockSize() - offset.y - imageHeight,
+                imageWidth,
+                imageHeight,
+                null
+            );
+        }
     }
 }

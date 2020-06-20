@@ -10,7 +10,7 @@ import static org.mockito.Mockito.mock;
 public class MapTest {
     @Test
     public void isAccessible() {
-        MapTile[][] map = {{new NotAccessible(null, null, 1), new Accessible()}};
+        MapTile[][] map = {{new NotAccessible(null, null, 1, 0), new Accessible()}};
         Map unterTest = new Map("test", map, mock(GameConfig.class));
 
         assertFalse(unterTest.isAccessible(0, 0));

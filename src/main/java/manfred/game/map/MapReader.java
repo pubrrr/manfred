@@ -127,13 +127,17 @@ public class MapReader {
         }
 
         int blocksWidth;
+        int yOffset;
         try {
             String jsonTileConfig = read(PATH_MAPS_TILE_IMAGES + tileValue + ".json");
-            blocksWidth = (new JSONObject(jsonTileConfig)).getInt("blocksWidth");
+            JSONObject tileConfig = new JSONObject(jsonTileConfig);
+            blocksWidth = tileConfig.optInt("blocksWidth", 1);
+            yOffset = tileConfig.optInt("yOffset", 0);
         } catch (IOException | JSONException exception) {
             blocksWidth = 1;
+            yOffset = 0;
         }
-        NotAccessible notAccessibleTile = new NotAccessible(tileImage, gameConfig, blocksWidth);
+        NotAccessible notAccessibleTile = new NotAccessible(tileImage, gameConfig, blocksWidth, yOffset);
         notAccessibleTilesStorage.put(tileValue, notAccessibleTile);
         return notAccessibleTile;
     }
