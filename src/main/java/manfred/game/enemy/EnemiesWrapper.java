@@ -1,11 +1,13 @@
 package manfred.game.enemy;
 
-import manfred.game.graphics.Paintable;
+import manfred.game.graphics.PaintablesContainer;
+import manfred.game.graphics.PaintableContainerElement;
+import org.springframework.lang.NonNull;
 
-import java.awt.*;
 import java.util.Iterator;
+import java.util.Stack;
 
-public class EnemiesWrapper implements Paintable, Iterable<Enemy> {
+public class EnemiesWrapper implements PaintablesContainer, Iterable<Enemy> {
     private EnemyStack enemies;
 
     public void setEnemies(EnemyStack enemies) {
@@ -13,11 +15,7 @@ public class EnemiesWrapper implements Paintable, Iterable<Enemy> {
     }
 
     @Override
-    public void paint(Graphics g, Point offset) {
-        enemies.forEach(enemy -> enemy.paint(g, offset));
-    }
-
-    @Override
+    @NonNull
     public Iterator<Enemy> iterator() {
         return enemies.iterator();
     }
@@ -28,5 +26,12 @@ public class EnemiesWrapper implements Paintable, Iterable<Enemy> {
                 enemies.remove(enemy);
             }
         });
+    }
+
+    @Override
+    public Stack<PaintableContainerElement> getPaintableContainerElements() {
+        Stack<PaintableContainerElement> elements = new Stack<>();
+        forEach(enemy -> elements.push(new PaintableContainerElement(enemy, enemy.getX(), enemy.getY())));
+        return elements;
     }
 }

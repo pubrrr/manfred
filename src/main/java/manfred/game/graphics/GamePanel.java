@@ -10,6 +10,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
+import java.util.TreeMap;
 
 public class GamePanel extends JPanel {
     public static final int FADE_PERIOD = 40;
@@ -17,47 +19,61 @@ public class GamePanel extends JPanel {
 
     private final BackgroundScroller backgroundScroller;
     private GameConfig gameConfig;
+    private PaintablesSorter paintablesSorter;
 
     private int fadeTransparency = 0;
-    private List<Paintable> paintables = new LinkedList<>();
+    private List<PaintablesContainer> paintablesContainers = new LinkedList<>();
 
     public GamePanel(
-            MapWrapper mapWrapper,
-            Manfred manfred,
-            EnemiesWrapper enemiesWrapper,
-            AttacksContainer attacksContainer,
-            BackgroundScroller backgroundScroller,
-            GameConfig gameConfig
+        MapWrapper mapWrapper,
+        Manfred manfred,
+        EnemiesWrapper enemiesWrapper,
+        AttacksContainer attacksContainer,
+        BackgroundScroller backgroundScroller,
+        GameConfig gameConfig,
+        PaintablesSorter paintablesSorter
     ) {
         super();
         this.gameConfig = gameConfig;
+        this.paintablesSorter = paintablesSorter;
         setFocusable(true);
         requestFocus();
 
         this.backgroundScroller = backgroundScroller;
 
-        registerPaintable(mapWrapper);
-        registerPaintable(manfred);
-        registerPaintable(enemiesWrapper);
-        registerPaintable(attacksContainer);
+        registerPaintableContainer(mapWrapper);
+        registerPaintableContainer(() -> {
+            Stack<PaintableContainerElement> elements = new Stack<>();
+            elements.push(new PaintableContainerElement(manfred, manfred.getX(), manfred.getY()));
+            return elements;
+        });
+        registerPaintableContainer(enemiesWrapper);
+        registerPaintableContainer(attacksContainer);
     }
 
     public Dimension getPreferredSize() {
         return new Dimension(gameConfig.getWindowWidth(), gameConfig.getWindowHeight());
     }
 
-    public void registerPaintable(Paintable paintable) {
-        paintables.add(paintable);
+    public void registerPaintableContainer(PaintablesContainer paintable) {
+        paintablesContainers.add(paintable);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // TODO add some way to determine the order in which the elements get painted
+
+        TreeMap<Integer, TreeMap<Integer, Paintable>> paintablesSortedByYAndX = paintablesSorter.sortByYAndX(this.paintablesContainers);
+
         Point offset = backgroundScroller.getOffset();
-        for (Paintable paintable : paintables) {
-            paintable.paint(g, offset);
-        }
+        paintablesSortedByYAndX.forEach(
+            (y, paintablesAtY) -> paintablesAtY.forEach(
+                (x, paintable) -> {
+                    paintable.paint(g, offset, x, y);
+                }
+            )
+        );
+
 
         if (fadeTransparency > 0) {
             g.setColor(new Color(255, 255, 255, fadeTransparency));
@@ -66,7 +82,8 @@ public class GamePanel extends JPanel {
     }
 
     public void deletePaintable(Paintable paintable) {
-        paintables.remove(paintable);
+        // TODO rework
+        paintablesContainers.remove(paintable);
     }
 
     public void fadeOut() {

@@ -57,7 +57,7 @@ public class Gelaber implements Paintable {
     }
 
     @Override
-    public void paint(Graphics g, Point offset) {
+    public void paint(Graphics g, Point offset, Integer x, Integer y) {
         currentText.paint(g);
     }
 }

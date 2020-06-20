@@ -95,7 +95,7 @@ public class Manfred extends MovingObject implements Paintable {
     }
 
     @Override
-    public void paint(Graphics g, Point offset) {
+    public void paint(Graphics g, Point offset, Integer x, Integer y) {
         g.drawImage(walkAnimation.get(viewDirection)[animationPosition], sprite.x - offset.x, sprite.y - offset.y, sprite.width, sprite.height, null);
     }
 

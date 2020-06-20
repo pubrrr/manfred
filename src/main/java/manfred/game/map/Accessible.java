@@ -3,6 +3,7 @@ package manfred.game.map;
 import manfred.game.controls.KeyControls;
 import org.springframework.lang.Nullable;
 
+import java.awt.*;
 import java.util.function.Consumer;
 
 public class Accessible implements MapTile {
@@ -24,5 +25,10 @@ public class Accessible implements MapTile {
             instance = new Accessible();
         }
         return instance;
+    }
+
+    @Override
+    public void paint(Graphics g, Point offset, Integer x, Integer y) {
+        // do nothing
     }
 }

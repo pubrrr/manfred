@@ -117,8 +117,8 @@ abstract public class MovingObject implements Paintable {
     }
 
     @Override
-    public void paint(Graphics g, Point offset) {
-        this.sprite.paint(g, offset);
+    public void paint(Graphics g, Point offset, Integer x, Integer y) {
+        this.sprite.paint(g, offset, x, y);
     }
 
     public void checkForVerticalViewDirection() {

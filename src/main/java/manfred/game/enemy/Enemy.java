@@ -25,8 +25,8 @@ public class Enemy extends MovingObject implements Paintable {
     }
 
     @Override
-    public void paint(Graphics g, Point offset) {
-        sprite.paint(g, offset);
+    public void paint(Graphics g, Point offset, Integer x, Integer y) {
+        sprite.paint(g, offset, x, y);
 
         g.setFont(new Font("Palatino Linotype", Font.BOLD, gameConfig.getPixelBlockSize() / 2));
 

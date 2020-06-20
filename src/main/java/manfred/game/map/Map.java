@@ -3,10 +3,12 @@ package manfred.game.map;
 import com.sun.istack.internal.Nullable;
 import manfred.game.GameConfig;
 import manfred.game.controls.KeyControls;
+import manfred.game.graphics.PaintableContainerElement;
 import manfred.game.interact.Interactable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Stack;
 import java.util.function.Consumer;
 
 public class Map {
@@ -90,5 +92,23 @@ public class Map {
     @Nullable
     public Consumer<KeyControls> stepOn(int x, int y) {
         return mapTiles[x][y].onStep();
+    }
+
+    public Stack<PaintableContainerElement> getPaintableContainerElements() {
+        Stack<PaintableContainerElement> elements = new Stack<>();
+
+        int numberOfHorizontalTiles = mapTiles.length;
+        int numberOfVerticaltiles = mapTiles[0].length;
+        for (int x = 0; x < numberOfHorizontalTiles; x++) {
+            for (int y = 0; y < numberOfVerticaltiles; y++) {
+                elements.push(new PaintableContainerElement(
+                        mapTiles[x][y],
+                        gameConfig.getPixelBlockSize() * x,
+                        gameConfig.getPixelBlockSize() * y
+                ));
+            }
+        }
+
+        return elements;
     }
 }

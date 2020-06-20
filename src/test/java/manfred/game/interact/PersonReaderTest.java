@@ -1,5 +1,6 @@
 package manfred.game.interact;
 
+import manfred.game.GameConfig;
 import manfred.game.exception.InvalidInputException;
 import manfred.game.interact.gelaber.GelaberReader;
 import org.json.JSONArray;
@@ -17,7 +18,7 @@ class PersonReaderTest {
     void init() {
         gelaberReaderMock = mock(GelaberReader.class);
 
-        underTest = new PersonReader(gelaberReaderMock);
+        underTest = new PersonReader(gelaberReaderMock, mock(GameConfig.class));
     }
 
     @Test

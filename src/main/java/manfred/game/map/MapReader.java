@@ -125,7 +125,7 @@ public class MapReader {
         } catch (IOException exception) {
             tileImage = null;
         }
-        NotAccessible notAccessibleTile = new NotAccessible(tileImage);
+        NotAccessible notAccessibleTile = new NotAccessible(tileImage, gameConfig);
         notAccessibleTilesStorage.put(tileValue, notAccessibleTile);
         return notAccessibleTile;
     }
@@ -164,7 +164,8 @@ public class MapReader {
         return new Door(
                 interactable.getString("target"),
                 interactable.getInt("targetSpawnX"),
-                interactable.getInt("targetSpawnY")
+                interactable.getInt("targetSpawnY"),
+                gameConfig
         );
     }
 

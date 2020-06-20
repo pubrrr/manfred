@@ -56,7 +56,7 @@ public class Sprite extends Rectangle implements Paintable {
     }
 
     @Override
-    public void paint(Graphics g, Point offset) {
-        g.drawImage(image, x - offset.x, y - offset.y, width, height, null);
+    public void paint(Graphics g, Point offset, Integer x, Integer y) {
+        g.drawImage(image, this.x - offset.x, this.y - offset.y, width, height, null);
     }
 }

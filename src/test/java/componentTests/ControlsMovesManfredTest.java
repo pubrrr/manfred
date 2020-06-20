@@ -188,7 +188,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         String targetName = "target";
         int targetSpawnX = 5;
         int targetSpawnY = 66;
-        setupMapWithDoorOrPortal(new Door(targetName, targetSpawnX, targetSpawnY));
+        setupMapWithDoorOrPortal(new Door(targetName, targetSpawnX, targetSpawnY, null));
 
         KeyControls controlsSpy = spy(controls);
         controlsSpy.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));

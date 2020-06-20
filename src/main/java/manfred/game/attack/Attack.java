@@ -38,7 +38,7 @@ public class Attack extends MovingObject implements Paintable {
     }
 
     @Override
-    public void paint(Graphics g, Point offset) {
+    public void paint(Graphics g, Point offset, Integer x, Integer y) {
         g.setColor(Color.MAGENTA);
         g.fillPolygon(this.sprite.toPaint(offset));
     }

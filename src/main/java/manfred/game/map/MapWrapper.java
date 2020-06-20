@@ -2,12 +2,13 @@ package manfred.game.map;
 
 import manfred.game.attack.AttacksContainer;
 import manfred.game.exception.InvalidInputException;
-import manfred.game.graphics.Paintable;
+import manfred.game.graphics.PaintablesContainer;
+import manfred.game.graphics.PaintableContainerElement;
 
-import java.awt.*;
 import java.io.IOException;
+import java.util.Stack;
 
-public class MapWrapper implements Paintable {
+public class MapWrapper implements PaintablesContainer {
     private MapReader mapReader;
     private String initialMapName;
     private AttacksContainer attacksContainer;
@@ -37,7 +38,7 @@ public class MapWrapper implements Paintable {
     }
 
     @Override
-    public void paint(Graphics g, Point offset) {
-        this.getMap().paint(g, offset);
+    public Stack<PaintableContainerElement> getPaintableContainerElements() {
+        return getMap().getPaintableContainerElements();
     }
 }

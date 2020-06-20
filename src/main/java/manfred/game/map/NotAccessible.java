@@ -1,17 +1,20 @@
 package manfred.game.map;
 
+import manfred.game.GameConfig;
 import manfred.game.controls.KeyControls;
 import org.springframework.lang.Nullable;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
 public class NotAccessible implements MapTile {
     private BufferedImage tileImage;
+    private GameConfig gameConfig;
 
-    public NotAccessible(BufferedImage tileImage) {
-
+    public NotAccessible(BufferedImage tileImage, GameConfig gameConfig) {
         this.tileImage = tileImage;
+        this.gameConfig = gameConfig;
     }
 
     @Override
@@ -28,5 +31,30 @@ public class NotAccessible implements MapTile {
     @Override
     public BufferedImage getImage() {
         return tileImage;
+    }
+
+    @Override
+    public void paint(Graphics g, Point offset, Integer x, Integer y) {
+        if (tileImage != null) {
+            int imageWidth = gameConfig.getPixelBlockSize() * 2;
+            int imageHeight = tileImage.getHeight() * imageWidth / tileImage.getWidth();
+            g.drawImage(
+                    tileImage,
+                    x - offset.x,
+                    (y + gameConfig.getPixelBlockSize()) - offset.y - imageHeight,
+                    imageWidth,
+                    imageHeight,
+                    null
+            );
+            return;
+        }
+
+        g.setColor(Color.RED);
+        g.fillRect(
+                x - offset.x,
+                y - offset.y,
+                gameConfig.getPixelBlockSize(),
+                gameConfig.getPixelBlockSize()
+        );
     }
 }

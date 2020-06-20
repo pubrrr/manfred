@@ -2,6 +2,7 @@ package manfred.game.interact;
 
 import manfred.game.controls.KeyControls;
 
+import java.awt.*;
 import java.util.function.Consumer;
 
 public class Portal extends LoadMapWorker implements Interactable {
@@ -22,5 +23,10 @@ public class Portal extends LoadMapWorker implements Interactable {
     @Override
     public Consumer<KeyControls> interact() {
         return null;
+    }
+
+    @Override
+    public void paint(Graphics g, Point offset, Integer x, Integer y) {
+        // do nothing
     }
 }
