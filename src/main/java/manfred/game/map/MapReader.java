@@ -125,7 +125,15 @@ public class MapReader {
         } catch (IOException exception) {
             tileImage = null;
         }
-        NotAccessible notAccessibleTile = new NotAccessible(tileImage, gameConfig);
+
+        int blocksWidth;
+        try {
+            String jsonTileConfig = read(PATH_MAPS_TILE_IMAGES + tileValue + ".json");
+            blocksWidth = (new JSONObject(jsonTileConfig)).getInt("blocksWidth");
+        } catch (IOException | JSONException exception) {
+            blocksWidth = 1;
+        }
+        NotAccessible notAccessibleTile = new NotAccessible(tileImage, gameConfig, blocksWidth);
         notAccessibleTilesStorage.put(tileValue, notAccessibleTile);
         return notAccessibleTile;
     }
@@ -162,18 +170,18 @@ public class MapReader {
 
     private Door convertDoor(JSONObject interactable) {
         return new Door(
-                interactable.getString("target"),
-                interactable.getInt("targetSpawnX"),
-                interactable.getInt("targetSpawnY"),
-                gameConfig
+            interactable.getString("target"),
+            interactable.getInt("targetSpawnX"),
+            interactable.getInt("targetSpawnY"),
+            gameConfig
         );
     }
 
     private Portal convertPortal(JSONObject interactable) {
         return new Portal(
-                interactable.getString("target"),
-                interactable.getInt("targetSpawnX"),
-                interactable.getInt("targetSpawnY")
+            interactable.getString("target"),
+            interactable.getInt("targetSpawnX"),
+            interactable.getInt("targetSpawnY")
         );
     }
 

@@ -11,10 +11,12 @@ import java.util.function.Consumer;
 public class NotAccessible implements MapTile {
     private BufferedImage tileImage;
     private GameConfig gameConfig;
+    private int blocksWidth;
 
-    public NotAccessible(BufferedImage tileImage, GameConfig gameConfig) {
+    public NotAccessible(BufferedImage tileImage, GameConfig gameConfig, int blocksWidth) {
         this.tileImage = tileImage;
         this.gameConfig = gameConfig;
+        this.blocksWidth = blocksWidth;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class NotAccessible implements MapTile {
     @Override
     public void paint(Graphics g, Point offset, Integer x, Integer y) {
         if (tileImage != null) {
-            int imageWidth = gameConfig.getPixelBlockSize() * 2;
+            int imageWidth = gameConfig.getPixelBlockSize() * this.blocksWidth;
             int imageHeight = tileImage.getHeight() * imageWidth / tileImage.getWidth();
             g.drawImage(
                     tileImage,
