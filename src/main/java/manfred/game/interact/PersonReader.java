@@ -3,11 +3,13 @@ package manfred.game.interact;
 import manfred.game.Game;
 import manfred.game.GameConfig;
 import manfred.game.exception.InvalidInputException;
+import manfred.game.graphics.ImageLoader;
 import manfred.game.interact.gelaber.Gelaber;
 import manfred.game.interact.gelaber.GelaberReader;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -18,10 +20,12 @@ public class PersonReader {
 
     private GelaberReader gelaberReader;
     private GameConfig gameConfig;
+    private ImageLoader imageLoader;
 
-    public PersonReader(GelaberReader gelaberReader, GameConfig gameConfig) {
+    public PersonReader(GelaberReader gelaberReader, GameConfig gameConfig, ImageLoader imageLoader) {
         this.gelaberReader = gelaberReader;
         this.gameConfig = gameConfig;
+        this.imageLoader = imageLoader;
     }
 
     public Person load(String name) throws InvalidInputException, IOException {
@@ -40,9 +44,10 @@ public class PersonReader {
 
             String name = jsonInput.getString("name");
             Gelaber gelaber = gelaberReader.convert(jsonInput.getJSONArray("gelaber"));
+            BufferedImage image = imageLoader.load(PATH_PERSONS + name + ".png");
 
-            return new Person(name, gelaber, gameConfig);
-        } catch (JSONException e) {
+            return new Person(name, gelaber, gameConfig, image);
+        } catch (JSONException | IOException e) {
             throw new InvalidInputException(e.getMessage());
         }
     }

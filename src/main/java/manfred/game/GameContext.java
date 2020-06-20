@@ -118,8 +118,8 @@ public class GameContext {
     }
 
     @Bean
-    public PersonReader personReader(GelaberReader gelaberReader, GameConfig gameConfig) {
-        return new PersonReader(gelaberReader, gameConfig);
+    public PersonReader personReader(GelaberReader gelaberReader, GameConfig gameConfig, ImageLoader imageLoader) {
+        return new PersonReader(gelaberReader, gameConfig, imageLoader);
     }
 
     @Bean

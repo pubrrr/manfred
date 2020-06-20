@@ -6,17 +6,20 @@ import manfred.game.interact.gelaber.Gelaber;
 import org.springframework.lang.Nullable;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
 public class Person implements Interactable {
     private String name;
     private Gelaber gelaber;
     private final GameConfig gameConfig;
+    private BufferedImage image;
 
-    public Person(String name, Gelaber gelaber, GameConfig gameConfig) {
+    public Person(String name, Gelaber gelaber, GameConfig gameConfig, BufferedImage image) {
         this.name = name;
         this.gelaber = gelaber;
         this.gameConfig = gameConfig;
+        this.image = image;
     }
 
     public String getName() {
@@ -48,12 +51,6 @@ public class Person implements Interactable {
 
     @Override
     public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        g.setColor(Color.YELLOW);
-        g.fillRect(
-                x - offset.x,
-                y - offset.y,
-                gameConfig.getPixelBlockSize(),
-                gameConfig.getPixelBlockSize()
-        );
+        g.drawImage(image, x, y, gameConfig.getPixelBlockSize(), gameConfig.getPixelBlockSize(), null);
     }
 }
