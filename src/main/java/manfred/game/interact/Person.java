@@ -34,7 +34,7 @@ public class Person implements Interactable {
     public Consumer<KeyControls> interact() {
         return keyControls -> {
             keyControls.controlGelaber(this.gelaber);
-//            keyControls.getGamePanel().registerPaintableContainer(this.gelaber);
+            keyControls.getGamePanel().registerGelaberToPaint(this.gelaber);
         };
     }
 
@@ -51,6 +51,6 @@ public class Person implements Interactable {
 
     @Override
     public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        g.drawImage(image, x, y, gameConfig.getPixelBlockSize(), gameConfig.getPixelBlockSize(), null);
+        g.drawImage(image, x - offset.x, y - offset.y, gameConfig.getPixelBlockSize(), gameConfig.getPixelBlockSize(), null);
     }
 }

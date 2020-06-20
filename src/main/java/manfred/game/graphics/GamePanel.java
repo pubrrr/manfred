@@ -4,7 +4,9 @@ import manfred.game.GameConfig;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.characters.Manfred;
 import manfred.game.enemy.EnemiesWrapper;
+import manfred.game.interact.gelaber.Gelaber;
 import manfred.game.map.MapWrapper;
+import org.springframework.lang.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +25,7 @@ public class GamePanel extends JPanel {
 
     private int fadeTransparency = 0;
     private List<PaintablesContainer> paintablesContainers = new LinkedList<>();
+    @Nullable private Gelaber gelaber = null;
 
     public GamePanel(
         MapWrapper mapWrapper,
@@ -63,9 +66,9 @@ public class GamePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        TreeMap<Integer, TreeMap<Integer, Paintable>> paintablesSortedByYAndX = paintablesSorter.sortByYAndX(this.paintablesContainers);
-
         Point offset = backgroundScroller.getOffset();
+
+        TreeMap<Integer, TreeMap<Integer, Paintable>> paintablesSortedByYAndX = paintablesSorter.sortByYAndX(this.paintablesContainers);
         paintablesSortedByYAndX.forEach(
             (y, paintablesAtY) -> paintablesAtY.forEach(
                 (x, paintable) -> {
@@ -74,16 +77,14 @@ public class GamePanel extends JPanel {
             )
         );
 
+        if (this.gelaber != null) {
+            gelaber.paint(g, offset, 0, 0);
+        }
 
         if (fadeTransparency > 0) {
             g.setColor(new Color(255, 255, 255, fadeTransparency));
             g.fillRect(0, 0, gameConfig.getWindowWidth(), gameConfig.getWindowHeight());
         }
-    }
-
-    public void deletePaintable(Paintable paintable) {
-        // TODO rework
-        paintablesContainers.remove(paintable);
     }
 
     public void fadeOut() {
@@ -109,5 +110,13 @@ public class GamePanel extends JPanel {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void registerGelaberToPaint(Gelaber gelaber) {
+        this.gelaber = gelaber;
+    }
+
+    public void deleteGelaber() {
+        this.gelaber = null;
     }
 }

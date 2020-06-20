@@ -44,7 +44,7 @@ public class Gelaber implements Paintable {
 
         return keyControls -> {
             keyControls.controlManfred();
-            keyControls.getGamePanel().deletePaintable(this);
+            keyControls.getGamePanel().deleteGelaber();
         };
     }
 
