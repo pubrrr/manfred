@@ -37,26 +37,28 @@ public class GameContext {
 
     @Bean
     public Manfred manfred(
-            MapCollider collider,
-            MapWrapper mapWrapper,
-            AttacksContainer attacksContainer,
-            SkillSet skillSet,
-            GameConfig gameConfig,
-            ManfredFramesLoader manfredFramesLoader
+        MapCollider collider,
+        MapWrapper mapWrapper,
+        AttacksContainer attacksContainer,
+        SkillSet skillSet,
+        GameConfig gameConfig,
+        ManfredFramesLoader manfredFramesLoader,
+        ImageLoader imageLoader
     ) throws IOException {
         return new Manfred(
-                6,
-                gameConfig.getPixelBlockSize() * 3,
-                gameConfig.getPixelBlockSize() * 3,
-                gameConfig.getPixelBlockSize(),
-                2 * gameConfig.getPixelBlockSize(),
-                100,
-                collider,
-                mapWrapper,
-                attacksContainer,
-                skillSet,
-                gameConfig,
-                manfredFramesLoader.load()
+            6,
+            gameConfig.getPixelBlockSize() * 3,
+            gameConfig.getPixelBlockSize() * 3,
+            gameConfig.getPixelBlockSize(),
+            2 * gameConfig.getPixelBlockSize(),
+            100,
+            collider,
+            mapWrapper,
+            attacksContainer,
+            skillSet,
+            gameConfig,
+            manfredFramesLoader.load(),
+            manfredFramesLoader.loadCastModeSprite()
         );
     }
 
@@ -80,23 +82,23 @@ public class GameContext {
 
     @Bean
     public KeyControls keyControls(
-            ManfredController manfredController,
-            GelaberController gelaberController,
-            DoNothingController doNothingController,
-            Manfred manfred,
-            GamePanel panel,
-            MapWrapper mapWrapper,
-            GameConfig gameConfig,
-            BackgroundScroller backgroundScroller
+        ManfredController manfredController,
+        GelaberController gelaberController,
+        DoNothingController doNothingController,
+        Manfred manfred,
+        GamePanel panel,
+        MapWrapper mapWrapper,
+        GameConfig gameConfig,
+        BackgroundScroller backgroundScroller
     ) {
         KeyControls keyControls = new KeyControls(manfredController,
-                gelaberController,
-                doNothingController,
-                manfred,
-                panel,
-                mapWrapper,
-                gameConfig,
-                backgroundScroller
+            gelaberController,
+            doNothingController,
+            manfred,
+            panel,
+            mapWrapper,
+            gameConfig,
+            backgroundScroller
         );
         panel.addKeyListener(keyControls);
         return keyControls;

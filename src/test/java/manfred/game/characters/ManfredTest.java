@@ -45,7 +45,7 @@ class ManfredTest {
         attacksContainerMock = mock(AttacksContainer.class);
         skillSetMock = mock(SkillSet.class);
 
-        underTest = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, colliderMock, mapWrapperMock, attacksContainerMock, skillSetMock, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE), null);
+        underTest = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, colliderMock, mapWrapperMock, attacksContainerMock, skillSetMock, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE), null, null);
     }
 
     @Test
@@ -81,13 +81,13 @@ class ManfredTest {
     static Object[][] provideInitialManfredCoordinates() {
         int halfBlockSize = PIXEL_BLOCK_SIZE / 2;
         return new Object[][]{
-                {0, 0, true},
-                {halfBlockSize - 1, 0, true},
-                {0, halfBlockSize - 1, true},
-                {halfBlockSize - 1, halfBlockSize - 1, true},
-                {halfBlockSize, 0, false},
-                {0, halfBlockSize, false},
-                {halfBlockSize, halfBlockSize, false},
+            {0, 0, true},
+            {halfBlockSize - 1, 0, true},
+            {0, halfBlockSize - 1, true},
+            {halfBlockSize - 1, halfBlockSize - 1, true},
+            {halfBlockSize, 0, false},
+            {0, halfBlockSize, false},
+            {halfBlockSize, halfBlockSize, false},
         };
     }
 

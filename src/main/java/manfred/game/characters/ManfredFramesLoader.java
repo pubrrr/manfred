@@ -28,4 +28,8 @@ public class ManfredFramesLoader {
         }
         return result;
     }
+
+    public BufferedImage loadCastModeSprite() throws IOException {
+        return imageLoader.load(PATH_MANFRED_FRAMES + "castModeSprite.png");
+    }
 }

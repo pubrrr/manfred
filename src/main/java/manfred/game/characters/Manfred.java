@@ -27,24 +27,26 @@ public class Manfred extends MovingObject implements Paintable {
     private SkillSet skillSet;
     private GameConfig gameConfig;
     private HashMap<Direction, BufferedImage[]> walkAnimation;
+    private BufferedImage castModeSprite;
 
     private boolean castMode = false;
     private int framesCounter = 0;
     private int animationPosition = 0;
 
     public Manfred(
-            int speed,
-            int x,
-            int y,
-            int spriteWidth,
-            int spriteHeight,
-            int healthPoints,
-            MapCollider collider,
-            MapWrapper mapWrapper,
-            AttacksContainer attacksContainer,
-            SkillSet skillSet,
-            GameConfig gameConfig,
-            HashMap<Direction, BufferedImage[]> walkAnimation
+        int speed,
+        int x,
+        int y,
+        int spriteWidth,
+        int spriteHeight,
+        int healthPoints,
+        MapCollider collider,
+        MapWrapper mapWrapper,
+        AttacksContainer attacksContainer,
+        SkillSet skillSet,
+        GameConfig gameConfig,
+        HashMap<Direction, BufferedImage[]> walkAnimation,
+        BufferedImage castModeSprite
     ) {
         super(speed, x, y, spriteWidth, spriteHeight, gameConfig.getPixelBlockSize(), null, collider);
         this.healthPoints = healthPoints;
@@ -53,6 +55,7 @@ public class Manfred extends MovingObject implements Paintable {
         this.skillSet = skillSet;
         this.gameConfig = gameConfig;
         this.walkAnimation = walkAnimation;
+        this.castModeSprite = castModeSprite;
     }
 
     public void setX(int x) {
@@ -97,6 +100,16 @@ public class Manfred extends MovingObject implements Paintable {
     @Override
     public void paint(Graphics g, Point offset, Integer x, Integer y) {
         g.drawImage(walkAnimation.get(viewDirection)[animationPosition], sprite.x - offset.x, sprite.y - offset.y, sprite.width, sprite.height, null);
+        if (castMode) {
+            g.drawImage(
+                castModeSprite,
+                sprite.x - gameConfig.getPixelBlockSize() / 2 - offset.x,
+                sprite.y - gameConfig.getPixelBlockSize() / 2 - offset.y,
+                sprite.width + gameConfig.getPixelBlockSize(),
+                sprite.height + gameConfig.getPixelBlockSize(),
+                null
+            );
+        }
     }
 
     @Nullable
