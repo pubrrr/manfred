@@ -1,10 +1,10 @@
 package manfred.game.map;
 
-import com.sun.istack.internal.Nullable;
 import manfred.game.GameConfig;
 import manfred.game.controls.KeyControls;
 import manfred.game.graphics.PaintableContainerElement;
 import manfred.game.interact.Interactable;
+import org.springframework.lang.Nullable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
