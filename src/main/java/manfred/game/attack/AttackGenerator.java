@@ -4,6 +4,7 @@ import manfred.game.characters.Direction;
 import manfred.game.characters.MapCollider;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class AttackGenerator {
     private final int speed;
@@ -12,14 +13,16 @@ public class AttackGenerator {
     private MapCollider mapCollider;
     private int damage;
     private int range;
+    private BufferedImage[] attackAnimation;
 
-    public AttackGenerator(int speed, int sizeX, int sizeY, MapCollider mapCollider, int damage, int range) {
+    public AttackGenerator(int speed, int sizeX, int sizeY, MapCollider mapCollider, int damage, int range, BufferedImage[] attackAnimation) {
         this.speed = speed;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.mapCollider = mapCollider;
         this.damage = damage;
         this.range = range;
+        this.attackAnimation = attackAnimation;
     }
 
     public Attack generate(Point center, Direction castDirection) {
@@ -31,7 +34,8 @@ public class AttackGenerator {
                 this.sizeY,
                 mapCollider,
                 this.damage,
-                this.range
+                this.range,
+                this.attackAnimation
         );
         switch (castDirection) {
             case up:

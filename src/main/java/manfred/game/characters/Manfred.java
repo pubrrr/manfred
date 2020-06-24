@@ -88,18 +88,25 @@ public class Manfred extends MovingObject implements Paintable {
             }
         }
 
-        Point mainTile = checkForTileManfredStandMainlyOn();
+        Point mainTile = checkForTileManfredMainlyStandsOn();
         return mapWrapper.getMap().stepOn(mainTile.x, mainTile.y);
     }
 
-    private Point checkForTileManfredStandMainlyOn() {
+    private Point checkForTileManfredMainlyStandsOn() {
         Point center = this.sprite.getCenter();
         return new Point(center.x / gameConfig.getPixelBlockSize(), center.y / gameConfig.getPixelBlockSize());
     }
 
     @Override
     public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        g.drawImage(walkAnimation.get(viewDirection)[animationPosition], sprite.x - offset.x, sprite.y - offset.y, sprite.width, sprite.height, null);
+        g.drawImage(
+                walkAnimation.get(viewDirection)[animationPosition],
+                sprite.x - offset.x,
+                sprite.y - offset.y,
+                sprite.width,
+                sprite.height,
+                null
+        );
         if (castMode) {
             g.drawImage(
                 castModeSprite,

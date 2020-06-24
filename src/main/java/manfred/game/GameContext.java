@@ -2,7 +2,10 @@ package manfred.game;
 
 import manfred.game.attack.AttackReader;
 import manfred.game.attack.AttacksContainer;
-import manfred.game.characters.*;
+import manfred.game.characters.Manfred;
+import manfred.game.characters.ManfredFramesLoader;
+import manfred.game.characters.MapCollider;
+import manfred.game.characters.SkillSet;
 import manfred.game.controls.DoNothingController;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
@@ -42,8 +45,7 @@ public class GameContext {
         AttacksContainer attacksContainer,
         SkillSet skillSet,
         GameConfig gameConfig,
-        ManfredFramesLoader manfredFramesLoader,
-        ImageLoader imageLoader
+        ManfredFramesLoader manfredFramesLoader
     ) throws IOException {
         return new Manfred(
             6,
@@ -57,7 +59,7 @@ public class GameContext {
             attacksContainer,
             skillSet,
             gameConfig,
-            manfredFramesLoader.load(),
+            manfredFramesLoader.loadWalkAnimation(),
             manfredFramesLoader.loadCastModeSprite()
         );
     }
@@ -167,13 +169,13 @@ public class GameContext {
     @Bean
     public SkillSet skillSet(AttackReader attackReader) throws InvalidInputException, IOException {
         SkillSet skillSet = new SkillSet();
-        skillSet.put("lurul", attackReader.load("throwBlock"));
+        skillSet.put("lurul", attackReader.load("thunder"));
         return skillSet;
     }
 
     @Bean
-    public AttackReader attackReader(MapColliderProvider mapColliderProvider) {
-        return new AttackReader(mapColliderProvider);
+    public AttackReader attackReader(MapColliderProvider mapColliderProvider, ImageLoader imageLoader) {
+        return new AttackReader(mapColliderProvider, imageLoader);
     }
 
     @Bean

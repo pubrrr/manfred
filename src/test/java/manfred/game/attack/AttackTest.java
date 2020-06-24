@@ -17,7 +17,7 @@ class AttackTest {
 
     @Test
     void notResolvedWhenNothingHappens() {
-        underTest = new Attack(0, 0, 0, 0, 0, mock(MapCollider.class), 0, 0);
+        underTest = new Attack(0, 0, 0, 0, 0, mock(MapCollider.class), 0, 0, null);
 
         assertFalse(underTest.isResolved());
     }
@@ -27,7 +27,7 @@ class AttackTest {
         int range = 5;
         int speed = 2 * range;
 
-        underTest = new Attack(speed, 0, 0, 0, 0, mock(MapCollider.class), 0, range);
+        underTest = new Attack(speed, 0, 0, 0, 0, mock(MapCollider.class), 0, range, null);
 
         underTest.up();
         underTest.move();
@@ -39,7 +39,7 @@ class AttackTest {
         MapCollider mapColliderMock = mock(MapCollider.class);
         when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(true);
 
-        underTest = new Attack(0, 0, 0, 0, 0, mapColliderMock, 0, 0);
+        underTest = new Attack(0, 0, 0, 0, 0, mapColliderMock, 0, 0, null);
 
         underTest.move();
         assertTrue(underTest.isResolved());
@@ -50,7 +50,7 @@ class AttackTest {
         int damage = 3;
         int healthPoints = 2;
 
-        underTest = new Attack(0, 0, 0, 5, 5, mock(MapCollider.class), damage, 0);
+        underTest = new Attack(0, 0, 0, 5, 5, mock(MapCollider.class), damage, 0, null);
         Enemy enemy = new Enemy("test", 0, 3, 3, healthPoints, null, mock(MapCollider.class), 0, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE));
 
         underTest.checkHit(enemy);
@@ -64,7 +64,7 @@ class AttackTest {
         int damage = 3;
         int healthPoints = 2;
 
-        underTest = new Attack(0, 0, 0, 5, 5, mock(MapCollider.class), damage, 0);
+        underTest = new Attack(0, 0, 0, 0, 0, mock(MapCollider.class), 0, 0, null);
         Enemy enemy = new Enemy("test", 0, 8, 8, healthPoints, null, mock(MapCollider.class), 0, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE));
 
         underTest.checkHit(enemy);

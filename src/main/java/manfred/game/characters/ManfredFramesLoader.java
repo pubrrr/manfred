@@ -15,8 +15,8 @@ public class ManfredFramesLoader {
         this.imageLoader = imageLoader;
     }
 
-    public HashMap<Direction, BufferedImage[]> load() throws IOException {
-        HashMap<Direction, BufferedImage[]> result = new HashMap<>();
+    public HashMap<Direction, BufferedImage[]> loadWalkAnimation() throws IOException {
+        HashMap<Direction, BufferedImage[]> walkAnimation = new HashMap<>();
         for (Direction direction : Direction.values()) {
             BufferedImage[] frames = new BufferedImage[Manfred.ANIMATION_IMAGES_NUMBER];
 
@@ -24,9 +24,9 @@ public class ManfredFramesLoader {
                 frames[i] = imageLoader.load(PATH_MANFRED_FRAMES + "manfred_" + direction.toString() + i + ".png");
             }
 
-            result.put(direction, frames);
+            walkAnimation.put(direction, frames);
         }
-        return result;
+        return walkAnimation;
     }
 
     public BufferedImage loadCastModeSprite() throws IOException {

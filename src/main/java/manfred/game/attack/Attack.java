@@ -7,20 +7,34 @@ import manfred.game.enemy.Enemy;
 import manfred.game.graphics.Paintable;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
 public class Attack extends MovingObject implements Paintable {
     private int damage;
     private int range;
     private boolean resolved = false;
+    private BufferedImage[] attackAnimation;
 
     private final Point castPosition;
+    private int animationPosition = 0;
 
-    protected Attack(int speed, int x, int y, int width, int height, MapCollider collider, int damage, int range) {
+    public Attack(
+            int speed,
+            int x,
+            int y,
+            int width,
+            int height,
+            MapCollider collider,
+            int damage,
+            int range,
+            BufferedImage[] attackAnimation
+    ) {
         super(speed, x, y, width, height, height, null, collider);
         this.castPosition = this.sprite.getCenter();
         this.damage = damage;
         this.range = range;
+        this.attackAnimation = attackAnimation;
     }
 
     @Override
@@ -41,6 +55,14 @@ public class Attack extends MovingObject implements Paintable {
     public void paint(Graphics g, Point offset, Integer x, Integer y) {
         g.setColor(Color.MAGENTA);
         g.fillPolygon(this.sprite.toPaint(offset));
+        g.drawImage(
+                attackAnimation[animationPosition],
+                sprite.x - offset.x,
+                sprite.y - offset.y,
+                sprite.width,
+                sprite.height,
+                null
+        );
     }
 
     public void checkHit(Enemy enemy) {
