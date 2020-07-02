@@ -6,6 +6,7 @@
 
     <groupId>manf</groupId>
     <artifactId>ManfredsApocalypse2_0</artifactId>
+    <packaging>pom</packaging>
     <version>2.0</version>
     <build>
         <plugins>
@@ -19,6 +20,9 @@
             </plugin>
         </plugins>
     </build>
+    <modules>
+        <module>Manfreditor</module>
+    </modules>
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
