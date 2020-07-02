@@ -15,9 +15,12 @@ public class Attack extends MovingObject implements Paintable {
     private int range;
     private boolean resolved = false;
     private BufferedImage[] attackAnimation;
+    private int numberOfAnimationImages;
+    private int nextAnimationImageTrigger;
 
     private final Point castPosition;
-    private int animationPosition = 0;
+    private int animationIdx = 0;
+    private int framesCounter = 0;
 
     public Attack(
             int speed,
@@ -28,35 +31,47 @@ public class Attack extends MovingObject implements Paintable {
             MapCollider collider,
             int damage,
             int range,
-            BufferedImage[] attackAnimation
+            BufferedImage[] attackAnimation,
+            int numberOfAnimationImages
     ) {
         super(speed, x, y, width, height, height, null, collider);
         this.castPosition = this.sprite.getCenter();
         this.damage = damage;
         this.range = range;
         this.attackAnimation = attackAnimation;
+        this.numberOfAnimationImages = numberOfAnimationImages;
+        this.nextAnimationImageTrigger = (int)Math.ceil((double) range / speed / numberOfAnimationImages);
+
+        System.out.println(nextAnimationImageTrigger);
     }
+
+    private int counter = 0;
 
     @Override
     public Consumer<KeyControls> move() {
         if (collidesVertically() || collidesHorizontally()) {
             resolve();
         }
-        this.sprite.translate(currentSpeedX, 0);
-        this.sprite.translate(0, currentSpeedY);
+        this.sprite.translate(currentSpeedX, currentSpeedY);
 
-        if (castPosition.distance(this.sprite.getCenter()) > range) {
+        if (castPosition.distance(this.sprite.getCenter()) >= range) {
             this.resolve();
         }
+
+
+        framesCounter++;
+        if (framesCounter >= nextAnimationImageTrigger) {
+            framesCounter = 0;
+            animationIdx++;
+        }
+        System.out.println(animationIdx + "_" + framesCounter + "_" + ++counter);
         return null;
     }
 
     @Override
     public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        g.setColor(Color.MAGENTA);
-        g.fillPolygon(this.sprite.toPaint(offset));
         g.drawImage(
-                attackAnimation[animationPosition],
+                attackAnimation[animationIdx],
                 sprite.x - offset.x,
                 sprite.y - offset.y,
                 sprite.width,

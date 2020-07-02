@@ -14,8 +14,9 @@ public class AttackGenerator {
     private int damage;
     private int range;
     private BufferedImage[] attackAnimation;
+    private int numberOfAnimationImages;
 
-    public AttackGenerator(int speed, int sizeX, int sizeY, MapCollider mapCollider, int damage, int range, BufferedImage[] attackAnimation) {
+    public AttackGenerator(int speed, int sizeX, int sizeY, MapCollider mapCollider, int damage, int range, BufferedImage[] attackAnimation, int numberOfAnimationImages) {
         this.speed = speed;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
@@ -23,6 +24,7 @@ public class AttackGenerator {
         this.damage = damage;
         this.range = range;
         this.attackAnimation = attackAnimation;
+        this.numberOfAnimationImages = numberOfAnimationImages;
     }
 
     public Attack generate(Point center, Direction castDirection) {
@@ -35,7 +37,8 @@ public class AttackGenerator {
                 mapCollider,
                 this.damage,
                 this.range,
-                this.attackAnimation
+                this.attackAnimation,
+                this.numberOfAnimationImages
         );
         switch (castDirection) {
             case up:

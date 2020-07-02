@@ -47,7 +47,7 @@ public class AttackReader {
 
             BufferedImage[] attackAnimation = loadAttackAnimation(name, numberOfAnimationImages);
 
-            return new AttackGenerator(speed, sizeX, sizeY, mapColliderProvider.provide(), damage, range, attackAnimation);
+            return new AttackGenerator(speed, sizeX, sizeY, mapColliderProvider.provide(), damage, range, attackAnimation, numberOfAnimationImages);
         } catch (Exception e) {
             throw new InvalidInputException(e.getMessage());
         }
