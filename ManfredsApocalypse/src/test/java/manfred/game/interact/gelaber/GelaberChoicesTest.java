@@ -23,7 +23,7 @@ class GelaberChoicesTest {
     @BeforeEach
     void setupWithNextGelaber() {
         Set<String> keySet = mock(Set.class);
-        when(keySet.toArray(any())).thenReturn(new String[]{"key"});
+        when(keySet.toArray((Object[]) any())).thenReturn(new String[]{"key"});
 
         choices = mock(HashMap.class);
         when(choices.keySet()).thenReturn(keySet);

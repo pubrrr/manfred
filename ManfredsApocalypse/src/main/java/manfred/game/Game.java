@@ -3,7 +3,7 @@ package manfred.game;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Game {
-    public static final String PATH_DATA = "data\\";
+    public static final String PATH_DATA = "ManfredsApocalypse\\data\\";
 
     private Thread graphicsPainterThread;
 

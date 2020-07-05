@@ -1,0 +1,8 @@
+*.class
+*.log
+.*jar
+*.iml
+
+.idea/
+target/
+/Manfreditor/Manfreditor.iml

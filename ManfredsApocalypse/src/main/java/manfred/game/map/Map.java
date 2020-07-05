@@ -12,9 +12,9 @@ import java.util.Stack;
 import java.util.function.Consumer;
 
 public class Map {
-    private String name;
-    private MapTile[][] mapTiles;
-    private GameConfig gameConfig;
+    private final String name;
+    private final MapTile[][] mapTiles;
+    private final GameConfig gameConfig;
 
     public Map(String name, MapTile[][] mapTiles, GameConfig gameConfig) {
         this.name = name;

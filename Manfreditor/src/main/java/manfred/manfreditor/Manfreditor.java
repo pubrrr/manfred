@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Manfreditor extends Application {
-
     public static void main(String[] args) {
         launch(args);
     }
@@ -17,7 +16,6 @@ public class Manfreditor extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("manfreditor.fxml"));
         primaryStage.setTitle("Manfreditor");
         primaryStage.setScene(new Scene(root, 800, 600));
-        //primaryStage.setMaximized(true);
         primaryStage.show();
     }
 }

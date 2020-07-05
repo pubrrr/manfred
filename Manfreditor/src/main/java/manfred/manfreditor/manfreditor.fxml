@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="manfred.manfreditor.ManfreditorController">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="manfred.manfreditor.Controller">
    <children>
       <TabPane prefHeight="474.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -17,7 +14,7 @@
                         <Button fx:id="button" layoutX="34.0" layoutY="25.0" mnemonicParsing="false" onAction="#onClick" text="Button" />
                         <ScrollPane fx:id="mapPaneContainer" hvalue="0.23" layoutX="34.0" layoutY="71.0" onScroll="#drag" onScrollFinished="#drag" onScrollStarted="#drag" prefHeight="350.0" prefWidth="675.0" vvalue="0.18">
                           <content>
-                            <Pane fx:id="mapPane" minHeight="0" minWidth="0" onScroll="#drag" prefHeight="0" prefWidth="0" />
+                            <GridPane fx:id="mapPane" gridLinesVisible="true" minHeight="0" minWidth="0" prefHeight="0" prefWidth="0" />
                           </content>
                         </ScrollPane>
                      </children>

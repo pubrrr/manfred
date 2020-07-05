@@ -1,5 +1,6 @@
 package manfred.game.characters;
 
+import manfred.game.Game;
 import manfred.game.graphics.ImageLoader;
 
 import java.awt.image.BufferedImage;
@@ -7,7 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class ManfredFramesLoader {
-    private final static String PATH_MANFRED_FRAMES = "data\\manfred\\";
+    private final static String PATH_MANFRED_FRAMES = Game.PATH_DATA + "manfred\\";
     
     private ImageLoader imageLoader;
 

@@ -118,7 +118,7 @@ public class ControlsGelaberTest extends ControllerTestCase {
 
     private HashMap setupChoicesMock(String key, String line) {
         Set<String> keySetMock = mock(Set.class);
-        when(keySetMock.toArray(any())).thenReturn(new String[]{key});
+        when(keySetMock.toArray((Object[]) any())).thenReturn(new String[]{key});
 
         HashMap choicesMock = mock(HashMap.class);
         when(choicesMock.keySet()).thenReturn(keySetMock);

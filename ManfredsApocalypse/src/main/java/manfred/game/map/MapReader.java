@@ -29,13 +29,13 @@ public class MapReader {
     public static final String PATH_MAPS = Game.PATH_DATA + "maps\\";
     public static final String PATH_MAPS_TILE_IMAGES = PATH_MAPS + "tiles\\";
 
-    private PersonReader personReader;
-    private EnemyReader enemyReader;
-    private EnemiesWrapper enemiesWrapper;
-    private GameConfig gameConfig;
-    private ImageLoader imageLoader;
+    private final PersonReader personReader;
+    private final EnemyReader enemyReader;
+    private final EnemiesWrapper enemiesWrapper;
+    private final GameConfig gameConfig;
+    private final ImageLoader imageLoader;
 
-    private HashMap<String, MapTile> notAccessibleTilesStorage = new HashMap<>();
+    private final HashMap<String, MapTile> notAccessibleTilesStorage = new HashMap<>();
 
     public MapReader(PersonReader personReader, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper, GameConfig gameConfig, ImageLoader imageLoader) {
         this.personReader = personReader;
