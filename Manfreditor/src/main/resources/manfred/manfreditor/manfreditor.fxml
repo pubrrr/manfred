@@ -7,7 +7,7 @@
     <TabPane prefHeight="1200" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE">
         <Tab text="Map Editor">
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1200" prefWidth="1200">
-                <Button fx:id="loadMapButton" layoutX="34.0" layoutY="25.0" mnemonicParsing="false" onAction="#loadMap" text="Load Map"/>
+                <Button fx:id="loadMapButton" layoutX="34.0" layoutY="25.0" mnemonicParsing="false" onAction="#loadMapDialogue" text="Lade Map"/>
                 <ScrollPane fx:id="mapPaneContainer" pannable="true" hvalue="0.23" layoutX="34.0" layoutY="71.0" prefHeight="1000" prefWidth="1000" vvalue="0.18">
                     <GridPane fx:id="mapPane" gridLinesVisible="true" minHeight="0" minWidth="0" prefHeight="0" prefWidth="0"/>
                 </ScrollPane>
