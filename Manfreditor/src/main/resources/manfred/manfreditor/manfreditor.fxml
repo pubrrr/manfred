@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="manfred.manfreditor.Controller">
+    <TabPane prefHeight="1200" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE">
+        <Tab text="Map Editor">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1200" prefWidth="1200">
+                <Button fx:id="loadMapButton" layoutX="34.0" layoutY="25.0" mnemonicParsing="false" onAction="#loadMap" text="Load Map"/>
+                <ScrollPane fx:id="mapPaneContainer" pannable="true" hvalue="0.23" layoutX="34.0" layoutY="71.0" prefHeight="1000" prefWidth="1000" vvalue="0.18">
+                    <GridPane fx:id="mapPane" gridLinesVisible="true" minHeight="0" minWidth="0" prefHeight="0" prefWidth="0"/>
+                </ScrollPane>
+            </AnchorPane>
+        </Tab>
+    </TabPane>
+</AnchorPane>
