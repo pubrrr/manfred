@@ -7,20 +7,40 @@ import manfred.game.enemy.Enemy;
 import manfred.game.graphics.Paintable;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
 public class Attack extends MovingObject implements Paintable {
     private int damage;
     private int range;
     private boolean resolved = false;
+    private BufferedImage[] attackAnimation;
+    private int numberOfAnimationImages;
+    private long nextAnimationImageTrigger;
 
     private final Point castPosition;
+    private int animationIdx = 0;
+    private int framesCounter = 0;
 
-    protected Attack(int speed, int x, int y, int width, int height, MapCollider collider, int damage, int range) {
+    public Attack(
+        int speed,
+        int x,
+        int y,
+        int width,
+        int height,
+        MapCollider collider,
+        int damage,
+        int range,
+        BufferedImage[] attackAnimation,
+        int numberOfAnimationImages
+    ) {
         super(speed, x, y, width, height, height, null, collider);
         this.castPosition = this.sprite.getCenter();
         this.damage = damage;
         this.range = range;
+        this.attackAnimation = attackAnimation;
+        this.numberOfAnimationImages = numberOfAnimationImages;
+        this.nextAnimationImageTrigger = Math.round((double) range / speed / numberOfAnimationImages);
     }
 
     @Override
@@ -28,19 +48,32 @@ public class Attack extends MovingObject implements Paintable {
         if (collidesVertically() || collidesHorizontally()) {
             resolve();
         }
-        this.sprite.translate(currentSpeedX, 0);
-        this.sprite.translate(0, currentSpeedY);
+        this.sprite.translate(currentSpeedX, currentSpeedY);
 
-        if (castPosition.distance(this.sprite.getCenter()) > range) {
+        if (castPosition.distance(this.sprite.getCenter()) >= range) {
             this.resolve();
+        }
+
+        framesCounter++;
+        if (framesCounter >= nextAnimationImageTrigger) {
+            framesCounter = 0;
+            if (animationIdx + 1 < numberOfAnimationImages) {
+                animationIdx++;
+            }
         }
         return null;
     }
 
     @Override
     public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        g.setColor(Color.MAGENTA);
-        g.fillPolygon(this.sprite.toPaint(offset));
+        g.drawImage(
+            attackAnimation[animationIdx],
+            sprite.x - offset.x,
+            sprite.y - offset.y,
+            sprite.width,
+            sprite.height,
+            null
+        );
     }
 
     public void checkHit(Enemy enemy) {
