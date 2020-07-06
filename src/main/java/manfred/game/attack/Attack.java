@@ -16,23 +16,23 @@ public class Attack extends MovingObject implements Paintable {
     private boolean resolved = false;
     private BufferedImage[] attackAnimation;
     private int numberOfAnimationImages;
-    private int nextAnimationImageTrigger;
+    private long nextAnimationImageTrigger;
 
     private final Point castPosition;
     private int animationIdx = 0;
     private int framesCounter = 0;
 
     public Attack(
-            int speed,
-            int x,
-            int y,
-            int width,
-            int height,
-            MapCollider collider,
-            int damage,
-            int range,
-            BufferedImage[] attackAnimation,
-            int numberOfAnimationImages
+        int speed,
+        int x,
+        int y,
+        int width,
+        int height,
+        MapCollider collider,
+        int damage,
+        int range,
+        BufferedImage[] attackAnimation,
+        int numberOfAnimationImages
     ) {
         super(speed, x, y, width, height, height, null, collider);
         this.castPosition = this.sprite.getCenter();
@@ -40,12 +40,8 @@ public class Attack extends MovingObject implements Paintable {
         this.range = range;
         this.attackAnimation = attackAnimation;
         this.numberOfAnimationImages = numberOfAnimationImages;
-        this.nextAnimationImageTrigger = (int)Math.ceil((double) range / speed / numberOfAnimationImages);
-
-        System.out.println(nextAnimationImageTrigger);
+        this.nextAnimationImageTrigger = Math.round((double) range / speed / numberOfAnimationImages);
     }
-
-    private int counter = 0;
 
     @Override
     public Consumer<KeyControls> move() {
@@ -58,25 +54,25 @@ public class Attack extends MovingObject implements Paintable {
             this.resolve();
         }
 
-
         framesCounter++;
         if (framesCounter >= nextAnimationImageTrigger) {
             framesCounter = 0;
-            animationIdx++;
+            if (animationIdx + 1 < numberOfAnimationImages) {
+                animationIdx++;
+            }
         }
-        System.out.println(animationIdx + "_" + framesCounter + "_" + ++counter);
         return null;
     }
 
     @Override
     public void paint(Graphics g, Point offset, Integer x, Integer y) {
         g.drawImage(
-                attackAnimation[animationIdx],
-                sprite.x - offset.x,
-                sprite.y - offset.y,
-                sprite.width,
-                sprite.height,
-                null
+            attackAnimation[animationIdx],
+            sprite.x - offset.x,
+            sprite.y - offset.y,
+            sprite.width,
+            sprite.height,
+            null
         );
     }
 
