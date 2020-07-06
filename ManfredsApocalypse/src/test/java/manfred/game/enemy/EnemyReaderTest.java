@@ -37,7 +37,7 @@ class EnemyReaderTest {
 
         Enemy result = underTest.convert(input, 1, 22);
 
-        verify(imageLoaderMock).load("data\\enemies\\testName.png");
+        verify(imageLoaderMock).load("ManfredsApocalypse\\data\\enemies\\testName.png");
         assertEquals(PIXEL_BLOCK_SIZE, result.getX());
         assertEquals(PIXEL_BLOCK_SIZE * 22, result.getY());
         assertEquals(100, result.getHealthPoints());

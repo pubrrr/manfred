@@ -30,7 +30,7 @@ class PersonReaderTest {
     void convertsName() throws InvalidInputException, IOException {
         Person result = underTest.convert("{name: testName, gelaber: []}");
 
-        verify(imageLoaderMock).load("data\\persons\\testName.png");
+        verify(imageLoaderMock).load("ManfredsApocalypse\\data\\persons\\testName.png");
         assertEquals("testName", result.getName());
     }
 

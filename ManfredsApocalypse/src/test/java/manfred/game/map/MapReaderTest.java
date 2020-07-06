@@ -134,6 +134,6 @@ public class MapReaderTest {
         String input = "{name: test, map: [[tileName]]}";
         underTest.convert(input);
 
-        verify(imageLoaderMock).load("data\\maps\\tiles\\tileName.png");
+        verify(imageLoaderMock).load("ManfredsApocalypse\\data\\maps\\tiles\\tileName.png");
     }
 }

@@ -70,8 +70,6 @@ class AttackReaderTest {
 
         assertFalse(attack.isResolved());
         attack.move();
-        assertFalse(attack.isResolved());
-        attack.move();
         assertTrue(attack.isResolved());
     }
 
