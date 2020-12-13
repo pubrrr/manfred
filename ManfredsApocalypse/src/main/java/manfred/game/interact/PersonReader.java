@@ -8,6 +8,7 @@ import manfred.game.interact.gelaber.Gelaber;
 import manfred.game.interact.gelaber.GelaberReader;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.stereotype.Component;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+@Component
 public class PersonReader {
     public static final String PATH_PERSONS = Game.PATH_DATA + "persons\\";
 

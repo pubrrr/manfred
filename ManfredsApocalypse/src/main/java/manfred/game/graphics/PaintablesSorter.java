@@ -1,9 +1,12 @@
 package manfred.game.graphics;
 
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 import java.util.TreeMap;
 import java.util.function.Function;
 
+@Component
 public class PaintablesSorter {
     public TreeMap<Integer, TreeMap<Integer, Paintable>> sortByYAndX(List<PaintablesContainer> paintablesContainers) {
         TreeMap<Integer, TreeMap<Integer, Paintable>> paintablesSortedByYAndX = new TreeMap<>();

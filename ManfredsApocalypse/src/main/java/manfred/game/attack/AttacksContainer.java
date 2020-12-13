@@ -2,10 +2,12 @@ package manfred.game.attack;
 
 import manfred.game.graphics.PaintablesContainer;
 import manfred.game.graphics.PaintableContainerElement;
+import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
 import java.util.Stack;
 
+@Component
 public class AttacksContainer extends LinkedList<Attack> implements PaintablesContainer {
     public void removeResolved() {
         forEach(attack -> {

@@ -2,15 +2,17 @@ package manfred.game.characters;
 
 import manfred.game.Game;
 import manfred.game.graphics.ImageLoader;
+import org.springframework.stereotype.Component;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 
+@Component
 public class ManfredFramesLoader {
     private final static String PATH_MANFRED_FRAMES = Game.PATH_DATA + "manfred\\";
     
-    private ImageLoader imageLoader;
+    private final ImageLoader imageLoader;
 
     public ManfredFramesLoader(ImageLoader imageLoader) {
         this.imageLoader = imageLoader;

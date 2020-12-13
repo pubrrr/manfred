@@ -6,9 +6,11 @@ import manfred.game.characters.Manfred;
 import manfred.game.controls.KeyControls;
 import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.graphics.ManfredWindow;
+import org.springframework.stereotype.Component;
 
 import java.util.function.Consumer;
 
+@Component
 public class GameRunner implements Runnable {
     final static int REPAINT_PERIOD = 15;
 

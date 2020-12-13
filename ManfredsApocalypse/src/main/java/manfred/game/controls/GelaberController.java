@@ -1,11 +1,12 @@
 package manfred.game.controls;
 
 import manfred.game.interact.gelaber.Gelaber;
-import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 
 import java.awt.event.KeyEvent;
 import java.util.function.Consumer;
 
+@Component
 public class GelaberController implements ControllerInterface {
     private Gelaber gelaber;
 

@@ -39,11 +39,6 @@ public class GameContext {
     }
 
     @Bean
-    public GameRunner gameRunner(KeyControls keyControls, ManfredWindow window, Manfred manfred, EnemiesWrapper enemiesWrapper, AttacksContainer attacksContainer) {
-        return new GameRunner(keyControls, window, manfred, enemiesWrapper, attacksContainer);
-    }
-
-    @Bean
     public Manfred manfred(
         MapCollider collider,
         MapWrapper mapWrapper,
@@ -67,11 +62,6 @@ public class GameContext {
     @Bean
     public CastModeOn castModeOn(SkillSet skillSet, AttacksContainer attacksContainer, GameConfig gameConfig, Manfred manfred, ManfredFramesLoader manfredFramesLoader) throws IOException {
         return new CastModeOn(skillSet, attacksContainer, gameConfig, manfred.getSprite(), manfredFramesLoader.loadCastModeSprite());
-    }
-
-    @Bean
-    public ManfredWindow manfredWindow(GamePanel panel) {
-        return new ManfredWindow(panel);
     }
 
     @Bean
@@ -104,56 +94,6 @@ public class GameContext {
     }
 
     @Bean
-    public MapReader mapReader(PersonReader personReader, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper, GameConfig gameConfig, ImageLoader imageLoader) {
-        return new MapReader(personReader, enemyReader, enemiesWrapper, gameConfig, imageLoader);
-    }
-
-    @Bean
-    public MapCollider mapCollider(MapWrapper mapWrapper, GameConfig gameConfig) {
-        return new MapCollider(mapWrapper, gameConfig);
-    }
-
-    @Bean
-    public PersonReader personReader(GelaberReader gelaberReader, GameConfig gameConfig, ImageLoader imageLoader) {
-        return new PersonReader(gelaberReader, gameConfig, imageLoader);
-    }
-
-    @Bean
-    public GelaberReader gelaberReader(GameConfig gameConfig) {
-        return new GelaberReader(gameConfig);
-    }
-
-    @Bean
-    public GelaberController gelaberController() {
-        return new GelaberController();
-    }
-
-    @Bean
-    public DoNothingController doNothingController() {
-        return new DoNothingController();
-    }
-
-    @Bean
-    public EnemyReader enemyReader(MapColliderProvider mapColliderProvider, ImageLoader imageLoader, GameConfig gameConfig) {
-        return new EnemyReader(mapColliderProvider, imageLoader, gameConfig);
-    }
-
-    @Bean
-    public MapColliderProvider mapColliderProvider() {
-        return new MapColliderProvider();
-    }
-
-    @Bean
-    public EnemiesWrapper enemiesWrapper() {
-        return new EnemiesWrapper();
-    }
-
-    @Bean
-    public AttacksContainer attacksContainer() {
-        return new AttacksContainer();
-    }
-
-    @Bean
     public SkillSet skillSet(AttackReader attackReader, MapCollider mapCollider) throws InvalidInputException, IOException {
         //refactor this! the MapCollider is here because it needs to be constructed first.
 
@@ -169,38 +109,13 @@ public class GameContext {
     }
 
     @Bean
-    public AttackReader attackReader(MapColliderProvider mapColliderProvider, ImageLoader imageLoader) {
-        return new AttackReader(mapColliderProvider, imageLoader);
-    }
-
-    @Bean
     public BackgroundScroller backgroundScroller(Manfred manfred, MapWrapper mapWrapper, GameConfig gameConfig) {
         int triggerScrollDistanceToBorder = Math.min(gameConfig.getWindowHeight(), gameConfig.getWindowWidth()) / 3;
         return new BackgroundScroller(triggerScrollDistanceToBorder, manfred, mapWrapper, gameConfig);
     }
 
     @Bean
-    public ImageLoader imageLoader() {
-        return new ImageLoader();
-    }
-
-    @Bean
     public GameConfig gameConfig(ConfigReader configReader) throws InvalidInputException, IOException {
         return configReader.load();
-    }
-
-    @Bean
-    public ConfigReader configReader() {
-        return new ConfigReader();
-    }
-
-    @Bean
-    public ManfredFramesLoader manfredFramesLoader(ImageLoader imageLoader) {
-        return new ManfredFramesLoader(imageLoader);
-    }
-
-    @Bean
-    public PaintablesSorter paintablesSorter() {
-        return new PaintablesSorter();
     }
 }

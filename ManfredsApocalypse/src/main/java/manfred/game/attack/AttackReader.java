@@ -5,6 +5,7 @@ import manfred.game.enemy.MapColliderProvider;
 import manfred.game.exception.InvalidInputException;
 import manfred.game.graphics.ImageLoader;
 import org.json.JSONObject;
+import org.springframework.stereotype.Component;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+@Component
 public class AttackReader {
 
     public static final String PATH_ATTACKS = Game.PATH_DATA + "attacks\\";

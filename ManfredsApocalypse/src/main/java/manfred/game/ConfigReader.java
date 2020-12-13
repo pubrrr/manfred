@@ -2,12 +2,14 @@ package manfred.game;
 
 import manfred.game.exception.InvalidInputException;
 import org.json.JSONObject;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+@Component
 public class ConfigReader {
     private final static String PATH_CONFIG = Game.PATH_DATA + "config\\";
 
