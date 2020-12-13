@@ -14,7 +14,6 @@ public class GelaberController implements ControllerInterface {
     }
 
     @Override
-    @Nullable
     public Consumer<KeyControls> keyReleased(KeyEvent event) {
         switch (event.getKeyCode()) {
             case KeyEvent.VK_ENTER:
@@ -28,7 +27,7 @@ public class GelaberController implements ControllerInterface {
                 gelaber.up();
                 break;
         }
-        return null;
+        return KeyControls::doNothing;
     }
 
     public void setGelaber(Gelaber gelaber) {

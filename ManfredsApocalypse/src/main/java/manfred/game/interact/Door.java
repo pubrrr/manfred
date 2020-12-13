@@ -2,13 +2,12 @@ package manfred.game.interact;
 
 import manfred.game.GameConfig;
 import manfred.game.controls.KeyControls;
-import org.springframework.lang.Nullable;
 
 import java.awt.*;
 import java.util.function.Consumer;
 
 public class Door extends LoadMapWorker implements Interactable {
-    private GameConfig gameConfig;
+    private final GameConfig gameConfig;
 
     public Door(String targetName, int targetSpawnX, int targetSpawnY, GameConfig gameConfig) {
         super(targetName, targetSpawnX, targetSpawnY);
@@ -23,12 +22,6 @@ public class Door extends LoadMapWorker implements Interactable {
     @Override
     public boolean isAccessible() {
         return false;
-    }
-
-    @Override
-    @Nullable
-    public Consumer<KeyControls> onStep() {
-        return null;
     }
 
     @Override

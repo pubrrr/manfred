@@ -11,8 +11,7 @@ public class DoNothingController implements ControllerInterface {
 
     @Override
     public Consumer<KeyControls> keyReleased(KeyEvent event) {
-        // do nothing
-        return null;
+        return KeyControls::doNothing;
     }
 
     @Override

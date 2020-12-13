@@ -42,4 +42,8 @@ abstract public class AbstractGelaberText {
     public abstract void up();
 
     public abstract void down();
+
+    public static Consumer<KeyControls> doNothing(Gelaber gelaber) {
+        return KeyControls::doNothing;
+    }
 }

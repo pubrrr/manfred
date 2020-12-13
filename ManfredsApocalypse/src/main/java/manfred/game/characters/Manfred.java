@@ -3,9 +3,7 @@ package manfred.game.characters;
 import manfred.game.GameConfig;
 import manfred.game.controls.KeyControls;
 import manfred.game.graphics.Paintable;
-import manfred.game.interact.Interactable;
 import manfred.game.map.MapWrapper;
-import org.springframework.lang.Nullable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -56,7 +54,6 @@ public class Manfred extends MovingObject implements Paintable {
     }
 
     @Override
-    @Nullable
     public Consumer<KeyControls> move() {
         super.move();
 
@@ -95,37 +92,13 @@ public class Manfred extends MovingObject implements Paintable {
         );
     }
 
-    @Nullable
     public Consumer<KeyControls> interact() {
-        int triggerInteractPositionX = 0;
-        int triggerInteractPositionY = 0;
+        Point interactionPoint = viewDirection.interactAtDistance(this.sprite, INTERACT_DISTANCE);
+        Point interactionMapTile = new Point(
+            interactionPoint.x / gameConfig.getPixelBlockSize(),
+            interactionPoint.y / gameConfig.getPixelBlockSize()
+        );
 
-        Point center = this.sprite.getCenter();
-        switch (viewDirection) {
-            case up:
-                triggerInteractPositionX = center.x;
-                triggerInteractPositionY = this.sprite.getBaseTop() - INTERACT_DISTANCE;
-                break;
-            case down:
-                triggerInteractPositionX = center.x;
-                triggerInteractPositionY = this.sprite.getBottom() + INTERACT_DISTANCE;
-                break;
-            case left:
-                triggerInteractPositionX = this.sprite.getLeft() - INTERACT_DISTANCE;
-                triggerInteractPositionY = center.y;
-                break;
-            case right:
-                triggerInteractPositionX = this.sprite.getRight() + INTERACT_DISTANCE;
-                triggerInteractPositionY = center.y;
-                break;
-        }
-        int onMapGridX = triggerInteractPositionX / gameConfig.getPixelBlockSize();
-        int onMapGridY = triggerInteractPositionY / gameConfig.getPixelBlockSize();
-
-        Interactable interactable = mapWrapper.getMap().getInteractable(onMapGridX, onMapGridY);
-        if (interactable == null) {
-            return null;
-        }
-        return interactable.interact();
+        return mapWrapper.getMap().getInteractable(interactionMapTile).interact();
     }
 }

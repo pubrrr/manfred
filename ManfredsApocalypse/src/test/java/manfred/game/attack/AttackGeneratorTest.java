@@ -29,7 +29,7 @@ class AttackGeneratorTest {
 
     @Test
     void generateMovingLeft() {
-        Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.left);
+        Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.LEFT);
 
         result.move();
         assertEquals(-SPEED, result.getX());
@@ -38,7 +38,7 @@ class AttackGeneratorTest {
 
     @Test
     void generateMovingRight() {
-        Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.right);
+        Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.RIGHT);
 
         result.move();
         assertEquals(SPEED, result.getX());
@@ -47,7 +47,7 @@ class AttackGeneratorTest {
 
     @Test
     void generateMovingUp() {
-        Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.up);
+        Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.UP);
 
         result.move();
         assertEquals(0, result.getX());
@@ -56,7 +56,7 @@ class AttackGeneratorTest {
 
     @Test
     void generateMovingDown() {
-        Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.down);
+        Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.DOWN);
 
         result.move();
         assertEquals(0, result.getX());

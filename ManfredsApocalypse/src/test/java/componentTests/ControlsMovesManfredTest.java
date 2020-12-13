@@ -14,10 +14,7 @@ import manfred.game.controls.ManfredController;
 import manfred.game.exception.InvalidInputException;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
-import manfred.game.interact.Door;
-import manfred.game.interact.Interactable;
-import manfred.game.interact.Person;
-import manfred.game.interact.Portal;
+import manfred.game.interact.*;
 import manfred.game.map.Map;
 import manfred.game.map.MapWrapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -168,10 +165,10 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         when(mapWrapperMock.getMap()).thenReturn(mapSpy);
 
         ResultCaptor<Interactable> resultCaptor = new ResultCaptor<>();
-        doAnswer(resultCaptor).when(mapSpy).getInteractable(anyInt(), anyInt());
+        doAnswer(resultCaptor).when(mapSpy).getInteractable(any());
 
         controls.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
-        assertNull(resultCaptor.getResult());
+        assertTrue(resultCaptor.getResult() instanceof Idle);
     }
 
     @Test

@@ -3,7 +3,6 @@ package manfred.game.controls;
 import manfred.game.attack.Caster;
 import manfred.game.attack.CombinationElement;
 import manfred.game.characters.Manfred;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.awt.event.KeyEvent;
@@ -43,7 +42,6 @@ public class ManfredController implements ControllerInterface {
     }
 
     @Override
-    @Nullable
     public Consumer<KeyControls> keyReleased(KeyEvent event) {
         switch (event.getKeyCode()) {
             case KeyEvent.VK_A:
@@ -57,13 +55,9 @@ public class ManfredController implements ControllerInterface {
                 manfred.checkForHorizontalViewDirection();
                 break;
             case KeyEvent.VK_ENTER:
-                Consumer<KeyControls> interact = manfred.interact();
-                if (interact != null) {
-                    attackCaster.off();
-                }
-                return interact;
+                return manfred.interact();
         }
-        return null;
+        return KeyControls::doNothing;
     }
 
     @Override

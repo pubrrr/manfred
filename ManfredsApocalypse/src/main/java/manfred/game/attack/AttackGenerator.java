@@ -41,16 +41,16 @@ public class AttackGenerator {
                 this.numberOfAnimationImages
         );
         switch (castDirection) {
-            case up:
+            case UP:
                 attack.up();
                 break;
-            case down:
+            case DOWN:
                 attack.down();
                 break;
-            case left:
+            case LEFT:
                 attack.left();
                 break;
-            case right:
+            case RIGHT:
                 attack.right();
                 break;
         }

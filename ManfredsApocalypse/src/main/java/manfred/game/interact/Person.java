@@ -3,7 +3,6 @@ package manfred.game.interact;
 import manfred.game.GameConfig;
 import manfred.game.controls.KeyControls;
 import manfred.game.interact.gelaber.Gelaber;
-import org.springframework.lang.Nullable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -33,6 +32,7 @@ public class Person implements Interactable {
     @Override
     public Consumer<KeyControls> interact() {
         return keyControls -> {
+            keyControls.turnOffControls();
             keyControls.controlGelaber(this.gelaber);
             keyControls.getGamePanel().registerGelaberToPaint(this.gelaber);
         };
@@ -41,12 +41,6 @@ public class Person implements Interactable {
     @Override
     public boolean isAccessible() {
         return false;
-    }
-
-    @Override
-    @Nullable
-    public Consumer<KeyControls> onStep() {
-        return null;
     }
 
     @Override

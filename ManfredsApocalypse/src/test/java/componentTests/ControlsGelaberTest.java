@@ -30,6 +30,7 @@ public class ControlsGelaberTest extends ControllerTestCase {
     @BeforeEach
     void init() {
         manfredControllerMock = mock(ManfredController.class);
+        when(manfredControllerMock.keyReleased(any())).thenReturn(KeyControls::doNothing);
 
         gelaberController = new GelaberController();
         testGameConfig = (new TestGameConfig()).setNumberOfTextLines(NUMBER_OF_TEXT_LINES);

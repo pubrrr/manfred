@@ -22,7 +22,7 @@ public class Portal extends LoadMapWorker implements Interactable {
 
     @Override
     public Consumer<KeyControls> interact() {
-        return null;
+        return KeyControls::doNothing;
     }
 
     @Override

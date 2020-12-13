@@ -58,10 +58,7 @@ public class KeyControls implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent event) {
-        Consumer<KeyControls> callback = activeController.keyReleased(event);
-        if (callback != null) {
-            callback.accept(this);
-        }
+        activeController.keyReleased(event).accept(this);
     }
 
     @Override
@@ -95,5 +92,9 @@ public class KeyControls implements KeyListener {
         this.manfred.setX(gameConfig.getPixelBlockSize() * x);
         this.manfred.setY(gameConfig.getPixelBlockSize() * y);
         backgroundScroller.centerTo(manfred.getSprite().getCenter());
+    }
+
+    public void doNothing() {
+        // do nothing
     }
 }

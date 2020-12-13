@@ -12,11 +12,11 @@ import java.util.function.Consumer;
 public class GameRunner implements Runnable {
     final static int REPAINT_PERIOD = 15;
 
-    private KeyControls keyControls;
-    private ManfredWindow window;
-    private Manfred manfred;
-    private EnemiesWrapper enemiesWrapper;
-    private AttacksContainer attacksContainer;
+    private final KeyControls keyControls;
+    private final ManfredWindow window;
+    private final Manfred manfred;
+    private final EnemiesWrapper enemiesWrapper;
+    private final AttacksContainer attacksContainer;
 
     public GameRunner(KeyControls keyControls, ManfredWindow window, Manfred manfred, EnemiesWrapper enemiesWrapper, AttacksContainer attacksContainer) {
         this.keyControls = keyControls;

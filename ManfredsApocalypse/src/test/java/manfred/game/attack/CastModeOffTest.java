@@ -18,7 +18,7 @@ class CastModeOffTest {
 
     @Test
     void turnsOnCastMode() {
-        CastMode result = underTest.cast(mock(Sprite.class), Direction.right);
+        CastMode result = underTest.cast(mock(Sprite.class), Direction.RIGHT);
 
         assertTrue(result instanceof CastModeOn);
     }

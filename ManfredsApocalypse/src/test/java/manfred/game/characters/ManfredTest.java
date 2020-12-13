@@ -7,9 +7,6 @@ import com.tngtech.junit.dataprovider.UseDataProviderExtension;
 import helpers.TestGameConfig;
 import helpers.TestMapFactory;
 import manfred.game.GameConfig;
-import manfred.game.attack.Attack;
-import manfred.game.attack.AttackGenerator;
-import manfred.game.attack.AttacksContainer;
 import manfred.game.controls.KeyControls;
 import manfred.game.map.Accessible;
 import manfred.game.map.Map;
@@ -20,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.Stack;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -64,13 +60,15 @@ class ManfredTest {
         underTest.setX(manfredX);
         underTest.setY(manfredY);
 
-        Consumer<KeyControls> nonZeroLambda = keyControls -> {
-        };
+        Consumer<KeyControls> nonZeroLambda = mock(Consumer.class);
         setup4x4MapMockWithOnStepCallbackTopLeftTile(nonZeroLambda);
 
         Consumer<KeyControls> result = underTest.move();
 
-        assertEquals(expectTriggerStepOn, result != null);
+        KeyControls keyControlsMock = mock(KeyControls.class);
+        result.accept(keyControlsMock);
+        verify(keyControlsMock, expectTriggerStepOn ? never() : atLeastOnce()).doNothing();
+        verify(nonZeroLambda, expectTriggerStepOn ? atLeastOnce() : never()).accept(keyControlsMock);
     }
 
     @DataProvider

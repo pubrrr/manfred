@@ -7,9 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 class GelaberTextTest {
     private static final int NUMBER_OF_TEXT_LINES = 5;
@@ -33,7 +31,9 @@ class GelaberTextTest {
 
         Function<Gelaber, Consumer<KeyControls>> response = underTest.next();
 
-        Gelaber gelaberMock = mock(Gelaber.class);
-        assertNull(response.apply(gelaberMock));
+        KeyControls keyControlsMock = mock(KeyControls.class);
+        response.apply(mock(Gelaber.class)).accept(keyControlsMock);
+        verify(keyControlsMock).doNothing();
+        verify(keyControlsMock, never()).controlManfred();
     }
 }

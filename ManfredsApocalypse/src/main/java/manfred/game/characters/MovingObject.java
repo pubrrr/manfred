@@ -16,7 +16,7 @@ abstract public class MovingObject implements Paintable {
     protected boolean movesRight = false;
     protected boolean movesUp = false;
     protected boolean movesDown = false;
-    protected Direction viewDirection = Direction.down;
+    protected Direction viewDirection = Direction.DOWN;
 
     protected MapCollider collider;
 
@@ -39,7 +39,7 @@ abstract public class MovingObject implements Paintable {
 
     public void left() {
         if (!movesLeft) {
-            viewDirection = Direction.left;
+            viewDirection = Direction.LEFT;
             movesLeft = true;
             currentSpeedX -= speed;
         }
@@ -47,7 +47,7 @@ abstract public class MovingObject implements Paintable {
 
     public void right() {
         if (!movesRight) {
-            viewDirection = Direction.right;
+            viewDirection = Direction.RIGHT;
             movesRight = true;
             currentSpeedX += speed;
         }
@@ -55,7 +55,7 @@ abstract public class MovingObject implements Paintable {
 
     public void up() {
         if (!movesUp) {
-            viewDirection = Direction.up;
+            viewDirection = Direction.UP;
             movesUp = true;
             // y-Achse ist invertiert: kleiner Werte werden weiter oben gezeichnet
             currentSpeedY -= speed;
@@ -64,7 +64,7 @@ abstract public class MovingObject implements Paintable {
 
     public void down() {
         if (!movesDown) {
-            viewDirection = Direction.down;
+            viewDirection = Direction.DOWN;
             movesDown = true;
             currentSpeedY += speed;
         }
@@ -91,7 +91,7 @@ abstract public class MovingObject implements Paintable {
         if (!collidesHorizontally()) {
             this.sprite.translate(0, currentSpeedY);
         }
-        return null;
+        return KeyControls::doNothing;
     }
 
     protected boolean collidesVertically() {
@@ -127,17 +127,17 @@ abstract public class MovingObject implements Paintable {
 
     public void checkForVerticalViewDirection() {
         if (currentSpeedY > 0) {
-            viewDirection = Direction.down;
+            viewDirection = Direction.DOWN;
         } else if (currentSpeedY < 0) {
-            viewDirection = Direction.up;
+            viewDirection = Direction.UP;
         }
     }
 
     public void checkForHorizontalViewDirection() {
         if (currentSpeedX > 0) {
-            viewDirection = Direction.right;
+            viewDirection = Direction.RIGHT;
         } else if (currentSpeedX < 0) {
-            viewDirection = Direction.left;
+            viewDirection = Direction.LEFT;
         }
     }
 }
