@@ -1,18 +1,27 @@
 package manfred.game.characters;
 
+import manfred.game.attack.Attack;
+
 import java.awt.*;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 public enum Direction {
-    RIGHT(interactRight()),
-    LEFT(interactLeft()),
-    UP(interactUp()),
-    DOWN(interactDown());
+    RIGHT(interactRight(), Attack::right),
+    LEFT(interactLeft(), Attack::left),
+    UP(interactUp(), Attack::up),
+    DOWN(interactDown(), Attack::down);
 
-    private BiFunction<Sprite, Integer, Point> interactionPointDeterminator;
+    private final BiFunction<Sprite, Integer, Point> interactionPointDeterminator;
+    private final Consumer<Attack> initialAttackMovement;
 
-    Direction(BiFunction<Sprite, Integer, Point> interactionPointDeterminator) {
+    Direction(BiFunction<Sprite, Integer, Point> interactionPointDeterminator, Consumer<Attack> initialAttackMovement) {
         this.interactionPointDeterminator = interactionPointDeterminator;
+        this.initialAttackMovement = initialAttackMovement;
+    }
+
+    public void kickAttack(Attack attack) {
+        this.initialAttackMovement.accept(attack);
     }
 
     public Point interactAtDistance(Sprite sprite, int interactionDistance) {

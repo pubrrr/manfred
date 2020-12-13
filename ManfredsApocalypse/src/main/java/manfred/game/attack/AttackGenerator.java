@@ -10,11 +10,11 @@ public class AttackGenerator {
     private final int speed;
     private final int sizeX;
     private final int sizeY;
-    private MapCollider mapCollider;
-    private int damage;
-    private int range;
-    private BufferedImage[] attackAnimation;
-    private int numberOfAnimationImages;
+    private final MapCollider mapCollider;
+    private final int damage;
+    private final int range;
+    private final BufferedImage[] attackAnimation;
+    private final int numberOfAnimationImages;
 
     public AttackGenerator(int speed, int sizeX, int sizeY, MapCollider mapCollider, int damage, int range, BufferedImage[] attackAnimation, int numberOfAnimationImages) {
         this.speed = speed;
@@ -40,20 +40,7 @@ public class AttackGenerator {
                 this.attackAnimation,
                 this.numberOfAnimationImages
         );
-        switch (castDirection) {
-            case UP:
-                attack.up();
-                break;
-            case DOWN:
-                attack.down();
-                break;
-            case LEFT:
-                attack.left();
-                break;
-            case RIGHT:
-                attack.right();
-                break;
-        }
+        castDirection.kickAttack(attack);
         return attack;
     }
 }
