@@ -116,6 +116,10 @@ abstract public class MovingObject implements Paintable {
         return sprite;
     }
 
+    public Direction getDirection() {
+        return this.viewDirection;
+    }
+
     @Override
     public void paint(Graphics g, Point offset, Integer x, Integer y) {
         this.sprite.paint(g, offset, x, y);

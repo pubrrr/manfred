@@ -14,4 +14,9 @@ public class DoNothingController implements ControllerInterface {
         // do nothing
         return null;
     }
+
+    @Override
+    public void stop() {
+        // do nothing
+    }
 }

@@ -35,17 +35,13 @@ class ManfredTest {
     private Manfred underTest;
 
     private MapWrapper mapWrapperMock;
-    private AttacksContainer attacksContainerMock;
-    private SkillSet skillSetMock;
 
     @BeforeEach
     void init() {
         MapCollider colliderMock = mock(MapCollider.class);
         mapWrapperMock = mock(MapWrapper.class);
-        attacksContainerMock = mock(AttacksContainer.class);
-        skillSetMock = mock(SkillSet.class);
 
-        underTest = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, colliderMock, mapWrapperMock, attacksContainerMock, skillSetMock, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE), null, null);
+        underTest = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, colliderMock, mapWrapperMock, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE), null);
     }
 
     @Test
@@ -117,37 +113,5 @@ class ManfredTest {
         }
         verify(mapSpy, atLeastOnce()).stepOn(0, 0);
         verify(mapSpy, atLeastOnce()).stepOn(0, 1);
-    }
-
-    @Test
-    void givenKnownAttackCombination_addsAttackToContainer() {
-        Stack<String> attackCombination = new Stack<>();
-        attackCombination.push("a");
-        attackCombination.push("b");
-        attackCombination.push("c");
-
-        Attack attackMock = mock(Attack.class);
-        AttackGenerator attackGeneratorMock = mock(AttackGenerator.class);
-        when(attackGeneratorMock.generate(any(), any())).thenReturn(attackMock);
-
-        when(skillSetMock.get("abc")).thenReturn(attackGeneratorMock);
-
-        underTest.cast(attackCombination);
-
-        verify(attacksContainerMock).add(attackMock);
-    }
-
-    @Test
-    void givenUnkownAttackCombination_doesNotAddAttack() {
-        Stack<String> attackCombination = new Stack<>();
-        attackCombination.push("a");
-        attackCombination.push("b");
-        attackCombination.push("c");
-
-        when(skillSetMock.get("abc")).thenReturn(null);
-
-        underTest.cast(attackCombination);
-
-        verify(attacksContainerMock, never()).add(any());
     }
 }

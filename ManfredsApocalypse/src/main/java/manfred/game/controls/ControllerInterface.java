@@ -10,4 +10,6 @@ public interface ControllerInterface {
 
     @Nullable
     Consumer<KeyControls> keyReleased(KeyEvent event);
+
+    void stop();
 }

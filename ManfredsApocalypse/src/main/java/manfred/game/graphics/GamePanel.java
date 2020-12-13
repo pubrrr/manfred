@@ -2,11 +2,13 @@ package manfred.game.graphics;
 
 import manfred.game.GameConfig;
 import manfred.game.attack.AttacksContainer;
+import manfred.game.attack.Caster;
 import manfred.game.characters.Manfred;
 import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.interact.gelaber.Gelaber;
 import manfred.game.map.MapWrapper;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,21 +17,23 @@ import java.util.List;
 import java.util.Stack;
 import java.util.TreeMap;
 
+@Component
 public class GamePanel extends JPanel {
     public static final int FADE_PERIOD = 40;
     public static final int FADE_TRANSPARENCY_INTERVAL = 20;
 
     private final BackgroundScroller backgroundScroller;
-    private GameConfig gameConfig;
-    private PaintablesSorter paintablesSorter;
+    private final GameConfig gameConfig;
+    private final PaintablesSorter paintablesSorter;
 
     private int fadeTransparency = 0;
-    private List<PaintablesContainer> paintablesContainers = new LinkedList<>();
+    private final List<PaintablesContainer> paintablesContainers = new LinkedList<>();
     @Nullable private Gelaber gelaber = null;
 
     public GamePanel(
         MapWrapper mapWrapper,
         Manfred manfred,
+        Caster attackCaster,
         EnemiesWrapper enemiesWrapper,
         AttacksContainer attacksContainer,
         BackgroundScroller backgroundScroller,
@@ -47,6 +51,7 @@ public class GamePanel extends JPanel {
         registerPaintableContainer(mapWrapper);
         registerPaintableContainer(() -> {
             Stack<PaintableContainerElement> elements = new Stack<>();
+            elements.push(new PaintableContainerElement(attackCaster, manfred.getX() - gameConfig.getPixelBlockSize() / 2, manfred.getY()));
             elements.push(new PaintableContainerElement(manfred, manfred.getX(), manfred.getY()));
             return elements;
         });

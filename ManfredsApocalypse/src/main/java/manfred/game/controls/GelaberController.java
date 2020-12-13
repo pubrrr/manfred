@@ -34,4 +34,9 @@ public class GelaberController implements ControllerInterface {
     public void setGelaber(Gelaber gelaber) {
         this.gelaber = gelaber;
     }
+
+    @Override
+    public void stop() {
+        // do nothing
+    }
 }
