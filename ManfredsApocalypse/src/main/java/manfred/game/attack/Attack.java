@@ -61,7 +61,7 @@ public class Attack extends MovingObject implements Paintable {
                 animationIdx++;
             }
         }
-        return null;
+        return KeyControls::doNothing;
     }
 
     @Override

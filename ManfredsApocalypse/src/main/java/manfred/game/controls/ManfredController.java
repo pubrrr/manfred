@@ -1,20 +1,21 @@
 package manfred.game.controls;
 
+import manfred.game.attack.Caster;
+import manfred.game.attack.CombinationElement;
 import manfred.game.characters.Manfred;
-import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 
 import java.awt.event.KeyEvent;
-import java.util.Stack;
 import java.util.function.Consumer;
 
+@Component
 public class ManfredController implements ControllerInterface {
-    private Manfred manfred;
+    private final Manfred manfred;
+    private final Caster attackCaster;
 
-    private boolean castMode = false;
-    private Stack<String> attackCombination = new Stack<>();
-
-    public ManfredController(Manfred manfred) {
+    public ManfredController(Manfred manfred, Caster attackCaster) {
         this.manfred = manfred;
+        this.attackCaster = attackCaster;
     }
 
     @Override
@@ -33,37 +34,14 @@ public class ManfredController implements ControllerInterface {
                 manfred.up();
                 return;
             case KeyEvent.VK_SPACE:
-                if (castMode) {
-                    castMode = false;
-                    manfred.cast(this.attackCombination);
-                } else {
-                    attackCombination = new Stack<>();
-                    castMode = true;
-                    manfred.castModeOn();
-                }
+                attackCaster.cast(manfred.getSprite(), manfred.getDirection());
                 return;
-        }
-
-        if (castMode) {
-            switch (event.getKeyCode()) {
-                case KeyEvent.VK_LEFT:
-                    attackCombination.push("l");
-                    return;
-                case KeyEvent.VK_RIGHT:
-                    attackCombination.push("r");
-                    return;
-                case KeyEvent.VK_UP:
-                    attackCombination.push("u");
-                    return;
-                case KeyEvent.VK_DOWN:
-                    attackCombination.push("d");
-                    return;
-            }
+            default:
+                CombinationElement.fromKeyEvent(event).ifPresent(attackCaster::addToCombination);
         }
     }
 
     @Override
-    @Nullable
     public Consumer<KeyControls> keyReleased(KeyEvent event) {
         switch (event.getKeyCode()) {
             case KeyEvent.VK_A:
@@ -79,6 +57,13 @@ public class ManfredController implements ControllerInterface {
             case KeyEvent.VK_ENTER:
                 return manfred.interact();
         }
-        return null;
+        return KeyControls::doNothing;
+    }
+
+    @Override
+    public void stop() {
+        manfred.stopX();
+        manfred.stopY();
+        attackCaster.off();
     }
 }

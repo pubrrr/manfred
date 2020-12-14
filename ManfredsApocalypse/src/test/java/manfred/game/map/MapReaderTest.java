@@ -11,6 +11,7 @@ import manfred.game.interact.Portal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.awt.*;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -109,7 +110,7 @@ public class MapReaderTest {
         String jsonWithDoor = "{name: test, map: [[0, 0]], interactables: [{ type: Door, positionX: 1, positionY: 0, target: testTaraget, targetSpawnX: 1, targetSpawnY: 1}]}";
         Map result = underTest.convert(jsonWithDoor);
 
-        assertTrue(result.getInteractable(1, 0) instanceof Door);
+        assertTrue(result.getInteractable(new Point(1, 0)) instanceof Door);
     }
 
     @Test
@@ -117,7 +118,7 @@ public class MapReaderTest {
         String jsonWithPortal = "{name: test, map: [[0, 0]], interactables: [{ type: Portal, positionX: 1, positionY: 0, target: testTaraget, targetSpawnX: 1, targetSpawnY: 1}]}";
         Map result = underTest.convert(jsonWithPortal);
 
-        assertTrue(result.getInteractable(1, 0) instanceof Portal);
+        assertTrue(result.getInteractable(new Point(1, 0)) instanceof Portal);
     }
 
     @Test

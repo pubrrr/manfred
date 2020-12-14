@@ -14,14 +14,14 @@ import java.io.IOException;
 import java.util.function.Consumer;
 
 public class KeyControls implements KeyListener {
-    private ManfredController manfredController;
-    private GelaberController gelaberController;
-    private DoNothingController doNothingController;
-    private Manfred manfred;
-    private GamePanel gamePanel;
-    private MapWrapper mapWrapper;
-    private GameConfig gameConfig;
-    private BackgroundScroller backgroundScroller;
+    private final ManfredController manfredController;
+    private final GelaberController gelaberController;
+    private final DoNothingController doNothingController;
+    private final Manfred manfred;
+    private final GamePanel gamePanel;
+    private final MapWrapper mapWrapper;
+    private final GameConfig gameConfig;
+    private final BackgroundScroller backgroundScroller;
 
     private ControllerInterface activeController;
 
@@ -58,10 +58,7 @@ public class KeyControls implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent event) {
-        Consumer<KeyControls> callback = activeController.keyReleased(event);
-        if (callback != null) {
-            callback.accept(this);
-        }
+        activeController.keyReleased(event).accept(this);
     }
 
     @Override
@@ -78,8 +75,7 @@ public class KeyControls implements KeyListener {
     }
 
     public void turnOffControls() {
-        manfred.stopX();
-        manfred.stopY();
+        activeController.stop();
         activeController = doNothingController;
     }
 
@@ -96,5 +92,9 @@ public class KeyControls implements KeyListener {
         this.manfred.setX(gameConfig.getPixelBlockSize() * x);
         this.manfred.setY(gameConfig.getPixelBlockSize() * y);
         backgroundScroller.centerTo(manfred.getSprite().getCenter());
+    }
+
+    public void doNothing() {
+        // do nothing
     }
 }

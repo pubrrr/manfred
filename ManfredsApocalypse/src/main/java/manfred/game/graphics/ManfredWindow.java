@@ -1,7 +1,10 @@
 package manfred.game.graphics;
 
+import org.springframework.stereotype.Component;
+
 import javax.swing.*;
 
+@Component
 public class ManfredWindow extends JFrame {
     public ManfredWindow(GamePanel panel) {
         super("Manfreds Apokalüpse");

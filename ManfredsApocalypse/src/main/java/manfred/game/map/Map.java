@@ -4,7 +4,6 @@ import manfred.game.GameConfig;
 import manfred.game.controls.KeyControls;
 import manfred.game.graphics.PaintableContainerElement;
 import manfred.game.interact.Interactable;
-import org.springframework.lang.Nullable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -82,14 +81,13 @@ public class Map {
         }
     }
 
-    @Nullable
-    public Interactable getInteractable(int x, int y) {
-        return mapTiles[x][y] instanceof Interactable
-                ? (Interactable) mapTiles[x][y]
-                : null;
+    public Interactable getInteractable(Point mapTile) {
+        MapTile tile = mapTiles[mapTile.x][mapTile.y];
+        return tile instanceof Interactable
+            ? (Interactable) tile
+            : Interactable.idle();
     }
 
-    @Nullable
     public Consumer<KeyControls> stepOn(int x, int y) {
         return mapTiles[x][y].onStep();
     }

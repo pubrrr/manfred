@@ -8,10 +8,12 @@ import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
 public interface MapTile extends Paintable {
+
     boolean isAccessible();
 
-    @Nullable
-    Consumer<KeyControls> onStep();
+    default Consumer<KeyControls> onStep(){
+        return KeyControls::doNothing;
+    }
 
     @Nullable
     default BufferedImage getImage() {

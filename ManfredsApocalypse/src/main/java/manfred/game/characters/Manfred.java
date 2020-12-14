@@ -1,19 +1,13 @@
 package manfred.game.characters;
 
 import manfred.game.GameConfig;
-import manfred.game.attack.Attack;
-import manfred.game.attack.AttackGenerator;
-import manfred.game.attack.AttacksContainer;
 import manfred.game.controls.KeyControls;
 import manfred.game.graphics.Paintable;
-import manfred.game.interact.Interactable;
 import manfred.game.map.MapWrapper;
-import org.springframework.lang.Nullable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
-import java.util.Stack;
 import java.util.function.Consumer;
 
 public class Manfred extends MovingObject implements Paintable {
@@ -22,14 +16,10 @@ public class Manfred extends MovingObject implements Paintable {
     private static final int NEXT_ANIMATION_IMAGE_TRIGGER = 4;
 
     private int healthPoints;
-    private MapWrapper mapWrapper;
-    private AttacksContainer attacksContainer;
-    private SkillSet skillSet;
-    private GameConfig gameConfig;
-    private HashMap<Direction, BufferedImage[]> walkAnimation;
-    private BufferedImage castModeSprite;
+    private final MapWrapper mapWrapper;
+    private final GameConfig gameConfig;
+    private final HashMap<Direction, BufferedImage[]> walkAnimation;
 
-    private boolean castMode = false;
     private int framesCounter = 0;
     private int animationPosition = 0;
 
@@ -42,20 +32,14 @@ public class Manfred extends MovingObject implements Paintable {
         int healthPoints,
         MapCollider collider,
         MapWrapper mapWrapper,
-        AttacksContainer attacksContainer,
-        SkillSet skillSet,
         GameConfig gameConfig,
-        HashMap<Direction, BufferedImage[]> walkAnimation,
-        BufferedImage castModeSprite
+        HashMap<Direction, BufferedImage[]> walkAnimation
     ) {
         super(speed, x, y, spriteWidth, spriteHeight, gameConfig.getPixelBlockSize(), null, collider);
         this.healthPoints = healthPoints;
         this.mapWrapper = mapWrapper;
-        this.attacksContainer = attacksContainer;
-        this.skillSet = skillSet;
         this.gameConfig = gameConfig;
         this.walkAnimation = walkAnimation;
-        this.castModeSprite = castModeSprite;
     }
 
     public void setX(int x) {
@@ -70,7 +54,6 @@ public class Manfred extends MovingObject implements Paintable {
     }
 
     @Override
-    @Nullable
     public Consumer<KeyControls> move() {
         super.move();
 
@@ -107,66 +90,15 @@ public class Manfred extends MovingObject implements Paintable {
                 sprite.height,
                 null
         );
-        if (castMode) {
-            g.drawImage(
-                castModeSprite,
-                sprite.x - gameConfig.getPixelBlockSize() / 2 - offset.x,
-                sprite.y - gameConfig.getPixelBlockSize() / 2 - offset.y,
-                sprite.width + gameConfig.getPixelBlockSize(),
-                sprite.height + gameConfig.getPixelBlockSize(),
-                null
-            );
-        }
     }
 
-    @Nullable
     public Consumer<KeyControls> interact() {
-        int triggerInteractPositionX = 0;
-        int triggerInteractPositionY = 0;
+        Point interactionPoint = viewDirection.interactAtDistance(this.sprite, INTERACT_DISTANCE);
+        Point interactionMapTile = new Point(
+            interactionPoint.x / gameConfig.getPixelBlockSize(),
+            interactionPoint.y / gameConfig.getPixelBlockSize()
+        );
 
-        Point center = this.sprite.getCenter();
-        switch (viewDirection) {
-            case up:
-                triggerInteractPositionX = center.x;
-                triggerInteractPositionY = this.sprite.getBaseTop() - INTERACT_DISTANCE;
-                break;
-            case down:
-                triggerInteractPositionX = center.x;
-                triggerInteractPositionY = this.sprite.getBottom() + INTERACT_DISTANCE;
-                break;
-            case left:
-                triggerInteractPositionX = this.sprite.getLeft() - INTERACT_DISTANCE;
-                triggerInteractPositionY = center.y;
-                break;
-            case right:
-                triggerInteractPositionX = this.sprite.getRight() + INTERACT_DISTANCE;
-                triggerInteractPositionY = center.y;
-                break;
-        }
-        int onMapGridX = triggerInteractPositionX / gameConfig.getPixelBlockSize();
-        int onMapGridY = triggerInteractPositionY / gameConfig.getPixelBlockSize();
-
-        Interactable interactable = mapWrapper.getMap().getInteractable(onMapGridX, onMapGridY);
-        if (interactable == null) {
-            return null;
-        }
-        return interactable.interact();
-    }
-
-    public void cast(Stack<String> attackCombination) {
-        this.castMode = false;
-
-        StringBuilder stringBuilder = new StringBuilder();
-        attackCombination.forEach(stringBuilder::append);
-        AttackGenerator attackGenerator = skillSet.get(stringBuilder.toString());
-
-        if (attackGenerator != null) {
-            Attack attack = attackGenerator.generate(this.sprite.getCenter(), this.viewDirection);
-            attacksContainer.add(attack);
-        }
-    }
-
-    public void castModeOn() {
-        this.castMode = true;
+        return mapWrapper.getMap().getInteractable(interactionMapTile).interact();
     }
 }

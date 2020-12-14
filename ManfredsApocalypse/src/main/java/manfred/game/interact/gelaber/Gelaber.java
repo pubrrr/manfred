@@ -3,7 +3,6 @@ package manfred.game.interact.gelaber;
 import manfred.game.GameConfig;
 import manfred.game.controls.KeyControls;
 import manfred.game.graphics.Paintable;
-import org.springframework.lang.Nullable;
 
 import java.awt.*;
 import java.util.function.Consumer;
@@ -26,7 +25,6 @@ public class Gelaber implements Paintable {
         return texts;
     }
 
-    @Nullable
     public Consumer<KeyControls> next() {
         Function<Gelaber, Consumer<KeyControls>> callback = currentText.next();
         return callback.apply(this);

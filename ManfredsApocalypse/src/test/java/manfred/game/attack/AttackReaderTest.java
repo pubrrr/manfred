@@ -37,7 +37,7 @@ class AttackReaderTest {
 
         AttackGenerator result = underTest.convert(input);
 
-        Attack attack = result.generate(new Point(0,0), Direction.right);
+        Attack attack = result.generate(new Point(0,0), Direction.RIGHT);
         attack.move();
         assertEquals(1, attack.getX());
         assertEquals(0, attack.getY());
@@ -49,7 +49,7 @@ class AttackReaderTest {
 
         AttackGenerator result = underTest.convert(input);
 
-        Attack attack = result.generate(new Point(0,0), Direction.right);
+        Attack attack = result.generate(new Point(0,0), Direction.RIGHT);
 
         Sprite enemySpriteMock = mock(Sprite.class);
         when(enemySpriteMock.intersects(any())).thenReturn(true);
@@ -66,7 +66,7 @@ class AttackReaderTest {
 
         AttackGenerator result = underTest.convert(input);
 
-        Attack attack = result.generate(new Point(0,0), Direction.right);
+        Attack attack = result.generate(new Point(0,0), Direction.RIGHT);
 
         assertFalse(attack.isResolved());
         attack.move();

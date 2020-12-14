@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 class GelaberChoicesTest {
@@ -44,7 +43,10 @@ class GelaberChoicesTest {
         verify(selectionMarkerMock, never()).translate(anyInt(), anyInt());
 
         Function<Gelaber, Consumer<KeyControls>> response1 = underTest.next();
-        assertNull(response1.apply(gelaberMock));
+
+        KeyControls keyControlsMock = mock(KeyControls.class);
+        response1.apply(gelaberMock).accept(keyControlsMock);
+        verify(keyControlsMock).doNothing();
 
         underTest.up();
         underTest.down();
@@ -65,7 +67,10 @@ class GelaberChoicesTest {
         Gelaber gelaberMock = mock(Gelaber.class);
 
         Function<Gelaber, Consumer<KeyControls>> response1 = underTest.next();
-        assertNull(response1.apply(gelaberMock));
+
+        KeyControls keyControlsMock = mock(KeyControls.class);
+        response1.apply(gelaberMock).accept(keyControlsMock);
+        verify(keyControlsMock).doNothing();
 
         Function<Gelaber, Consumer<KeyControls>> response2 = underTest.next();
 

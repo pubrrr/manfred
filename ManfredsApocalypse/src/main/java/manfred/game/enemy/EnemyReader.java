@@ -5,18 +5,20 @@ import manfred.game.GameConfig;
 import manfred.game.exception.InvalidInputException;
 import manfred.game.graphics.ImageLoader;
 import org.json.JSONObject;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+@Component
 public class EnemyReader {
     public static final String PATH_ENEMIES = Game.PATH_DATA + "enemies\\";
 
-    private MapColliderProvider mapColliderProvider;
-    private ImageLoader imageLoader;
-    private GameConfig gameConfig;
+    private final MapColliderProvider mapColliderProvider;
+    private final ImageLoader imageLoader;
+    private final GameConfig gameConfig;
 
     public EnemyReader(MapColliderProvider mapColliderProvider, ImageLoader imageLoader, GameConfig gameConfig) {
         this.mapColliderProvider = mapColliderProvider;

@@ -3,9 +3,7 @@ package componentTests;
 import helpers.ResultCaptor;
 import helpers.TestGameConfig;
 import helpers.TestMapFactory;
-import manfred.game.attack.Attack;
-import manfred.game.attack.AttackGenerator;
-import manfred.game.attack.AttacksContainer;
+import manfred.game.attack.*;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.SkillSet;
@@ -16,10 +14,7 @@ import manfred.game.controls.ManfredController;
 import manfred.game.exception.InvalidInputException;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
-import manfred.game.interact.Door;
-import manfred.game.interact.Interactable;
-import manfred.game.interact.Person;
-import manfred.game.interact.Portal;
+import manfred.game.interact.*;
 import manfred.game.map.Map;
 import manfred.game.map.MapWrapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,8 +23,10 @@ import org.junit.jupiter.api.Test;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Stack;
 import java.util.function.Consumer;
 
+import static helpers.AttackCombinationHelper.attackCombination;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -44,6 +41,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
     private AttacksContainer attacksContainerMock;
     private TestGameConfig testGameConfig;
     private BackgroundScroller backgroundScrollerMock;
+    private Caster attackCaster;
 
     @BeforeEach
     void init() {
@@ -62,16 +60,17 @@ class ControlsMovesManfredTest extends ControllerTestCase {
 
         backgroundScrollerMock = mock(BackgroundScroller.class);
 
-        manfred = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, colliderMock, mapWrapperMock, attacksContainerMock, skillSetMock, testGameConfig, null, null);
+        manfred = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, colliderMock, mapWrapperMock, testGameConfig, null);
         manfredSpy = spy(manfred);
 
+        CastModeOn castModeOn = new CastModeOn(skillSetMock, attacksContainerMock, testGameConfig, manfred.getSprite(), null);
+        this.attackCaster = new Caster(new CastModeOff(castModeOn));
 
-
-        setupControllerWithManfred(manfred);
+        setupController(manfred, attackCaster);
     }
 
-    private void setupControllerWithManfred(Manfred manfred) {
-        ManfredController manfredController = new ManfredController(manfred);
+    private void setupController(Manfred manfred, Caster attackCaster) {
+        ManfredController manfredController = new ManfredController(manfred, attackCaster);
         GelaberController gelaberController = new GelaberController();
         GamePanel panel = mock(GamePanel.class);
 
@@ -166,10 +165,10 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         when(mapWrapperMock.getMap()).thenReturn(mapSpy);
 
         ResultCaptor<Interactable> resultCaptor = new ResultCaptor<>();
-        doAnswer(resultCaptor).when(mapSpy).getInteractable(anyInt(), anyInt());
+        doAnswer(resultCaptor).when(mapSpy).getInteractable(any());
 
         controls.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
-        assertNull(resultCaptor.getResult());
+        assertTrue(resultCaptor.getResult() instanceof Idle);
     }
 
     @Test
@@ -227,19 +226,8 @@ class ControlsMovesManfredTest extends ControllerTestCase {
     }
 
     @Test
-    void triggerEmtpyAttack() {
-        setupControllerWithManfred(manfredSpy);
-
-        controls.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
-        verify(manfredSpy, never()).cast(any());
-
-        controls.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
-        verify(manfredSpy, atLeastOnce()).cast(any());
-    }
-
-    @Test
     void givenCorrectCombination_thenTriggersAttack() {
-        Attack attackMock = mockSkillSetWithCombination("l");
+        Attack attackMock = mockSkillSetWithCombination(attackCombination(CombinationElement.LEFT));
 
         controls.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
         controls.keyPressed(mockEventWithKey(KeyEvent.VK_LEFT));
@@ -250,7 +238,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
 
     @Test
     void givenWrongCombination_thenDoesNotTriggerAttack() {
-        Attack attackMock = mockSkillSetWithCombination("ll");
+        Attack attackMock = mockSkillSetWithCombination(attackCombination(CombinationElement.LEFT, CombinationElement.LEFT));
 
         controls.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
         controls.keyPressed(mockEventWithKey(KeyEvent.VK_LEFT));
@@ -259,12 +247,12 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         verify(attacksContainerMock, never()).add(attackMock);
     }
 
-    private Attack mockSkillSetWithCombination(String combination) {
+    private Attack mockSkillSetWithCombination(Stack<CombinationElement> combination) {
         Attack attackMock = mock(Attack.class);
         AttackGenerator attacksGeneratorMock = mock(AttackGenerator.class);
         when(attacksGeneratorMock.generate(any(), any())).thenReturn(attackMock);
 
-        when(skillSetMock.get(combination)).thenReturn(attacksGeneratorMock);
+        when(skillSetMock.get(combination)).thenReturn(java.util.Optional.of(attacksGeneratorMock));
         return attackMock;
     }
 
@@ -275,7 +263,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         Map map = TestMapFactory.create(new String[][]{{"1", "doorOrPortal"}}, interactables);
         when(mapWrapperMock.getMap()).thenReturn(map);
 
-        setupControllerWithManfred(manfred);
+        setupController(manfred, this.attackCaster);
     }
 
     private Person setupMapWithOpaAndManfredSpy() {
@@ -288,7 +276,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         Map map = TestMapFactory.create(new String[][]{{"1", "Opa"}}, interactables);
         when(mapWrapperMock.getMap()).thenReturn(map);
 
-        setupControllerWithManfred(manfredSpy);
+        setupController(manfredSpy, this.attackCaster);
         return opaMock;
     }
 }

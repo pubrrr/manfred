@@ -6,12 +6,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component
 public class GelaberReader {
-    private int charactersPerLine;
-    private GameConfig gameConfig;
+    private final int charactersPerLine;
+    private final GameConfig gameConfig;
 
     public GelaberReader(GameConfig gameConfig) {
         this.charactersPerLine = gameConfig.getCharacterPerGelaberLine();

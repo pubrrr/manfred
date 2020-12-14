@@ -16,7 +16,7 @@ public class TestMapFactory {
             for (int y = 0; y < mapTilesAsStrings[0].length; y++) {
                 switch (mapTilesAsStrings[x][y]) {
                     case MapReader.ACCESSIBLE:
-                        mapTiles[x][y] = new Accessible();
+                        mapTiles[x][y] = Accessible.getInstance();
                         break;
                     case MapReader.NOT_ACCESSIBLE:
                         mapTiles[x][y] = new NotAccessible(null, null, 1, 0);

@@ -7,4 +7,8 @@ import java.util.function.Consumer;
 
 public interface Interactable extends MapTile {
     Consumer<KeyControls> interact();
+
+    static Idle idle() {
+        return new Idle();
+    }
 }

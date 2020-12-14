@@ -3,7 +3,9 @@ package manfred.game.characters;
 import manfred.game.GameConfig;
 import manfred.game.map.Map;
 import manfred.game.map.MapWrapper;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MapCollider {
     private static MapCollider instance = null;
 

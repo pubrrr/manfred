@@ -12,7 +12,7 @@ public class GelaberChoices extends AbstractGelaberText {
     HashMap<String, AbstractGelaberText> choices;
 
     private boolean showChoiceBox = false;
-    private SelectionMarker selectionMarker;
+    private final SelectionMarker selectionMarker;
     private int selection;
 
     public GelaberChoices(String[] lines, HashMap<String, AbstractGelaberText> choices, SelectionMarker selectionMarker, GameConfig gameConfig) {
@@ -32,10 +32,10 @@ public class GelaberChoices extends AbstractGelaberText {
 
         if (continueTalking) {
             linesPosition += gameConfig.getNumberOfTextLines() - 1;
-            return gelaber -> null;
+            return AbstractGelaberText::doNothing;
         } else if (!showChoiceBox) {
             showChoiceBox = true;
-            return gelaber -> null;
+            return AbstractGelaberText::doNothing;
         }
 
         String selectedChoice = choices.keySet().toArray(new String[]{})[selection];
@@ -48,7 +48,7 @@ public class GelaberChoices extends AbstractGelaberText {
         }
         return gelaber -> {
             gelaber.setCurrentText(nextGelaber);
-            return null;
+            return KeyControls::doNothing;
         };
     }
 

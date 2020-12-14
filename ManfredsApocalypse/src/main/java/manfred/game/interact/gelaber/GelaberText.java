@@ -18,7 +18,7 @@ public class GelaberText extends AbstractGelaberText {
         boolean continueTalking = linesPosition < lines.length;
 
         if (continueTalking) {
-            return gelaber -> null;
+            return AbstractGelaberText::doNothing;
         }
 
         linesPosition = 0;

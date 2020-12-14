@@ -1,11 +1,12 @@
 package manfred.game.controls;
 
 import manfred.game.interact.gelaber.Gelaber;
-import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 
 import java.awt.event.KeyEvent;
 import java.util.function.Consumer;
 
+@Component
 public class GelaberController implements ControllerInterface {
     private Gelaber gelaber;
 
@@ -14,7 +15,6 @@ public class GelaberController implements ControllerInterface {
     }
 
     @Override
-    @Nullable
     public Consumer<KeyControls> keyReleased(KeyEvent event) {
         switch (event.getKeyCode()) {
             case KeyEvent.VK_ENTER:
@@ -28,10 +28,15 @@ public class GelaberController implements ControllerInterface {
                 gelaber.up();
                 break;
         }
-        return null;
+        return KeyControls::doNothing;
     }
 
     public void setGelaber(Gelaber gelaber) {
         this.gelaber = gelaber;
+    }
+
+    @Override
+    public void stop() {
+        // do nothing
     }
 }
