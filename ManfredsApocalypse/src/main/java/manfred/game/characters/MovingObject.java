@@ -1,12 +1,9 @@
 package manfred.game.characters;
 
-import manfred.game.controls.KeyControls;
 import manfred.game.graphics.Paintable;
-import org.springframework.lang.Nullable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.function.Consumer;
 
 abstract public class MovingObject implements Paintable {
     protected Sprite sprite;
@@ -82,8 +79,7 @@ abstract public class MovingObject implements Paintable {
         currentSpeedY = 0;
     }
 
-    @Nullable
-    public Consumer<KeyControls> move() {
+    public void move() {
         if (!collidesVertically()) {
             this.sprite.translate(currentSpeedX, 0);
         }
@@ -91,7 +87,6 @@ abstract public class MovingObject implements Paintable {
         if (!collidesHorizontally()) {
             this.sprite.translate(0, currentSpeedY);
         }
-        return KeyControls::doNothing;
     }
 
     protected boolean collidesVertically() {

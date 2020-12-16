@@ -20,9 +20,9 @@ import java.util.List;
 public class PersonReader {
     public static final String PATH_PERSONS = Game.PATH_DATA + "persons\\";
 
-    private GelaberReader gelaberReader;
-    private GameConfig gameConfig;
-    private ImageLoader imageLoader;
+    private final GelaberReader gelaberReader;
+    private final GameConfig gameConfig;
+    private final ImageLoader imageLoader;
 
     public PersonReader(GelaberReader gelaberReader, GameConfig gameConfig, ImageLoader imageLoader) {
         this.gelaberReader = gelaberReader;

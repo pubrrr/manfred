@@ -1,14 +1,11 @@
 package manfred.game.characters;
 
 import manfred.game.GameConfig;
-import manfred.game.controls.KeyControls;
 import manfred.game.graphics.Paintable;
-import manfred.game.map.MapWrapper;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
-import java.util.function.Consumer;
 
 public class Manfred extends MovingObject implements Paintable {
     public static final int ANIMATION_IMAGES_NUMBER = 8;
@@ -16,7 +13,6 @@ public class Manfred extends MovingObject implements Paintable {
     private static final int NEXT_ANIMATION_IMAGE_TRIGGER = 4;
 
     private int healthPoints;
-    private final MapWrapper mapWrapper;
     private final GameConfig gameConfig;
     private final HashMap<Direction, BufferedImage[]> walkAnimation;
 
@@ -31,13 +27,11 @@ public class Manfred extends MovingObject implements Paintable {
         int spriteHeight,
         int healthPoints,
         MapCollider collider,
-        MapWrapper mapWrapper,
         GameConfig gameConfig,
         HashMap<Direction, BufferedImage[]> walkAnimation
     ) {
         super(speed, x, y, spriteWidth, spriteHeight, gameConfig.getPixelBlockSize(), null, collider);
         this.healthPoints = healthPoints;
-        this.mapWrapper = mapWrapper;
         this.gameConfig = gameConfig;
         this.walkAnimation = walkAnimation;
     }
@@ -53,8 +47,7 @@ public class Manfred extends MovingObject implements Paintable {
         this.sprite.y = y + sprite.getBaseHeight() - sprite.getSpriteHeight();
     }
 
-    @Override
-    public Consumer<KeyControls> move() {
+    public Point moveTo() {
         super.move();
 
         if (currentSpeedX == 0 && currentSpeedY == 0) {
@@ -71,11 +64,10 @@ public class Manfred extends MovingObject implements Paintable {
             }
         }
 
-        Point mainTile = checkForTileManfredMainlyStandsOn();
-        return mapWrapper.getMap().stepOn(mainTile.x, mainTile.y);
+        return getCenterMapTile();
     }
 
-    private Point checkForTileManfredMainlyStandsOn() {
+    protected Point getCenterMapTile() {
         Point center = this.sprite.getCenter();
         return new Point(center.x / gameConfig.getPixelBlockSize(), center.y / gameConfig.getPixelBlockSize());
     }
@@ -92,13 +84,11 @@ public class Manfred extends MovingObject implements Paintable {
         );
     }
 
-    public Consumer<KeyControls> interact() {
+    public Point getInteractionMapTile() {
         Point interactionPoint = viewDirection.interactAtDistance(this.sprite, INTERACT_DISTANCE);
-        Point interactionMapTile = new Point(
+        return new Point(
             interactionPoint.x / gameConfig.getPixelBlockSize(),
             interactionPoint.y / gameConfig.getPixelBlockSize()
         );
-
-        return mapWrapper.getMap().getInteractable(interactionMapTile).interact();
     }
 }

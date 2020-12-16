@@ -8,17 +8,11 @@ import manfred.game.characters.Manfred;
 import manfred.game.characters.ManfredFramesLoader;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.SkillSet;
-import manfred.game.controls.DoNothingController;
-import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
-import manfred.game.enemy.EnemiesWrapper;
-import manfred.game.enemy.EnemyReader;
-import manfred.game.enemy.MapColliderProvider;
 import manfred.game.exception.InvalidInputException;
-import manfred.game.graphics.*;
-import manfred.game.interact.PersonReader;
-import manfred.game.interact.gelaber.GelaberReader;
+import manfred.game.graphics.BackgroundScroller;
+import manfred.game.graphics.GamePanel;
 import manfred.game.map.MapReader;
 import manfred.game.map.MapWrapper;
 import org.springframework.context.annotation.Bean;
@@ -41,7 +35,6 @@ public class GameContext {
     @Bean
     public Manfred manfred(
         MapCollider collider,
-        MapWrapper mapWrapper,
         GameConfig gameConfig,
         ManfredFramesLoader manfredFramesLoader
     ) throws IOException {
@@ -53,7 +46,6 @@ public class GameContext {
             2 * gameConfig.getPixelBlockSize(),
             100,
             collider,
-            mapWrapper,
             gameConfig,
             manfredFramesLoader.loadWalkAnimation()
         );
@@ -65,25 +57,8 @@ public class GameContext {
     }
 
     @Bean
-    public KeyControls keyControls(
-        ManfredController manfredController,
-        GelaberController gelaberController,
-        DoNothingController doNothingController,
-        Manfred manfred,
-        GamePanel panel,
-        MapWrapper mapWrapper,
-        GameConfig gameConfig,
-        BackgroundScroller backgroundScroller
-    ) {
-        KeyControls keyControls = new KeyControls(manfredController,
-            gelaberController,
-            doNothingController,
-            manfred,
-            panel,
-            mapWrapper,
-            gameConfig,
-            backgroundScroller
-        );
+    public KeyControls keyControls(ManfredController manfredController, GamePanel panel) {
+        KeyControls keyControls = new KeyControls(manfredController, panel);
         panel.addKeyListener(keyControls);
         return keyControls;
     }

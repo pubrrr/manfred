@@ -1,13 +1,20 @@
 package manfred.game.interact;
 
-import manfred.game.controls.KeyControls;
+import manfred.game.controls.ControllerInterface;
+import manfred.game.controls.ManfredController;
 
 import java.awt.*;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
-public class Portal extends LoadMapWorker implements Interactable {
+public class Portal implements Interactable {
+    private final String targetName;
+    private final int targetSpawnX;
+    private final int targetSpawnY;
+
     public Portal(String targetName, int targetSpawnX, int targetSpawnY) {
-        super(targetName, targetSpawnX, targetSpawnY);
+        this.targetName = targetName;
+        this.targetSpawnX = targetSpawnX;
+        this.targetSpawnY = targetSpawnY;
     }
 
     @Override
@@ -16,13 +23,18 @@ public class Portal extends LoadMapWorker implements Interactable {
     }
 
     @Override
-    public Consumer<KeyControls> onStep() {
-        return this::triggerLoadMapInWorkerThread;
+    public Function<ManfredController, ControllerInterface> onStep() {
+        return controllerInterface -> {
+            controllerInterface.stop();
+            return ControllerInterface.sleepWhileWorkingOn(
+                new LoadMapWorker(this.targetName, this.targetSpawnX, this.targetSpawnY, controllerInterface)
+            );
+        };
     }
 
     @Override
-    public Consumer<KeyControls> interact() {
-        return KeyControls::doNothing;
+    public Function<ManfredController, ControllerInterface> interact() {
+        return ControllerInterface::self;
     }
 
     @Override

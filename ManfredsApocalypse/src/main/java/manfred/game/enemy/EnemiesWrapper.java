@@ -10,7 +10,7 @@ import java.util.Stack;
 
 @Component
 public class EnemiesWrapper implements PaintablesContainer, Iterable<Enemy> {
-    private EnemyStack enemies;
+    private EnemyStack enemies = new EnemyStack();
 
     public void setEnemies(EnemyStack enemies) {
         this.enemies = enemies;

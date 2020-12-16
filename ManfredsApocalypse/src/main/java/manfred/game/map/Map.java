@@ -1,14 +1,15 @@
 package manfred.game.map;
 
 import manfred.game.GameConfig;
-import manfred.game.controls.KeyControls;
+import manfred.game.controls.ControllerInterface;
+import manfred.game.controls.ManfredController;
 import manfred.game.graphics.PaintableContainerElement;
 import manfred.game.interact.Interactable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Stack;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class Map {
     private final String name;
@@ -88,8 +89,8 @@ public class Map {
             : Interactable.idle();
     }
 
-    public Consumer<KeyControls> stepOn(int x, int y) {
-        return mapTiles[x][y].onStep();
+    public Function<ManfredController, ControllerInterface> stepOn(Point mapTile) {
+        return mapTiles[mapTile.x][mapTile.y].onStep();
     }
 
     public Stack<PaintableContainerElement> getPaintableContainerElements() {

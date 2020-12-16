@@ -1,12 +1,13 @@
 package manfred.game.interact;
 
-import manfred.game.controls.KeyControls;
+import manfred.game.controls.ControllerInterface;
+import manfred.game.controls.ManfredController;
 import manfred.game.map.MapTile;
 
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 public interface Interactable extends MapTile {
-    Consumer<KeyControls> interact();
+    Function<ManfredController, ControllerInterface> interact();
 
     static Idle idle() {
         return new Idle();

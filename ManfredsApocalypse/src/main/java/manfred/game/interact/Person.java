@@ -1,18 +1,20 @@
 package manfred.game.interact;
 
 import manfred.game.GameConfig;
-import manfred.game.controls.KeyControls;
+import manfred.game.controls.ControllerInterface;
+import manfred.game.controls.GelaberController;
+import manfred.game.controls.ManfredController;
 import manfred.game.interact.gelaber.Gelaber;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class Person implements Interactable {
-    private String name;
-    private Gelaber gelaber;
+    private final String name;
+    private final Gelaber gelaber;
     private final GameConfig gameConfig;
-    private BufferedImage image;
+    private final BufferedImage image;
 
     public Person(String name, Gelaber gelaber, GameConfig gameConfig, BufferedImage image) {
         this.name = name;
@@ -30,11 +32,10 @@ public class Person implements Interactable {
     }
 
     @Override
-    public Consumer<KeyControls> interact() {
-        return keyControls -> {
-            keyControls.turnOffControls();
-            keyControls.controlGelaber(this.gelaber);
-            keyControls.getGamePanel().registerGelaberToPaint(this.gelaber);
+    public Function<ManfredController, ControllerInterface> interact() {
+        return controller -> {
+            controller.stop();
+            return new GelaberController(controller, this.gelaber);
         };
     }
 

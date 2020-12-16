@@ -1,15 +1,11 @@
 package componentTests;
 
 import helpers.TestGameConfig;
-import manfred.game.characters.Manfred;
-import manfred.game.controls.DoNothingController;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
-import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.interact.gelaber.*;
-import manfred.game.map.MapWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -30,21 +26,12 @@ public class ControlsGelaberTest extends ControllerTestCase {
     @BeforeEach
     void init() {
         manfredControllerMock = mock(ManfredController.class);
-        when(manfredControllerMock.keyReleased(any())).thenReturn(KeyControls::doNothing);
+//        when(manfredControllerMock.keyReleased(any())).thenReturn(KeyControls::doNothing);
 
-        gelaberController = new GelaberController();
+//        gelaberController = new GelaberController();
         testGameConfig = (new TestGameConfig()).setNumberOfTextLines(NUMBER_OF_TEXT_LINES);
 
-        KeyControls controls = new KeyControls(
-                manfredControllerMock,
-                gelaberController,
-                mock(DoNothingController.class),
-                mock(Manfred.class),
-                mock(GamePanel.class),
-                mock(MapWrapper.class),
-                testGameConfig,
-                mock(BackgroundScroller.class)
-        );
+        KeyControls controls = new KeyControls(gelaberController, mock(GamePanel.class));
         controls.controlGelaber(mock(Gelaber.class));
 
         controlsSpy = spy(controls);

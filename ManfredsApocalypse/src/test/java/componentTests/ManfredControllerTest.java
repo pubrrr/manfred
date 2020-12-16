@@ -1,20 +1,24 @@
 package componentTests;
 
-import helpers.ResultCaptor;
 import helpers.TestGameConfig;
 import helpers.TestMapFactory;
 import manfred.game.attack.*;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.SkillSet;
-import manfred.game.controls.DoNothingController;
+import manfred.game.controls.ControllerInterface;
+import manfred.game.controls.SleepingController;
 import manfred.game.controls.GelaberController;
-import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
+import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.exception.InvalidInputException;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
-import manfred.game.interact.*;
+import manfred.game.interact.Door;
+import manfred.game.interact.Interactable;
+import manfred.game.interact.Person;
+import manfred.game.interact.Portal;
+import manfred.game.interact.gelaber.Gelaber;
 import manfred.game.map.Map;
 import manfred.game.map.MapWrapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,24 +28,22 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Stack;
-import java.util.function.Consumer;
 
 import static helpers.AttackCombinationHelper.attackCombination;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class ControlsMovesManfredTest extends ControllerTestCase {
+class ManfredControllerTest extends ControllerTestCase {
     private static final int PIXEL_BLOCK_SIZE = 40;
 
     private Manfred manfred;
-    private Manfred manfredSpy;
-    private KeyControls controls;
     private MapWrapper mapWrapperMock;
-    private SkillSet skillSetMock;
-    private AttacksContainer attacksContainerMock;
+    private SkillSet skillSet;
+    private AttacksContainer attacksContainer;
     private TestGameConfig testGameConfig;
     private BackgroundScroller backgroundScrollerMock;
-    private Caster attackCaster;
+
+    private ManfredController underTest;
 
     @BeforeEach
     void init() {
@@ -51,39 +53,31 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         when(colliderMock.collides(0, 0, 0, 0)).thenReturn(true);
 
         Map mapMock = mock(Map.class);
-        when(mapMock.stepOn(anyInt(), anyInt())).thenReturn(null);
+        when(mapMock.stepOn(any())).thenReturn(null);
         mapWrapperMock = mock(MapWrapper.class);
         when(mapWrapperMock.getMap()).thenReturn(mapMock);
 
-        skillSetMock = mock(SkillSet.class);
-        attacksContainerMock = mock(AttacksContainer.class);
-
+        skillSet = new SkillSet();
+        attacksContainer = new AttacksContainer();
         backgroundScrollerMock = mock(BackgroundScroller.class);
 
-        manfred = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, colliderMock, mapWrapperMock, testGameConfig, null);
-        manfredSpy = spy(manfred);
+        manfred = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, colliderMock, testGameConfig, null);
 
-        CastModeOn castModeOn = new CastModeOn(skillSetMock, attacksContainerMock, testGameConfig, manfred.getSprite(), null);
-        this.attackCaster = new Caster(new CastModeOff(castModeOn));
+        CastModeOn castModeOn = new CastModeOn(skillSet, attacksContainer, testGameConfig, manfred.getSprite(), null);
+        Caster attackCaster = new Caster(new CastModeOff(castModeOn));
+        EnemiesWrapper enemiesWrapper = new EnemiesWrapper();
 
-        setupController(manfred, attackCaster);
-    }
-
-    private void setupController(Manfred manfred, Caster attackCaster) {
-        ManfredController manfredController = new ManfredController(manfred, attackCaster);
-        GelaberController gelaberController = new GelaberController();
-        GamePanel panel = mock(GamePanel.class);
-
-        controls = new KeyControls(
-                manfredController,
-                gelaberController,
-                mock(DoNothingController.class),
-                manfred,
-                panel,
-                mapWrapperMock,
-                testGameConfig,
-                backgroundScrollerMock
+        underTest = new ManfredController(
+            manfred,
+            attackCaster,
+            mapWrapperMock,
+            testGameConfig,
+            backgroundScrollerMock,
+            mock(GamePanel.class),
+            attacksContainer,
+            enemiesWrapper
         );
+
     }
 
     @Test
@@ -93,7 +87,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
 
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_D);
 
-        controls.keyPressed(eventMock);
+        underTest.keyPressed(eventMock);
         manfred.move();
 
         assertTrue(initialX < manfred.getX());
@@ -109,7 +103,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
 
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_A);
 
-        controls.keyPressed(eventMock);
+        underTest.keyPressed(eventMock);
         manfred.move();
 
         assertTrue(initialX > manfred.getX());
@@ -125,7 +119,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
 
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_W);
 
-        controls.keyPressed(eventMock);
+        underTest.keyPressed(eventMock);
         manfred.move();
 
         assertSame(initialX, manfred.getX());
@@ -141,7 +135,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
 
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_S);
 
-        controls.keyPressed(eventMock);
+        underTest.keyPressed(eventMock);
         manfred.move();
 
         assertSame(initialX, manfred.getX());
@@ -151,7 +145,7 @@ class ControlsMovesManfredTest extends ControllerTestCase {
     }
 
     private void assertStops(KeyEvent eventMock, int afterMoveX, int afterMoveY) {
-        controls.keyReleased(eventMock);
+        underTest.keyReleased(eventMock);
         manfred.move();
 
         assertSame(afterMoveX, manfred.getX());
@@ -161,25 +155,20 @@ class ControlsMovesManfredTest extends ControllerTestCase {
     @Test
     void interactDoesNothingWhenNoInteractInReach() {
         Map map = TestMapFactory.create(new String[][]{{"1", "1"}}, null);
-        Map mapSpy = spy(map);
-        when(mapWrapperMock.getMap()).thenReturn(mapSpy);
+        when(mapWrapperMock.getMap()).thenReturn(map);
 
-        ResultCaptor<Interactable> resultCaptor = new ResultCaptor<>();
-        doAnswer(resultCaptor).when(mapSpy).getInteractable(any());
+        ControllerInterface controllerState = underTest.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
 
-        controls.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
-        assertTrue(resultCaptor.getResult() instanceof Idle);
+        assertTrue(controllerState instanceof ManfredController);
     }
 
     @Test
-    void interactReturnsInteract_andTurnsOffManfredControls() {
-        Person opaMock = setupMapWithOpaAndManfredSpy();
+    void talkToPerson() {
+        setupMapWithInteractable(new Person("testOpa", mock(Gelaber.class), testGameConfig, null));
 
-        controls.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
-        verify(opaMock, atLeastOnce()).interact();
+        ControllerInterface controllerState = underTest.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
 
-        controls.keyPressed(mockEventWithKey(KeyEvent.VK_W));
-        verify(manfredSpy, never()).up();
+        assertTrue(controllerState instanceof GelaberController);
     }
 
     @Test
@@ -187,15 +176,18 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         String targetName = "target";
         int targetSpawnX = 5;
         int targetSpawnY = 66;
-        setupMapWithDoorOrPortal(new Door(targetName, targetSpawnX, targetSpawnY, null));
+        setupMapWithInteractable(new Door(targetName, targetSpawnX, targetSpawnY, null));
 
-        KeyControls controlsSpy = spy(controls);
-        controlsSpy.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
+        KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_ENTER);
+        ControllerInterface controllerState = underTest.keyReleased(eventMock);
+
+        assertTrue(controllerState instanceof SleepingController);
+        assertTrue(controllerState.keyPressed(eventMock) instanceof SleepingController);
 
         Thread.sleep(1000); // Wait for swing worker to finish
 
-        verify(controlsSpy).turnOffControls();
-        verify(controlsSpy).controlManfred();
+        assertTrue(controllerState.keyPressed(eventMock) instanceof ManfredController);
+
         verify(mapWrapperMock).loadMap(targetName);
         verify(backgroundScrollerMock).centerTo(manfred.getSprite().getCenter());
         assertEquals(PIXEL_BLOCK_SIZE * targetSpawnX, manfred.getX());
@@ -207,18 +199,18 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         String targetName = "target";
         int targetSpawnX = 5;
         int targetSpawnY = 66;
-        setupMapWithDoorOrPortal(new Portal(targetName, targetSpawnX, targetSpawnY));
+        setupMapWithInteractable(new Portal(targetName, targetSpawnX, targetSpawnY));
 
         manfred.setY(PIXEL_BLOCK_SIZE);
-        Consumer<KeyControls> result = manfred.move();
+        ControllerInterface controllerState = underTest.move();
 
-        KeyControls controlsSpy = spy(controls);
-        result.accept(controlsSpy);
+        assertTrue(controllerState instanceof SleepingController);
+        assertTrue(controllerState.keyPressed(mockEventWithKey(KeyEvent.VK_ENTER)) instanceof SleepingController);
 
         Thread.sleep(1000); // Wait for swing worker to finish
 
-        verify(controlsSpy).turnOffControls();
-        verify(controlsSpy).controlManfred();
+        assertTrue(controllerState.keyPressed(mockEventWithKey(KeyEvent.VK_ENTER)) instanceof ManfredController);
+
         verify(mapWrapperMock).loadMap(targetName);
         verify(backgroundScrollerMock).centerTo(manfred.getSprite().getCenter());
         assertEquals(PIXEL_BLOCK_SIZE * targetSpawnX, manfred.getX());
@@ -229,22 +221,23 @@ class ControlsMovesManfredTest extends ControllerTestCase {
     void givenCorrectCombination_thenTriggersAttack() {
         Attack attackMock = mockSkillSetWithCombination(attackCombination(CombinationElement.LEFT));
 
-        controls.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
-        controls.keyPressed(mockEventWithKey(KeyEvent.VK_LEFT));
-        controls.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
+        underTest.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
+        underTest.keyPressed(mockEventWithKey(KeyEvent.VK_LEFT));
+        underTest.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
 
-        verify(attacksContainerMock).add(attackMock);
+        assertFalse(attacksContainer.isEmpty());
+        assertEquals(attackMock, attacksContainer.getPaintableContainerElements().pop().getPaintable());
     }
 
     @Test
     void givenWrongCombination_thenDoesNotTriggerAttack() {
-        Attack attackMock = mockSkillSetWithCombination(attackCombination(CombinationElement.LEFT, CombinationElement.LEFT));
+        mockSkillSetWithCombination(attackCombination(CombinationElement.LEFT, CombinationElement.LEFT));
 
-        controls.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
-        controls.keyPressed(mockEventWithKey(KeyEvent.VK_LEFT));
-        controls.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
+        underTest.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
+        underTest.keyPressed(mockEventWithKey(KeyEvent.VK_LEFT));
+        underTest.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
 
-        verify(attacksContainerMock, never()).add(attackMock);
+        assertTrue(attacksContainer.isEmpty());
     }
 
     private Attack mockSkillSetWithCombination(Stack<CombinationElement> combination) {
@@ -252,31 +245,15 @@ class ControlsMovesManfredTest extends ControllerTestCase {
         AttackGenerator attacksGeneratorMock = mock(AttackGenerator.class);
         when(attacksGeneratorMock.generate(any(), any())).thenReturn(attackMock);
 
-        when(skillSetMock.get(combination)).thenReturn(java.util.Optional.of(attacksGeneratorMock));
+        skillSet.put(combination, attacksGeneratorMock);
         return attackMock;
     }
 
-    private void setupMapWithDoorOrPortal(Interactable doorOrPortal) {
-        HashMap<String, Interactable> interactables = new HashMap();
-        interactables.put("doorOrPortal", doorOrPortal);
+    private void setupMapWithInteractable(Interactable interactable) {
+        HashMap<String, Interactable> interactables = new HashMap<>();
+        interactables.put("interactable", interactable);
 
-        Map map = TestMapFactory.create(new String[][]{{"1", "doorOrPortal"}}, interactables);
+        Map map = TestMapFactory.create(new String[][]{{"1", "interactable"}}, interactables);
         when(mapWrapperMock.getMap()).thenReturn(map);
-
-        setupController(manfred, this.attackCaster);
-    }
-
-    private Person setupMapWithOpaAndManfredSpy() {
-        Person opaMock = mock(Person.class);
-        when(opaMock.interact()).thenCallRealMethod();
-
-        HashMap<String, Interactable> interactables = new HashMap();
-        interactables.put("Opa", opaMock);
-
-        Map map = TestMapFactory.create(new String[][]{{"1", "Opa"}}, interactables);
-        when(mapWrapperMock.getMap()).thenReturn(map);
-
-        setupController(manfredSpy, this.attackCaster);
-        return opaMock;
     }
 }
