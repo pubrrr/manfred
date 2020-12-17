@@ -1,9 +1,9 @@
 package manfred.game.interact.gelaber;
 
 import manfred.game.GameConfig;
-import manfred.game.controls.KeyControls;
+import manfred.game.controls.ControllerInterface;
+import manfred.game.controls.GelaberController;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class GelaberText extends AbstractGelaberText {
@@ -13,7 +13,7 @@ public class GelaberText extends AbstractGelaberText {
     }
 
     @Override
-    public Function<Gelaber, Consumer<KeyControls>> next() {
+    public Function<Gelaber, Function<GelaberController, ControllerInterface>> next() {
         linesPosition += gameConfig.getNumberOfTextLines() - 1;
         boolean continueTalking = linesPosition < lines.length;
 

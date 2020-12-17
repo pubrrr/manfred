@@ -1,4 +1,4 @@
-package manfred.game.graphics;
+package manfred.game.graphics.paintable;
 
 import java.awt.*;
 

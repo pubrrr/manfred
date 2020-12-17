@@ -1,32 +1,29 @@
 package manfred.game.interact.gelaber;
 
-import manfred.game.GameConfig;
-import manfred.game.controls.KeyControls;
-import manfred.game.graphics.Paintable;
+import manfred.game.controls.ControllerInterface;
+import manfred.game.controls.GelaberController;
+import manfred.game.graphics.paintable.Paintable;
 
 import java.awt.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class Gelaber implements Paintable {
-    private AbstractGelaberText[] texts;
-    private GameConfig gameConfig;
+    private final AbstractGelaberText[] texts;
 
     private AbstractGelaberText currentText;
     private int nextTextPointer = 0;
 
-    public Gelaber(AbstractGelaberText[] texts, GameConfig gameConfig) {
+    public Gelaber(AbstractGelaberText[] texts) {
         this.texts = texts;
         currentText = texts[0];
-        this.gameConfig = gameConfig;
     }
 
     public AbstractGelaberText[] getTexts() {
         return texts;
     }
 
-    public Consumer<KeyControls> next() {
-        Function<Gelaber, Consumer<KeyControls>> callback = currentText.next();
+    public Function<GelaberController, ControllerInterface> next() {
+        Function<Gelaber, Function<GelaberController, ControllerInterface>> callback = currentText.next();
         return callback.apply(this);
     }
 
@@ -34,16 +31,13 @@ public class Gelaber implements Paintable {
         this.currentText = currentText;
     }
 
-    Consumer<KeyControls> switchControlsBackToManfred() {
+    public Function<GelaberController, ControllerInterface> switchControlsBackToManfred() {
         if (nextTextPointer < texts.length - 1) {
             nextTextPointer++;
         }
         currentText = texts[nextTextPointer];
 
-        return keyControls -> {
-            keyControls.controlManfred();
-            keyControls.getGamePanel().deleteGelaber();
-        };
+        return GelaberController::previous;
     }
 
     public void down() {
@@ -56,6 +50,6 @@ public class Gelaber implements Paintable {
 
     @Override
     public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        currentText.paint(g);
+        currentText.paint(g, offset, x, y);
     }
 }

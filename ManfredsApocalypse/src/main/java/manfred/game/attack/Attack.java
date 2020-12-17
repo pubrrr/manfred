@@ -3,7 +3,7 @@ package manfred.game.attack;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.MovingObject;
 import manfred.game.enemy.Enemy;
-import manfred.game.graphics.Paintable;
+import manfred.game.graphics.paintable.Paintable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

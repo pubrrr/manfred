@@ -1,15 +1,16 @@
 package manfred.game.interact.gelaber;
 
 import helpers.TestGameConfig;
-import manfred.game.controls.KeyControls;
+import manfred.game.controls.ControllerInterface;
+import manfred.game.controls.GelaberController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
 class GelaberChoicesTest {
@@ -29,53 +30,53 @@ class GelaberChoicesTest {
 
         selectionMarkerMock = mock(SelectionMarker.class);
 
-        underTest = new GelaberChoices(new String[]{"line1"}, choices, selectionMarkerMock, (new TestGameConfig()).setNumberOfTextLines(NUMBER_OF_TEXT_LINES));
+        underTest = new GelaberChoices(new String[]{"line1"}, choices, selectionMarkerMock, (new TestGameConfig()).withNumberOfTextLines(NUMBER_OF_TEXT_LINES));
     }
 
     @Test
     void textAndChoiceSequence_givenNoNextGelaber_upAndDownOnlyWorksAfterNoLinesRemainingAndControlsSwitchedToManfred() {
         when(choices.get("key")).thenReturn(null);
 
-        Gelaber gelaberMock = mock(Gelaber.class);
+        Gelaber gelaber = new Gelaber(new AbstractGelaberText[]{mock(GelaberText.class)});
 
         underTest.up();
         underTest.down();
         verify(selectionMarkerMock, never()).translate(anyInt(), anyInt());
 
-        Function<Gelaber, Consumer<KeyControls>> response1 = underTest.next();
+        Function<Gelaber, Function<GelaberController, ControllerInterface>> response1 = underTest.next();
 
-        KeyControls keyControlsMock = mock(KeyControls.class);
-        response1.apply(gelaberMock).accept(keyControlsMock);
-        verify(keyControlsMock).doNothing();
+        GelaberController gelaberControllerMock = mock(GelaberController.class);
+        ControllerInterface newControllerState = response1.apply(gelaber).apply(gelaberControllerMock);
+        assertSame(gelaberControllerMock, newControllerState);
 
         underTest.up();
         underTest.down();
         verify(selectionMarkerMock, times(2)).translate(anyInt(), anyInt());
 
-        Function<Gelaber, Consumer<KeyControls>> response2 = underTest.next();
+        Function<Gelaber, Function<GelaberController, ControllerInterface>> response2 = underTest.next();
 
         verify(selectionMarkerMock).resetToTop();
-        response2.apply(gelaberMock);
-        verify(gelaberMock).switchControlsBackToManfred();
+        response2.apply(gelaber).apply(gelaberControllerMock);
+        verify(gelaberControllerMock).previous();
     }
 
     @Test
     void textAndChoiceSequence_givenNextGelaber_thenControlsNotSwitchedToManfred() {
-        AbstractGelaberText gelaberTextMock = new GelaberText(new String[]{"line"}, (new TestGameConfig()).setNumberOfTextLines(NUMBER_OF_TEXT_LINES));
+        AbstractGelaberText gelaberTextMock = new GelaberText(new String[]{"line"}, (new TestGameConfig()).withNumberOfTextLines(NUMBER_OF_TEXT_LINES));
         when(choices.get("key")).thenReturn(gelaberTextMock);
 
         Gelaber gelaberMock = mock(Gelaber.class);
 
-        Function<Gelaber, Consumer<KeyControls>> response1 = underTest.next();
+        Function<Gelaber, Function<GelaberController, ControllerInterface>> response1 = underTest.next();
 
-        KeyControls keyControlsMock = mock(KeyControls.class);
-        response1.apply(gelaberMock).accept(keyControlsMock);
-        verify(keyControlsMock).doNothing();
+        GelaberController gelaberControllerMock = mock(GelaberController.class);
+        ControllerInterface newControllerState = response1.apply(gelaberMock).apply(gelaberControllerMock);
+        assertSame(gelaberControllerMock, newControllerState);
 
-        Function<Gelaber, Consumer<KeyControls>> response2 = underTest.next();
+        Function<Gelaber, Function<GelaberController, ControllerInterface>> response2 = underTest.next();
 
         verify(selectionMarkerMock).resetToTop();
-        response2.apply(gelaberMock);
-        verify(gelaberMock).setCurrentText(gelaberTextMock);
+        ControllerInterface newControllerState2 = response2.apply(gelaberMock).apply(gelaberControllerMock);
+        assertSame(gelaberControllerMock, newControllerState2);
     }
 }

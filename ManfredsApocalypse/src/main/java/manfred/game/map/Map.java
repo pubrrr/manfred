@@ -3,7 +3,7 @@ package manfred.game.map;
 import manfred.game.GameConfig;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ManfredController;
-import manfred.game.graphics.PaintableContainerElement;
+import manfred.game.graphics.paintable.PaintableContainerElement;
 import manfred.game.interact.Interactable;
 
 import java.awt.*;

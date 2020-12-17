@@ -10,6 +10,8 @@ import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.exception.InvalidInputException;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
+import manfred.game.graphics.paintable.GelaberOverlay;
+import manfred.game.interact.gelaber.Gelaber;
 import manfred.game.map.MapWrapper;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +29,7 @@ public class ManfredController implements ControllerInterface {
     private final GamePanel gamePanel;
     private final AttacksContainer attacksContainer;
     private final EnemiesWrapper enemiesWrapper;
+    private final GelaberOverlay gelaberOverlay;
 
     public ManfredController(
         Manfred manfred,
@@ -36,7 +39,8 @@ public class ManfredController implements ControllerInterface {
         BackgroundScroller backgroundScroller,
         GamePanel gamePanel,
         AttacksContainer attacksContainer,
-        EnemiesWrapper enemiesWrapper
+        EnemiesWrapper enemiesWrapper,
+        GelaberOverlay gelaberOverlay
     ) {
         this.manfred = manfred;
         this.attackCaster = attackCaster;
@@ -46,6 +50,7 @@ public class ManfredController implements ControllerInterface {
         this.gamePanel = gamePanel;
         this.attacksContainer = attacksContainer;
         this.enemiesWrapper = enemiesWrapper;
+        this.gelaberOverlay = gelaberOverlay;
     }
 
     @Override
@@ -134,5 +139,11 @@ public class ManfredController implements ControllerInterface {
 
     public GamePanel getGamePanel() {
         return gamePanel;
+    }
+
+    public ControllerInterface talk(ManfredController self, Gelaber gelaber) {
+        self.stop();
+        gelaberOverlay.setGelaber(gelaber);
+        return new GelaberController(self, gelaber, gelaberOverlay);
     }
 }

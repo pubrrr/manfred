@@ -2,7 +2,6 @@ package manfred.game.interact;
 
 import manfred.game.GameConfig;
 import manfred.game.controls.ControllerInterface;
-import manfred.game.controls.GelaberController;
 import manfred.game.controls.ManfredController;
 import manfred.game.interact.gelaber.Gelaber;
 
@@ -33,10 +32,7 @@ public class Person implements Interactable {
 
     @Override
     public Function<ManfredController, ControllerInterface> interact() {
-        return controller -> {
-            controller.stop();
-            return new GelaberController(controller, this.gelaber);
-        };
+        return controller -> controller.talk(controller, this.gelaber);
     }
 
     @Override

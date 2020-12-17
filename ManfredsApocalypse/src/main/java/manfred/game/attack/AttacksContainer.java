@@ -1,7 +1,7 @@
 package manfred.game.attack;
 
-import manfred.game.graphics.PaintablesContainer;
-import manfred.game.graphics.PaintableContainerElement;
+import manfred.game.graphics.paintable.PaintablesContainer;
+import manfred.game.graphics.paintable.PaintableContainerElement;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;

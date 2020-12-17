@@ -1,7 +1,7 @@
 package manfred.game.enemy;
 
-import manfred.game.graphics.PaintablesContainer;
-import manfred.game.graphics.PaintableContainerElement;
+import manfred.game.graphics.paintable.PaintablesContainer;
+import manfred.game.graphics.paintable.PaintableContainerElement;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 

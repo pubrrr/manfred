@@ -14,6 +14,7 @@ import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.exception.InvalidInputException;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
+import manfred.game.graphics.paintable.GelaberOverlay;
 import manfred.game.interact.Door;
 import manfred.game.interact.Interactable;
 import manfred.game.interact.Person;
@@ -75,9 +76,9 @@ class ManfredControllerTest extends ControllerTestCase {
             backgroundScrollerMock,
             mock(GamePanel.class),
             attacksContainer,
-            enemiesWrapper
+            enemiesWrapper,
+            mock(GelaberOverlay.class)
         );
-
     }
 
     @Test

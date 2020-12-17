@@ -4,7 +4,7 @@ import manfred.game.GameConfig;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.MovingObject;
-import manfred.game.graphics.Paintable;
+import manfred.game.graphics.paintable.Paintable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

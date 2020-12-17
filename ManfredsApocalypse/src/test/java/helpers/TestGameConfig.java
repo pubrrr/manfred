@@ -43,7 +43,7 @@ public class TestGameConfig extends GameConfig {
         return testPixelBlockSize;
     }
 
-    public TestGameConfig setNumberOfTextLines(int testNumberOfTextLines) {
+    public TestGameConfig withNumberOfTextLines(int testNumberOfTextLines) {
         this.testNumberOfTextLines = testNumberOfTextLines;
         return this;
     }

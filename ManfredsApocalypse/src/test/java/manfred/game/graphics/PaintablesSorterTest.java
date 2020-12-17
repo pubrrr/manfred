@@ -1,5 +1,8 @@
 package manfred.game.graphics;
 
+import manfred.game.graphics.paintable.Paintable;
+import manfred.game.graphics.paintable.PaintableContainerElement;
+import manfred.game.graphics.paintable.PaintablesContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -27,7 +27,7 @@ public class GelaberReader {
                 JSONObject jsonTextLine = jsonGelaber.getJSONObject(i);
                 texts[i] = convertText(jsonTextLine);
             }
-            return new Gelaber(texts, gameConfig);
+            return new Gelaber(texts);
         } catch (JSONException $e) {
             throw new InvalidInputException($e.getMessage());
         }

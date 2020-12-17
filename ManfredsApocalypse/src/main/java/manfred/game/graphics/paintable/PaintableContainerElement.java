@@ -1,4 +1,6 @@
-package manfred.game.graphics;
+package manfred.game.graphics.paintable;
+
+import manfred.game.graphics.paintable.Paintable;
 
 public class PaintableContainerElement {
     private Paintable paintable;

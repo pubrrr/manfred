@@ -1,7 +1,7 @@
 package manfred.game.characters;
 
 import manfred.game.GameConfig;
-import manfred.game.graphics.Paintable;
+import manfred.game.graphics.paintable.Paintable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

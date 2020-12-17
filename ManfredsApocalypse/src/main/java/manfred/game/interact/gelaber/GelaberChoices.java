@@ -1,11 +1,11 @@
 package manfred.game.interact.gelaber;
 
 import manfred.game.GameConfig;
-import manfred.game.controls.KeyControls;
+import manfred.game.controls.ControllerInterface;
+import manfred.game.controls.GelaberController;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class GelaberChoices extends AbstractGelaberText {
@@ -27,7 +27,7 @@ public class GelaberChoices extends AbstractGelaberText {
     }
 
     @Override
-    public Function<Gelaber, Consumer<KeyControls>> next() {
+    public Function<Gelaber, Function<GelaberController, ControllerInterface>> next() {
         boolean continueTalking = linesPosition + gameConfig.getNumberOfTextLines() - 1 < lines.length;
 
         if (continueTalking) {
@@ -48,7 +48,7 @@ public class GelaberChoices extends AbstractGelaberText {
         }
         return gelaber -> {
             gelaber.setCurrentText(nextGelaber);
-            return KeyControls::doNothing;
+            return ControllerInterface::self;
         };
     }
 
@@ -84,8 +84,8 @@ public class GelaberChoices extends AbstractGelaberText {
     }
 
     @Override
-    public void paint(Graphics g) {
-        super.paint(g);
+    public void paint(Graphics g, Point offset, Integer x, Integer y) {
+        super.paint(g, offset, x, y);
 
         if (showChoiceBox) {
             g.setColor(Color.YELLOW);

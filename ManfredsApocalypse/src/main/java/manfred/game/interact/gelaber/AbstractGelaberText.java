@@ -1,13 +1,14 @@
 package manfred.game.interact.gelaber;
 
 import manfred.game.GameConfig;
-import manfred.game.controls.KeyControls;
+import manfred.game.controls.ControllerInterface;
+import manfred.game.controls.GelaberController;
+import manfred.game.graphics.paintable.Paintable;
 
 import java.awt.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
-abstract public class AbstractGelaberText {
+abstract public class AbstractGelaberText implements Paintable {
     protected String[] lines;
 
     protected int linesPosition = 0;
@@ -21,7 +22,8 @@ abstract public class AbstractGelaberText {
         this.gameConfig = gameConfig;
     }
 
-    public void paint(Graphics g) {
+    @Override
+    public void paint(Graphics g, Point offset, Integer x, Integer y) {
         g.setColor(Color.YELLOW);
         g.fillRect(gameConfig.getTextBoxPositionX(), gameConfig.getTextBoxPositionY(), gameConfig.getTextBoxWidth(), gameConfig.getTextBoxHeight());
 
@@ -37,13 +39,13 @@ abstract public class AbstractGelaberText {
         }
     }
 
-    public abstract Function<Gelaber, Consumer<KeyControls>> next();
+    public abstract Function<Gelaber, Function<GelaberController, ControllerInterface>> next();
 
     public abstract void up();
 
     public abstract void down();
 
-    public static Consumer<KeyControls> doNothing(Gelaber gelaber) {
-        return KeyControls::doNothing;
+    public static Function<GelaberController, ControllerInterface> doNothing(Gelaber gelaber) {
+        return ControllerInterface::self;
     }
 }
