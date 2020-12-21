@@ -1,5 +1,7 @@
 package manfred.game;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import manfred.game.attack.AttackReader;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.attack.CastModeOn;
@@ -13,21 +15,23 @@ import manfred.game.controls.ManfredController;
 import manfred.game.exception.InvalidInputException;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
+import manfred.game.graphics.ImageLoader;
+import manfred.game.interact.person.GelaberFacadeBuilder;
 import manfred.game.map.MapReader;
 import manfred.game.map.MapWrapper;
-import manfred.infrastructure.InfrastructureContext;
-import manfred.infrastructure.person.LineSplitter;
+import manfred.game.infrastructure.person.GelaberConverter;
+import manfred.game.infrastructure.person.LineSplitter;
+import manfred.game.infrastructure.person.PersonDtoReader;
+import manfred.game.infrastructure.person.PersonReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 import java.io.IOException;
 import java.util.Stack;
 
 @Configuration
 @ComponentScan(basePackages = "manfred.game")
-@Import(InfrastructureContext.class)
 public class GameContext {
     @Bean
     public Game game(GameRunner gameRunner) {
@@ -101,5 +105,20 @@ public class GameContext {
     @Bean
     public LineSplitter lineSplitter(GameConfig gameConfig) {
         return new LineSplitter(gameConfig.getCharactersPerGelaberLine());
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper(new YAMLFactory());
+    }
+
+    @Bean
+    public PersonReader personReader(GelaberConverter gelaberConverter, GameConfig gameConfig, ImageLoader imageLoader, PersonDtoReader personDtoReader) {
+        return new PersonReader(gelaberConverter, gameConfig, imageLoader, personDtoReader);
+    }
+
+    @Bean
+    public GelaberConverter gelaberConverter(GelaberFacadeBuilder gelaberFacadeBuilder, LineSplitter lineSplitter) {
+        return new GelaberConverter(gelaberFacadeBuilder, lineSplitter);
     }
 }

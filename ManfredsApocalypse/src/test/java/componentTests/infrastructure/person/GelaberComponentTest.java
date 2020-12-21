@@ -4,16 +4,17 @@ import componentTests.TestGameContext;
 import helpers.TestGameConfig;
 import manfred.game.exception.ManfredException;
 import manfred.game.interact.person.GelaberFacade;
-import manfred.infrastructure.person.GelaberConverter;
-import manfred.infrastructure.person.GelaberDto;
-import manfred.infrastructure.person.GelaberTextDto;
-import manfred.infrastructure.person.ReferenceDto;
+import manfred.game.infrastructure.person.GelaberConverter;
+import manfred.game.infrastructure.person.GelaberDto;
+import manfred.game.infrastructure.person.GelaberTextDto;
+import manfred.game.infrastructure.person.ReferenceDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -65,7 +66,7 @@ public class GelaberComponentTest {
 
                 GelaberTextDto gelaberTextDto = new GelaberTextDto();
                 gelaberTextDto.setText("some text");
-                gelaberTextDto.setRef(referenceDto);
+                gelaberTextDto.setReferences(List.of(referenceDto));
 
                 return Map.entry(keyToReference.getKey(), gelaberTextDto);
             })

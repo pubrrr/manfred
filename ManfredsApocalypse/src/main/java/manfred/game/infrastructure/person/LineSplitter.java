@@ -1,4 +1,4 @@
-package manfred.infrastructure.person;
+package manfred.game.infrastructure.person;
 
 import org.springframework.lang.Nullable;
 

@@ -1,4 +1,4 @@
-package manfred.infrastructure.person;
+package manfred.game.infrastructure.person;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,12 +50,12 @@ class PersonDtoReaderTest {
             "          text: Ja\n" +
             "    Koks:\n" +
             "      text: Pfui, mach sowas nicht!\n" +
-            "      ref:\n" +
-            "        to: Intro\n" +
+            "      references:\n" +
+            "        - to: Intro\n" +
             "    Nichts:\n" +
             "      text: Dann lass mich in Ruhe sterben!\n" +
-            "      ref:\n" +
-            "        to: Intro\n";
+            "      references:\n" +
+            "        - to: Intro\n";
 
         PersonDto result = underTest.read(input);
 

@@ -1,4 +1,4 @@
-package manfred.infrastructure.person;
+package manfred.game.infrastructure.person;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

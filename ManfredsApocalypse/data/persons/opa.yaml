@@ -30,9 +30,9 @@ gelaber:
           text: Ja
     Koks:
       text: Pfui, mach sowas nicht!
-      ref:
-        to: Intro
+      references:
+        - to: Intro
     Nichts:
       text: Dann lass mich in Ruhe sterben!
-      ref:
-        to: Intro
+      references:
+        - to: Intro

@@ -10,7 +10,7 @@ import manfred.game.exception.ManfredException;
 import manfred.game.graphics.ImageLoader;
 import manfred.game.interact.Door;
 import manfred.game.interact.Interactable;
-import manfred.infrastructure.person.PersonReader;
+import manfred.game.infrastructure.person.PersonReader;
 import manfred.game.interact.Portal;
 import org.json.JSONArray;
 import org.json.JSONException;

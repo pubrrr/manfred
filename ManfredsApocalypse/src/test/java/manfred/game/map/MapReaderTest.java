@@ -7,7 +7,7 @@ import manfred.game.exception.InvalidInputException;
 import manfred.game.exception.ManfredException;
 import manfred.game.graphics.ImageLoader;
 import manfred.game.interact.Door;
-import manfred.infrastructure.person.PersonReader;
+import manfred.game.infrastructure.person.PersonReader;
 import manfred.game.interact.Portal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

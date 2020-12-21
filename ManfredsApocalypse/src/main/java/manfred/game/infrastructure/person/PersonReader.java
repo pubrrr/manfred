@@ -1,4 +1,4 @@
-package manfred.infrastructure.person;
+package manfred.game.infrastructure.person;
 
 import manfred.game.Game;
 import manfred.game.GameConfig;

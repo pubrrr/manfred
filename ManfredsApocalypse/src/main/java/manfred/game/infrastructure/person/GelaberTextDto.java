@@ -1,4 +1,4 @@
-package manfred.infrastructure.person;
+package manfred.game.infrastructure.person;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,5 +10,4 @@ import java.util.List;
 public class GelaberTextDto {
     private String text;
     private List<ReferenceDto> references;
-    private ReferenceDto ref;
 }
