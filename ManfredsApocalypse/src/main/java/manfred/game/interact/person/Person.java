@@ -1,9 +1,9 @@
-package manfred.game.interact;
+package manfred.game.interact.person;
 
 import manfred.game.GameConfig;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ManfredController;
-import manfred.game.interact.gelaber.Gelaber;
+import manfred.game.interact.Interactable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,13 +11,14 @@ import java.util.function.Function;
 
 public class Person implements Interactable {
     private final String name;
-    private final Gelaber gelaber;
+    private final GelaberFacade gelaberFacade;
     private final GameConfig gameConfig;
     private final BufferedImage image;
 
-    public Person(String name, Gelaber gelaber, GameConfig gameConfig, BufferedImage image) {
+    public Person(String name, GelaberFacade gelaberFacade, GameConfig gameConfig, BufferedImage image) {
+
         this.name = name;
-        this.gelaber = gelaber;
+        this.gelaberFacade = gelaberFacade;
         this.gameConfig = gameConfig;
         this.image = image;
     }
@@ -26,13 +27,13 @@ public class Person implements Interactable {
         return this.name;
     }
 
-    public Gelaber getGelaber() {
-        return this.gelaber;
+    public GelaberFacade getGelaberFacade() {
+        return this.gelaberFacade;
     }
 
     @Override
     public Function<ManfredController, ControllerInterface> interact() {
-        return controller -> controller.talk(controller, this.gelaber);
+        return controller -> controller.talk(controller, this.gelaberFacade);
     }
 
     @Override

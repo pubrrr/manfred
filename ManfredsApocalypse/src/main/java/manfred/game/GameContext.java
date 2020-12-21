@@ -15,15 +15,19 @@ import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.map.MapReader;
 import manfred.game.map.MapWrapper;
+import manfred.infrastructure.InfrastructureContext;
+import manfred.infrastructure.person.LineSplitter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import java.io.IOException;
 import java.util.Stack;
 
 @Configuration
-@ComponentScan
+@ComponentScan(basePackages = "manfred.game")
+@Import(InfrastructureContext.class)
 public class GameContext {
     @Bean
     public Game game(GameRunner gameRunner) {
@@ -92,5 +96,10 @@ public class GameContext {
     @Bean
     public GameConfig gameConfig(ConfigReader configReader) throws InvalidInputException, IOException {
         return configReader.load();
+    }
+
+    @Bean
+    public LineSplitter lineSplitter(GameConfig gameConfig) {
+        return new LineSplitter(gameConfig.getCharactersPerGelaberLine());
     }
 }

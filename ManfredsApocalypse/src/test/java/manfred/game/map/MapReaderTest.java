@@ -4,9 +4,10 @@ import manfred.game.GameConfig;
 import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.enemy.EnemyReader;
 import manfred.game.exception.InvalidInputException;
+import manfred.game.exception.ManfredException;
 import manfred.game.graphics.ImageLoader;
 import manfred.game.interact.Door;
-import manfred.game.interact.PersonReader;
+import manfred.infrastructure.person.PersonReader;
 import manfred.game.interact.Portal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void convert() throws InvalidInputException {
+    void convert() throws ManfredException {
         Map result = underTest.convert("{name: test, map: [[]]}");
 
         assertEquals("test", result.getName());
@@ -43,7 +44,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void convertsMapWithString() throws InvalidInputException {
+    void convertsMapWithString() throws ManfredException {
         String jsonWithStrings = "{name: test, map: [['1', '0']]}";
 
         Map result = underTest.convert(jsonWithStrings);
@@ -54,7 +55,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void convertsMapWithInt() throws InvalidInputException {
+    void convertsMapWithInt() throws ManfredException {
         String jsonWithIntMap = "{name : test, map :[[0, 1], [1, 0]]}";
 
         Map result = underTest.convert(jsonWithIntMap);
@@ -68,7 +69,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void convertsMapWithStringAndInt() throws InvalidInputException {
+    void convertsMapWithStringAndInt() throws ManfredException {
         String jsonWithStrings = "{name: test ,map: [['0', 0], [1,1], ['1', 1]]}";
 
         Map result = underTest.convert(jsonWithStrings);
@@ -79,7 +80,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void readAndConvert() throws InvalidInputException, IOException {
+    void readAndConvert() throws ManfredException, IOException {
         String[][] expectedMap = {{"opa", "1", "0"}, {"0", "1", "1"}};
 
         String json = underTest.read("src\\test\\java\\manfred\\game\\map\\test.json");
@@ -98,7 +99,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void triggersLoadPerson() throws IOException, InvalidInputException {
+    void triggersLoadPerson() throws IOException, ManfredException {
         String json = underTest.read("src\\test\\java\\manfred\\game\\map\\test.json");
         underTest.convert(json);
 
@@ -106,7 +107,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void loadsDoor() throws InvalidInputException {
+    void loadsDoor() throws ManfredException {
         String jsonWithDoor = "{name: test, map: [[0, 0]], interactables: [{ type: Door, positionX: 1, positionY: 0, target: testTaraget, targetSpawnX: 1, targetSpawnY: 1}]}";
         Map result = underTest.convert(jsonWithDoor);
 
@@ -114,7 +115,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void loadsPortal() throws InvalidInputException {
+    void loadsPortal() throws ManfredException {
         String jsonWithPortal = "{name: test, map: [[0, 0]], interactables: [{ type: Portal, positionX: 1, positionY: 0, target: testTaraget, targetSpawnX: 1, targetSpawnY: 1}]}";
         Map result = underTest.convert(jsonWithPortal);
 
@@ -122,7 +123,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void triggersLoadEnemies() throws InvalidInputException, IOException {
+    void triggersLoadEnemies() throws ManfredException, IOException {
         String jsonWithEnemy = "{name: test, map: [[0]], enemies: [{name: testEnemy, spawnX: 0, spawnY: 55}]}";
         underTest.convert(jsonWithEnemy);
 
@@ -131,7 +132,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void triggerLoadTileImage() throws InvalidInputException, IOException {
+    void triggerLoadTileImage() throws ManfredException, IOException {
         String input = "{name: test, map: [[tileName]]}";
         underTest.convert(input);
 

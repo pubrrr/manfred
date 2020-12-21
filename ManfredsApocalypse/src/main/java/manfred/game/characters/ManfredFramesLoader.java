@@ -24,7 +24,7 @@ public class ManfredFramesLoader {
             BufferedImage[] frames = new BufferedImage[Manfred.ANIMATION_IMAGES_NUMBER];
 
             for (int i = 0; i < Manfred.ANIMATION_IMAGES_NUMBER; i++) {
-                frames[i] = imageLoader.load(PATH_MANFRED_FRAMES + "manfred_" + direction.toString() + i + ".png");
+                frames[i] = imageLoader.load(PATH_MANFRED_FRAMES + "manfred_" + direction.toString().toLowerCase() + i + ".png");
             }
 
             walkAnimation.put(direction, frames);

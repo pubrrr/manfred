@@ -1,6 +1,6 @@
 package manfred.game.graphics.paintable;
 
-import manfred.game.interact.gelaber.Gelaber;
+import manfred.game.interact.person.GelaberFacade;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
@@ -23,7 +23,7 @@ public class GelaberOverlay implements Paintable {
         this.gelaber = new Empty();
     }
 
-    public void setGelaber(Gelaber gelaber) {
-        this.gelaber = gelaber;
+    public void setGelaber(GelaberFacade gelaberFacade) {
+        this.gelaber = gelaberFacade;
     }
 }

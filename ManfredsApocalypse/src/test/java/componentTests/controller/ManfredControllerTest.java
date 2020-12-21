@@ -1,4 +1,4 @@
-package componentTests;
+package componentTests.controller;
 
 import helpers.TestGameConfig;
 import helpers.TestMapFactory;
@@ -11,15 +11,15 @@ import manfred.game.controls.SleepingController;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.ManfredController;
 import manfred.game.enemy.EnemiesWrapper;
-import manfred.game.exception.InvalidInputException;
+import manfred.game.exception.ManfredException;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.paintable.GelaberOverlay;
 import manfred.game.interact.Door;
 import manfred.game.interact.Interactable;
-import manfred.game.interact.Person;
+import manfred.game.interact.person.Person;
 import manfred.game.interact.Portal;
-import manfred.game.interact.gelaber.Gelaber;
+import manfred.game.interact.person.GelaberFacade;
 import manfred.game.map.Map;
 import manfred.game.map.MapWrapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -165,7 +165,7 @@ class ManfredControllerTest extends ControllerTestCase {
 
     @Test
     void talkToPerson() {
-        setupMapWithInteractable(new Person("testOpa", mock(Gelaber.class), testGameConfig, null));
+        setupMapWithInteractable(new Person("testOpa", mock(GelaberFacade.class), testGameConfig, null));
 
         ControllerInterface controllerState = underTest.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
 
@@ -173,7 +173,7 @@ class ManfredControllerTest extends ControllerTestCase {
     }
 
     @Test
-    void interactWithDoor() throws InvalidInputException, IOException, InterruptedException {
+    void interactWithDoor() throws ManfredException, IOException, InterruptedException {
         String targetName = "target";
         int targetSpawnX = 5;
         int targetSpawnY = 66;
@@ -196,7 +196,7 @@ class ManfredControllerTest extends ControllerTestCase {
     }
 
     @Test
-    void stepOnPortal() throws InterruptedException, InvalidInputException, IOException {
+    void stepOnPortal() throws InterruptedException, ManfredException, IOException {
         String targetName = "target";
         int targetSpawnX = 5;
         int targetSpawnY = 66;

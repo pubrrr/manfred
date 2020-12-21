@@ -1,4 +1,4 @@
-package manfred.game.interact.gelaber;
+package manfred.game.interact.person;
 
 import manfred.game.GameConfig;
 

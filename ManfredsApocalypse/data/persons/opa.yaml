@@ -1,0 +1,38 @@
+---
+name: Opa
+gelaber:
+  initialTextReference: Intro
+  texts:
+    Intro:
+      text: Was soll ich dir erzählen, mein Sohn?
+      references:
+        - to: Nutten
+          text: Nutten
+          continueTalking: true
+        - to: Koks
+          text: Koks
+          continueTalking: true
+        - to: Nichts
+          text: Nichts
+          continueTalking: true
+    Nutten:
+      text: Früher war alles besser! Da hatten die Männer noch richtige Bärte! Und die
+        Nutten hatten noch ordendlich was drauf. Nicht so wie heute, da ist ein anständiger
+        Achselfick schon das höchste der Gefühle. Aber mein Lurchi braucht doch Liebe!
+        Wegen meiner scheiss Artritis kann ich mir kaum noch einen keulen und mit der
+        Achsel komm ich auch nicht mehr so weit runter. Und was unternimmt der Staat?
+        Der weiss doch gar nicht mehr, wie eine Achselpolitik auszusehen hat. Was denkst
+        du dazu, mein Junge?
+      references:
+        - to: Intro
+          text: Ja
+        - to: Intro
+          text: Ja
+    Koks:
+      text: Pfui, mach sowas nicht!
+      ref:
+        to: Intro
+    Nichts:
+      text: Dann lass mich in Ruhe sterben!
+      ref:
+        to: Intro

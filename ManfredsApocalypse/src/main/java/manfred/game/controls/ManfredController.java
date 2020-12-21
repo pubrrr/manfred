@@ -7,11 +7,11 @@ import manfred.game.attack.Caster;
 import manfred.game.attack.CombinationElement;
 import manfred.game.characters.Manfred;
 import manfred.game.enemy.EnemiesWrapper;
-import manfred.game.exception.InvalidInputException;
+import manfred.game.exception.ManfredException;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.paintable.GelaberOverlay;
-import manfred.game.interact.gelaber.Gelaber;
+import manfred.game.interact.person.GelaberFacade;
 import manfred.game.map.MapWrapper;
 import org.springframework.stereotype.Component;
 
@@ -125,7 +125,7 @@ public class ManfredController implements ControllerInterface {
     public void loadMap(String name) {
         try {
             mapWrapper.loadMap(name);
-        } catch (InvalidInputException | IOException e) {
+        } catch (ManfredException | IOException e) {
             System.out.println("ERROR: Failed to load map " + name + "\n");
             e.printStackTrace();
         }
@@ -141,9 +141,9 @@ public class ManfredController implements ControllerInterface {
         return gamePanel;
     }
 
-    public ControllerInterface talk(ManfredController self, Gelaber gelaber) {
+    public ControllerInterface talk(ManfredController self, GelaberFacade gelaberFacade) {
         self.stop();
-        gelaberOverlay.setGelaber(gelaber);
-        return new GelaberController(self, gelaber, gelaberOverlay);
+        gelaberOverlay.setGelaber(gelaberFacade);
+        return new GelaberController(self, gelaberFacade, gelaberOverlay);
     }
 }

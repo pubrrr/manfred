@@ -1,4 +1,4 @@
-package componentTests;
+package componentTests.controller;
 
 import java.awt.event.KeyEvent;
 

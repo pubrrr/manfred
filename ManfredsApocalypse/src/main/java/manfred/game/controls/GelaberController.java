@@ -1,18 +1,18 @@
 package manfred.game.controls;
 
 import manfred.game.graphics.paintable.GelaberOverlay;
-import manfred.game.interact.gelaber.Gelaber;
+import manfred.game.interact.person.GelaberFacade;
 
 import java.awt.event.KeyEvent;
 
 public class GelaberController implements ControllerInterface {
     private final ControllerInterface previous;
-    private final Gelaber gelaber;
+    private final GelaberFacade gelaberFacade;
     private final GelaberOverlay gelaberOverlay;
 
-    public GelaberController(ControllerInterface previous, Gelaber gelaber, GelaberOverlay gelaberOverlay) {
+    public GelaberController(ControllerInterface previous, GelaberFacade gelaberFacade, GelaberOverlay gelaberOverlay) {
         this.previous = previous;
-        this.gelaber = gelaber;
+        this.gelaberFacade = gelaberFacade;
         this.gelaberOverlay = gelaberOverlay;
     }
 
@@ -25,14 +25,14 @@ public class GelaberController implements ControllerInterface {
     public ControllerInterface keyReleased(KeyEvent event) {
         switch (event.getKeyCode()) {
             case KeyEvent.VK_ENTER:
-                return gelaber.next().apply(this);
+                return gelaberFacade.next().apply(this);
             case KeyEvent.VK_S:
             case KeyEvent.VK_DOWN:
-                gelaber.down();
+                gelaberFacade.down();
                 break;
             case KeyEvent.VK_W:
             case KeyEvent.VK_UP:
-                gelaber.up();
+                gelaberFacade.up();
                 break;
         }
         return this;

@@ -6,10 +6,11 @@ import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.enemy.EnemyReader;
 import manfred.game.enemy.EnemyStack;
 import manfred.game.exception.InvalidInputException;
+import manfred.game.exception.ManfredException;
 import manfred.game.graphics.ImageLoader;
 import manfred.game.interact.Door;
 import manfred.game.interact.Interactable;
-import manfred.game.interact.PersonReader;
+import manfred.infrastructure.person.PersonReader;
 import manfred.game.interact.Portal;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,7 +48,7 @@ public class MapReader {
         this.imageLoader = imageLoader;
     }
 
-    public Map load(String name) throws InvalidInputException, IOException {
+    public Map load(String name) throws ManfredException, IOException {
         String jsonMap = read(PATH_MAPS + name + ".json");
         return convert(jsonMap);
     }
@@ -57,7 +58,7 @@ public class MapReader {
         return String.join("", input);
     }
 
-    Map convert(String jsonString) throws InvalidInputException {
+    Map convert(String jsonString) throws ManfredException {
         try {
             JSONObject jsonInput = new JSONObject(jsonString);
 
@@ -144,7 +145,7 @@ public class MapReader {
         return notAccessibleTile;
     }
 
-    private void convertAndInsertInteractables(@Nullable JSONArray interactables, MapTile[][] mapTiles) throws InvalidInputException, IOException {
+    private void convertAndInsertInteractables(@Nullable JSONArray interactables, MapTile[][] mapTiles) throws ManfredException, IOException {
         if (interactables == null) {
             return;
         }
@@ -160,7 +161,7 @@ public class MapReader {
         }
     }
 
-    private Interactable convertInteractable(JSONObject jsonInteractable) throws InvalidInputException, IOException {
+    private Interactable convertInteractable(JSONObject jsonInteractable) throws ManfredException, IOException {
         String interactableType = jsonInteractable.getString("type");
         switch (interactableType) {
             case "Person":
