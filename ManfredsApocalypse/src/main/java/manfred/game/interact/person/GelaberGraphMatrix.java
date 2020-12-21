@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 public class GelaberGraphMatrix {
-    private final Map<GelaberNodeIdentifier, List<ReferencingTextLineWrapper>> graphMatrix;
+    private final Map<GelaberNodeIdentifier, List<GelaberEdge>> graphMatrix;
 
-    public GelaberGraphMatrix(Map<GelaberNodeIdentifier, List<ReferencingTextLineWrapper>> graphMatrix) {
+    public GelaberGraphMatrix(Map<GelaberNodeIdentifier, List<GelaberEdge>> graphMatrix) {
         this.graphMatrix = graphMatrix;
     }
 
-    public List<ReferencingTextLineWrapper> getOutgoingEdgesFor(GelaberNodeIdentifier gelaberNodeIdentifier) {
+    public List<GelaberEdge> getOutgoingEdgesFor(GelaberNodeIdentifier gelaberNodeIdentifier) {
         return graphMatrix.get(gelaberNodeIdentifier);
     }
 }

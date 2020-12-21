@@ -14,12 +14,12 @@ public class SimpleTextLineFactory implements TextLineFactory {
         this.gameConfig = gameConfig;
     }
 
-    public boolean appliesTo(List<ReferencingTextLineWrapper> outgoingEdges) {
+    public boolean appliesTo(List<GelaberEdge> outgoingEdges) {
         return outgoingEdges.size() == 1;
     }
 
     @Override
-    public SimpleTextLine create(GelaberNode gelaberNode, List<ReferencingTextLineWrapper> outgoingEdges) {
+    public SimpleTextLine create(GelaberNode gelaberNode, List<GelaberEdge> outgoingEdges) {
         return new SimpleTextLine(gelaberNode.getTextLines(), this.gameConfig, outgoingEdges.get(0));
     }
 }

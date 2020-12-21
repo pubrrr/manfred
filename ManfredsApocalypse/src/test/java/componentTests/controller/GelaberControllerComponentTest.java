@@ -20,7 +20,7 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toMap;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 @SpringJUnitConfig(TestGameContext.class)
 public class GelaberControllerComponentTest extends ControllerTestCase {
@@ -42,7 +42,7 @@ public class GelaberControllerComponentTest extends ControllerTestCase {
     @Test
     void nextLine_whenEnterPressed() {
         setupControllerWithGelaberText(
-            Map.of("key", List.of(GelaberEdge.continuingWith(new GelaberNodeIdentifier("key")))),
+            Map.of("key", List.of(GelaberEdge.continuingWith(new GelaberNodeIdentifier("key"), "edgeText"))),
             "key"
         );
 
@@ -54,7 +54,7 @@ public class GelaberControllerComponentTest extends ControllerTestCase {
     @Test
     void upAndDown() {
         setupControllerWithGelaberText(
-            Map.of("key", List.of(GelaberEdge.continuingWith(new GelaberNodeIdentifier("key")))),
+            Map.of("key", List.of(GelaberEdge.continuingWith(new GelaberNodeIdentifier("key"), "edgeText"))),
             "key"
         );
 
@@ -68,7 +68,7 @@ public class GelaberControllerComponentTest extends ControllerTestCase {
     @Test
     void returnsControlsToManfred_whenEnterPressedAndNoFurtherText() {
         setupControllerWithGelaberText(
-            Map.of("key", List.of(GelaberEdge.abortingReferencingTo(new GelaberNodeIdentifier("key")))),
+            Map.of("key", List.of(GelaberEdge.abortingReferencingTo(new GelaberNodeIdentifier("key"), "edgeText"))),
             "key"
         );
 

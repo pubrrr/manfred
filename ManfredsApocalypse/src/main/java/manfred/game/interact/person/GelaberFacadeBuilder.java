@@ -1,22 +1,22 @@
 package manfred.game.interact.person;
 
 import com.google.common.collect.ImmutableBiMap;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 @Component
 public class GelaberFacadeBuilder {
 
-    private final List<TextLineFactory> textLineFactories = new LinkedList<>();
+    private final List<TextLineFactory> textLineFactories;
 
     private ImmutableBiMap<GelaberNodeIdentifier, GelaberNode> gelaberNodes;
     private GelaberGraphMatrix gelaberGraphMatrix;
 
-    public GelaberFacadeBuilder(SimpleTextLineFactory simpleTextLineFactory) {
-        this.textLineFactories.add(simpleTextLineFactory);
+    public GelaberFacadeBuilder(@Qualifier("textLineFactories") List<TextLineFactory> textLineFactories) {
+        this.textLineFactories = textLineFactories;
     }
 
     public GelaberFacadeBuilder withNodes(ImmutableBiMap<GelaberNodeIdentifier, GelaberNode> gelaberNodes) {

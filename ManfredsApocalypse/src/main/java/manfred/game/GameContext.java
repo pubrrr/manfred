@@ -16,7 +16,10 @@ import manfred.game.exception.InvalidInputException;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.ImageLoader;
+import manfred.game.interact.person.ChoicesTextLineFactory;
 import manfred.game.interact.person.GelaberFacadeBuilder;
+import manfred.game.interact.person.SimpleTextLineFactory;
+import manfred.game.interact.person.TextLineFactory;
 import manfred.game.map.MapReader;
 import manfred.game.map.MapWrapper;
 import manfred.game.infrastructure.person.GelaberConverter;
@@ -28,6 +31,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Stack;
 
 @Configuration
@@ -120,5 +124,10 @@ public class GameContext {
     @Bean
     public GelaberConverter gelaberConverter(GelaberFacadeBuilder gelaberFacadeBuilder, LineSplitter lineSplitter) {
         return new GelaberConverter(gelaberFacadeBuilder, lineSplitter);
+    }
+
+    @Bean("textLineFactories")
+    public List<TextLineFactory> textLineFactories(SimpleTextLineFactory simpleTextLineFactory, ChoicesTextLineFactory choicesTextLineFactory) {
+        return List.of(simpleTextLineFactory, choicesTextLineFactory);
     }
 }

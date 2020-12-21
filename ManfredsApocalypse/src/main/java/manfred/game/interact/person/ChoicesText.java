@@ -1,15 +1,16 @@
 package manfred.game.interact.person;
 
 import manfred.game.GameConfig;
+import manfred.game.controls.ControllerInterface;
 
 import java.util.function.Function;
 
-public class SimpleTextLine extends BasicTextLine implements TextLine {
-    private final GelaberEdge edge;
+public class ChoicesText extends BasicTextLine implements TextLine {
+    private final ChoicesFacade choicesFacade;
 
-    public SimpleTextLine(String[] textLines, GameConfig gameConfig, GelaberEdge edge) {
+    public ChoicesText(String[] textLines, GameConfig gameConfig, ChoicesFacade choicesFacade) {
         super(textLines, gameConfig);
-        this.edge = edge;
+        this.choicesFacade = choicesFacade;
     }
 
     @Override
@@ -23,8 +24,8 @@ public class SimpleTextLine extends BasicTextLine implements TextLine {
     @Override
     public GelaberResponseWrapper next(Function<GelaberNodeIdentifier, TextLine> successorSupplier) {
         return new GelaberResponseWrapper(
-            successorSupplier.apply(edge.follow()),
-            edge.getContinueCommand()
+            new ChoicesBox(this, this.choicesFacade),
+            ControllerInterface::self
         );
     }
 }

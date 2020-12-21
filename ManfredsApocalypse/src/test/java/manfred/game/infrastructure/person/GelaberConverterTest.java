@@ -27,7 +27,7 @@ class GelaberConverterTest {
         simpleTextLineFactoryMock = mock(SimpleTextLineFactory.class);
 
         underTest = new GelaberConverter(
-            new GelaberFacadeBuilder(simpleTextLineFactoryMock),
+            new GelaberFacadeBuilder(List.of(simpleTextLineFactoryMock)),
             new LineSplitter(1)
         );
     }

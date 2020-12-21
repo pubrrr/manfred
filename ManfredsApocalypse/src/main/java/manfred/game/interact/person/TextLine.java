@@ -2,12 +2,12 @@ package manfred.game.interact.person;
 
 import manfred.game.graphics.paintable.Paintable;
 
-import java.util.List;
+import java.util.function.Function;
 
 public interface TextLine extends Paintable {
     void up();
 
     void down();
 
-    GelaberEdge next();
+    GelaberResponseWrapper next(Function<GelaberNodeIdentifier, TextLine> successorSupplier);
 }

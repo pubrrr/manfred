@@ -11,11 +11,13 @@ public interface GelaberEdge {
 
     Function<GelaberController, ControllerInterface> getContinueCommand();
 
-    static ReferencingTextLineWrapper continuingWith(GelaberNodeIdentifier next) {
-        return new ReferencingTextLineWrapper(next, ControllerInterface::self);
+    String getEdgeText();
+
+    static ReferencingTextLineWrapper continuingWith(GelaberNodeIdentifier next, String edgeText) {
+        return new ReferencingTextLineWrapper(next, ControllerInterface::self, edgeText);
     }
 
-    static ReferencingTextLineWrapper abortingReferencingTo(GelaberNodeIdentifier next) {
-        return new ReferencingTextLineWrapper(next, GelaberController::previous);
+    static ReferencingTextLineWrapper abortingReferencingTo(GelaberNodeIdentifier next, String edgeText) {
+        return new ReferencingTextLineWrapper(next, GelaberController::previous, edgeText);
     }
 }

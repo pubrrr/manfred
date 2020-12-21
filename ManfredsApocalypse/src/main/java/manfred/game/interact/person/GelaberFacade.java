@@ -30,9 +30,9 @@ public class GelaberFacade implements Paintable {
     }
 
     public Function<GelaberController, ControllerInterface> next() {
-        GelaberEdge gelaberEdge = currentTextLine.next();
-        this.currentTextLine = buildTextLine(gelaberEdge.follow());
-        return gelaberEdge.getContinueCommand();
+        GelaberResponseWrapper response = currentTextLine.next(this::buildTextLine);
+        this.currentTextLine = response.getNextTextLine();
+        return response.getContinueCommand();
     }
 
     public void down() {
@@ -50,7 +50,7 @@ public class GelaberFacade implements Paintable {
 
     private TextLine buildTextLine(GelaberNodeIdentifier identifier) {
         GelaberNode gelaberNode = nodesByIdentifier.get(identifier);
-        List<ReferencingTextLineWrapper> outgoingEdges = gelaberGraphMatrix.getOutgoingEdgesFor(identifier);
+        List<GelaberEdge> outgoingEdges = gelaberGraphMatrix.getOutgoingEdgesFor(identifier);
 
         return textLineFactories.stream()
             .filter(textLineFactory -> textLineFactory.appliesTo(outgoingEdges))

@@ -1,17 +1,27 @@
 package manfred.game.interact.person;
 
-import manfred.game.GameConfig;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-class SimpleTextLineTest {
+class ChoicesBoxTest {
+
+    private ChoicesBox underTest;
+    private ChoicesFacade choicesFacadeMock;
+
+    @BeforeEach
+    void setUp() {
+        choicesFacadeMock = mock(ChoicesFacade.class);
+        underTest = new ChoicesBox(mock(ChoicesText.class), choicesFacadeMock);
+    }
 
     @Test
     void next() {
         GelaberEdge edgeMock = mock(GelaberEdge.class);
-        SimpleTextLine underTest = new SimpleTextLine(new String[]{"test"}, mock(GameConfig.class), edgeMock);
+        when(choicesFacadeMock.confirm()).thenReturn(edgeMock);
 
         TextLine textLineMock = mock(TextLine.class);
         GelaberResponseWrapper result = underTest.next(identifier -> textLineMock);
