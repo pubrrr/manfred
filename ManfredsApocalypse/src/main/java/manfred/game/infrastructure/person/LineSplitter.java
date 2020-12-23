@@ -15,7 +15,7 @@ public class LineSplitter {
         this.charactersPerLine = charactersPerLine;
     }
 
-    public String[] splitIntoTextLinesFittingIntoTextBox(String wholeText) {
+    public List<String> splitIntoTextLinesFittingIntoTextBox(String wholeText) {
         LinkedList<String> originalWords = new LinkedList(Arrays.asList(wholeText.split("\\s+")));
         LinkedList<String> words = cutWordsThatAreTooLongForOneLine(originalWords);
 
@@ -41,7 +41,7 @@ public class LineSplitter {
             result.add(currentWord);
         }
 
-        return result.toArray(new String[0]); // the argument is to tell the function to return String[] instead of Object[]
+        return result;
     }
 
     private LinkedList<String> cutWordsThatAreTooLongForOneLine(LinkedList<String> words) {

@@ -10,4 +10,15 @@ import java.util.function.Function;
 public class GelaberResponseWrapper {
     TextLine nextTextLine;
     Function<GelaberController, ControllerInterface> continueCommand;
+
+    public static GelaberResponseWrapper continuingWith(TextLine textLine) {
+        return new GelaberResponseWrapper(textLine, ControllerInterface::self);
+    }
+
+    public static GelaberResponseWrapper followingTheEdge(GelaberEdge edge, Function<GelaberNodeIdentifier, TextLine> successorSupplier) {
+        return new GelaberResponseWrapper(
+            successorSupplier.apply(edge.follow()),
+            edge.getContinueCommand()
+        );
+    }
 }

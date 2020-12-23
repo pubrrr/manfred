@@ -82,7 +82,7 @@ public class GelaberControllerComponentTest extends ControllerTestCase {
             .collect(toMap(entry -> new GelaberNodeIdentifier(entry.getKey()), Map.Entry::getValue));
 
         ImmutableBiMap<GelaberNodeIdentifier, GelaberNode> gelaberNodes = graphMatrix.keySet().stream()
-            .map(gelaberEdges -> Map.entry(gelaberEdges, new GelaberNode(new String[]{"some text for " + gelaberEdges})))
+            .map(gelaberEdges -> Map.entry(gelaberEdges, new GelaberNode(List.of("some text for " + gelaberEdges))))
             .collect(collectingAndThen(toMap(Map.Entry::getKey, Map.Entry::getValue), ImmutableBiMap::copyOf));
 
         GelaberFacade gelaberFacade = this.gelaberFacadeBuilder

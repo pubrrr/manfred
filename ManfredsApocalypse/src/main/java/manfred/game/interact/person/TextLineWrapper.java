@@ -5,12 +5,12 @@ import manfred.game.GameConfig;
 import java.util.List;
 import java.util.function.Function;
 
-public class SimpleTextLine extends BasicTextLine implements TextLine {
-    private final GelaberEdge edge;
+public class TextLineWrapper extends BasicTextLine {
+    private final TextLine wrapped;
 
-    public SimpleTextLine(List<String> textLines, GameConfig gameConfig, GelaberEdge edge) {
+    protected TextLineWrapper(List<String> textLines, GameConfig gameConfig, TextLine wrapped) {
         super(textLines, gameConfig);
-        this.edge = edge;
+        this.wrapped = wrapped;
     }
 
     @Override
@@ -23,6 +23,6 @@ public class SimpleTextLine extends BasicTextLine implements TextLine {
 
     @Override
     public GelaberResponseWrapper next(Function<GelaberNodeIdentifier, TextLine> successorSupplier) {
-        return GelaberResponseWrapper.followingTheEdge(edge, successorSupplier);
+        return GelaberResponseWrapper.continuingWith(wrapped);
     }
 }

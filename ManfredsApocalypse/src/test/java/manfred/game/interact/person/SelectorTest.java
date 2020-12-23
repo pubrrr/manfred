@@ -4,8 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static helpers.GelaberEdgeHelper.edge;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalToObject;
 
 class SelectorTest {
 
@@ -63,9 +64,5 @@ class SelectorTest {
 
         selector.selectNext();
         assertThat(selector.confirm(), equalToObject(firstEdge.follow()));
-    }
-
-    private GelaberEdge edge(String id) {
-        return GelaberEdge.continuingWith(new GelaberNodeIdentifier(id), "edgeText");
     }
 }

@@ -65,7 +65,7 @@ public class GelaberComponentTest {
                 referenceDto.setTo(keyToReference.getValue());
 
                 GelaberTextDto gelaberTextDto = new GelaberTextDto();
-                gelaberTextDto.setText("some text");
+                gelaberTextDto.setText("some text for " + keyToReference.getKey());
                 gelaberTextDto.setReferences(List.of(referenceDto));
 
                 return Map.entry(keyToReference.getKey(), gelaberTextDto);

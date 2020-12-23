@@ -6,12 +6,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class SimpleTextLineFactory implements TextLineFactory {
-
-    private final GameConfig gameConfig;
+public class SimpleTextLineFactory extends WrappingTextLineFactory implements TextLineFactory {
 
     public SimpleTextLineFactory(GameConfig gameConfig) {
-        this.gameConfig = gameConfig;
+        super(gameConfig);
     }
 
     public boolean appliesTo(List<GelaberEdge> outgoingEdges) {
@@ -19,7 +17,12 @@ public class SimpleTextLineFactory implements TextLineFactory {
     }
 
     @Override
-    public SimpleTextLine create(GelaberNode gelaberNode, List<GelaberEdge> outgoingEdges) {
-        return new SimpleTextLine(gelaberNode.getTextLines(), this.gameConfig, outgoingEdges.get(0));
+    public TextLine create(GelaberNode gelaberNode, List<GelaberEdge> outgoingEdges) {
+        return wrapTextLinesRecursively(outgoingEdges, gelaberNode.getTextLines());
+    }
+
+    @Override
+    protected TextLine createFinalTextLine(List<GelaberEdge> outgoingEdges, List<String> textLines) {
+        return new SimpleTextLine(textLines, this.gameConfig, outgoingEdges.get(0));
     }
 }

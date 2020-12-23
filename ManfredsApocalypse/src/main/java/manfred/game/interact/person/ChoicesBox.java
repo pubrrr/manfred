@@ -25,10 +25,7 @@ public class ChoicesBox implements TextLine {
     @Override
     public GelaberResponseWrapper next(Function<GelaberNodeIdentifier, TextLine> successorSupplier) {
         GelaberEdge edge = choicesFacade.confirm();
-        return new GelaberResponseWrapper(
-            successorSupplier.apply(edge.follow()),
-            edge.getContinueCommand()
-        );
+        return GelaberResponseWrapper.followingTheEdge(edge, successorSupplier);
     }
 
     @Override

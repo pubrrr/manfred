@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static helpers.GelaberEdgeHelper.edge;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalToObject;
 import static org.mockito.Mockito.mock;
@@ -28,9 +29,5 @@ class ChoicesFacadeTest {
 
         choicesFacade.down();
         assertThat(choicesFacade.confirm().follow(), equalToObject(thirdEdge.follow()));
-    }
-
-    private GelaberEdge edge(String id) {
-        return GelaberEdge.continuingWith(new GelaberNodeIdentifier(id), "edgeText");
     }
 }

@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
@@ -14,7 +16,7 @@ class ChoicesTextTest {
 
     @BeforeEach
     void setUp() {
-        underTest = new ChoicesText(new String[]{"text"}, mock(GameConfig.class), mock(ChoicesFacade.class));
+        underTest = new ChoicesText(List.of("text"), mock(GameConfig.class), mock(ChoicesFacade.class));
     }
 
     @Test
