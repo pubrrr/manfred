@@ -14,7 +14,6 @@ public class Selector {
 
     public static Selector fromEdges(List<GelaberEdge> edges) {
         List<Choice> choices = edges.stream()
-            .map(GelaberEdge::follow)
             .map(Choice::new)
             .collect(Collectors.toList());
 
@@ -41,21 +40,21 @@ public class Selector {
         this.currentSelection = this.currentSelection.next;
     }
 
-    public GelaberNodeIdentifier confirm() {
-        return this.currentSelection.node;
+    public GelaberEdge confirm() {
+        return this.currentSelection.edge;
     }
 
-    public boolean isSelected(GelaberNodeIdentifier nodeIdentifier) {
-        return currentSelection.node.equals(nodeIdentifier);
+    public boolean isSelected(GelaberEdge edge) {
+        return currentSelection.edge.equals(edge);
     }
 
     private static class Choice {
         private Choice next;
         private Choice previous;
-        private final GelaberNodeIdentifier node;
+        private final GelaberEdge edge;
 
-        private Choice(GelaberNodeIdentifier node) {
-            this.node = node;
+        private Choice(GelaberEdge edge) {
+            this.edge = edge;
         }
 
         private void linkWithPrevious(Choice previous) {

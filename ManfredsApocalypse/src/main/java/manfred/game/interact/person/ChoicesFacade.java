@@ -4,15 +4,15 @@ import manfred.game.GameConfig;
 import manfred.game.graphics.paintable.Paintable;
 
 import java.awt.*;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ChoicesFacade implements Paintable {
     private final GameConfig gameConfig;
-    private final LinkedHashMap<GelaberNodeIdentifier, GelaberEdge> edgesToChooseFrom;
+    private final java.util.List<GelaberEdge> edgesToChooseFrom;
     private final Selector selector;
 
-    public ChoicesFacade(LinkedHashMap<GelaberNodeIdentifier, GelaberEdge> edgesToChooseFrom, Selector selector, GameConfig gameConfig) {
+    public ChoicesFacade(List<GelaberEdge> edgesToChooseFrom, Selector selector, GameConfig gameConfig) {
         this.edgesToChooseFrom = edgesToChooseFrom;
         this.selector = selector;
         this.gameConfig = gameConfig;
@@ -27,7 +27,7 @@ public class ChoicesFacade implements Paintable {
     }
 
     public GelaberEdge confirm() {
-        return edgesToChooseFrom.get(this.selector.confirm());
+        return this.selector.confirm();
     }
 
     @Override
@@ -39,8 +39,8 @@ public class ChoicesFacade implements Paintable {
         g.setFont(new Font("Palatino Linotype", Font.BOLD, gameConfig.getTextPointSize()));
 
         AtomicInteger idx = new AtomicInteger();
-        edgesToChooseFrom.forEach((nodeIdentifier, edge) -> {
-            if (selector.isSelected(nodeIdentifier)) {
+        edgesToChooseFrom.forEach(edge -> {
+            if (selector.isSelected(edge)) {
 //                selectionMarker.paint(g); // TODO
             }
             g.drawString(

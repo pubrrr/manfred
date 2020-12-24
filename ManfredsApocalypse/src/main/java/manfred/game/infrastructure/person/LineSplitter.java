@@ -31,7 +31,7 @@ public class LineSplitter {
         String currentWord = words.poll();
         while (!words.isEmpty()) {
             if (fitsCombinedIntoOneLine(currentLineBuilder, currentWord)) {
-                currentLineBuilder.append(currentWord + " ");
+                currentLineBuilder.append(currentWord).append(" ");
                 currentWord = words.poll();
             } else {
                 result.add(currentLineBuilder.toString());

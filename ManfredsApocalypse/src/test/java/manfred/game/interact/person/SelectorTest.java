@@ -15,7 +15,7 @@ class SelectorTest {
         GelaberEdge edge = edge("first");
         Selector selector = Selector.fromEdges(List.of(edge));
 
-        assertThat(selector.confirm(), equalToObject(edge.follow()));
+        assertThat(selector.confirm(), equalToObject(edge));
     }
 
     @Test
@@ -24,7 +24,7 @@ class SelectorTest {
         Selector selector = Selector.fromEdges(List.of(edge));
 
         selector.selectPrevious();
-        assertThat(selector.confirm(), equalToObject(edge.follow()));
+        assertThat(selector.confirm(), equalToObject(edge));
     }
 
     @Test
@@ -33,7 +33,7 @@ class SelectorTest {
         Selector selector = Selector.fromEdges(List.of(edge));
 
         selector.selectNext();
-        assertThat(selector.confirm(), equalToObject(edge.follow()));
+        assertThat(selector.confirm(), equalToObject(edge));
     }
 
     @Test
@@ -42,13 +42,13 @@ class SelectorTest {
         GelaberEdge secondEdge = edge("second");
         Selector selector = Selector.fromEdges(List.of(firstEdge, secondEdge));
 
-        assertThat(selector.confirm(), equalToObject(firstEdge.follow()));
+        assertThat(selector.confirm(), equalToObject(firstEdge));
 
         selector.selectPrevious();
-        assertThat(selector.confirm(), equalToObject(secondEdge.follow()));
+        assertThat(selector.confirm(), equalToObject(secondEdge));
 
         selector.selectPrevious();
-        assertThat(selector.confirm(), equalToObject(firstEdge.follow()));
+        assertThat(selector.confirm(), equalToObject(firstEdge));
     }
 
     @Test
@@ -57,12 +57,12 @@ class SelectorTest {
         GelaberEdge secondEdge = edge("second");
         Selector selector = Selector.fromEdges(List.of(firstEdge, secondEdge));
 
-        assertThat(selector.confirm(), equalToObject(firstEdge.follow()));
+        assertThat(selector.confirm(), equalToObject(firstEdge));
 
         selector.selectNext();
-        assertThat(selector.confirm(), equalToObject(secondEdge.follow()));
+        assertThat(selector.confirm(), equalToObject(secondEdge));
 
         selector.selectNext();
-        assertThat(selector.confirm(), equalToObject(firstEdge.follow()));
+        assertThat(selector.confirm(), equalToObject(firstEdge));
     }
 }
