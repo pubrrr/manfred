@@ -2,10 +2,8 @@ package manfred.game.infrastructure.person;
 
 import org.springframework.lang.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class LineSplitter {
 
@@ -16,7 +14,15 @@ public class LineSplitter {
     }
 
     public List<String> splitIntoTextLinesFittingIntoTextBox(String wholeText) {
-        LinkedList<String> originalWords = new LinkedList(Arrays.asList(wholeText.split("\\s+")));
+        return Arrays.stream(wholeText.split("\\R"))
+            .map(this::splitLineIntoLines)
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
+    }
+
+    private List<String> splitLineIntoLines(String wholeLine) {
+        LinkedList<String> originalWords = new LinkedList<>(Arrays.asList(wholeLine.trim().split("\\s+")));
+
         LinkedList<String> words = cutWordsThatAreTooLongForOneLine(originalWords);
 
         List<String> result = new ArrayList<>();
