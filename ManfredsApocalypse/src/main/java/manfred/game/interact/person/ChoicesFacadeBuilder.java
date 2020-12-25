@@ -12,6 +12,6 @@ public class ChoicesFacadeBuilder {
     }
 
     public ChoicesFacade from(List<GelaberEdge> outgoingEdges) {
-        return new ChoicesFacade(outgoingEdges, Selector.fromEdges(outgoingEdges), gameConfig);
+        return new ChoicesFacade(outgoingEdges, Selector.fromEdges(outgoingEdges, gameConfig), gameConfig);
     }
 }

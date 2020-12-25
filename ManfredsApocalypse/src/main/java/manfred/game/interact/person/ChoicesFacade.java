@@ -38,17 +38,14 @@ public class ChoicesFacade implements Paintable {
         g.setColor(Color.BLACK);
         g.setFont(new Font("Palatino Linotype", Font.BOLD, gameConfig.getTextPointSize()));
 
+        this.selector.paint(g, offset, x, y);
+
         AtomicInteger idx = new AtomicInteger();
-        edgesToChooseFrom.forEach(edge -> {
-            if (selector.isSelected(edge)) {
-//                selectionMarker.paint(g); // TODO
-            }
-            g.drawString(
-                edge.getEdgeText(),
-                gameConfig.getGelaberBoxPositionX() + gameConfig.getTextDistanceToBox(),
-                gameConfig.getGelaberBoxPositionY() + gameConfig.getTextDistanceToBox() + idx.getAndIncrement() * (gameConfig.getTextPointSize() + gameConfig.getDistanceBetweenLines()) + gameConfig.getTextPointSize() / 2
-            );
-        });
+        edgesToChooseFrom.forEach(edge -> g.drawString(
+            edge.getEdgeText(),
+            gameConfig.getGelaberBoxPositionX() + gameConfig.getTextDistanceToBox(),
+            gameConfig.getGelaberBoxPositionY() + gameConfig.getTextDistanceToBox() + idx.getAndIncrement() * (gameConfig.getTextPointSize() + gameConfig.getDistanceBetweenLines()) + gameConfig.getTextPointSize() / 2
+        ));
     }
 
     public static ChoicesFacadeBuilder buildWith(GameConfig gameConfig) {
