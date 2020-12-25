@@ -1,0 +1,45 @@
+---
+name: Depp
+gelaber:
+  initialTextReference: Intro
+  texts:
+    Intro:
+      text: |-
+        Argharararararharharharharharharharharharharharharharharharharharharharharharharharharharharharhihihihuhuhuhuhuhahahahahaaaaaa!
+        Du hast mich also gefunden, Manfred!
+        Nun gut, dazu gehört wohl mehr als nur fett zu sein, ich werde dich belohnen. Nimm dies Geschenk!
+         ...
+
+
+        ......
+        ...
+
+        Du erhältst:
+        Nichts
+      references:
+        - to: NutzeEsWeise
+          continueTalking: false
+    NutzeEsWeise:
+      text: Nutze es weise!
+      references:
+        - to: Was
+          continueTalking: false
+    Was:
+      text: Was willst du von mir?
+      references:
+        - to: Stirb
+          text: Stirb!
+          continueTalking: true
+        - to: Was
+          text: Halt die Fresse!
+          continueTalking: false
+        - to: Intro
+          text: Was hast du gesagt?
+          continueTalking: true
+    Stirb:
+      text: |-
+        Ich bin doch schon lange tot!
+        Argharararararharharharharharharharharharharharharharharharharharharharharharharharharharharharhihihihuhuhuhuhuhahahahahaaaaaa!
+        Manni, du alter Witzbold.
+      references:
+        - to: Was

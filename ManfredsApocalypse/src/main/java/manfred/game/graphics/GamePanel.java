@@ -5,9 +5,11 @@ import manfred.game.attack.AttacksContainer;
 import manfred.game.attack.Caster;
 import manfred.game.characters.Manfred;
 import manfred.game.enemy.EnemiesWrapper;
-import manfred.game.interact.gelaber.Gelaber;
+import manfred.game.graphics.paintable.GelaberOverlay;
+import manfred.game.graphics.paintable.Paintable;
+import manfred.game.graphics.paintable.PaintableContainerElement;
+import manfred.game.graphics.paintable.PaintablesContainer;
 import manfred.game.map.MapWrapper;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -25,10 +27,10 @@ public class GamePanel extends JPanel {
     private final BackgroundScroller backgroundScroller;
     private final GameConfig gameConfig;
     private final PaintablesSorter paintablesSorter;
+    private final GelaberOverlay gelaberOverlay;
 
     private int fadeTransparency = 0;
     private final List<PaintablesContainer> paintablesContainers = new LinkedList<>();
-    @Nullable private Gelaber gelaber = null;
 
     public GamePanel(
         MapWrapper mapWrapper,
@@ -38,11 +40,13 @@ public class GamePanel extends JPanel {
         AttacksContainer attacksContainer,
         BackgroundScroller backgroundScroller,
         GameConfig gameConfig,
-        PaintablesSorter paintablesSorter
+        PaintablesSorter paintablesSorter,
+        GelaberOverlay gelaberOverlay
     ) {
         super();
         this.gameConfig = gameConfig;
         this.paintablesSorter = paintablesSorter;
+        this.gelaberOverlay = gelaberOverlay;
         setFocusable(true);
         requestFocus();
 
@@ -82,9 +86,7 @@ public class GamePanel extends JPanel {
             )
         );
 
-        if (this.gelaber != null) {
-            gelaber.paint(g, offset, 0, 0);
-        }
+        gelaberOverlay.paint(g, offset, 0, 0);
 
         if (fadeTransparency > 0) {
             g.setColor(new Color(255, 255, 255, fadeTransparency));
@@ -115,13 +117,5 @@ public class GamePanel extends JPanel {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    public void registerGelaberToPaint(Gelaber gelaber) {
-        this.gelaber = gelaber;
-    }
-
-    public void deleteGelaber() {
-        this.gelaber = null;
     }
 }

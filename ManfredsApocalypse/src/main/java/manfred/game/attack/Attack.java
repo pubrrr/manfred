@@ -2,21 +2,19 @@ package manfred.game.attack;
 
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.MovingObject;
-import manfred.game.controls.KeyControls;
 import manfred.game.enemy.Enemy;
-import manfred.game.graphics.Paintable;
+import manfred.game.graphics.paintable.Paintable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.function.Consumer;
 
 public class Attack extends MovingObject implements Paintable {
-    private int damage;
-    private int range;
+    private final int damage;
+    private final int range;
     private boolean resolved = false;
-    private BufferedImage[] attackAnimation;
-    private int numberOfAnimationImages;
-    private long nextAnimationImageTrigger;
+    private final BufferedImage[] attackAnimation;
+    private final int numberOfAnimationImages;
+    private final long nextAnimationImageTrigger;
 
     private final Point castPosition;
     private int animationIdx = 0;
@@ -44,7 +42,7 @@ public class Attack extends MovingObject implements Paintable {
     }
 
     @Override
-    public Consumer<KeyControls> move() {
+    public void move() {
         if (collidesVertically() || collidesHorizontally()) {
             resolve();
         }
@@ -61,7 +59,6 @@ public class Attack extends MovingObject implements Paintable {
                 animationIdx++;
             }
         }
-        return KeyControls::doNothing;
     }
 
     @Override

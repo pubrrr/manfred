@@ -1,5 +1,8 @@
 package manfred.game.graphics;
 
+import manfred.game.graphics.paintable.Paintable;
+import manfred.game.graphics.paintable.PaintableContainerElement;
+import manfred.game.graphics.paintable.PaintablesContainer;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

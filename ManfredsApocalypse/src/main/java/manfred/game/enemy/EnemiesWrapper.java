@@ -1,7 +1,7 @@
 package manfred.game.enemy;
 
-import manfred.game.graphics.PaintablesContainer;
-import manfred.game.graphics.PaintableContainerElement;
+import manfred.game.graphics.paintable.PaintablesContainer;
+import manfred.game.graphics.paintable.PaintableContainerElement;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,7 @@ import java.util.Stack;
 
 @Component
 public class EnemiesWrapper implements PaintablesContainer, Iterable<Enemy> {
-    private EnemyStack enemies;
+    private EnemyStack enemies = new EnemyStack();
 
     public void setEnemies(EnemyStack enemies) {
         this.enemies = enemies;

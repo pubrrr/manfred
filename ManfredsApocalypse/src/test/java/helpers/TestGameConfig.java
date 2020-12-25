@@ -2,6 +2,8 @@ package helpers;
 
 import manfred.game.GameConfig;
 
+import java.util.Objects;
+
 public class TestGameConfig extends GameConfig {
     public static final int STANDARD_TEST_WINDOW_WIDTH = 1600;
     public static final int STANDARD_TEST_WINDOW_HEIGTH = 1200;
@@ -16,6 +18,7 @@ public class TestGameConfig extends GameConfig {
     private Integer testNumberOfTextLines = null;
     private Integer testWindowHeight = null;
     private Integer testWindowWidth = null;
+    private Integer charactersPerLine = null;
 
     public TestGameConfig() {
         super(
@@ -43,7 +46,7 @@ public class TestGameConfig extends GameConfig {
         return testPixelBlockSize;
     }
 
-    public TestGameConfig setNumberOfTextLines(int testNumberOfTextLines) {
+    public TestGameConfig withNumberOfTextLines(int testNumberOfTextLines) {
         this.testNumberOfTextLines = testNumberOfTextLines;
         return this;
     }
@@ -80,5 +83,15 @@ public class TestGameConfig extends GameConfig {
             return super.getWindowWidth();
         }
         return testWindowWidth;
+    }
+
+    public GameConfig withCharactersPerGelaberLine(int characterPerLine) {
+        this.charactersPerLine = characterPerLine;
+        return this;
+    }
+
+    @Override
+    public int getCharactersPerGelaberLine() {
+        return Objects.requireNonNullElseGet(this.charactersPerLine, super::getCharactersPerGelaberLine);
     }
 }

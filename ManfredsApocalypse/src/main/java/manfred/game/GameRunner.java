@@ -1,14 +1,8 @@
 package manfred.game;
 
-import manfred.game.attack.Attack;
-import manfred.game.attack.AttacksContainer;
-import manfred.game.characters.Manfred;
 import manfred.game.controls.KeyControls;
-import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.graphics.ManfredWindow;
 import org.springframework.stereotype.Component;
-
-import java.util.function.Consumer;
 
 @Component
 public class GameRunner implements Runnable {
@@ -16,22 +10,16 @@ public class GameRunner implements Runnable {
 
     private final KeyControls keyControls;
     private final ManfredWindow window;
-    private final Manfred manfred;
-    private final EnemiesWrapper enemiesWrapper;
-    private final AttacksContainer attacksContainer;
 
-    public GameRunner(KeyControls keyControls, ManfredWindow window, Manfred manfred, EnemiesWrapper enemiesWrapper, AttacksContainer attacksContainer) {
+    public GameRunner(KeyControls keyControls, ManfredWindow window) {
         this.keyControls = keyControls;
         this.window = window;
-        this.manfred = manfred;
-        this.enemiesWrapper = enemiesWrapper;
-        this.attacksContainer = attacksContainer;
     }
 
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
             long beforeTime = System.currentTimeMillis();
-            move();
+            this.keyControls.move();
             window.repaint();
 
             long timeNeeded = System.currentTimeMillis() - beforeTime;
@@ -45,23 +33,5 @@ public class GameRunner implements Runnable {
                 e.printStackTrace();
             }
         }
-    }
-
-    private void move() {
-        Consumer<KeyControls> callback = this.manfred.move();
-        if (callback != null) {
-            callback.accept(this.keyControls);
-        }
-
-        enemiesWrapper.forEach(enemy -> enemy.move(manfred));
-        attacksContainer.forEach(Attack::move);
-
-        enemiesWrapper.forEach(
-                enemy -> attacksContainer.forEach(
-                        attack -> attack.checkHit(enemy)
-                )
-        );
-        enemiesWrapper.removeKilled();
-        attacksContainer.removeResolved();
     }
 }

@@ -1,18 +1,19 @@
 package manfred.game.map;
 
-import manfred.game.controls.KeyControls;
-import manfred.game.graphics.Paintable;
+import manfred.game.controls.ControllerInterface;
+import manfred.game.controls.ManfredController;
+import manfred.game.graphics.paintable.Paintable;
 import org.springframework.lang.Nullable;
 
 import java.awt.image.BufferedImage;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 public interface MapTile extends Paintable {
 
     boolean isAccessible();
 
-    default Consumer<KeyControls> onStep(){
-        return KeyControls::doNothing;
+    default Function<ManfredController, ControllerInterface> onStep(){
+        return ControllerInterface::self;
     }
 
     @Nullable

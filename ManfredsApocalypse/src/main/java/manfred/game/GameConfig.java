@@ -78,7 +78,7 @@ public class GameConfig {
         return windowHeight / 3 - textBoxDistanceToBorder;
     }
 
-    public int getCharacterPerGelaberLine() {
+    public int getCharactersPerGelaberLine() {
         return (getTextBoxWidth() - 2 * textDistanceToBox) / (textPointSize / 2);
     }
 

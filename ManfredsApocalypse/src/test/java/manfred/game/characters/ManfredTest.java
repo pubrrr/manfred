@@ -6,22 +6,18 @@ import com.tngtech.junit.dataprovider.UseDataProvider;
 import com.tngtech.junit.dataprovider.UseDataProviderExtension;
 import helpers.TestGameConfig;
 import helpers.TestMapFactory;
-import manfred.game.GameConfig;
-import manfred.game.controls.KeyControls;
-import manfred.game.map.Accessible;
 import manfred.game.map.Map;
-import manfred.game.map.MapTile;
 import manfred.game.map.MapWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.function.Consumer;
+import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(DataProviderExtension.class)
 @ExtendWith(UseDataProviderExtension.class)
@@ -37,7 +33,7 @@ class ManfredTest {
         MapCollider colliderMock = mock(MapCollider.class);
         mapWrapperMock = mock(MapWrapper.class);
 
-        underTest = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, colliderMock, mapWrapperMock, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE), null);
+        underTest = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, colliderMock, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE), null);
     }
 
     @Test
@@ -48,7 +44,7 @@ class ManfredTest {
         int initialX = underTest.getX();
         int initialY = underTest.getY();
 
-        underTest.move();
+        underTest.moveTo();
 
         assertEquals(initialX, underTest.getX());
         assertEquals(initialY, underTest.getY());
@@ -56,19 +52,13 @@ class ManfredTest {
 
     @TestTemplate
     @UseDataProvider("provideInitialManfredCoordinates")
-    public void triggerOnStep(int manfredX, int manfredY, boolean expectTriggerStepOn) {
+    public void wouldTriggerOnStep(int manfredX, int manfredY, boolean expectTriggerStepOn) {
         underTest.setX(manfredX);
         underTest.setY(manfredY);
 
-        Consumer<KeyControls> nonZeroLambda = mock(Consumer.class);
-        setup4x4MapMockWithOnStepCallbackTopLeftTile(nonZeroLambda);
+        Point resultingMapTile = underTest.moveTo();
 
-        Consumer<KeyControls> result = underTest.move();
-
-        KeyControls keyControlsMock = mock(KeyControls.class);
-        result.accept(keyControlsMock);
-        verify(keyControlsMock, expectTriggerStepOn ? never() : atLeastOnce()).doNothing();
-        verify(nonZeroLambda, expectTriggerStepOn ? atLeastOnce() : never()).accept(keyControlsMock);
+        assertEquals(expectTriggerStepOn, resultingMapTile.equals(new Point(0,0)));
     }
 
     @DataProvider
@@ -83,33 +73,5 @@ class ManfredTest {
             {0, halfBlockSize, false},
             {halfBlockSize, halfBlockSize, false},
         };
-    }
-
-    private void setup4x4MapMockWithOnStepCallbackTopLeftTile(Consumer<KeyControls> nonZeroLambda) {
-        MapTile mapTileMock = mock(MapTile.class);
-        when(mapTileMock.onStep()).thenReturn(nonZeroLambda);
-        Map map = new Map("test", new MapTile[][]{{mapTileMock, Accessible.getInstance()}, {Accessible.getInstance(), Accessible.getInstance()}}, mock(GameConfig.class));
-        when(mapWrapperMock.getMap()).thenReturn(map);
-    }
-
-    @Test
-    void noGapBetweenTwoNeighboringOnStepTiles() {
-        Consumer<KeyControls> nonZeroLambda = keyControls -> {
-        };
-
-        MapTile mapTileMock = mock(MapTile.class);
-        when(mapTileMock.onStep()).thenReturn(nonZeroLambda);
-        Map map = new Map("test", new MapTile[][]{{mapTileMock, mapTileMock}}, mock(GameConfig.class));
-        Map mapSpy = spy(map);
-        when(mapWrapperMock.getMap()).thenReturn(mapSpy);
-
-        underTest.down();
-
-        while (underTest.getY() <= PIXEL_BLOCK_SIZE) {
-            Consumer<KeyControls> result = underTest.move();
-            assertNotNull(result);
-        }
-        verify(mapSpy, atLeastOnce()).stepOn(0, 0);
-        verify(mapSpy, atLeastOnce()).stepOn(0, 1);
     }
 }

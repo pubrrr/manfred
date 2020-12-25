@@ -1,22 +1,31 @@
 package manfred.game.interact;
 
 import manfred.game.GameConfig;
-import manfred.game.controls.KeyControls;
+import manfred.game.controls.ControllerInterface;
+import manfred.game.controls.ManfredController;
 
 import java.awt.*;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
-public class Door extends LoadMapWorker implements Interactable {
+public class Door implements Interactable {
+    private final String targetName;
+    private final int targetSpawnX;
+    private final int targetSpawnY;
     private final GameConfig gameConfig;
 
     public Door(String targetName, int targetSpawnX, int targetSpawnY, GameConfig gameConfig) {
-        super(targetName, targetSpawnX, targetSpawnY);
+        this.targetName = targetName;
+        this.targetSpawnX = targetSpawnX;
+        this.targetSpawnY = targetSpawnY;
         this.gameConfig = gameConfig;
     }
 
     @Override
-    public Consumer<KeyControls> interact() {
-        return this::triggerLoadMapInWorkerThread;
+    public Function<ManfredController, ControllerInterface> interact() {
+        return controllerInterface -> {
+            controllerInterface.stop();
+            return ControllerInterface.sleepWhileWorkingOn(new LoadMapWorker(this.targetName, this.targetSpawnX, this.targetSpawnY, controllerInterface));
+        };
     }
 
     @Override

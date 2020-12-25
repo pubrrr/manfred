@@ -1,5 +1,7 @@
 package manfred.game;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import manfred.game.attack.AttackReader;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.attack.CastModeOn;
@@ -8,28 +10,32 @@ import manfred.game.characters.Manfred;
 import manfred.game.characters.ManfredFramesLoader;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.SkillSet;
-import manfred.game.controls.DoNothingController;
-import manfred.game.controls.GelaberController;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
-import manfred.game.enemy.EnemiesWrapper;
-import manfred.game.enemy.EnemyReader;
-import manfred.game.enemy.MapColliderProvider;
 import manfred.game.exception.InvalidInputException;
-import manfred.game.graphics.*;
-import manfred.game.interact.PersonReader;
-import manfred.game.interact.gelaber.GelaberReader;
+import manfred.game.graphics.BackgroundScroller;
+import manfred.game.graphics.GamePanel;
+import manfred.game.graphics.ImageLoader;
+import manfred.game.interact.person.ChoicesTextLineFactory;
+import manfred.game.interact.person.GelaberFacadeBuilder;
+import manfred.game.interact.person.SimpleTextLineFactory;
+import manfred.game.interact.person.TextLineFactory;
 import manfred.game.map.MapReader;
 import manfred.game.map.MapWrapper;
+import manfred.game.infrastructure.person.GelaberConverter;
+import manfred.game.infrastructure.person.LineSplitter;
+import manfred.game.infrastructure.person.PersonDtoReader;
+import manfred.game.infrastructure.person.PersonReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Stack;
 
 @Configuration
-@ComponentScan
+@ComponentScan(basePackages = "manfred.game")
 public class GameContext {
     @Bean
     public Game game(GameRunner gameRunner) {
@@ -41,7 +47,6 @@ public class GameContext {
     @Bean
     public Manfred manfred(
         MapCollider collider,
-        MapWrapper mapWrapper,
         GameConfig gameConfig,
         ManfredFramesLoader manfredFramesLoader
     ) throws IOException {
@@ -53,7 +58,6 @@ public class GameContext {
             2 * gameConfig.getPixelBlockSize(),
             100,
             collider,
-            mapWrapper,
             gameConfig,
             manfredFramesLoader.loadWalkAnimation()
         );
@@ -65,25 +69,8 @@ public class GameContext {
     }
 
     @Bean
-    public KeyControls keyControls(
-        ManfredController manfredController,
-        GelaberController gelaberController,
-        DoNothingController doNothingController,
-        Manfred manfred,
-        GamePanel panel,
-        MapWrapper mapWrapper,
-        GameConfig gameConfig,
-        BackgroundScroller backgroundScroller
-    ) {
-        KeyControls keyControls = new KeyControls(manfredController,
-            gelaberController,
-            doNothingController,
-            manfred,
-            panel,
-            mapWrapper,
-            gameConfig,
-            backgroundScroller
-        );
+    public KeyControls keyControls(ManfredController manfredController, GamePanel panel) {
+        KeyControls keyControls = new KeyControls(manfredController);
         panel.addKeyListener(keyControls);
         return keyControls;
     }
@@ -117,5 +104,30 @@ public class GameContext {
     @Bean
     public GameConfig gameConfig(ConfigReader configReader) throws InvalidInputException, IOException {
         return configReader.load();
+    }
+
+    @Bean
+    public LineSplitter lineSplitter(GameConfig gameConfig) {
+        return new LineSplitter(gameConfig.getCharactersPerGelaberLine());
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper(new YAMLFactory());
+    }
+
+    @Bean
+    public PersonReader personReader(GelaberConverter gelaberConverter, GameConfig gameConfig, ImageLoader imageLoader, PersonDtoReader personDtoReader) {
+        return new PersonReader(gelaberConverter, gameConfig, imageLoader, personDtoReader);
+    }
+
+    @Bean
+    public GelaberConverter gelaberConverter(GelaberFacadeBuilder gelaberFacadeBuilder, LineSplitter lineSplitter) {
+        return new GelaberConverter(gelaberFacadeBuilder, lineSplitter);
+    }
+
+    @Bean("textLineFactories")
+    public List<TextLineFactory> textLineFactories(SimpleTextLineFactory simpleTextLineFactory, ChoicesTextLineFactory choicesTextLineFactory) {
+        return List.of(simpleTextLineFactory, choicesTextLineFactory);
     }
 }

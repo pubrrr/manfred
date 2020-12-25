@@ -2,7 +2,7 @@ package manfred.game.attack;
 
 import manfred.game.characters.Direction;
 import manfred.game.characters.Sprite;
-import manfred.game.graphics.Paintable;
+import manfred.game.graphics.paintable.Paintable;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
