@@ -16,22 +16,21 @@ import manfred.game.exception.InvalidInputException;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.ImageLoader;
-import manfred.game.interact.person.ChoicesTextLineFactory;
-import manfred.game.interact.person.GelaberFacadeBuilder;
-import manfred.game.interact.person.SimpleTextLineFactory;
-import manfred.game.interact.person.TextLineFactory;
-import manfred.game.map.MapReader;
-import manfred.game.map.MapWrapper;
 import manfred.game.infrastructure.person.GelaberConverter;
 import manfred.game.infrastructure.person.LineSplitter;
 import manfred.game.infrastructure.person.PersonDtoReader;
 import manfred.game.infrastructure.person.PersonReader;
+import manfred.game.interact.person.GelaberFacadeBuilder;
+import manfred.game.interact.person.textLineFactory.ChoicesTextLineFactory;
+import manfred.game.interact.person.textLineFactory.SimpleTextLineFactory;
+import manfred.game.interact.person.textLineFactory.TextLineFactory;
+import manfred.game.map.MapReader;
+import manfred.game.map.MapWrapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Stack;
 
 @Configuration
@@ -126,8 +125,11 @@ public class GameContext {
         return new GelaberConverter(gelaberFacadeBuilder, lineSplitter);
     }
 
-    @Bean("textLineFactories")
-    public List<TextLineFactory> textLineFactories(SimpleTextLineFactory simpleTextLineFactory, ChoicesTextLineFactory choicesTextLineFactory) {
-        return List.of(simpleTextLineFactory, choicesTextLineFactory);
+    @Bean
+    public TextLineFactory textLineFactory(GameConfig gameConfig) {
+        return new TextLineFactory(
+            ChoicesTextLineFactory.withConfig(gameConfig)
+                .orElse(SimpleTextLineFactory.withConfig(gameConfig))
+        );
     }
 }

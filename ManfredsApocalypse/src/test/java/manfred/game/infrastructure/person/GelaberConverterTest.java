@@ -4,12 +4,14 @@ import manfred.game.exception.InvalidInputException;
 import manfred.game.interact.person.GelaberFacade;
 import manfred.game.interact.person.GelaberFacadeBuilder;
 import manfred.game.interact.person.SimpleTextLine;
-import manfred.game.interact.person.SimpleTextLineFactory;
+import manfred.game.interact.person.textLineFactory.SimpleTextLineFactory;
+import manfred.game.interact.person.textLineFactory.TextLineFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,7 +29,7 @@ class GelaberConverterTest {
         simpleTextLineFactoryMock = mock(SimpleTextLineFactory.class);
 
         underTest = new GelaberConverter(
-            new GelaberFacadeBuilder(List.of(simpleTextLineFactoryMock)),
+            new GelaberFacadeBuilder(new TextLineFactory(simpleTextLineFactoryMock)),
             new LineSplitter(1)
         );
     }
@@ -50,7 +52,7 @@ class GelaberConverterTest {
 
     @Test
     void happyPath() throws InvalidInputException {
-        when(simpleTextLineFactoryMock.appliesTo(any())).thenReturn(true);
+        when(simpleTextLineFactoryMock.applicableTo(any())).thenReturn(Optional.of(simpleTextLineFactoryMock));
         when(simpleTextLineFactoryMock.create(any(), any())).thenReturn(mock(SimpleTextLine.class));
 
         GelaberDto input = setupGelaber(
