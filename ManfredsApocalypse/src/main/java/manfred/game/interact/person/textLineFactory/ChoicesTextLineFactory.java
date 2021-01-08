@@ -1,20 +1,28 @@
-package manfred.game.interact.person;
+package manfred.game.interact.person.textLineFactory;
 
 import manfred.game.GameConfig;
+import manfred.game.interact.person.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
-public class ChoicesTextLineFactory extends WrappingTextLineFactory implements TextLineFactory {
+public class ChoicesTextLineFactory extends WrappingTextLineFactory implements FactoryAction, FactoryRule {
 
-    public ChoicesTextLineFactory(GameConfig gameConfig) {
+    private ChoicesTextLineFactory(GameConfig gameConfig) {
         super(gameConfig);
     }
 
+    public static FactoryRule withConfig(GameConfig gameConfig) {
+        return new ChoicesTextLineFactory(gameConfig);
+    }
+
     @Override
-    public boolean appliesTo(List<GelaberEdge> outgoingEdges) {
-        return outgoingEdges.size() > 1;
+    public Optional<FactoryAction> applicableTo(List<GelaberEdge> outgoingEdges) {
+        return outgoingEdges.size() > 1
+            ? Optional.of(this)
+            : Optional.empty();
     }
 
     @Override
