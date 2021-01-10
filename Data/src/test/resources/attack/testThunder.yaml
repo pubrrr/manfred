@@ -1,0 +1,8 @@
+---
+name: thunder
+speed: 5
+sizeX: 60
+sizeY: 60
+damage: 10
+range: 320
+numberOfAnimationImages: 5

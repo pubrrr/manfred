@@ -2,8 +2,9 @@ package manfred.game;
 
 import manfred.data.DataContext;
 import manfred.data.InvalidInputException;
+import manfred.data.attack.AttackReader;
 import manfred.data.config.ConfigProvider;
-import manfred.game.attack.AttackReader;
+import manfred.game.attack.AttackGeneratorConverter;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.attack.CastModeOn;
 import manfred.game.attack.CombinationElement;
@@ -78,7 +79,7 @@ public class GameContext {
     }
 
     @Bean
-    public SkillSet skillSet(AttackReader attackReader, MapCollider mapCollider) throws InvalidInputException {
+    public SkillSet skillSet(AttackReader attackReader, AttackGeneratorConverter attackGeneratorConverter, MapCollider mapCollider) throws Exception {
         //refactor this! the MapCollider is here because it needs to be constructed first.
 
         SkillSet skillSet = new SkillSet();
@@ -88,7 +89,7 @@ public class GameContext {
         combination.push(CombinationElement.RIGHT);
         combination.push(CombinationElement.UP);
         combination.push(CombinationElement.LEFT);
-        skillSet.put(combination, attackReader.load("thunder"));
+        skillSet.put(combination, attackGeneratorConverter.convert(attackReader.load("thunder")));
         return skillSet;
     }
 

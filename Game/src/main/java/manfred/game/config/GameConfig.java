@@ -4,11 +4,11 @@ public class GameConfig {
     private final int windowWidth;
     private final int windowHeight;
     private final int pixelBlockSize;
-    private int textBoxDistanceToBorder;
-    private int textPointSize;
-    private int textDistanceToBox;
-    private int gelaberBoxPositionX;
-    private int gelaberBoxPositionY;
+    private final int textBoxDistanceToBorder;
+    private final int textPointSize;
+    private final int textDistanceToBox;
+    private final int gelaberBoxPositionX;
+    private final int gelaberBoxPositionY;
 
     public GameConfig(
             int windowWidth,
@@ -88,9 +88,5 @@ public class GameConfig {
 
     public int getNumberOfTextLines() {
         return (getTextBoxHeight() - 2 * textDistanceToBox) / (textPointSize + getDistanceBetweenLines());
-    }
-
-    public int getSelectionMovementDistance() {
-        return getTextPointSize() + getDistanceBetweenLines();
     }
 }

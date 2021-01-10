@@ -4,7 +4,8 @@ import helpers.TestGameConfig;
 import manfred.data.config.ConfigProvider;
 import manfred.data.image.ImageLoader;
 import manfred.game.GameContext;
-import manfred.game.attack.AttackReader;
+import manfred.data.attack.AttackReader;
+import manfred.game.attack.AttackGeneratorConverter;
 import manfred.game.config.ConfigConverter;
 import manfred.game.config.GameConfig;
 import org.springframework.context.annotation.Bean;
@@ -29,5 +30,10 @@ public class TestGameContext extends GameContext {
     @Bean
     public AttackReader attackReader() {
         return mock(AttackReader.class);
+    }
+
+    @Bean
+    public AttackGeneratorConverter attackGeneratorConverter() {
+        return mock(AttackGeneratorConverter.class);
     }
 }

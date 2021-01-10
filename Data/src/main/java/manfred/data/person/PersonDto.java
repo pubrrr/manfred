@@ -1,5 +1,6 @@
 package manfred.data.person;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,5 +11,5 @@ import java.awt.image.BufferedImage;
 public class PersonDto {
     private String name;
     private GelaberDto gelaber;
-    private BufferedImage image;
+    @JsonIgnore private BufferedImage image;
 }

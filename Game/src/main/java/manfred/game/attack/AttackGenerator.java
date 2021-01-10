@@ -5,6 +5,7 @@ import manfred.game.characters.MapCollider;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 public class AttackGenerator {
     private final int speed;
@@ -13,10 +14,10 @@ public class AttackGenerator {
     private final MapCollider mapCollider;
     private final int damage;
     private final int range;
-    private final BufferedImage[] attackAnimation;
+    private final List<BufferedImage> attackAnimation;
     private final int numberOfAnimationImages;
 
-    public AttackGenerator(int speed, int sizeX, int sizeY, MapCollider mapCollider, int damage, int range, BufferedImage[] attackAnimation, int numberOfAnimationImages) {
+    public AttackGenerator(int speed, int sizeX, int sizeY, MapCollider mapCollider, int damage, int range, List<BufferedImage> attackAnimation, int numberOfAnimationImages) {
         this.speed = speed;
         this.sizeX = sizeX;
         this.sizeY = sizeY;

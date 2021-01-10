@@ -24,19 +24,16 @@ import static org.mockito.Mockito.mock;
 
 @SpringJUnitConfig(TestGameContext.class)
 public class GelaberControllerComponentTest extends ControllerTestCase {
-    private static final int NUMBER_OF_TEXT_LINES = 5;
 
     @Autowired
     private GelaberFacadeBuilder gelaberFacadeBuilder;
 
     private GelaberController underTest;
     private ControllerInterface previous;
-    private TestGameConfig testGameConfig;
 
     @BeforeEach
     void init() {
         previous = mock(ControllerInterface.class);
-        testGameConfig = (new TestGameConfig()).withNumberOfTextLines(NUMBER_OF_TEXT_LINES);
     }
 
     @Test

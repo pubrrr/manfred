@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -24,7 +24,7 @@ class AttackGeneratorTest {
         MapCollider mapColliderMock = mock(MapCollider.class);
         when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
 
-        underTest = new AttackGenerator(SPEED, SIZE, SIZE, mapColliderMock, 3, 4, new BufferedImage[0], 1);
+        underTest = new AttackGenerator(SPEED, SIZE, SIZE, mapColliderMock, 3, 4, List.of(), 1);
     }
 
     @Test

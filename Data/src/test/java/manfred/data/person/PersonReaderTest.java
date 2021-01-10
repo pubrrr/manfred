@@ -39,7 +39,7 @@ class PersonReaderTest {
         when(imageLoaderMock.load(any(URL.class))).thenReturn(imageMock);
 
         URL url = getClass().getResource("/persons/testOpa.yaml");
-       PersonDto result = underTest.load(url, getClass().getResource("/persons/testOpa.yaml"));
+        PersonDto result = underTest.load(url, getClass().getResource("/persons/testOpa.yaml"));
 
         assertThat(result.getName(), equalToObject("Opa"));
         assertThat(result.getImage(), equalToObject(imageMock));

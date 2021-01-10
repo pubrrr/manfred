@@ -1,5 +1,8 @@
 package manfred.game.config;
 
+import manfred.data.config.ConfigDto;
+import manfred.data.config.GelaberBoxPositionDto;
+import manfred.data.config.WindowSizeDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +20,14 @@ class ConfigConverterTest {
 
     @Test
     void convert() {
-        GameConfig result = underTest.convert(null);
+        GameConfig result = underTest.convert(new ConfigDto(
+            new WindowSizeDto(1, 2),
+            new GelaberBoxPositionDto(7, 8),
+            3,
+            4,
+            5,
+            6
+        ));
 
         Assertions.assertEquals(1, result.getWindowWidth());
         Assertions.assertEquals(2, result.getWindowHeight());

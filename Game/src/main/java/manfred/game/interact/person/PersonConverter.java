@@ -4,7 +4,9 @@ import manfred.data.person.PersonDto;
 import manfred.game.config.GameConfig;
 import manfred.game.exception.ManfredException;
 import manfred.game.interact.person.gelaber.GelaberConverter;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PersonConverter {
 
     private final GelaberConverter gelaberConverter;

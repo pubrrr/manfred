@@ -1,8 +1,6 @@
 package manfred.game.attack;
 
-import manfred.data.InvalidInputException;
-import manfred.data.TextFileReader;
-import manfred.data.image.ImageLoader;
+import manfred.data.attack.AttackDto;
 import manfred.game.characters.Direction;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.Sprite;
@@ -12,46 +10,46 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
-import java.io.IOException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class AttackReaderTest {
-    private AttackReader underTest;
+class AttackGeneratorConverterTest {
 
-    private ImageLoader imageLoaderMock;
+    private AttackGeneratorConverter underTest;
 
     @BeforeEach
     void init() throws Exception {
         MapColliderProvider mapColliderProviderMock = mock(MapColliderProvider.class);
         when(mapColliderProviderMock.provide()).thenReturn(mock(MapCollider.class));
 
-        imageLoaderMock = mock(ImageLoader.class);
-
-        underTest = new AttackReader(mapColliderProviderMock, imageLoaderMock, new TextFileReader());
+        underTest = new AttackGeneratorConverter(mapColliderProviderMock);
     }
 
     @Test
-    void convertSpeed() throws InvalidInputException {
-        String input = "{name: testName, speed: 1, sizeX: 0, sizeY: 0, damage: 100, range: 2, numberOfAnimationImages: 3}";
+    void convert() throws Exception {
+        AttackDto input = getInput();
 
         AttackGenerator result = underTest.convert(input);
 
         Attack attack = result.generate(new Point(0,0), Direction.RIGHT);
+        assertMoves(attack);
+        assertHitsEnemy(attack);
+    }
+
+    private AttackDto getInput() {
+        return new AttackDto("testName", 1, 0, 0, 100, 2, 3, List.of());
+    }
+
+    private void assertMoves(Attack attack) {
         attack.move();
         assertEquals(1, attack.getX());
         assertEquals(0, attack.getY());
     }
 
-    @Test
-    void convertDamage() throws InvalidInputException {
-        String input = "{name: testName, speed: 1, sizeX: 0, sizeY: 0, damage: 100, range: 2, numberOfAnimationImages: 3}";
-
-        AttackGenerator result = underTest.convert(input);
-
-        Attack attack = result.generate(new Point(0,0), Direction.RIGHT);
-
+    private void assertHitsEnemy(Attack attack) {
         Sprite enemySpriteMock = mock(Sprite.class);
         when(enemySpriteMock.intersects(any())).thenReturn(true);
         Enemy enemyMock = mock(Enemy.class);
@@ -62,8 +60,8 @@ class AttackReaderTest {
     }
 
     @Test
-    void convertRange() throws InvalidInputException {
-        String input = "{name: testName, speed: 2, sizeX: 0, sizeY: 0, damage: 100, range: 2, numberOfAnimationImages: 3}";
+    void convertRange() throws Exception {
+        AttackDto input = getInput();
 
         AttackGenerator result = underTest.convert(input);
 
@@ -71,15 +69,8 @@ class AttackReaderTest {
 
         assertFalse(attack.isResolved());
         attack.move();
+        assertFalse(attack.isResolved());
+        attack.move();
         assertTrue(attack.isResolved());
-    }
-
-    @Test
-    void triggersLoadAnimation() throws InvalidInputException {
-        String input = "{name: testName, speed: 1, sizeX: 0, sizeY: 0, damage: 100, range: 2, numberOfAnimationImages: 3}";
-
-        underTest.convert(input);
-
-        verify(imageLoaderMock, times(3)).load(anyString());
     }
 }

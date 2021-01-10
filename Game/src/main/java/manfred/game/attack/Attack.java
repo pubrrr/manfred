@@ -7,12 +7,13 @@ import manfred.game.graphics.paintable.Paintable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 public class Attack extends MovingObject implements Paintable {
     private final int damage;
     private final int range;
     private boolean resolved = false;
-    private final BufferedImage[] attackAnimation;
+    private final List<BufferedImage> attackAnimation;
     private final int numberOfAnimationImages;
     private final long nextAnimationImageTrigger;
 
@@ -29,7 +30,7 @@ public class Attack extends MovingObject implements Paintable {
         MapCollider collider,
         int damage,
         int range,
-        BufferedImage[] attackAnimation,
+        List<BufferedImage> attackAnimation,
         int numberOfAnimationImages
     ) {
         super(speed, x, y, width, height, height, null, collider);
@@ -64,7 +65,7 @@ public class Attack extends MovingObject implements Paintable {
     @Override
     public void paint(Graphics g, Point offset, Integer x, Integer y) {
         g.drawImage(
-            attackAnimation[animationIdx],
+            attackAnimation.get(animationIdx),
             sprite.x - offset.x,
             sprite.y - offset.y,
             sprite.width,

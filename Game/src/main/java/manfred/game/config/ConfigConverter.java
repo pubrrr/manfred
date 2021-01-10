@@ -7,6 +7,15 @@ import org.springframework.stereotype.Component;
 public class ConfigConverter {
 
     public GameConfig convert(ConfigDto configDto) {
-        return null;
+        return new GameConfig(
+            configDto.getWindowSize().getWidth(),
+            configDto.getWindowSize().getHeight(),
+            configDto.getPixelBlockSize(),
+            configDto.getTextBoxDistanceToBorder(),
+            configDto.getTextPointSize(),
+            configDto.getTextDistanceToBox(),
+            configDto.getGelaberBoxPosition().getBoxPositionX(),
+            configDto.getGelaberBoxPosition().getBoxPositionY()
+        );
     }
 }
