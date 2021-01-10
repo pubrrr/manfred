@@ -1,6 +1,7 @@
 package util;
 
-import manfred.game.graphics.ImageLoader;
+import manfred.data.InvalidInputException;
+import manfred.data.image.ImageLoader;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -8,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class ImageSplitter {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InvalidInputException {
         ImageLoader imageLoader = new ImageLoader();
         BufferedImage image = imageLoader.load("data\\manfred\\manfred.png");
 

@@ -1,17 +1,19 @@
 package manfred.game.map;
 
-import manfred.game.Game;
-import manfred.game.GameConfig;
+import manfred.data.DataContext;
+import manfred.data.InvalidInputException;
+import manfred.data.TextFileReader;
+import manfred.data.image.ImageLoader;
+import manfred.data.person.PersonReader;
+import manfred.game.config.GameConfig;
 import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.enemy.EnemyReader;
 import manfred.game.enemy.EnemyStack;
-import manfred.game.exception.InvalidInputException;
 import manfred.game.exception.ManfredException;
-import manfred.game.graphics.ImageLoader;
 import manfred.game.interact.Door;
 import manfred.game.interact.Interactable;
-import manfred.game.infrastructure.person.PersonReader;
 import manfred.game.interact.Portal;
+import manfred.game.interact.person.PersonConverter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,27 +31,31 @@ import java.util.List;
 public class MapReader {
     public static final String ACCESSIBLE = "1";
     public static final String NOT_ACCESSIBLE = "0";
-    public static final String PATH_MAPS = Game.PATH_DATA + "maps\\";
+    public static final String PATH_MAPS = DataContext.PATH_DATA + "maps\\";
     public static final String PATH_MAPS_TILE_IMAGES = PATH_MAPS + "tiles\\";
 
-    private final PersonReader personReader;
+    private final PersonConverter personConverter;
     private final EnemyReader enemyReader;
     private final EnemiesWrapper enemiesWrapper;
     private final GameConfig gameConfig;
     private final ImageLoader imageLoader;
+    private final TextFileReader textFileReader;
+    private final PersonReader personReader;
 
     private final HashMap<String, MapTile> notAccessibleTilesStorage = new HashMap<>();
 
-    public MapReader(PersonReader personReader, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper, GameConfig gameConfig, ImageLoader imageLoader) {
-        this.personReader = personReader;
+    public MapReader(PersonConverter personConverter, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper, GameConfig gameConfig, ImageLoader imageLoader, TextFileReader textFileReader, PersonReader personReader) {
+        this.personConverter = personConverter;
         this.enemyReader = enemyReader;
         this.enemiesWrapper = enemiesWrapper;
         this.gameConfig = gameConfig;
         this.imageLoader = imageLoader;
+        this.textFileReader = textFileReader;
+        this.personReader = personReader;
     }
 
-    public Map load(String name) throws ManfredException, IOException {
-        String jsonMap = read(PATH_MAPS + name + ".json");
+    public Map load(String name) throws ManfredException, InvalidInputException {
+        String jsonMap = textFileReader.read(PATH_MAPS + name + ".json");
         return convert(jsonMap);
     }
 
@@ -58,7 +64,7 @@ public class MapReader {
         return String.join("", input);
     }
 
-    Map convert(String jsonString) throws ManfredException {
+    Map convert(String jsonString) throws ManfredException, InvalidInputException {
         try {
             JSONObject jsonInput = new JSONObject(jsonString);
 
@@ -69,12 +75,12 @@ public class MapReader {
             enemiesWrapper.setEnemies(enemies);
 
             return new Map(name, mapTiles, gameConfig);
-        } catch (JSONException | IOException $e) {
+        } catch (JSONException $e) {
             throw new InvalidInputException($e.getMessage() + " in map " + jsonString);
         }
     }
 
-    private MapTile[][] convertMap(JSONArray jsonMap) throws InvalidInputException, IOException {
+    private MapTile[][] convertMap(JSONArray jsonMap) throws InvalidInputException {
         int lengthVertical = jsonMap.length();
         int lengthHorizontal = jsonMap.getJSONArray(0).length();
 
@@ -100,7 +106,7 @@ public class MapReader {
         return transposed;
     }
 
-    private MapTile[] convertHorizontalMapLine(JSONArray horizontalJsonLine) throws InvalidInputException, IOException {
+    private MapTile[] convertHorizontalMapLine(JSONArray horizontalJsonLine) throws InvalidInputException {
         MapTile[] mapTileLine = new MapTile[horizontalJsonLine.length()];
         for (int x = 0; x < horizontalJsonLine.length(); x++) {
             Object tileValue = horizontalJsonLine.get(x);
@@ -113,7 +119,7 @@ public class MapReader {
         return mapTileLine;
     }
 
-    private MapTile convertMapTile(String tileValue) throws InvalidInputException, IOException {
+    private MapTile convertMapTile(String tileValue) throws InvalidInputException {
         if (tileValue.equals(ACCESSIBLE)) {
             return Accessible.getInstance();
         }
@@ -123,20 +129,16 @@ public class MapReader {
         }
 
         BufferedImage tileImage;
-        try {
-            tileImage = imageLoader.load(PATH_MAPS_TILE_IMAGES + tileValue + ".png");
-        } catch (IOException exception) {
-            tileImage = null;
-        }
+        tileImage = imageLoader.load(PATH_MAPS_TILE_IMAGES + tileValue + ".png");
 
         int blocksWidth;
         int yOffset;
         try {
-            String jsonTileConfig = read(PATH_MAPS_TILE_IMAGES + tileValue + ".json");
+            String jsonTileConfig = textFileReader.read(PATH_MAPS_TILE_IMAGES + tileValue + ".json");
             JSONObject tileConfig = new JSONObject(jsonTileConfig);
             blocksWidth = tileConfig.optInt("blocksWidth", 1);
             yOffset = tileConfig.optInt("yOffset", 0);
-        } catch (IOException | JSONException exception) {
+        } catch (JSONException exception) {
             blocksWidth = 1;
             yOffset = 0;
         }
@@ -145,7 +147,7 @@ public class MapReader {
         return notAccessibleTile;
     }
 
-    private void convertAndInsertInteractables(@Nullable JSONArray interactables, MapTile[][] mapTiles) throws ManfredException, IOException {
+    private void convertAndInsertInteractables(@Nullable JSONArray interactables, MapTile[][] mapTiles) throws ManfredException, InvalidInputException {
         if (interactables == null) {
             return;
         }
@@ -161,18 +163,16 @@ public class MapReader {
         }
     }
 
-    private Interactable convertInteractable(JSONObject jsonInteractable) throws ManfredException, IOException {
+    private Interactable convertInteractable(JSONObject jsonInteractable) throws ManfredException, InvalidInputException {
         String interactableType = jsonInteractable.getString("type");
-        switch (interactableType) {
-            case "Person":
-                return personReader.load(jsonInteractable.getString("name"));
-            case "Door":
-                return convertDoor(jsonInteractable);
-            case "Portal":
-                return convertPortal(jsonInteractable);
-            default:
-                throw new InvalidInputException("Unknown interactable type: " + interactableType + " for interactable " + jsonInteractable.toString());
-        }
+        return switch (interactableType) {
+            case "Person" -> personConverter.convert(
+                personReader.load(jsonInteractable.getString("name"))
+            );
+            case "Door" -> convertDoor(jsonInteractable);
+            case "Portal" -> convertPortal(jsonInteractable);
+            default -> throw new InvalidInputException("Unknown interactable type: " + interactableType + " for interactable " + jsonInteractable.toString());
+        };
     }
 
     private Door convertDoor(JSONObject interactable) {
@@ -192,7 +192,7 @@ public class MapReader {
         );
     }
 
-    private EnemyStack convertEnemies(@Nullable JSONArray enemies) throws InvalidInputException, IOException {
+    private EnemyStack convertEnemies(@Nullable JSONArray enemies) throws InvalidInputException {
         EnemyStack enemyStack = new EnemyStack();
         if (enemies == null) {
             return enemyStack;

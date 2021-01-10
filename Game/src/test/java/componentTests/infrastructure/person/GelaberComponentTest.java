@@ -2,12 +2,12 @@ package componentTests.infrastructure.person;
 
 import componentTests.TestGameContext;
 import helpers.TestGameConfig;
+import manfred.data.person.GelaberDto;
+import manfred.data.person.GelaberTextDto;
+import manfred.data.person.ReferenceDto;
 import manfred.game.exception.ManfredException;
-import manfred.game.interact.person.GelaberFacade;
-import manfred.game.infrastructure.person.GelaberConverter;
-import manfred.game.infrastructure.person.GelaberDto;
-import manfred.game.infrastructure.person.GelaberTextDto;
-import manfred.game.infrastructure.person.ReferenceDto;
+import manfred.game.interact.person.gelaber.GelaberConverter;
+import manfred.game.interact.person.gelaber.GelaberFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

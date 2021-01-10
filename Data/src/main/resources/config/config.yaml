@@ -1,0 +1,11 @@
+---
+windowSize:
+  width: 1600
+  height: 900
+gelaberBoxPosition:
+  boxPositionX: 100
+  boxPositionY: 100
+pixelBlockSize: 60
+textBoxDistanceToBorder: 100
+textPointSize: 30
+textDistanceToBox: 50

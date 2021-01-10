@@ -1,7 +1,7 @@
 package manfred.game.interact.person.textLineFactory;
 
-import manfred.game.interact.person.GelaberNode;
-import manfred.game.interact.person.TextLine;
+import manfred.game.interact.person.gelaber.GelaberNode;
+import manfred.game.interact.person.gelaber.TextLine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

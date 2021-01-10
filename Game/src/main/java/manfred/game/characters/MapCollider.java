@@ -1,6 +1,6 @@
 package manfred.game.characters;
 
-import manfred.game.GameConfig;
+import manfred.game.config.GameConfig;
 import manfred.game.map.Map;
 import manfred.game.map.MapWrapper;
 import org.springframework.stereotype.Component;

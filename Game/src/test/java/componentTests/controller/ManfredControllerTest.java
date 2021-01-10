@@ -2,14 +2,15 @@ package componentTests.controller;
 
 import helpers.TestGameConfig;
 import helpers.TestMapFactory;
+import manfred.data.InvalidInputException;
 import manfred.game.attack.*;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.SkillSet;
 import manfred.game.controls.ControllerInterface;
-import manfred.game.controls.SleepingController;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.ManfredController;
+import manfred.game.controls.SleepingController;
 import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.exception.ManfredException;
 import manfred.game.graphics.BackgroundScroller;
@@ -17,16 +18,15 @@ import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.paintable.GelaberOverlay;
 import manfred.game.interact.Door;
 import manfred.game.interact.Interactable;
-import manfred.game.interact.person.Person;
 import manfred.game.interact.Portal;
-import manfred.game.interact.person.GelaberFacade;
+import manfred.game.interact.person.Person;
+import manfred.game.interact.person.gelaber.GelaberFacade;
 import manfred.game.map.Map;
 import manfred.game.map.MapWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -173,7 +173,7 @@ class ManfredControllerTest extends ControllerTestCase {
     }
 
     @Test
-    void interactWithDoor() throws ManfredException, IOException, InterruptedException {
+    void interactWithDoor() throws ManfredException, InterruptedException, InvalidInputException {
         String targetName = "target";
         int targetSpawnX = 5;
         int targetSpawnY = 66;
@@ -196,7 +196,7 @@ class ManfredControllerTest extends ControllerTestCase {
     }
 
     @Test
-    void stepOnPortal() throws InterruptedException, ManfredException, IOException {
+    void stepOnPortal() throws InterruptedException, ManfredException, InvalidInputException {
         String targetName = "target";
         int targetSpawnX = 5;
         int targetSpawnY = 66;

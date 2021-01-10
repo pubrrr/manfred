@@ -1,13 +1,12 @@
 package manfred.game.enemy;
 
 import helpers.TestGameConfig;
+import manfred.data.InvalidInputException;
+import manfred.data.TextFileReader;
+import manfred.data.image.ImageLoader;
 import manfred.game.characters.MapCollider;
-import manfred.game.exception.InvalidInputException;
-import manfred.game.graphics.ImageLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -28,11 +27,11 @@ class EnemyReaderTest {
 
         imageLoaderMock = mock(ImageLoader.class);
 
-        underTest = new EnemyReader(mapColliderProviderMock, imageLoaderMock, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE));
+        underTest = new EnemyReader(mapColliderProviderMock, imageLoaderMock, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE), new TextFileReader());
     }
 
     @Test
-    void testConvert() throws InvalidInputException, IOException {
+    void testConvert() throws InvalidInputException {
         String input = "{name: testName, healthPoints: 100, speed: 1}";
 
         Enemy result = underTest.convert(input, 1, 22);

@@ -1,6 +1,6 @@
 package manfred.game.graphics.paintable;
 
-import manfred.game.interact.person.GelaberFacade;
+import manfred.game.interact.person.gelaber.GelaberFacade;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;

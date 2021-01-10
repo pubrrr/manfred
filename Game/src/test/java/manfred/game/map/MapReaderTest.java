@@ -1,14 +1,16 @@
 package manfred.game.map;
 
-import manfred.game.GameConfig;
+import manfred.data.InvalidInputException;
+import manfred.data.TextFileReader;
+import manfred.data.image.ImageLoader;
+import manfred.data.person.PersonReader;
+import manfred.game.config.GameConfig;
 import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.enemy.EnemyReader;
-import manfred.game.exception.InvalidInputException;
 import manfred.game.exception.ManfredException;
-import manfred.game.graphics.ImageLoader;
 import manfred.game.interact.Door;
-import manfred.game.infrastructure.person.PersonReader;
 import manfred.game.interact.Portal;
+import manfred.game.interact.person.PersonConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,23 +22,25 @@ import static org.mockito.Mockito.*;
 
 public class MapReaderTest {
     private MapReader underTest;
-    private PersonReader personReaderMock;
+    private PersonConverter personConverterMock;
     private EnemyReader enemyReaderMock;
     private EnemiesWrapper enemiesWrapperMock;
     private ImageLoader imageLoaderMock;
+    private PersonReader personReaderMock;
 
     @BeforeEach
     void init() {
-        personReaderMock = mock(PersonReader.class);
+        personConverterMock = mock(PersonConverter.class);
         enemyReaderMock = mock(EnemyReader.class);
         enemiesWrapperMock = mock(EnemiesWrapper.class);
         imageLoaderMock = mock(ImageLoader.class);
+        personReaderMock = mock(PersonReader.class);
 
-        underTest = new MapReader(personReaderMock, enemyReaderMock, enemiesWrapperMock, mock(GameConfig.class), imageLoaderMock);
+        underTest = new MapReader(personConverterMock, enemyReaderMock, enemiesWrapperMock, mock(GameConfig.class), imageLoaderMock, new TextFileReader(), personReaderMock);
     }
 
     @Test
-    void convert() throws ManfredException {
+    void convert() throws ManfredException, InvalidInputException {
         Map result = underTest.convert("{name: test, map: [[]]}");
 
         assertEquals("test", result.getName());
@@ -44,7 +48,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void convertsMapWithString() throws ManfredException {
+    void convertsMapWithString() throws ManfredException, InvalidInputException {
         String jsonWithStrings = "{name: test, map: [['1', '0']]}";
 
         Map result = underTest.convert(jsonWithStrings);
@@ -55,7 +59,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void convertsMapWithInt() throws ManfredException {
+    void convertsMapWithInt() throws ManfredException, InvalidInputException {
         String jsonWithIntMap = "{name : test, map :[[0, 1], [1, 0]]}";
 
         Map result = underTest.convert(jsonWithIntMap);
@@ -69,7 +73,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void convertsMapWithStringAndInt() throws ManfredException {
+    void convertsMapWithStringAndInt() throws ManfredException, InvalidInputException {
         String jsonWithStrings = "{name: test ,map: [['0', 0], [1,1], ['1', 1]]}";
 
         Map result = underTest.convert(jsonWithStrings);
@@ -80,7 +84,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void readAndConvert() throws ManfredException, IOException {
+    void readAndConvert() throws ManfredException, IOException, InvalidInputException {
         String[][] expectedMap = {{"opa", "1", "0"}, {"0", "1", "1"}};
 
         String json = underTest.read("src\\test\\java\\manfred\\game\\map\\test.json");
@@ -99,7 +103,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void triggersLoadPerson() throws IOException, ManfredException {
+    void triggersLoadPerson() throws IOException, ManfredException, InvalidInputException {
         String json = underTest.read("src\\test\\java\\manfred\\game\\map\\test.json");
         underTest.convert(json);
 
@@ -107,7 +111,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void loadsDoor() throws ManfredException {
+    void loadsDoor() throws ManfredException, InvalidInputException {
         String jsonWithDoor = "{name: test, map: [[0, 0]], interactables: [{ type: Door, positionX: 1, positionY: 0, target: testTaraget, targetSpawnX: 1, targetSpawnY: 1}]}";
         Map result = underTest.convert(jsonWithDoor);
 
@@ -115,7 +119,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void loadsPortal() throws ManfredException {
+    void loadsPortal() throws ManfredException, InvalidInputException {
         String jsonWithPortal = "{name: test, map: [[0, 0]], interactables: [{ type: Portal, positionX: 1, positionY: 0, target: testTaraget, targetSpawnX: 1, targetSpawnY: 1}]}";
         Map result = underTest.convert(jsonWithPortal);
 
@@ -123,7 +127,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void triggersLoadEnemies() throws ManfredException, IOException {
+    void triggersLoadEnemies() throws ManfredException, InvalidInputException {
         String jsonWithEnemy = "{name: test, map: [[0]], enemies: [{name: testEnemy, spawnX: 0, spawnY: 55}]}";
         underTest.convert(jsonWithEnemy);
 
@@ -132,7 +136,7 @@ public class MapReaderTest {
     }
 
     @Test
-    void triggerLoadTileImage() throws ManfredException, IOException {
+    void triggerLoadTileImage() throws ManfredException, InvalidInputException {
         String input = "{name: test, map: [[tileName]]}";
         underTest.convert(input);
 

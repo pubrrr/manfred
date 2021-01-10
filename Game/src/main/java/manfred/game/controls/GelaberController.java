@@ -1,7 +1,7 @@
 package manfred.game.controls;
 
 import manfred.game.graphics.paintable.GelaberOverlay;
-import manfred.game.interact.person.GelaberFacade;
+import manfred.game.interact.person.gelaber.GelaberFacade;
 
 import java.awt.event.KeyEvent;
 

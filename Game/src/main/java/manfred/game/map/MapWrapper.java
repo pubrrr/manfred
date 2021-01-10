@@ -1,12 +1,11 @@
 package manfred.game.map;
 
+import manfred.data.InvalidInputException;
 import manfred.game.attack.AttacksContainer;
-import manfred.game.exception.InvalidInputException;
 import manfred.game.exception.ManfredException;
-import manfred.game.graphics.paintable.PaintablesContainer;
 import manfred.game.graphics.paintable.PaintableContainerElement;
+import manfred.game.graphics.paintable.PaintablesContainer;
 
-import java.io.IOException;
 import java.util.Stack;
 
 public class MapWrapper implements PaintablesContainer {
@@ -26,14 +25,14 @@ public class MapWrapper implements PaintablesContainer {
         if (map == null) {
             try {
                 loadMap(initialMapName);
-            } catch (IOException | ManfredException e) {
+            } catch (ManfredException | InvalidInputException e) {
                 e.printStackTrace();
             }
         }
         return map;
     }
 
-    public void loadMap(String name) throws ManfredException, IOException {
+    public void loadMap(String name) throws ManfredException, InvalidInputException {
         attacksContainer.clear();
         this.map = mapReader.load(name);
     }

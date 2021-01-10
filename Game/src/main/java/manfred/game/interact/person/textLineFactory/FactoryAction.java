@@ -1,8 +1,8 @@
 package manfred.game.interact.person.textLineFactory;
 
-import manfred.game.interact.person.GelaberEdge;
-import manfred.game.interact.person.GelaberNode;
-import manfred.game.interact.person.TextLine;
+import manfred.game.interact.person.gelaber.GelaberEdge;
+import manfred.game.interact.person.gelaber.GelaberNode;
+import manfred.game.interact.person.gelaber.TextLine;
 
 import java.util.List;
 

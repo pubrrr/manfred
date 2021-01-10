@@ -1,7 +1,7 @@
 package helpers;
 
-import manfred.game.interact.person.GelaberEdge;
-import manfred.game.interact.person.GelaberNodeIdentifier;
+import manfred.game.interact.person.gelaber.GelaberEdge;
+import manfred.game.interact.person.gelaber.GelaberNodeIdentifier;
 
 public class GelaberEdgeHelper {
 

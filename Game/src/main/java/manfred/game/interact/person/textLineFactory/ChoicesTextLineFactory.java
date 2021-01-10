@@ -1,7 +1,7 @@
 package manfred.game.interact.person.textLineFactory;
 
-import manfred.game.GameConfig;
-import manfred.game.interact.person.*;
+import manfred.game.config.GameConfig;
+import manfred.game.interact.person.gelaber.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

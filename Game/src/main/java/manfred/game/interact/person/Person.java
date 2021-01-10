@@ -1,9 +1,10 @@
 package manfred.game.interact.person;
 
-import manfred.game.GameConfig;
+import manfred.game.config.GameConfig;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ManfredController;
 import manfred.game.interact.Interactable;
+import manfred.game.interact.person.gelaber.GelaberFacade;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

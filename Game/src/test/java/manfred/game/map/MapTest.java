@@ -1,6 +1,6 @@
 package manfred.game.map;
 
-import manfred.game.GameConfig;
+import manfred.game.config.GameConfig;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;

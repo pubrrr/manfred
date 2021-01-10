@@ -1,38 +1,32 @@
 package manfred.game.attack;
 
-import manfred.game.Game;
+import manfred.data.DataContext;
+import manfred.data.InvalidInputException;
+import manfred.data.TextFileReader;
+import manfred.data.image.ImageLoader;
 import manfred.game.enemy.MapColliderProvider;
-import manfred.game.exception.InvalidInputException;
-import manfred.game.graphics.ImageLoader;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
 @Component
 public class AttackReader {
 
-    public static final String PATH_ATTACKS = Game.PATH_DATA + "attacks\\";
-    private MapColliderProvider mapColliderProvider;
-    private ImageLoader imageLoader;
+    public static final String PATH_ATTACKS = DataContext.PATH_DATA + "attacks\\";
+    private final MapColliderProvider mapColliderProvider;
+    private final ImageLoader imageLoader;
+    private final TextFileReader textFileReader;
 
-    public AttackReader(MapColliderProvider mapColliderProvider, ImageLoader imageLoader) {
+    public AttackReader(MapColliderProvider mapColliderProvider, ImageLoader imageLoader, TextFileReader textFileReader) {
         this.mapColliderProvider = mapColliderProvider;
         this.imageLoader = imageLoader;
+        this.textFileReader = textFileReader;
     }
 
-    public AttackGenerator load(String name) throws InvalidInputException, IOException {
-        String jsonAttack = read(PATH_ATTACKS + name + ".json");
+    public AttackGenerator load(String name) throws InvalidInputException {
+        String jsonAttack = textFileReader.read(PATH_ATTACKS + name + ".json");
         return convert(jsonAttack);
-    }
-
-    String read(String jsonFileLocation) throws IOException {
-        List<String> input = Files.readAllLines(Paths.get(jsonFileLocation));
-        return String.join("", input);
     }
 
     AttackGenerator convert(String jsonAttack) throws InvalidInputException {
@@ -55,7 +49,7 @@ public class AttackReader {
         }
     }
 
-    private BufferedImage[] loadAttackAnimation(String name, int numberOfAnimationImages) throws IOException {
+    private BufferedImage[] loadAttackAnimation(String name, int numberOfAnimationImages) throws InvalidInputException {
         BufferedImage[] attackAnimation = new BufferedImage[numberOfAnimationImages];
         for (int idx = 0; idx < numberOfAnimationImages; idx++) {
             attackAnimation[idx] = imageLoader.load(PATH_ATTACKS + name + "_" + idx + ".png");

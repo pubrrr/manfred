@@ -1,10 +1,10 @@
 package manfred.game.interact.person.textLineFactory;
 
 import helpers.TestGameConfig;
-import manfred.game.interact.person.ChoicesText;
-import manfred.game.interact.person.GelaberNode;
-import manfred.game.interact.person.TextLine;
-import manfred.game.interact.person.TextLineWrapper;
+import manfred.game.interact.person.gelaber.ChoicesText;
+import manfred.game.interact.person.gelaber.GelaberNode;
+import manfred.game.interact.person.gelaber.TextLine;
+import manfred.game.interact.person.gelaber.TextLineWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

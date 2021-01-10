@@ -1,12 +1,13 @@
 package manfred.game.attack;
 
+import manfred.data.InvalidInputException;
+import manfred.data.TextFileReader;
+import manfred.data.image.ImageLoader;
 import manfred.game.characters.Direction;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.Sprite;
 import manfred.game.enemy.Enemy;
 import manfred.game.enemy.MapColliderProvider;
-import manfred.game.exception.InvalidInputException;
-import manfred.game.graphics.ImageLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +29,7 @@ class AttackReaderTest {
 
         imageLoaderMock = mock(ImageLoader.class);
 
-        underTest = new AttackReader(mapColliderProviderMock, imageLoaderMock);
+        underTest = new AttackReader(mapColliderProviderMock, imageLoaderMock, new TextFileReader());
     }
 
     @Test
@@ -74,7 +75,7 @@ class AttackReaderTest {
     }
 
     @Test
-    void triggersLoadAnimation() throws IOException, InvalidInputException {
+    void triggersLoadAnimation() throws InvalidInputException {
         String input = "{name: testName, speed: 1, sizeX: 0, sizeY: 0, damage: 100, range: 2, numberOfAnimationImages: 3}";
 
         underTest.convert(input);

@@ -1,6 +1,6 @@
 package manfred.game.map;
 
-import manfred.game.GameConfig;
+import manfred.game.config.GameConfig;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ManfredController;
 import manfred.game.graphics.paintable.PaintableContainerElement;

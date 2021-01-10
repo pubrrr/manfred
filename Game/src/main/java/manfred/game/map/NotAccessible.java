@@ -1,6 +1,6 @@
 package manfred.game.map;
 
-import manfred.game.GameConfig;
+import manfred.game.config.GameConfig;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

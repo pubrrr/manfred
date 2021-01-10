@@ -1,6 +1,6 @@
 package manfred.game.enemy;
 
-import manfred.game.GameConfig;
+import manfred.game.config.GameConfig;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.MovingObject;

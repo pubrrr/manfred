@@ -6,7 +6,7 @@ import helpers.TestGameConfig;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.GelaberController;
 import manfred.game.graphics.paintable.GelaberOverlay;
-import manfred.game.interact.person.*;
+import manfred.game.interact.person.gelaber.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

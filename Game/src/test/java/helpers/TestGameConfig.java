@@ -1,6 +1,6 @@
 package helpers;
 
-import manfred.game.GameConfig;
+import manfred.game.config.GameConfig;
 
 import java.util.Objects;
 
@@ -53,10 +53,7 @@ public class TestGameConfig extends GameConfig {
 
     @Override
     public int getNumberOfTextLines() {
-        if (testNumberOfTextLines == null) {
-            return super.getNumberOfTextLines();
-        }
-        return testNumberOfTextLines;
+        return Objects.requireNonNullElseGet(testNumberOfTextLines, super::getNumberOfTextLines);
     }
 
     public TestGameConfig setWindowHeight(int height) {

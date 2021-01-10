@@ -1,6 +1,6 @@
 package manfred.game.attack;
 
-import manfred.game.GameConfig;
+import manfred.game.config.GameConfig;
 import manfred.game.characters.Direction;
 import manfred.game.characters.SkillSet;
 import manfred.game.characters.Sprite;

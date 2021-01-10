@@ -1,11 +1,12 @@
 package componentTests;
 
 import helpers.TestGameConfig;
-import manfred.game.ConfigReader;
-import manfred.game.GameConfig;
+import manfred.data.config.ConfigProvider;
+import manfred.data.image.ImageLoader;
 import manfred.game.GameContext;
 import manfred.game.attack.AttackReader;
-import manfred.game.graphics.ImageLoader;
+import manfred.game.config.ConfigConverter;
+import manfred.game.config.GameConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +17,7 @@ import static org.mockito.Mockito.mock;
 @ComponentScan
 public class TestGameContext extends GameContext {
     @Override
-    public GameConfig gameConfig(ConfigReader configReader) {
+    public GameConfig gameConfig(ConfigProvider configReader, ConfigConverter configConverter) {
         return new TestGameConfig();
     }
 

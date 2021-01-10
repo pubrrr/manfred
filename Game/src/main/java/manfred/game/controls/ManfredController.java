@@ -1,6 +1,7 @@
 package manfred.game.controls;
 
-import manfred.game.GameConfig;
+import manfred.data.InvalidInputException;
+import manfred.game.config.GameConfig;
 import manfred.game.attack.Attack;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.attack.Caster;
@@ -11,7 +12,7 @@ import manfred.game.exception.ManfredException;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.paintable.GelaberOverlay;
-import manfred.game.interact.person.GelaberFacade;
+import manfred.game.interact.person.gelaber.GelaberFacade;
 import manfred.game.map.MapWrapper;
 import org.springframework.stereotype.Component;
 
@@ -56,43 +57,31 @@ public class ManfredController implements ControllerInterface {
     @Override
     public ControllerInterface keyPressed(KeyEvent event) {
         switch (event.getKeyCode()) {
-            case KeyEvent.VK_A:
-                manfred.left();
-                return this;
-            case KeyEvent.VK_D:
-                manfred.right();
-                return this;
-            case KeyEvent.VK_S:
-                manfred.down();
-                return this;
-            case KeyEvent.VK_W:
-                manfred.up();
-                return this;
-            case KeyEvent.VK_SPACE:
-                attackCaster.cast(manfred.getSprite(), manfred.getDirection());
-                return this;
-            default:
-                CombinationElement.fromKeyEvent(event).ifPresent(attackCaster::addToCombination);
-                return this;
+            case KeyEvent.VK_A -> manfred.left();
+            case KeyEvent.VK_D -> manfred.right();
+            case KeyEvent.VK_S -> manfred.down();
+            case KeyEvent.VK_W -> manfred.up();
+            case KeyEvent.VK_SPACE -> attackCaster.cast(manfred.getSprite(), manfred.getDirection());
+            default -> CombinationElement.fromKeyEvent(event).ifPresent(attackCaster::addToCombination);
         }
+        return this;
     }
 
     @Override
     public ControllerInterface keyReleased(KeyEvent event) {
         switch (event.getKeyCode()) {
-            case KeyEvent.VK_A:
-            case KeyEvent.VK_D:
+            case KeyEvent.VK_A, KeyEvent.VK_D -> {
                 manfred.stopX();
                 manfred.checkForVerticalViewDirection();
-                break;
-            case KeyEvent.VK_S:
-            case KeyEvent.VK_W:
+            }
+            case KeyEvent.VK_S, KeyEvent.VK_W -> {
                 manfred.stopY();
                 manfred.checkForHorizontalViewDirection();
-                break;
-            case KeyEvent.VK_ENTER:
+            }
+            case KeyEvent.VK_ENTER -> {
                 Point interactionMapTile = manfred.getInteractionMapTile();
                 return mapWrapper.getMap().getInteractable(interactionMapTile).interact().apply(this);
+            }
         }
         return this;
     }
@@ -125,7 +114,7 @@ public class ManfredController implements ControllerInterface {
     public void loadMap(String name) {
         try {
             mapWrapper.loadMap(name);
-        } catch (ManfredException | IOException e) {
+        } catch (ManfredException | InvalidInputException e) {
             System.out.println("ERROR: Failed to load map " + name + "\n");
             e.printStackTrace();
         }
