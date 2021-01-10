@@ -4,22 +4,24 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>manf</groupId>
-    <artifactId>ManfredsApocalypse2_0</artifactId>
-    <packaging>pom</packaging>
-    <version>2.0</version>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>11</source>
-                    <target>11</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <parent>
+        <artifactId>ManfredsApocalypse</artifactId>
+        <groupId>org.manfredsapocalypse</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>Game</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <name>Game</name>
+    <description>A simple Game.</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>14</maven.compiler.source>
+        <maven.compiler.target>14</maven.compiler.target>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>

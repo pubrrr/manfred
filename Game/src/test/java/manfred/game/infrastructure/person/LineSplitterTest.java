@@ -1,5 +1,6 @@
 package manfred.game.infrastructure.person;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +31,7 @@ class LineSplitterTest {
         List<String> result = underTest.splitIntoTextLinesFittingIntoTextBox("one");
 
         assertThat(result, hasSize(1));
-        assertThat(result.get(0), equalToObject("one"));
+        assertThat(result.get(0), Matchers.equalToObject("one"));
     }
 
     @Test
