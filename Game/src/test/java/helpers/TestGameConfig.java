@@ -33,7 +33,7 @@ public class TestGameConfig extends GameConfig {
         );
     }
 
-    public TestGameConfig setPixelBlockSize(int pixelBlockSize) {
+    public TestGameConfig withPixelBlockSize(int pixelBlockSize) {
         this.testPixelBlockSize = pixelBlockSize;
         return this;
     }

@@ -2,11 +2,13 @@ package manfred.game.map;
 
 import manfred.data.InvalidInputException;
 import manfred.data.TextFileReader;
+import manfred.data.enemy.EnemyDto;
+import manfred.data.enemy.EnemyReader;
 import manfred.data.image.ImageLoader;
 import manfred.data.person.PersonReader;
 import manfred.game.config.GameConfig;
 import manfred.game.enemy.EnemiesWrapper;
-import manfred.game.enemy.EnemyReader;
+import manfred.game.enemy.EnemyConverter;
 import manfred.game.exception.ManfredException;
 import manfred.game.interact.Door;
 import manfred.game.interact.Portal;
@@ -22,21 +24,22 @@ import static org.mockito.Mockito.*;
 
 public class MapReaderTest {
     private MapReader underTest;
-    private PersonConverter personConverterMock;
-    private EnemyReader enemyReaderMock;
+    private EnemyConverter enemyConverterMock;
     private EnemiesWrapper enemiesWrapperMock;
     private ImageLoader imageLoaderMock;
     private PersonReader personReaderMock;
+    private EnemyReader enemyReaderMock;
 
     @BeforeEach
     void init() {
-        personConverterMock = mock(PersonConverter.class);
-        enemyReaderMock = mock(EnemyReader.class);
+        PersonConverter personConverterMock = mock(PersonConverter.class);
+        enemyConverterMock = mock(EnemyConverter.class);
         enemiesWrapperMock = mock(EnemiesWrapper.class);
         imageLoaderMock = mock(ImageLoader.class);
         personReaderMock = mock(PersonReader.class);
+        enemyReaderMock = mock(EnemyReader.class);
 
-        underTest = new MapReader(personConverterMock, enemyReaderMock, enemiesWrapperMock, mock(GameConfig.class), imageLoaderMock, new TextFileReader(), personReaderMock);
+        underTest = new MapReader(personConverterMock, enemyConverterMock, enemyReaderMock, enemiesWrapperMock, mock(GameConfig.class), imageLoaderMock, new TextFileReader(), personReaderMock);
     }
 
     @Test
@@ -128,10 +131,13 @@ public class MapReaderTest {
 
     @Test
     void triggersLoadEnemies() throws ManfredException, InvalidInputException {
+        when(enemyReaderMock.load(any())).thenReturn(new EnemyDto());
+
         String jsonWithEnemy = "{name: test, map: [[0]], enemies: [{name: testEnemy, spawnX: 0, spawnY: 55}]}";
         underTest.convert(jsonWithEnemy);
 
-        verify(enemyReaderMock).load("testEnemy", 0, 55);
+        verify(enemyReaderMock).load("testEnemy");
+        verify(enemyConverterMock).convert(any(), eq(0), eq(55));
         verify(enemiesWrapperMock).setEnemies(any());
     }
 
@@ -140,6 +146,6 @@ public class MapReaderTest {
         String input = "{name: test, map: [[tileName]]}";
         underTest.convert(input);
 
-        verify(imageLoaderMock).load("ManfredsApocalypse\\data\\maps\\tiles\\tileName.png");
+        verify(imageLoaderMock).load("ManfredsApocalypse\\Data\\data\\maps\\tiles\\tileName.png");
     }
 }

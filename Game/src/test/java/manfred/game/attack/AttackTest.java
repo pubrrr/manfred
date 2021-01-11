@@ -51,7 +51,7 @@ class AttackTest {
         int healthPoints = 2;
 
         underTest = new Attack(0, 0, 0, 5, 5, mock(MapCollider.class), damage, 0, null, 1);
-        Enemy enemy = new Enemy("test", 0, 3, 3, healthPoints, null, mock(MapCollider.class), 0, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE));
+        Enemy enemy = new Enemy("test", 0, 3, 3, healthPoints, null, mock(MapCollider.class), 0, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
 
         underTest.checkHit(enemy);
 
@@ -65,7 +65,7 @@ class AttackTest {
         int healthPoints = 2;
 
         underTest = new Attack(0, 0, 0, 0, 0, mock(MapCollider.class), 0, 0, null, 1);
-        Enemy enemy = new Enemy("test", 0, 8, 8, healthPoints, null, mock(MapCollider.class), 0, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE));
+        Enemy enemy = new Enemy("test", 0, 8, 8, healthPoints, null, mock(MapCollider.class), 0, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
 
         underTest.checkHit(enemy);
 

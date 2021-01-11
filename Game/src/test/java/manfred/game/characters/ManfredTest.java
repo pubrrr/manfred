@@ -33,7 +33,7 @@ class ManfredTest {
         MapCollider colliderMock = mock(MapCollider.class);
         mapWrapperMock = mock(MapWrapper.class);
 
-        underTest = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, colliderMock, (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE), null);
+        underTest = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, colliderMock, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE), null);
     }
 
     @Test

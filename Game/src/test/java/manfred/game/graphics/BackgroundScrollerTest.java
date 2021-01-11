@@ -38,7 +38,7 @@ class BackgroundScrollerTest {
         MapWrapper mapWrapperMock = mock(MapWrapper.class);
         when(mapWrapperMock.getMap()).thenAnswer(invocationOnMock -> map);
 
-        testGameConfig = (new TestGameConfig()).setPixelBlockSize(PIXEL_BLOCK_SIZE);
+        testGameConfig = (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE);
 
         underTest = new BackgroundScroller(TRIGGER_SCROLL_DISTANCE_TO_BORDER, manfredMock, mapWrapperMock, testGameConfig);
     }

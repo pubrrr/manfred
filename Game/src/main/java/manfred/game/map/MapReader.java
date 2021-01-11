@@ -3,11 +3,12 @@ package manfred.game.map;
 import manfred.data.DataContext;
 import manfred.data.InvalidInputException;
 import manfred.data.TextFileReader;
+import manfred.data.enemy.EnemyReader;
 import manfred.data.image.ImageLoader;
 import manfred.data.person.PersonReader;
 import manfred.game.config.GameConfig;
 import manfred.game.enemy.EnemiesWrapper;
-import manfred.game.enemy.EnemyReader;
+import manfred.game.enemy.EnemyConverter;
 import manfred.game.enemy.EnemyStack;
 import manfred.game.exception.ManfredException;
 import manfred.game.interact.Door;
@@ -35,6 +36,7 @@ public class MapReader {
     public static final String PATH_MAPS_TILE_IMAGES = PATH_MAPS + "tiles\\";
 
     private final PersonConverter personConverter;
+    private final EnemyConverter enemyConverter;
     private final EnemyReader enemyReader;
     private final EnemiesWrapper enemiesWrapper;
     private final GameConfig gameConfig;
@@ -44,8 +46,9 @@ public class MapReader {
 
     private final HashMap<String, MapTile> notAccessibleTilesStorage = new HashMap<>();
 
-    public MapReader(PersonConverter personConverter, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper, GameConfig gameConfig, ImageLoader imageLoader, TextFileReader textFileReader, PersonReader personReader) {
+    public MapReader(PersonConverter personConverter, EnemyConverter enemyConverter, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper, GameConfig gameConfig, ImageLoader imageLoader, TextFileReader textFileReader, PersonReader personReader) {
         this.personConverter = personConverter;
+        this.enemyConverter = enemyConverter;
         this.enemyReader = enemyReader;
         this.enemiesWrapper = enemiesWrapper;
         this.gameConfig = gameConfig;
@@ -138,7 +141,7 @@ public class MapReader {
             JSONObject tileConfig = new JSONObject(jsonTileConfig);
             blocksWidth = tileConfig.optInt("blocksWidth", 1);
             yOffset = tileConfig.optInt("yOffset", 0);
-        } catch (JSONException exception) {
+        } catch (JSONException | InvalidInputException exception) {
             blocksWidth = 1;
             yOffset = 0;
         }
@@ -205,7 +208,7 @@ public class MapReader {
             String name = ((JSONObject) enemy).getString("name");
             int spawnX = ((JSONObject) enemy).getInt("spawnX");
             int spawnY = ((JSONObject) enemy).getInt("spawnY");
-            enemyStack.add(enemyReader.load(name, spawnX, spawnY));
+            enemyStack.add(enemyConverter.convert(enemyReader.load(name), spawnX, spawnY));
         }
         return enemyStack;
     }
