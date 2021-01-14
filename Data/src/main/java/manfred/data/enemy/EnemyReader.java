@@ -20,12 +20,12 @@ public class EnemyReader {
     }
 
     public EnemyDto load(String name) throws InvalidInputException {
-        URL yamlURL = getClass().getResource("/enemy/" + name + ".yaml");
+        URL yamlURL = getClass().getResource("/enemies/" + name + ".yaml");
         if (yamlURL == null) {
             throw new InvalidInputException("Did not find resource for enemy " + name);
         }
 
-        URL imageURL = getClass().getResource("/enemy/" + name + ".png");
+        URL imageURL = getClass().getResource("/enemies/" + name + ".png");
         if (imageURL == null) {
             throw new InvalidInputException("Did not find image resource for enemy " + name);
         }

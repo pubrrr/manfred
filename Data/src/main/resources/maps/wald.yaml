@@ -1,0 +1,48 @@
+---
+name: Wald
+map:
+  - tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2
+  - tree2,_tree2,tree2,_tree2,1,1,1,1,tree2,_tree2,1,1,tree2,_tree2,1,1,1,1,1,1,1,1,tree2,_tree2,1,1,1,1,tree2,_tree2
+  - tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2
+  - tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2
+  - tree2,_tree2,1,1,1,1,1,tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2
+  - 1,tree2,_tree2,1,tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2
+  - tree2_right,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2
+  - tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2
+  - 1,tree2,_tree2,1,1,1,1,1,1,1,1,tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2,1,tree2
+  - tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2,1
+  - tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2,tree2,_tree2
+  - tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2,1,1,1,1,1,1,tree2,_tree2,1
+  - tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2
+  - tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2
+  - 1,tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2
+  - tree2,_tree2,1,1,1,1,1,1,1,1,1,tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2
+  - 1,tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2
+  - tree2,_tree2,tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2,1,tree2
+  - tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2,tree2,_tree2
+  - tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2,tree2,_tree2
+  - tree2,_tree2,tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2,tree2,_tree2,1
+  - tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2,tree2,_tree2,tree2,_tree2,1
+  - tree2_right,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2,tree2,_tree2,tree2,_tree2,1
+  - tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2,tree2,_tree2,tree2,_tree2
+  - tree2,_tree2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2,tree2,_tree2,1
+  - tree2,_tree2,1,1,1,1,1,1,_spooky_tree,_spooky_tree,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,tree2,_tree2,tree2,_tree2,1
+  - tree2,_tree2,1,1,1,1,1,1,_spooky_tree,_spooky_tree,0,1,1,1,1,1,1,tree2,_tree2,1,1,1,1,1,tree2,_tree2,tree2,_tree2,tree2,_tree2
+  - tree2,_tree2,1,1,1,spooky_tree,_spooky_tree,_spooky_tree,_spooky_tree,1,tree2,_tree2,1,1,1,1,1,1,1,1,1,tree2,_tree2,1,tree2,_tree2,tree2,_tree2,tree2,_tree2
+  - tree2_right,1,1,1,1,1,1,1,1,1,1,_spooky_tree,_spooky_tree,1,1,tree2,_tree2,1,1,1,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2
+  - tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2,tree2,_tree2
+persons:
+  - name: opa
+    positionX: 14
+    positionY: 1
+portals:
+  - positionX: 9
+    positionY: 27
+    target: baum
+    targetSpawnX: 5
+    targetSpawnY: 10
+doors: []
+enemies:
+  - name: mongo
+    positionX: 9
+    positionY: 9
