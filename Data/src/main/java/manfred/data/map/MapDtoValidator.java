@@ -38,6 +38,8 @@ public class MapDtoValidator {
     }
 
     private List<String> splitAtCommas(String line) {
-        return Arrays.asList(line.split(","));
+        return Arrays.stream(line.split(","))
+            .map(String::trim)
+            .collect(toList());
     }
 }
