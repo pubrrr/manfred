@@ -5,6 +5,7 @@ import manfred.data.InvalidInputException;
 import manfred.data.TextFileReader;
 import manfred.data.enemy.EnemyReader;
 import manfred.data.image.ImageLoader;
+import manfred.data.map.ValidatedMapDto;
 import manfred.data.person.PersonReader;
 import manfred.game.config.GameConfig;
 import manfred.game.enemy.EnemiesWrapper;
@@ -29,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Component
-public class MapReader {
+public class MapConverter {
     public static final String ACCESSIBLE = "1";
     public static final String NOT_ACCESSIBLE = "0";
     public static final String PATH_MAPS = DataContext.PATH_DATA + "maps\\";
@@ -46,7 +47,7 @@ public class MapReader {
 
     private final HashMap<String, MapTile> notAccessibleTilesStorage = new HashMap<>();
 
-    public MapReader(PersonConverter personConverter, EnemyConverter enemyConverter, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper, GameConfig gameConfig, ImageLoader imageLoader, TextFileReader textFileReader, PersonReader personReader) {
+    public MapConverter(PersonConverter personConverter, EnemyConverter enemyConverter, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper, GameConfig gameConfig, ImageLoader imageLoader, TextFileReader textFileReader, PersonReader personReader) {
         this.personConverter = personConverter;
         this.enemyConverter = enemyConverter;
         this.enemyReader = enemyReader;
@@ -57,14 +58,8 @@ public class MapReader {
         this.personReader = personReader;
     }
 
-    public Map load(String name) throws ManfredException, InvalidInputException {
-        String jsonMap = textFileReader.read(PATH_MAPS + name + ".json");
-        return convert(jsonMap);
-    }
-
-    String read(String jsonFileLocation) throws IOException {
-        List<String> input = Files.readAllLines(Paths.get(jsonFileLocation));
-        return String.join("", input);
+    public Map convert(ValidatedMapDto input) {
+        return null;
     }
 
     Map convert(String jsonString) throws ManfredException, InvalidInputException {
@@ -77,7 +72,7 @@ public class MapReader {
             EnemyStack enemies = convertEnemies(jsonInput.optJSONArray("enemies"));
             enemiesWrapper.setEnemies(enemies);
 
-            return new Map(name, mapTiles, gameConfig);
+            return new Map(mapTiles, gameConfig);
         } catch (JSONException $e) {
             throw new InvalidInputException($e.getMessage() + " in map " + jsonString);
         }

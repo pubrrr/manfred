@@ -7,7 +7,7 @@ import com.tngtech.junit.dataprovider.UseDataProviderExtension;
 import helpers.TestGameConfig;
 import helpers.TestMapFactory;
 import manfred.game.map.Map;
-import manfred.game.map.MapWrapper;
+import manfred.game.map.MapFacade;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -28,10 +28,10 @@ class MapColliderTest {
     void initMap(String[][] mapArray) {
         Map map = TestMapFactory.create(mapArray, new HashMap<>());
 
-        MapWrapper mapWrapperMock = mock(MapWrapper.class);
-        when(mapWrapperMock.getMap()).thenReturn(map);
+        MapFacade mapFacadeMock = mock(MapFacade.class);
+        when(mapFacadeMock.getMap()).thenReturn(map);
 
-        underTest = new MapCollider(mapWrapperMock, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
+        underTest = new MapCollider(mapFacadeMock, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
     }
 
     @TestTemplate

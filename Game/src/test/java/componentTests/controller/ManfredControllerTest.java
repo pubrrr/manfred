@@ -22,7 +22,7 @@ import manfred.game.interact.Portal;
 import manfred.game.interact.person.Person;
 import manfred.game.interact.person.gelaber.GelaberFacade;
 import manfred.game.map.Map;
-import manfred.game.map.MapWrapper;
+import manfred.game.map.MapFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -38,7 +38,7 @@ class ManfredControllerTest extends ControllerTestCase {
     private static final int PIXEL_BLOCK_SIZE = 40;
 
     private Manfred manfred;
-    private MapWrapper mapWrapperMock;
+    private MapFacade mapFacadeMock;
     private SkillSet skillSet;
     private AttacksContainer attacksContainer;
     private TestGameConfig testGameConfig;
@@ -55,8 +55,8 @@ class ManfredControllerTest extends ControllerTestCase {
 
         Map mapMock = mock(Map.class);
         when(mapMock.stepOn(any())).thenReturn(null);
-        mapWrapperMock = mock(MapWrapper.class);
-        when(mapWrapperMock.getMap()).thenReturn(mapMock);
+        mapFacadeMock = mock(MapFacade.class);
+        when(mapFacadeMock.getMap()).thenReturn(mapMock);
 
         skillSet = new SkillSet();
         attacksContainer = new AttacksContainer();
@@ -71,7 +71,7 @@ class ManfredControllerTest extends ControllerTestCase {
         underTest = new ManfredController(
             manfred,
             attackCaster,
-            mapWrapperMock,
+            mapFacadeMock,
             testGameConfig,
             backgroundScrollerMock,
             mock(GamePanel.class),
@@ -156,7 +156,7 @@ class ManfredControllerTest extends ControllerTestCase {
     @Test
     void interactDoesNothingWhenNoInteractInReach() {
         Map map = TestMapFactory.create(new String[][]{{"1", "1"}}, null);
-        when(mapWrapperMock.getMap()).thenReturn(map);
+        when(mapFacadeMock.getMap()).thenReturn(map);
 
         ControllerInterface controllerState = underTest.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
 
@@ -189,7 +189,7 @@ class ManfredControllerTest extends ControllerTestCase {
 
         assertTrue(controllerState.keyPressed(eventMock) instanceof ManfredController);
 
-        verify(mapWrapperMock).loadMap(targetName);
+        verify(mapFacadeMock).loadMap(targetName);
         verify(backgroundScrollerMock).centerTo(manfred.getSprite().getCenter());
         assertEquals(PIXEL_BLOCK_SIZE * targetSpawnX, manfred.getX());
         assertEquals(PIXEL_BLOCK_SIZE * targetSpawnY, manfred.getY());
@@ -212,7 +212,7 @@ class ManfredControllerTest extends ControllerTestCase {
 
         assertTrue(controllerState.keyPressed(mockEventWithKey(KeyEvent.VK_ENTER)) instanceof ManfredController);
 
-        verify(mapWrapperMock).loadMap(targetName);
+        verify(mapFacadeMock).loadMap(targetName);
         verify(backgroundScrollerMock).centerTo(manfred.getSprite().getCenter());
         assertEquals(PIXEL_BLOCK_SIZE * targetSpawnX, manfred.getX());
         assertEquals(PIXEL_BLOCK_SIZE * targetSpawnY, manfred.getY());
@@ -255,6 +255,6 @@ class ManfredControllerTest extends ControllerTestCase {
         interactables.put("interactable", interactable);
 
         Map map = TestMapFactory.create(new String[][]{{"1", "interactable"}}, interactables);
-        when(mapWrapperMock.getMap()).thenReturn(map);
+        when(mapFacadeMock.getMap()).thenReturn(map);
     }
 }

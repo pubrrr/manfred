@@ -11,9 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 public class RawMapDto {
     private String name;
-    private List<String> map;
-    private List<PersonDto> persons;
-    private List<TransporterDto> portals;
-    private List<TransporterDto> doors;
-    private List<EnemyDto> enemies;
+    private List<String> map = List.of();
+    private List<PersonDto> persons = List.of();
+    private List<TransporterDto> portals = List.of();
+    private List<TransporterDto> doors = List.of();
+    private List<EnemyDto> enemies = List.of();
 }

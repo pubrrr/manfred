@@ -3,7 +3,6 @@ package helpers;
 import manfred.game.config.GameConfig;
 import manfred.game.interact.Interactable;
 import manfred.game.map.*;
-import org.springframework.lang.Nullable;
 
 import java.util.HashMap;
 
@@ -15,12 +14,12 @@ public class TestMapFactory {
         for (int x = 0; x < mapTilesAsStrings.length; x++) {
             for (int y = 0; y < mapTilesAsStrings[0].length; y++) {
                 switch (mapTilesAsStrings[x][y]) {
-                    case MapReader.ACCESSIBLE -> mapTiles[x][y] = Accessible.getInstance();
-                    case MapReader.NOT_ACCESSIBLE -> mapTiles[x][y] = new NotAccessible(null, null, 1, 0);
+                    case MapConverter.ACCESSIBLE -> mapTiles[x][y] = Accessible.getInstance();
+                    case MapConverter.NOT_ACCESSIBLE -> mapTiles[x][y] = new NotAccessible(null, null, 1, 0);
                     default -> mapTiles[x][y] = interactables.get(mapTilesAsStrings[x][y]);
                 }
             }
         }
-        return new Map("testName", mapTiles, mock(GameConfig.class));
+        return new Map(mapTiles, mock(GameConfig.class));
     }
 }

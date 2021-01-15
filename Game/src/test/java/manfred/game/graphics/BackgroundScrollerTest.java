@@ -5,7 +5,7 @@ import helpers.TestMapFactory;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.Sprite;
 import manfred.game.map.Map;
-import manfred.game.map.MapWrapper;
+import manfred.game.map.MapFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -35,12 +35,12 @@ class BackgroundScrollerTest {
         manfredMock = mock(Manfred.class);
         when(manfredMock.getSprite()).thenAnswer(invocationOnMock -> manfredPosition);
 
-        MapWrapper mapWrapperMock = mock(MapWrapper.class);
-        when(mapWrapperMock.getMap()).thenAnswer(invocationOnMock -> map);
+        MapFacade mapFacadeMock = mock(MapFacade.class);
+        when(mapFacadeMock.getMap()).thenAnswer(invocationOnMock -> map);
 
         testGameConfig = (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE);
 
-        underTest = new BackgroundScroller(TRIGGER_SCROLL_DISTANCE_TO_BORDER, manfredMock, mapWrapperMock, testGameConfig);
+        underTest = new BackgroundScroller(TRIGGER_SCROLL_DISTANCE_TO_BORDER, manfredMock, mapFacadeMock, testGameConfig);
     }
 
     @Test

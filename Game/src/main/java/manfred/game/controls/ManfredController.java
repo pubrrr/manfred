@@ -13,18 +13,17 @@ import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.paintable.GelaberOverlay;
 import manfred.game.interact.person.gelaber.GelaberFacade;
-import manfred.game.map.MapWrapper;
+import manfred.game.map.MapFacade;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 
 @Component
 public class ManfredController implements ControllerInterface {
     private final Manfred manfred;
     private final Caster attackCaster;
-    private final MapWrapper mapWrapper;
+    private final MapFacade mapFacade;
     private final GameConfig gameConfig;
     private final BackgroundScroller backgroundScroller;
     private final GamePanel gamePanel;
@@ -35,7 +34,7 @@ public class ManfredController implements ControllerInterface {
     public ManfredController(
         Manfred manfred,
         Caster attackCaster,
-        MapWrapper mapWrapper,
+        MapFacade mapFacade,
         GameConfig gameConfig,
         BackgroundScroller backgroundScroller,
         GamePanel gamePanel,
@@ -45,7 +44,7 @@ public class ManfredController implements ControllerInterface {
     ) {
         this.manfred = manfred;
         this.attackCaster = attackCaster;
-        this.mapWrapper = mapWrapper;
+        this.mapFacade = mapFacade;
         this.gameConfig = gameConfig;
         this.backgroundScroller = backgroundScroller;
         this.gamePanel = gamePanel;
@@ -80,7 +79,7 @@ public class ManfredController implements ControllerInterface {
             }
             case KeyEvent.VK_ENTER -> {
                 Point interactionMapTile = manfred.getInteractionMapTile();
-                return mapWrapper.getMap().getInteractable(interactionMapTile).interact().apply(this);
+                return mapFacade.getMap().getInteractable(interactionMapTile).interact().apply(this);
             }
         }
         return this;
@@ -95,7 +94,7 @@ public class ManfredController implements ControllerInterface {
 
     @Override
     public ControllerInterface move() {
-        ControllerInterface newControllerState = mapWrapper.getMap().stepOn(this.manfred.moveTo()).apply(this);
+        ControllerInterface newControllerState = mapFacade.getMap().stepOn(this.manfred.moveTo()).apply(this);
 
         enemiesWrapper.forEach(enemy -> enemy.move(manfred));
         attacksContainer.forEach(Attack::move);
@@ -113,8 +112,8 @@ public class ManfredController implements ControllerInterface {
 
     public void loadMap(String name) {
         try {
-            mapWrapper.loadMap(name);
-        } catch (ManfredException | InvalidInputException e) {
+            mapFacade.loadMap(name);
+        } catch (InvalidInputException e) {
             System.out.println("ERROR: Failed to load map " + name + "\n");
             e.printStackTrace();
         }

@@ -11,7 +11,7 @@ public class MapTest {
     @Test
     public void isAccessible() {
         MapTile[][] map = {{new NotAccessible(null, null, 1, 0), Accessible.getInstance()}};
-        Map unterTest = new Map("test", map, mock(GameConfig.class));
+        Map unterTest = new Map(map, mock(GameConfig.class));
 
         assertFalse(unterTest.isAccessible(0, 0));
         assertTrue(unterTest.isAccessible(0, 1));

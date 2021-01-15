@@ -1,6 +1,9 @@
-package manfred.game.interact.person.gelaber;
+package manfred.game.interact.person.textLineFactory;
 
 import manfred.game.config.GameConfig;
+import manfred.game.interact.person.gelaber.GelaberEdge;
+import manfred.game.interact.person.gelaber.TextLine;
+import manfred.game.interact.person.gelaber.TextLineWrapper;
 
 import java.util.List;
 

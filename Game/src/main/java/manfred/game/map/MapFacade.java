@@ -2,21 +2,20 @@ package manfred.game.map;
 
 import manfred.data.InvalidInputException;
 import manfred.game.attack.AttacksContainer;
-import manfred.game.exception.ManfredException;
 import manfred.game.graphics.paintable.PaintableContainerElement;
 import manfred.game.graphics.paintable.PaintablesContainer;
 
 import java.util.Stack;
 
-public class MapWrapper implements PaintablesContainer {
-    private final MapReader mapReader;
+public class MapFacade implements PaintablesContainer {
+    private final MapProvider mapProvider;
     private final String initialMapName;
     private final AttacksContainer attacksContainer;
 
     private Map map;
 
-    public MapWrapper(MapReader mapReader, String initialMapName, AttacksContainer attacksContainer) {
-        this.mapReader = mapReader;
+    public MapFacade(MapProvider mapProvider, String initialMapName, AttacksContainer attacksContainer) {
+        this.mapProvider = mapProvider;
         this.initialMapName = initialMapName;
         this.attacksContainer = attacksContainer;
     }
@@ -25,20 +24,20 @@ public class MapWrapper implements PaintablesContainer {
         if (map == null) {
             try {
                 loadMap(initialMapName);
-            } catch (ManfredException | InvalidInputException e) {
+            } catch (InvalidInputException e) {
                 e.printStackTrace();
             }
         }
         return map;
     }
 
-    public void loadMap(String name) throws ManfredException, InvalidInputException {
+    public void loadMap(String name) throws InvalidInputException {
         attacksContainer.clear();
-        this.map = mapReader.load(name);
+        this.map = mapProvider.provide(name);
     }
 
     @Override
     public Stack<PaintableContainerElement> getPaintableContainerElements() {
-        return getMap().getPaintableContainerElements();
+        return this.map.getPaintableContainerElements();
     }
 }

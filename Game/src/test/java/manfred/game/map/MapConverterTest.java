@@ -22,8 +22,8 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class MapReaderTest {
-    private MapReader underTest;
+public class MapConverterTest {
+    private MapConverter underTest;
     private EnemyConverter enemyConverterMock;
     private EnemiesWrapper enemiesWrapperMock;
     private ImageLoader imageLoaderMock;
@@ -39,7 +39,7 @@ public class MapReaderTest {
         personReaderMock = mock(PersonReader.class);
         enemyReaderMock = mock(EnemyReader.class);
 
-        underTest = new MapReader(personConverterMock, enemyConverterMock, enemyReaderMock, enemiesWrapperMock, mock(GameConfig.class), imageLoaderMock, new TextFileReader(), personReaderMock);
+        underTest = new MapConverter(personConverterMock, enemyConverterMock, enemyReaderMock, enemiesWrapperMock, mock(GameConfig.class), imageLoaderMock, new TextFileReader(), personReaderMock);
     }
 
     @Test

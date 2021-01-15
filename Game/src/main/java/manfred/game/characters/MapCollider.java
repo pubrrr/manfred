@@ -2,21 +2,21 @@ package manfred.game.characters;
 
 import manfred.game.config.GameConfig;
 import manfred.game.map.Map;
-import manfred.game.map.MapWrapper;
+import manfred.game.map.MapFacade;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MapCollider {
     private static MapCollider instance = null;
 
-    private MapWrapper mapWrapper;
-    private GameConfig gameConfig;
+    private final MapFacade mapFacade;
+    private final GameConfig gameConfig;
 
-    public MapCollider(MapWrapper mapWrapper, GameConfig gameConfig) {
+    public MapCollider(MapFacade mapFacade, GameConfig gameConfig) {
         this.gameConfig = gameConfig;
         instance = this;
 
-        this.mapWrapper = mapWrapper;
+        this.mapFacade = mapFacade;
     }
 
     public boolean collides(int leftBorder, int rightBorder, int topBorder, int bottomBorder) {
@@ -25,7 +25,7 @@ public class MapCollider {
         int topMapTile = topBorder / gameConfig.getPixelBlockSize();
         int bottomMapTile = bottomBorder / gameConfig.getPixelBlockSize();
 
-        Map map = mapWrapper.getMap();
+        Map map = mapFacade.getMap();
         for (int x = leftMapTile; x <= rightMapTile; x++) {
             for (int y = topMapTile; y <= bottomMapTile; y++) {
                 if (!map.isAccessible(x, y)) {

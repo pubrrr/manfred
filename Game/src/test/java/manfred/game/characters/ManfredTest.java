@@ -7,7 +7,7 @@ import com.tngtech.junit.dataprovider.UseDataProviderExtension;
 import helpers.TestGameConfig;
 import helpers.TestMapFactory;
 import manfred.game.map.Map;
-import manfred.game.map.MapWrapper;
+import manfred.game.map.MapFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestTemplate;
@@ -26,12 +26,12 @@ class ManfredTest {
 
     private Manfred underTest;
 
-    private MapWrapper mapWrapperMock;
+    private MapFacade mapFacadeMock;
 
     @BeforeEach
     void init() {
         MapCollider colliderMock = mock(MapCollider.class);
-        mapWrapperMock = mock(MapWrapper.class);
+        mapFacadeMock = mock(MapFacade.class);
 
         underTest = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, colliderMock, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE), null);
     }
@@ -39,7 +39,7 @@ class ManfredTest {
     @Test
     void whenNoKeyPressed_thenDoesNotMove() {
         Map map = TestMapFactory.create(new String[][]{{"1"}}, null);
-        when(mapWrapperMock.getMap()).thenReturn(map);
+        when(mapFacadeMock.getMap()).thenReturn(map);
 
         int initialX = underTest.getX();
         int initialY = underTest.getY();

@@ -1,6 +1,7 @@
 package manfred.data.map;
 
 import manfred.data.InvalidInputException;
+import manfred.data.map.validator.Validator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,14 +10,23 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class MapDtoValidatorTest {
 
     private MapDtoValidator underTest;
 
+    private Validator validatorMock1;
+
+    private Validator validatorMock2;
+
     @BeforeEach
     void setUp() {
-        underTest = new MapDtoValidator();
+        validatorMock1 = mock(Validator.class);
+        validatorMock2 = mock(Validator.class);
+        underTest = new MapDtoValidator(List.of(validatorMock1, validatorMock2));
     }
 
     @Test
@@ -205,5 +215,27 @@ class MapDtoValidatorTest {
         assertThat(exception.getCause().getMessage(), containsString("Map row 0 is too long"));
         assertThat(exception.getCause().getMessage(), containsString("Map row 2 is too long"));
         assertThat(exception.getCause().getMessage(), containsString("must not be longer than 1"));
+    }
+
+    @Test
+    void oneFailingValidator() {
+        RawMapDto input = new RawMapDto("test", List.of(), List.of(), List.of(), List.of(), List.of());
+
+        when(validatorMock1.validate(any())).thenReturn(List.of("message1", "message2"));
+
+        InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.validate(input));
+        assertThat(exception.getMessage(), containsString("Validation of map test failed:\nmessage1,\nmessage2"));
+    }
+
+    @Test
+    void twoFailingValidators() {
+        RawMapDto input = new RawMapDto("test", List.of(), List.of(), List.of(), List.of(), List.of());
+
+        when(validatorMock1.validate(any())).thenReturn(List.of("validator1_message1", "validator1_message2"));
+        when(validatorMock2.validate(any())).thenReturn(List.of("validator2_message1", "validator2_message2"));
+
+        InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.validate(input));
+        assertThat(exception.getMessage(), containsString("validator1_message1,\nvalidator1_message2"));
+        assertThat(exception.getMessage(), containsString("validator2_message1,\nvalidator2_message2"));
     }
 }

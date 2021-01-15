@@ -12,19 +12,12 @@ import java.util.Stack;
 import java.util.function.Function;
 
 public class Map {
-    private final String name;
     private final MapTile[][] mapTiles;
     private final GameConfig gameConfig;
 
-    public Map(String name, MapTile[][] mapTiles, GameConfig gameConfig) {
-        this.name = name;
+    public Map(MapTile[][] mapTiles, GameConfig gameConfig) {
         this.mapTiles = mapTiles;
         this.gameConfig = gameConfig;
-    }
-
-    // TODO necessary?
-    public String getName() {
-        return name;
     }
 
     public MapTile[][] getArray() {

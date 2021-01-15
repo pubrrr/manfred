@@ -22,8 +22,8 @@ import manfred.game.interact.person.gelaber.LineSplitter;
 import manfred.game.interact.person.textLineFactory.ChoicesTextLineFactory;
 import manfred.game.interact.person.textLineFactory.SimpleTextLineFactory;
 import manfred.game.interact.person.textLineFactory.TextLineFactory;
-import manfred.game.map.MapReader;
-import manfred.game.map.MapWrapper;
+import manfred.game.map.MapConverter;
+import manfred.game.map.MapFacade;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -74,8 +74,8 @@ public class GameContext {
     }
 
     @Bean
-    public MapWrapper mapWrapper(MapReader mapReader, AttacksContainer attacksContainer) {
-        return new MapWrapper(mapReader, "Wald", attacksContainer);
+    public MapFacade mapWrapper(MapConverter mapConverter, AttacksContainer attacksContainer) {
+        return new MapFacade(mapConverter, "Wald", attacksContainer);
     }
 
     @Bean
@@ -94,9 +94,9 @@ public class GameContext {
     }
 
     @Bean
-    public BackgroundScroller backgroundScroller(Manfred manfred, MapWrapper mapWrapper, GameConfig gameConfig) {
+    public BackgroundScroller backgroundScroller(Manfred manfred, MapFacade mapFacade, GameConfig gameConfig) {
         int triggerScrollDistanceToBorder = Math.min(gameConfig.getWindowHeight(), gameConfig.getWindowWidth()) / 3;
-        return new BackgroundScroller(triggerScrollDistanceToBorder, manfred, mapWrapper, gameConfig);
+        return new BackgroundScroller(triggerScrollDistanceToBorder, manfred, mapFacade, gameConfig);
     }
 
     @Bean

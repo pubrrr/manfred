@@ -8,7 +8,7 @@ import java.util.function.Function;
 public class TextLineWrapper extends BasicTextLine {
     private final TextLine wrapped;
 
-    protected TextLineWrapper(List<String> textLines, GameConfig gameConfig, TextLine wrapped) {
+    public TextLineWrapper(List<String> textLines, GameConfig gameConfig, TextLine wrapped) {
         super(textLines, gameConfig);
         this.wrapped = wrapped;
     }

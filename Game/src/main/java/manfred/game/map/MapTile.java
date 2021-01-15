@@ -18,6 +18,7 @@ public interface MapTile extends Paintable {
 
     @Nullable
     default BufferedImage getImage() {
+        // TODO refactor
         return null;
     }
 }

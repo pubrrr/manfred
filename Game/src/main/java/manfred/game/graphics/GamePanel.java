@@ -9,7 +9,7 @@ import manfred.game.graphics.paintable.GelaberOverlay;
 import manfred.game.graphics.paintable.Paintable;
 import manfred.game.graphics.paintable.PaintableContainerElement;
 import manfred.game.graphics.paintable.PaintablesContainer;
-import manfred.game.map.MapWrapper;
+import manfred.game.map.MapFacade;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -33,7 +33,7 @@ public class GamePanel extends JPanel {
     private final List<PaintablesContainer> paintablesContainers = new LinkedList<>();
 
     public GamePanel(
-        MapWrapper mapWrapper,
+        MapFacade mapFacade,
         Manfred manfred,
         Caster attackCaster,
         EnemiesWrapper enemiesWrapper,
@@ -52,7 +52,7 @@ public class GamePanel extends JPanel {
 
         this.backgroundScroller = backgroundScroller;
 
-        registerPaintableContainer(mapWrapper);
+        registerPaintableContainer(mapFacade);
         registerPaintableContainer(() -> {
             Stack<PaintableContainerElement> elements = new Stack<>();
             elements.push(new PaintableContainerElement(attackCaster, manfred.getX() - gameConfig.getPixelBlockSize() / 2, manfred.getY()));
