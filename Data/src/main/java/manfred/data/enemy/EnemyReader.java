@@ -2,6 +2,7 @@ package manfred.data.enemy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import manfred.data.InvalidInputException;
+import manfred.data.ObjectReader;
 import manfred.data.image.ImageLoader;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 
 @Component
-public class EnemyReader {
+public class EnemyReader implements ObjectReader<EnemyDto> {
 
     private final ImageLoader imageLoader;
     private final ObjectMapper objectMapper;

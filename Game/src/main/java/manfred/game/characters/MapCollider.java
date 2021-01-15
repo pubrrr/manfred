@@ -1,5 +1,6 @@
 package manfred.game.characters;
 
+import manfred.data.InvalidInputException;
 import manfred.game.config.GameConfig;
 import manfred.game.map.Map;
 import manfred.game.map.MapFacade;
@@ -36,9 +37,9 @@ public class MapCollider {
         return false;
     }
 
-    public static MapCollider getInstance() throws Exception {
+    public static MapCollider getInstance() throws InvalidInputException {
         if (instance == null) {
-            throw new Exception("Must call constuctor first.");
+            throw new InvalidInputException("Must call constuctor first.");
         }
         return instance;
     }

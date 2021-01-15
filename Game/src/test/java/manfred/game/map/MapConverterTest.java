@@ -1,7 +1,6 @@
 package manfred.game.map;
 
 import manfred.data.InvalidInputException;
-import manfred.data.TextFileReader;
 import manfred.data.enemy.EnemyDto;
 import manfred.data.enemy.EnemyReader;
 import manfred.data.image.ImageLoader;
@@ -39,7 +38,7 @@ public class MapConverterTest {
         personReaderMock = mock(PersonReader.class);
         enemyReaderMock = mock(EnemyReader.class);
 
-        underTest = new MapConverter(personConverterMock, enemyConverterMock, enemyReaderMock, enemiesWrapperMock, mock(GameConfig.class), imageLoaderMock, new TextFileReader(), personReaderMock);
+        underTest = new MapConverter(personConverterMock, enemyConverterMock, enemyReaderMock, enemiesWrapperMock, mock(GameConfig.class));
     }
 
     @Test

@@ -1,12 +1,13 @@
 package manfred.game.enemy;
 
 import manfred.data.InvalidInputException;
+import manfred.data.ObjectConverter;
 import manfred.data.enemy.EnemyDto;
 import manfred.game.config.GameConfig;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EnemyConverter {
+public class EnemyConverter implements ObjectConverter<EnemyDto, UnlocatedEnemy> {
 
     private final MapColliderProvider mapColliderProvider;
     private final GameConfig gameConfig;
@@ -16,13 +17,11 @@ public class EnemyConverter {
         this.gameConfig = gameConfig;
     }
 
-    public Enemy convert(EnemyDto enemyDto, int spawnX, int spawnY) throws InvalidInputException {
+    public UnlocatedEnemy convert(EnemyDto enemyDto) throws InvalidInputException {
         try {
-            return new Enemy(
+            return new UnlocatedEnemy(
                 enemyDto.getName(),
                 enemyDto.getSpeed(),
-                gameConfig.getPixelBlockSize() * spawnX,
-                gameConfig.getPixelBlockSize() * spawnY,
                 enemyDto.getHealthPoints(),
                 enemyDto.getImage(),
                 mapColliderProvider.provide(),

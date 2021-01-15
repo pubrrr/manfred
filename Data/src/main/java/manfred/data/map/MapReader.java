@@ -1,8 +1,9 @@
 package manfred.data.map;
 
 import manfred.data.InvalidInputException;
+import manfred.data.ObjectReader;
 
-public class MapReader {
+public class MapReader implements ObjectReader<ValidatedMapDto> {
 
     private final RawMapReader rawMapReader;
     private final MapDtoValidator mapDtoValidator;
@@ -12,7 +13,7 @@ public class MapReader {
         this.mapDtoValidator = mapDtoValidator;
     }
 
-    public ValidatedMapDto read(String name) throws InvalidInputException {
+    public ValidatedMapDto load(String name) throws InvalidInputException {
         RawMapDto rawMapDto = rawMapReader.load(name);
         return mapDtoValidator.validate(rawMapDto);
     }

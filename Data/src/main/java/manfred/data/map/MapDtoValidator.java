@@ -19,21 +19,9 @@ public class MapDtoValidator {
     }
 
     public ValidatedMapDto validate(RawMapDto rawMap) throws InvalidInputException {
-        MapMatrix mapMatrix;
-        try {
-            mapMatrix = buildMapMatrix(rawMap.getMap());
-        } catch (InvalidInputException e) {
-            throw new InvalidInputException("Could not create map " + rawMap.getName(), e);
-        }
+        MapMatrix mapMatrix = buildMapMatrix(rawMap);
 
-        List<String> validationMessages = validators.stream()
-            .map(validator -> validator.validate(rawMap))
-            .flatMap(Collection::stream)
-            .collect(toList());
-
-        if (!validationMessages.isEmpty()) {
-            throw new InvalidInputException("Validation of map " + rawMap.getName() + " failed:\n" + String.join(",\n", validationMessages));
-        }
+        validateMapObjects(rawMap);
 
         return new ValidatedMapDto(
             rawMap.getName(),
@@ -45,11 +33,26 @@ public class MapDtoValidator {
         );
     }
 
-    private MapMatrix buildMapMatrix(List<String> rawMap) throws InvalidInputException {
-        List<List<String>> rawMatrix = rawMap.stream().map(this::splitAtCommas).collect(toList());
+    private void validateMapObjects(RawMapDto rawMap) throws InvalidInputException {
+        List<String> validationMessages = validators.stream()
+            .map(validator -> validator.validate(rawMap))
+            .flatMap(Collection::stream)
+            .collect(toList());
+
+        if (!validationMessages.isEmpty()) {
+            throw new InvalidInputException("Validation of map " + rawMap.getName() + " failed:\n" + String.join(",\n", validationMessages));
+        }
+    }
+
+    private MapMatrix buildMapMatrix(RawMapDto rawMap) throws InvalidInputException {
+        List<List<String>> rawMatrix = rawMap.getMap().stream().map(this::splitAtCommas).collect(toList());
 
         MapMatrix.Builder mapMatrixBuilder = MapMatrix.fromRawData(rawMatrix);
-        return mapMatrixBuilder.validateAndBuild();
+        try {
+            return mapMatrixBuilder.validateAndBuild();
+        } catch (InvalidInputException e) {
+            throw new InvalidInputException("Could not create map " + rawMap.getName(), e);
+        }
     }
 
     private List<String> splitAtCommas(String line) {

@@ -2,9 +2,8 @@ package manfred.game.map;
 
 import manfred.data.DataContext;
 import manfred.data.InvalidInputException;
-import manfred.data.TextFileReader;
+import manfred.data.ObjectConverter;
 import manfred.data.enemy.EnemyReader;
-import manfred.data.image.ImageLoader;
 import manfred.data.map.ValidatedMapDto;
 import manfred.data.person.PersonReader;
 import manfred.game.config.GameConfig;
@@ -15,7 +14,7 @@ import manfred.game.exception.ManfredException;
 import manfred.game.interact.Door;
 import manfred.game.interact.Interactable;
 import manfred.game.interact.Portal;
-import manfred.game.interact.person.PersonConverter;
+import manfred.game.interact.person.PersonProvider;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,38 +22,30 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 
 @Component
-public class MapConverter {
+public class MapConverter implements ObjectConverter<ValidatedMapDto, Map> {
     public static final String ACCESSIBLE = "1";
     public static final String NOT_ACCESSIBLE = "0";
     public static final String PATH_MAPS = DataContext.PATH_DATA + "maps\\";
     public static final String PATH_MAPS_TILE_IMAGES = PATH_MAPS + "tiles\\";
 
-    private final PersonConverter personConverter;
+    private final PersonProvider personProvider;
     private final EnemyConverter enemyConverter;
     private final EnemyReader enemyReader;
     private final EnemiesWrapper enemiesWrapper;
     private final GameConfig gameConfig;
-    private final ImageLoader imageLoader;
-    private final TextFileReader textFileReader;
     private final PersonReader personReader;
 
     private final HashMap<String, MapTile> notAccessibleTilesStorage = new HashMap<>();
 
-    public MapConverter(PersonConverter personConverter, EnemyConverter enemyConverter, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper, GameConfig gameConfig, ImageLoader imageLoader, TextFileReader textFileReader, PersonReader personReader) {
-        this.personConverter = personConverter;
+    public MapConverter(PersonProvider personProvider, EnemyConverter enemyConverter, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper, GameConfig gameConfig, PersonReader personReader) {
+        this.personProvider = personProvider;
         this.enemyConverter = enemyConverter;
         this.enemyReader = enemyReader;
         this.enemiesWrapper = enemiesWrapper;
         this.gameConfig = gameConfig;
-        this.imageLoader = imageLoader;
-        this.textFileReader = textFileReader;
         this.personReader = personReader;
     }
 
@@ -164,7 +155,7 @@ public class MapConverter {
     private Interactable convertInteractable(JSONObject jsonInteractable) throws ManfredException, InvalidInputException {
         String interactableType = jsonInteractable.getString("type");
         return switch (interactableType) {
-            case "Person" -> personConverter.convert(
+            case "Person" -> personProvider.convert(
                 personReader.load(jsonInteractable.getString("name"))
             );
             case "Door" -> convertDoor(jsonInteractable);

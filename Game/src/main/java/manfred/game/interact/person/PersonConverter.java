@@ -1,13 +1,14 @@
 package manfred.game.interact.person;
 
+import manfred.data.InvalidInputException;
+import manfred.data.ObjectConverter;
 import manfred.data.person.PersonDto;
 import manfred.game.config.GameConfig;
-import manfred.game.exception.ManfredException;
 import manfred.game.interact.person.gelaber.GelaberConverter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PersonConverter {
+public class PersonConverter implements ObjectConverter<PersonDto, Person> {
 
     private final GelaberConverter gelaberConverter;
     private final GameConfig gameConfig;
@@ -17,7 +18,7 @@ public class PersonConverter {
         this.gameConfig = gameConfig;
     }
 
-    public Person convert(PersonDto personDto) throws ManfredException {
+    public Person convert(PersonDto personDto) throws InvalidInputException {
         return new Person(
             personDto.getName(),
             gelaberConverter.convert(personDto.getGelaber()),

@@ -2,6 +2,7 @@ package manfred.data.attack;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import manfred.data.InvalidInputException;
+import manfred.data.ObjectReader;
 import manfred.data.image.ImageLoader;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-public class AttackReader {
+public class AttackReader implements ObjectReader<AttackDto> {
 
     private final ObjectMapper objectMapper;
     private final ImageLoader imageLoader;

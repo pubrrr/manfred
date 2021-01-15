@@ -2,6 +2,7 @@ package manfred.data.person;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import manfred.data.InvalidInputException;
+import manfred.data.ObjectReader;
 import manfred.data.image.ImageLoader;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 
 @Component
-public class PersonReader {
+public class PersonReader implements ObjectReader<PersonDto> {
     private final ImageLoader imageLoader;
     private final ObjectMapper objectMapper;
 
@@ -18,6 +19,7 @@ public class PersonReader {
         this.objectMapper = objectMapper;
     }
 
+    @Override
     public PersonDto load(String name) throws InvalidInputException {
         URL yamlURL = getClass().getResource("/persons/" + name + ".yaml");
         if (yamlURL == null) {

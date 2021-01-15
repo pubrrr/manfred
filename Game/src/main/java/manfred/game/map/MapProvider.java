@@ -1,19 +1,14 @@
 package manfred.game.map;
 
-import manfred.data.InvalidInputException;
+import manfred.data.ObjectProvider;
 import manfred.data.map.MapReader;
+import manfred.data.map.ValidatedMapDto;
+import org.springframework.stereotype.Component;
 
-public class MapProvider {
+@Component
+public class MapProvider extends ObjectProvider<ValidatedMapDto, Map> {
 
-    private final MapConverter mapConverter;
-    private final MapReader mapReader;
-
-    public MapProvider(MapConverter mapConverter, MapReader mapReader) {
-        this.mapConverter = mapConverter;
-        this.mapReader = mapReader;
-    }
-
-    public Map provide(String name) throws InvalidInputException {
-        return mapConverter.convert(mapReader.read(name));
+    public MapProvider(MapReader mapReader, MapConverter mapConverter) {
+        super(mapReader, mapConverter);
     }
 }

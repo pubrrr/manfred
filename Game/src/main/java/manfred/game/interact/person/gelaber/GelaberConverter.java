@@ -2,10 +2,10 @@ package manfred.game.interact.person.gelaber;
 
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableMap;
+import manfred.data.InvalidInputException;
 import manfred.data.person.GelaberDto;
 import manfred.data.person.GelaberTextDto;
 import manfred.data.person.ReferenceDto;
-import manfred.game.exception.ManfredException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class GelaberConverter {
         this.lineSplitter = lineSplitter;
     }
 
-    public GelaberFacade convert(GelaberDto gelaber) throws ManfredException {
+    public GelaberFacade convert(GelaberDto gelaber) throws InvalidInputException {
         ImmutableMap<String, GelaberNodeIdentifier> keyToIdMap = gelaber.getTexts().keySet().stream()
             .collect(collectingAndThen(toMap(Function.identity(), GelaberNodeIdentifier::new), ImmutableMap::copyOf));
 
@@ -49,9 +49,9 @@ public class GelaberConverter {
             .buildStartingAt(keyToIdMap.get(gelaber.getInitialTextReference()));
     }
 
-    private void checkReferences(ImmutableMap<String, GelaberNodeIdentifier> keyToIdMap, GelaberDto gelaber) throws ManfredException {
+    private void checkReferences(ImmutableMap<String, GelaberNodeIdentifier> keyToIdMap, GelaberDto gelaber) throws InvalidInputException {
         if (!keyToIdMap.containsKey(gelaber.getInitialTextReference())) {
-            throw new ManfredException("Unknown initial gelaber reference " + gelaber.getInitialTextReference() + " not found in " + keyToIdMap.keySet());
+            throw new InvalidInputException("Unknown initial gelaber reference " + gelaber.getInitialTextReference() + " not found in " + keyToIdMap.keySet());
         }
 
         Optional<ReferenceDto> unknownReference = gelaber.getTexts().values().stream()
@@ -60,7 +60,7 @@ public class GelaberConverter {
             .findAny();
 
         if (unknownReference.isPresent()) {
-            throw new ManfredException("Unknown gelaber reference: " + unknownReference.get().getTo() + " not found in " + keyToIdMap.keySet());
+            throw new InvalidInputException("Unknown gelaber reference: " + unknownReference.get().getTo() + " not found in " + keyToIdMap.keySet());
         }
     }
 

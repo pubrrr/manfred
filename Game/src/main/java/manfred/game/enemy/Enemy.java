@@ -10,11 +10,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Enemy extends MovingObject implements Paintable {
-    private String name;
-    private GameConfig gameConfig;
+    private final String name;
+    private final GameConfig gameConfig;
+    private final int aggroRadius;
 
     private int healthPoints;
-    private int aggroRadius;
 
     public Enemy(String name, int speed, int x, int y, int healthPoints, BufferedImage image, MapCollider collider, int aggroRadius, GameConfig gameConfig) {
         super(speed, x, y, 2 * gameConfig.getPixelBlockSize(), 2 * gameConfig.getPixelBlockSize(), 2 * gameConfig.getPixelBlockSize(), image, collider);
