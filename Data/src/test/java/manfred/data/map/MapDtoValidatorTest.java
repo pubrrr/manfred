@@ -1,6 +1,10 @@
 package manfred.data.map;
 
 import manfred.data.InvalidInputException;
+import manfred.data.map.matrix.MapMatrix;
+import manfred.data.map.tile.MapTileReader;
+import manfred.data.map.tile.TileConverter;
+import manfred.data.map.tile.TilePrototype;
 import manfred.data.map.validator.Validator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,16 +30,15 @@ class MapDtoValidatorTest {
     void setUp() {
         validatorMock1 = mock(Validator.class);
         validatorMock2 = mock(Validator.class);
-        underTest = new MapDtoValidator(List.of(validatorMock1, validatorMock2));
+        underTest = new MapDtoValidator(List.of(validatorMock1, validatorMock2), new TileConverter(mock(MapTileReader.class)));
     }
 
     @Test
-    void emptyInput() throws InvalidInputException {
-        RawMapDto input = new RawMapDto("test", List.of(), List.of(), List.of(), List.of(), List.of());
+    void emptyOtherStructs() throws InvalidInputException {
+        RawMapDto input = new RawMapDto("test", List.of("1"), List.of(), List.of(), List.of(), List.of());
 
         ValidatedMapDto result = underTest.validate(input);
 
-        assertThat(result.getMap().getMatrix(), empty());
         assertThat(result.getPersons(), empty());
         assertThat(result.getPortals(), empty());
         assertThat(result.getDoors(), empty());
@@ -43,10 +46,10 @@ class MapDtoValidatorTest {
     }
 
     @Test
-    void emptyEmptyButOtherStructs() throws InvalidInputException {
+    void nonEmptyOtherStructs() throws InvalidInputException {
         RawMapDto input = new RawMapDto(
             "test",
-            List.of(),
+            List.of("1"),
             List.of(new PersonDto()),
             List.of(new TransporterDto()),
             List.of(new TransporterDto(), new TransporterDto()),
@@ -55,7 +58,6 @@ class MapDtoValidatorTest {
 
         ValidatedMapDto result = underTest.validate(input);
 
-        assertThat(result.getMap().getMatrix(), empty());
         assertThat(result.getPersons(), hasSize(1));
         assertThat(result.getPortals(), hasSize(1));
         assertThat(result.getDoors(), hasSize(2));
@@ -78,9 +80,9 @@ class MapDtoValidatorTest {
 
         ValidatedMapDto result = underTest.validate(input);
 
-        List<List<String>> matrix = result.getMap().getMatrix();
-        assertThat(matrix.size(), is(1));
-        assertThat(matrix.get(0).size(), is(2));
+        MapMatrix<TilePrototype> matrix = result.getMap();
+        assertThat(matrix.sizeX(), is(1));
+        assertThat(matrix.sizeY(), is(2));
     }
 
     @Test
@@ -98,9 +100,9 @@ class MapDtoValidatorTest {
 
         ValidatedMapDto result = underTest.validate(input);
 
-        List<List<String>> matrix = result.getMap().getMatrix();
-        assertThat(matrix.size(), is(2));
-        assertThat(matrix.get(0).size(), is(1));
+        MapMatrix<TilePrototype> matrix = result.getMap();
+        assertThat(matrix.sizeX(), is(2));
+        assertThat(matrix.sizeY(), is(1));
     }
 
     @Test
@@ -109,7 +111,7 @@ class MapDtoValidatorTest {
             "test",
             List.of(
                 "0,1",
-                "2,3"
+                "0,1"
             ),
             List.of(),
             List.of(),
@@ -119,11 +121,11 @@ class MapDtoValidatorTest {
 
         ValidatedMapDto result = underTest.validate(input);
 
-        List<List<String>> matrix = result.getMap().getMatrix();
-        assertThat(matrix.size(), is(2));
-        assertThat(matrix.get(0).size(), is(2));
-        assertThat(matrix.get(0).get(1), is("2"));
-        assertThat(matrix.get(1).get(0), is("1"));
+        MapMatrix<TilePrototype> matrix = result.getMap();
+        assertThat(matrix.sizeX(), is(2));
+        assertThat(matrix.sizeY(), is(2));
+        assertThat(matrix.get(0, 1).isAccessible(), is(false));
+        assertThat(matrix.get(1, 0).isAccessible(), is(true));
     }
 
     @Test
@@ -132,7 +134,7 @@ class MapDtoValidatorTest {
             "test",
             List.of(
                 "0 ,1",
-                "2, 3 "
+                "0, 1 "
             ),
             List.of(),
             List.of(),
@@ -142,11 +144,11 @@ class MapDtoValidatorTest {
 
         ValidatedMapDto result = underTest.validate(input);
 
-        List<List<String>> matrix = result.getMap().getMatrix();
-        assertThat(matrix.size(), is(2));
-        assertThat(matrix.get(0).size(), is(2));
-        assertThat(matrix.get(0).get(1), is("2"));
-        assertThat(matrix.get(1).get(0), is("1"));
+        MapMatrix<TilePrototype> matrix = result.getMap();
+        assertThat(matrix.sizeX(), is(2));
+        assertThat(matrix.sizeY(), is(2));
+        assertThat(matrix.get(0, 1).isAccessible(), is(false));
+        assertThat(matrix.get(1, 0).isAccessible(), is(true));
     }
 
     @Test
@@ -154,8 +156,8 @@ class MapDtoValidatorTest {
         RawMapDto input = new RawMapDto(
             "test",
             List.of(
-                "0,1,2",
-                "3,4,5"
+                "0,1,0",
+                "1,0,1"
             ),
             List.of(),
             List.of(),
@@ -165,11 +167,12 @@ class MapDtoValidatorTest {
 
         ValidatedMapDto result = underTest.validate(input);
 
-        List<List<String>> matrix = result.getMap().getMatrix();
-        assertThat(matrix.size(), is(3));
-        assertThat(matrix.get(0).size(), is(2));
-        assertThat(matrix.get(0).get(1), is("3"));
-        assertThat(matrix.get(2).get(1), is("5"));
+        MapMatrix<TilePrototype> matrix = result.getMap();
+        assertThat(matrix.sizeX(), is(3));
+        assertThat(matrix.sizeY(), is(2));
+        assertThat(matrix.get(0, 1).isAccessible(), is(true));
+        assertThat(matrix.get(1, 1).isAccessible(), is(false));
+        assertThat(matrix.get(2, 1).isAccessible(), is(true));
     }
 
     @Test
@@ -219,7 +222,7 @@ class MapDtoValidatorTest {
 
     @Test
     void oneFailingValidator() {
-        RawMapDto input = new RawMapDto("test", List.of(), List.of(), List.of(), List.of(), List.of());
+        RawMapDto input = new RawMapDto("test", List.of("1"), List.of(), List.of(), List.of(), List.of());
 
         when(validatorMock1.validate(any())).thenReturn(List.of("message1", "message2"));
 
@@ -229,7 +232,7 @@ class MapDtoValidatorTest {
 
     @Test
     void twoFailingValidators() {
-        RawMapDto input = new RawMapDto("test", List.of(), List.of(), List.of(), List.of(), List.of());
+        RawMapDto input = new RawMapDto("test", List.of("1"), List.of(), List.of(), List.of(), List.of());
 
         when(validatorMock1.validate(any())).thenReturn(List.of("validator1_message1", "validator1_message2"));
         when(validatorMock2.validate(any())).thenReturn(List.of("validator2_message1", "validator2_message2"));

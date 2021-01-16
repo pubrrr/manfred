@@ -3,12 +3,10 @@ package manfred.game.map;
 import manfred.data.DataContext;
 import manfred.data.InvalidInputException;
 import manfred.data.ObjectConverter;
-import manfred.data.enemy.EnemyReader;
 import manfred.data.map.ValidatedMapDto;
-import manfred.data.person.PersonReader;
 import manfred.game.config.GameConfig;
 import manfred.game.enemy.EnemiesWrapper;
-import manfred.game.enemy.EnemyConverter;
+import manfred.game.enemy.EnemyProvider;
 import manfred.game.enemy.EnemyStack;
 import manfred.game.exception.ManfredException;
 import manfred.game.interact.Door;
@@ -32,21 +30,17 @@ public class MapConverter implements ObjectConverter<ValidatedMapDto, Map> {
     public static final String PATH_MAPS_TILE_IMAGES = PATH_MAPS + "tiles\\";
 
     private final PersonProvider personProvider;
-    private final EnemyConverter enemyConverter;
-    private final EnemyReader enemyReader;
+    private final EnemyProvider enemyProvider;
     private final EnemiesWrapper enemiesWrapper;
     private final GameConfig gameConfig;
-    private final PersonReader personReader;
 
     private final HashMap<String, MapTile> notAccessibleTilesStorage = new HashMap<>();
 
-    public MapConverter(PersonProvider personProvider, EnemyConverter enemyConverter, EnemyReader enemyReader, EnemiesWrapper enemiesWrapper, GameConfig gameConfig, PersonReader personReader) {
+    public MapConverter(PersonProvider personProvider, EnemyProvider enemyProvider, EnemiesWrapper enemiesWrapper, GameConfig gameConfig) {
         this.personProvider = personProvider;
-        this.enemyConverter = enemyConverter;
-        this.enemyReader = enemyReader;
+        this.enemyProvider = enemyProvider;
         this.enemiesWrapper = enemiesWrapper;
         this.gameConfig = gameConfig;
-        this.personReader = personReader;
     }
 
     public Map convert(ValidatedMapDto input) {
@@ -194,7 +188,7 @@ public class MapConverter implements ObjectConverter<ValidatedMapDto, Map> {
             String name = ((JSONObject) enemy).getString("name");
             int spawnX = ((JSONObject) enemy).getInt("spawnX");
             int spawnY = ((JSONObject) enemy).getInt("spawnY");
-            enemyStack.add(enemyConverter.convert(enemyReader.load(name), spawnX, spawnY));
+            enemyStack.add(enemyProvider.convert(enemyReader.load(name), spawnX, spawnY));
         }
         return enemyStack;
     }

@@ -4,6 +4,7 @@ package manfred.data;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import manfred.data.map.MapDtoValidator;
+import manfred.data.map.tile.TileConverter;
 import manfred.data.map.validator.PersonsValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,7 +23,7 @@ public class DataContext {
     }
 
     @Bean
-    public MapDtoValidator mapDtoValidator() {
-        return new MapDtoValidator(List.of(new PersonsValidator()));
+    public MapDtoValidator mapDtoValidator(TileConverter tileConverter) {
+        return new MapDtoValidator(List.of(new PersonsValidator()), tileConverter);
     }
 }
