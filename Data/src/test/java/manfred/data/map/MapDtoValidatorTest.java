@@ -1,6 +1,8 @@
 package manfred.data.map;
 
 import manfred.data.InvalidInputException;
+import manfred.data.enemy.EnemyReader;
+import manfred.data.enemy.UnlocatedEnemyDto;
 import manfred.data.map.matrix.MapMatrix;
 import manfred.data.map.tile.MapTileReader;
 import manfred.data.map.tile.TileConverter;
@@ -23,14 +25,16 @@ class MapDtoValidatorTest {
     private MapDtoValidator underTest;
 
     private Validator validatorMock1;
-
     private Validator validatorMock2;
+    private EnemyReader enemyReaderMock;
 
     @BeforeEach
     void setUp() {
         validatorMock1 = mock(Validator.class);
         validatorMock2 = mock(Validator.class);
-        underTest = new MapDtoValidator(List.of(validatorMock1, validatorMock2), new TileConverter(mock(MapTileReader.class)));
+        enemyReaderMock = mock(EnemyReader.class);
+
+        underTest = new MapDtoValidator(List.of(validatorMock1, validatorMock2), new TileConverter(mock(MapTileReader.class)), enemyReaderMock);
     }
 
     @Test
@@ -47,13 +51,15 @@ class MapDtoValidatorTest {
 
     @Test
     void nonEmptyOtherStructs() throws InvalidInputException {
+        when(enemyReaderMock.load(any())).thenReturn(new UnlocatedEnemyDto());
+
         RawMapDto input = new RawMapDto(
             "test",
             List.of("1"),
             List.of(new PersonDto()),
             List.of(new TransporterDto()),
             List.of(new TransporterDto(), new TransporterDto()),
-            List.of(new EnemyDto())
+            List.of(new MapEnemyDto())
         );
 
         ValidatedMapDto result = underTest.validate(input);
@@ -62,6 +68,23 @@ class MapDtoValidatorTest {
         assertThat(result.getPortals(), hasSize(1));
         assertThat(result.getDoors(), hasSize(2));
         assertThat(result.getEnemies(), hasSize(1));
+    }
+
+    @Test
+    void unknownEnemy() throws InvalidInputException {
+        when(enemyReaderMock.load(any())).thenThrow(new InvalidInputException("errorMessage"));
+
+        RawMapDto input = new RawMapDto(
+            "test",
+            List.of("1"),
+            List.of(),
+            List.of(),
+            List.of(),
+            List.of(new MapEnemyDto())
+        );
+
+        InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.validate(input));
+        assertThat(exception.getMessage(), containsString("Error when creating enemies on map test:\nerrorMessage"));
     }
 
     @Test

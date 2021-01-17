@@ -17,7 +17,6 @@ public class Person implements Interactable {
     private final BufferedImage image;
 
     public Person(String name, GelaberFacade gelaberFacade, GameConfig gameConfig, BufferedImage image) {
-
         this.name = name;
         this.gelaberFacade = gelaberFacade;
         this.gameConfig = gameConfig;

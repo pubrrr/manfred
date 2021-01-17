@@ -2,11 +2,13 @@ package manfred.data.map.tile;
 
 import manfred.data.InvalidInputException;
 import manfred.data.map.matrix.MapMatrix;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 import static manfred.data.helper.StringSplitter.splitAtCommas;
 
+@Component
 public class MapTileDtoValidator {
 
     public ValidatedMapTileDto validate(RawMapTileDto rawMapTile) throws InvalidInputException {

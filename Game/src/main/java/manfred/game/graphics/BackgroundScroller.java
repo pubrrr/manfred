@@ -28,7 +28,7 @@ public class BackgroundScroller {
     }
 
     private void updateX() {
-        int mapSizeX = mapFacade.getMap().getArray().length * gameConfig.getPixelBlockSize();
+        int mapSizeX = mapFacade.getMap().sizeX() * gameConfig.getPixelBlockSize();
         if (mapSizeX < gameConfig.getWindowWidth()) {
             offset.x = -(gameConfig.getWindowWidth() - mapSizeX) / 2;
             return;
@@ -51,7 +51,7 @@ public class BackgroundScroller {
     }
 
     private void updateY() {
-        int mapSizeY = mapFacade.getMap().getArray()[0].length * gameConfig.getPixelBlockSize();
+        int mapSizeY = mapFacade.getMap().sizeY() * gameConfig.getPixelBlockSize();
         if (mapSizeY < gameConfig.getWindowHeight()) {
             offset.y = -(gameConfig.getWindowHeight() - mapSizeY) / 2;
             return;
@@ -74,7 +74,7 @@ public class BackgroundScroller {
     }
 
     public void centerTo(Point center) {
-        int mapSizeX = mapFacade.getMap().getArray().length * gameConfig.getPixelBlockSize();
+        int mapSizeX = mapFacade.getMap().sizeX() * gameConfig.getPixelBlockSize();
         if (mapSizeX > gameConfig.getWindowWidth()) {
             offset.x = Math.max(
                     center.x - gameConfig.getWindowWidth() / 2,
@@ -87,7 +87,7 @@ public class BackgroundScroller {
             offset.x = -(gameConfig.getWindowWidth() - mapSizeX) / 2;
         }
 
-        int mapSizeY = mapFacade.getMap().getArray()[0].length * gameConfig.getPixelBlockSize();
+        int mapSizeY = mapFacade.getMap().sizeY() * gameConfig.getPixelBlockSize();
         if (mapSizeY > gameConfig.getWindowHeight()) {
             offset.y = Math.max(
                     center.y - gameConfig.getWindowHeight() / 2,

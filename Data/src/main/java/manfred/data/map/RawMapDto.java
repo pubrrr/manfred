@@ -15,5 +15,5 @@ public class RawMapDto {
     private List<PersonDto> persons = List.of();
     private List<TransporterDto> portals = List.of();
     private List<TransporterDto> doors = List.of();
-    private List<EnemyDto> enemies = List.of();
+    private List<MapEnemyDto> enemies = List.of();
 }

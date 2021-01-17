@@ -12,19 +12,19 @@ import java.net.URL;
 @Component
 public class ImageLoader {
     public BufferedImage load(String source) throws InvalidInputException {
-        File file = new File(source);
+        File file = (new File(source)).getAbsoluteFile();
         try {
             return ImageIO.read(file);
         } catch (IOException e) {
-            throw new InvalidInputException(e);
+            throw new InvalidInputException("Could not read from " + file, e);
         }
     }
 
     public BufferedImage load(URL source) throws InvalidInputException {
         try {
             return ImageIO.read(source);
-        } catch (IOException e) {
-            throw new InvalidInputException(e);
+        } catch (IOException | IllegalArgumentException e) {
+            throw new InvalidInputException("Could not read from " + source, e);
         }
     }
 }

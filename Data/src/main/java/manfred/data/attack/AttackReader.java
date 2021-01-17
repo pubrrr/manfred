@@ -25,7 +25,7 @@ public class AttackReader implements ObjectReader<AttackDto> {
     }
 
     public AttackDto load(String name) throws InvalidInputException {
-        URL yamlURL = getClass().getResource("/attack/" + name + ".yaml");
+        URL yamlURL = getClass().getResource("/attacks/" + name + ".yaml");
         if (yamlURL == null) {
             throw new InvalidInputException("Did not find resource for attack " + name);
         }
@@ -47,7 +47,7 @@ public class AttackReader implements ObjectReader<AttackDto> {
         List<BufferedImage> attackAnimation = new ArrayList<>(numberOfAnimationImages);
         for (int idx = 0; idx < numberOfAnimationImages; idx++) {
             attackAnimation.add(
-                imageLoader.load(getClass().getResource("/attack/" + name + "_" + idx + ".yaml"))
+                imageLoader.load(getClass().getResource("/attacks/" + name + "_" + idx + ".png"))
             );
         }
         return Collections.unmodifiableList(attackAnimation);

@@ -3,6 +3,7 @@ package manfred.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import manfred.data.enemy.EnemyReader;
 import manfred.data.map.MapDtoValidator;
 import manfred.data.map.tile.TileConverter;
 import manfred.data.map.validator.PersonsValidator;
@@ -15,7 +16,7 @@ import java.util.List;
 @Configuration
 @ComponentScan(basePackages = "manfred.data")
 public class DataContext {
-    public static final String PATH_DATA = "ManfredsApocalypse\\Data\\data\\";
+    public static final String PATH_DATA = "Data\\data\\";
 
     @Bean
     public ObjectMapper objectMapper() {
@@ -23,7 +24,7 @@ public class DataContext {
     }
 
     @Bean
-    public MapDtoValidator mapDtoValidator(TileConverter tileConverter) {
-        return new MapDtoValidator(List.of(new PersonsValidator()), tileConverter);
+    public MapDtoValidator mapDtoValidator(TileConverter tileConverter, EnemyReader enemyReader) {
+        return new MapDtoValidator(List.of(new PersonsValidator()), tileConverter, enemyReader);
     }
 }

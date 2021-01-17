@@ -16,20 +16,23 @@ import manfred.game.config.ConfigConverter;
 import manfred.game.config.GameConfig;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
+import manfred.game.conversion.map.TileConversionRule;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.interact.person.gelaber.LineSplitter;
 import manfred.game.interact.person.textLineFactory.ChoicesTextLineFactory;
 import manfred.game.interact.person.textLineFactory.SimpleTextLineFactory;
 import manfred.game.interact.person.textLineFactory.TextLineFactory;
-import manfred.game.map.MapConverter;
 import manfred.game.map.MapFacade;
+import manfred.game.map.MapProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import java.util.Stack;
+
+import static manfred.game.conversion.map.TileConversionRule.*;
 
 @Configuration
 @ComponentScan(basePackages = "manfred.game")
@@ -74,8 +77,8 @@ public class GameContext {
     }
 
     @Bean
-    public MapFacade mapWrapper(MapConverter mapConverter, AttacksContainer attacksContainer) {
-        return new MapFacade(mapConverter, "Wald", attacksContainer);
+    public MapFacade mapWrapper(MapProvider mapProvider, AttacksContainer attacksContainer) {
+        return new MapFacade(mapProvider, "Wald", attacksContainer);
     }
 
     @Bean
@@ -115,5 +118,12 @@ public class GameContext {
             ChoicesTextLineFactory.withConfig(gameConfig)
                 .orElse(SimpleTextLineFactory.withConfig(gameConfig))
         );
+    }
+
+    @Bean
+    public TileConversionRule tileConversionRule() {
+        return createPerson()
+            .orElse(createAccessible())
+            .orElse(createNonAccessible());
     }
 }

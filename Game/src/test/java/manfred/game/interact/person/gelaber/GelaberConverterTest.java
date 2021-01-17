@@ -1,5 +1,6 @@
 package manfred.game.interact.person.gelaber;
 
+import manfred.data.InvalidInputException;
 import manfred.data.person.GelaberDto;
 import manfred.data.person.GelaberTextDto;
 import manfred.data.person.ReferenceDto;
@@ -40,7 +41,7 @@ class GelaberConverterTest {
     void emptyGelaber() {
         GelaberDto input = setupGelaber(Map.of(), "unknown");
 
-        ManfredException exception = Assertions.assertThrows(ManfredException.class, () -> underTest.convert(input));
+        InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.convert(input));
         assertThat(exception.getMessage(), containsString("Unknown initial gelaber reference unknown not found"));
     }
 
@@ -48,12 +49,12 @@ class GelaberConverterTest {
     void referenceNotFound() {
         GelaberDto input = setupGelaber(Map.of("key", List.of("unknown")), "key");
 
-        ManfredException exception = Assertions.assertThrows(ManfredException.class, () -> underTest.convert(input));
+        InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.convert(input));
         assertThat(exception.getMessage(), containsString("Unknown gelaber reference"));
     }
 
     @Test
-    void happyPath() throws ManfredException {
+    void happyPath() throws InvalidInputException {
         when(simpleTextLineFactoryMock.applicableTo(any())).thenReturn(Optional.of(simpleTextLineFactoryMock));
         when(simpleTextLineFactoryMock.create(any(), any())).thenReturn(mock(SimpleTextLine.class));
 

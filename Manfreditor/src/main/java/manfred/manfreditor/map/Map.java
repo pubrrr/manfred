@@ -23,7 +23,7 @@ public class Map {
     }
 
     private boolean isInBounds(int x, int y) {
-        return x >= 0 && x < mapTiles.length
-                && y >= 0 && y < mapTiles[0].length;
+        return x >= 0 && x < sizeX()
+                && y >= 0 && y < sizeY();
     }
 }

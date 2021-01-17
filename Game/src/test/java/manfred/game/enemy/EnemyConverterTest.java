@@ -1,8 +1,7 @@
 package manfred.game.enemy;
 
 import helpers.TestGameConfig;
-import manfred.data.InvalidInputException;
-import manfred.data.enemy.EnemyDto;
+import manfred.data.enemy.UnlocatedEnemyDto;
 import manfred.game.characters.MapCollider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,11 +26,11 @@ class EnemyConverterTest {
     }
 
     @Test
-    void testConvert() throws InvalidInputException {
+    void testConvert() {
         int speed = 10;
-        EnemyDto input = new EnemyDto("name", 100, speed, null);
+        UnlocatedEnemyDto input = new UnlocatedEnemyDto("name", 100, speed, null);
 
-        Enemy result = underTest.convert(input, 1, 22);
+        Enemy result = underTest.convert(input.at(1, 22));
 
         assertEquals(PIXEL_BLOCK_SIZE, result.getX());
         assertEquals(PIXEL_BLOCK_SIZE * 22, result.getY());

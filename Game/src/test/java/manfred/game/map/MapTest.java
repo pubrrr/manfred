@@ -3,6 +3,8 @@ package manfred.game.map;
 import manfred.game.config.GameConfig;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -10,8 +12,7 @@ import static org.mockito.Mockito.mock;
 public class MapTest {
     @Test
     public void isAccessible() {
-        MapTile[][] map = {{new NotAccessible(null, null, 1, 0), Accessible.getInstance()}};
-        Map unterTest = new Map(map, mock(GameConfig.class));
+        Map unterTest = new Map(List.of(List.of(new NotAccessible(), Accessible.getInstance())), mock(GameConfig.class));
 
         assertFalse(unterTest.isAccessible(0, 0));
         assertTrue(unterTest.isAccessible(0, 1));

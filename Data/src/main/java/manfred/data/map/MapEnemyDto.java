@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EnemyDto extends MapObjectDto {
+public class MapEnemyDto extends MapObjectDto {
     private String name;
 }

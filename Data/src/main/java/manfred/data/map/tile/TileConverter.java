@@ -1,6 +1,5 @@
 package manfred.data.map.tile;
 
-import lombok.AllArgsConstructor;
 import manfred.data.InvalidInputException;
 import org.springframework.stereotype.Component;
 
@@ -8,12 +7,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Component
-@AllArgsConstructor
 public class TileConverter {
 
     private final MapTileReader mapTileReader;
 
     private final List<String> validationMessages = new LinkedList<>();
+
+    public TileConverter(MapTileReader mapTileReader) {
+        this.mapTileReader = mapTileReader;
+    }
 
     public TilePrototype stringToObject(String tileValue) {
         if (isNotAccessible(tileValue)) {

@@ -96,10 +96,10 @@ public class ManfredController implements ControllerInterface {
     public ControllerInterface move() {
         ControllerInterface newControllerState = mapFacade.getMap().stepOn(this.manfred.moveTo()).apply(this);
 
-        enemiesWrapper.forEach(enemy -> enemy.move(manfred));
+        enemiesWrapper.getEnemies().forEach(enemy -> enemy.move(manfred));
         attacksContainer.forEach(Attack::move);
 
-        enemiesWrapper.forEach(
+        enemiesWrapper.getEnemies().forEach(
             enemy -> attacksContainer.forEach(
                 attack -> attack.checkHit(enemy)
             )

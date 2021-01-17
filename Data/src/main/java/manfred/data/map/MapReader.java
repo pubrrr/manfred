@@ -2,7 +2,9 @@ package manfred.data.map;
 
 import manfred.data.InvalidInputException;
 import manfred.data.ObjectReader;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MapReader implements ObjectReader<ValidatedMapDto> {
 
     private final RawMapReader rawMapReader;

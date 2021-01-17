@@ -2,12 +2,15 @@ package manfred.data.map;
 
 import lombok.AllArgsConstructor;
 import manfred.data.InvalidInputException;
+import manfred.data.enemy.EnemyDto;
+import manfred.data.enemy.EnemyReader;
 import manfred.data.map.matrix.MapMatrix;
 import manfred.data.map.tile.TileConverter;
 import manfred.data.map.tile.TilePrototype;
 import manfred.data.map.validator.Validator;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -18,6 +21,7 @@ public class MapDtoValidator {
 
     private final List<Validator> validators;
     private final TileConverter tileConverter;
+    private final EnemyReader enemyReader;
 
     public ValidatedMapDto validate(RawMapDto rawMap) throws InvalidInputException {
         // TODO validate that map tile image interferes with other images on the map
@@ -32,7 +36,7 @@ public class MapDtoValidator {
             rawMap.getPersons(),
             rawMap.getPortals(),
             rawMap.getDoors(),
-            rawMap.getEnemies()
+            validateAndLocateEnemies(rawMap)
         );
     }
 
@@ -62,5 +66,22 @@ public class MapDtoValidator {
             throw new InvalidInputException("Could not convert map tiles:\n" + String.join(",\n", tileConverter.getValidationMessages()));
         }
         return mapMatrix;
+    }
+
+    private List<EnemyDto> validateAndLocateEnemies(RawMapDto rawMapDto) throws InvalidInputException {
+        List<String> validationMessages = new LinkedList<>();
+        List<EnemyDto> result = rawMapDto.getEnemies().stream().map(mapEnemyDto -> {
+            try {
+                return enemyReader.load(mapEnemyDto.getName()).at(mapEnemyDto.positionX, mapEnemyDto.positionY);
+            } catch (InvalidInputException e) {
+                validationMessages.add(e.getMessage());
+                return null;
+            }
+        }).collect(toList());
+
+        if (!validationMessages.isEmpty()) {
+            throw new InvalidInputException("Error when creating enemies on map " + rawMapDto.getName() + ":\n" + String.join(",\n", validationMessages));
+        }
+        return result;
     }
 }

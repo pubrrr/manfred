@@ -1,31 +1,31 @@
 package manfred.game.enemy;
 
-import manfred.game.graphics.paintable.PaintablesContainer;
 import manfred.game.graphics.paintable.PaintableContainerElement;
-import org.springframework.lang.NonNull;
+import manfred.game.graphics.paintable.PaintablesContainer;
 import org.springframework.stereotype.Component;
 
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
 @Component
-public class EnemiesWrapper implements PaintablesContainer, Iterable<Enemy> {
-    private EnemyStack enemies = new EnemyStack();
+public class EnemiesWrapper implements PaintablesContainer {
+    private final List<Enemy> enemies = Collections.synchronizedList(new LinkedList<>());
 
-    public void setEnemies(EnemyStack enemies) {
-        this.enemies = enemies;
+    public void setEnemies(List<Enemy> enemies) {
+        getEnemies().clear();
+        getEnemies().addAll(Collections.synchronizedList(enemies));
     }
 
-    @Override
-    @NonNull
-    public Iterator<Enemy> iterator() {
-        return enemies.iterator();
+    public List<Enemy> getEnemies() {
+        return enemies;
     }
 
     public void removeKilled() {
-        forEach(enemy -> {
+        getEnemies().forEach(enemy -> {
             if (enemy.getHealthPoints() <= 0) {
-                enemies.remove(enemy);
+                getEnemies().remove(enemy);
             }
         });
     }
@@ -33,7 +33,7 @@ public class EnemiesWrapper implements PaintablesContainer, Iterable<Enemy> {
     @Override
     public Stack<PaintableContainerElement> getPaintableContainerElements() {
         Stack<PaintableContainerElement> elements = new Stack<>();
-        forEach(enemy -> elements.push(new PaintableContainerElement(enemy, enemy.getX(), enemy.getY())));
+        getEnemies().forEach(enemy -> elements.push(new PaintableContainerElement(enemy, enemy.getX(), enemy.getY())));
         return elements;
     }
 }

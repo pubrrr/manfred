@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 
 @Component
-public class EnemyReader implements ObjectReader<EnemyDto> {
+public class EnemyReader implements ObjectReader<UnlocatedEnemyDto> {
 
     private final ImageLoader imageLoader;
     private final ObjectMapper objectMapper;
@@ -20,7 +20,7 @@ public class EnemyReader implements ObjectReader<EnemyDto> {
         this.objectMapper = objectMapper;
     }
 
-    public EnemyDto load(String name) throws InvalidInputException {
+    public UnlocatedEnemyDto load(String name) throws InvalidInputException {
         URL yamlURL = getClass().getResource("/enemies/" + name + ".yaml");
         if (yamlURL == null) {
             throw new InvalidInputException("Did not find resource for enemy " + name);
@@ -34,9 +34,9 @@ public class EnemyReader implements ObjectReader<EnemyDto> {
         return load(yamlURL, imageURL);
     }
 
-    EnemyDto load(URL yamlURL, URL imageURL) throws InvalidInputException {
+    UnlocatedEnemyDto load(URL yamlURL, URL imageURL) throws InvalidInputException {
         try {
-            EnemyDto enemyDto = objectMapper.readValue(yamlURL, EnemyDto.class);
+            UnlocatedEnemyDto enemyDto = objectMapper.readValue(yamlURL, UnlocatedEnemyDto.class);
             enemyDto.setImage(imageLoader.load(imageURL));
             return enemyDto;
         } catch (IOException e) {

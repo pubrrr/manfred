@@ -3,7 +3,9 @@ package manfred.data.map.tile;
 import lombok.AllArgsConstructor;
 import manfred.data.InvalidInputException;
 import manfred.data.ObjectReader;
+import org.springframework.stereotype.Component;
 
+@Component
 @AllArgsConstructor
 public class MapTileReader implements ObjectReader<ValidatedMapTileDto> {
 

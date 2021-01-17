@@ -7,94 +7,54 @@ import manfred.game.graphics.paintable.PaintableContainerElement;
 import manfred.game.interact.Interactable;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Stack;
 import java.util.function.Function;
 
 public class Map {
-    private final MapTile[][] mapTiles;
+    private final List<List<MapTile>> mapTiles;
     private final GameConfig gameConfig;
 
-    public Map(MapTile[][] mapTiles, GameConfig gameConfig) {
+    public Map(List<List<MapTile>> mapTiles, GameConfig gameConfig) {
         this.mapTiles = mapTiles;
         this.gameConfig = gameConfig;
     }
 
-    public MapTile[][] getArray() {
-        return mapTiles;
+    public int sizeX() {
+        return mapTiles.size();
+    }
+
+    public int sizeY() {
+        return mapTiles.get(0).size();
     }
 
     public boolean isAccessible(int x, int y) {
-        return isInBounds(x, y) && mapTiles[x][y].isAccessible();
+        return isInBounds(x, y) && mapTiles.get(x).get(y).isAccessible();
     }
 
     private boolean isInBounds(int x, int y) {
-        return x >= 0 && x < mapTiles.length
-                && y >= 0 && y < mapTiles[0].length;
-    }
-
-    public void paint(Graphics g, Point offset) {
-        g.setColor(Color.RED);
-
-        for (int x = 0; x < mapTiles.length; x++) {
-            for (int y = 0; y < mapTiles[0].length; y++) {
-                paintTile(g, offset, x, y);
-            }
-        }
-    }
-
-    private void paintTile(Graphics g, Point offset, int x, int y) {
-        BufferedImage tileImage = mapTiles[x][y].getImage();
-        if (tileImage != null) {
-            int imageWidth = gameConfig.getPixelBlockSize() * 2;
-            int imageHeight = tileImage.getHeight() * imageWidth / tileImage.getWidth();
-            g.drawImage(
-                    tileImage,
-                    gameConfig.getPixelBlockSize() * x - offset.x,
-                    gameConfig.getPixelBlockSize() * (y + 1) - offset.y - imageHeight,
-                    imageWidth,
-                    imageHeight,
-                    null
-            );
-            return;
-        }
-
-        if (mapTiles[x][y] instanceof Interactable) {
-            g.setColor(Color.YELLOW);
-        }
-        if (!isAccessible(x, y)) {
-            g.fillRect(
-                    gameConfig.getPixelBlockSize() * x - offset.x,
-                    gameConfig.getPixelBlockSize() * y - offset.y,
-                    gameConfig.getPixelBlockSize(),
-                    gameConfig.getPixelBlockSize()
-            );
-        }
-        if (mapTiles[x][y] instanceof Interactable) {
-            g.setColor(Color.RED);
-        }
+        return x >= 0 && x < sizeX()
+            && y >= 0 && y < sizeY();
     }
 
     public Interactable getInteractable(Point mapTile) {
-        MapTile tile = mapTiles[mapTile.x][mapTile.y];
+        MapTile tile = mapTiles.get(mapTile.x).get(mapTile.y);
         return tile instanceof Interactable
             ? (Interactable) tile
             : Interactable.idle();
     }
 
     public Function<ManfredController, ControllerInterface> stepOn(Point mapTile) {
-        return mapTiles[mapTile.x][mapTile.y].onStep();
+        return mapTiles.get(mapTile.x).get(mapTile.y).onStep();
     }
 
     public Stack<PaintableContainerElement> getPaintableContainerElements() {
         Stack<PaintableContainerElement> elements = new Stack<>();
 
-        int numberOfHorizontalTiles = mapTiles.length;
-        int numberOfVerticaltiles = mapTiles[0].length;
-        for (int x = 0; x < numberOfHorizontalTiles; x++) {
-            for (int y = 0; y < numberOfVerticaltiles; y++) {
+        for (int x = 0; x < sizeX(); x++) {
+            for (int y = 0; y < sizeY(); y++) {
                 elements.push(new PaintableContainerElement(
-                        mapTiles[x][y],
+                        mapTiles.get(x).get(y),
                         gameConfig.getPixelBlockSize() * x,
                         gameConfig.getPixelBlockSize() * y
                 ));

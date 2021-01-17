@@ -2,10 +2,10 @@ package componentTests.infrastructure.person;
 
 import componentTests.TestGameContext;
 import helpers.TestGameConfig;
+import manfred.data.InvalidInputException;
 import manfred.data.person.GelaberDto;
 import manfred.data.person.GelaberTextDto;
 import manfred.data.person.ReferenceDto;
-import manfred.game.exception.ManfredException;
 import manfred.game.interact.person.gelaber.GelaberConverter;
 import manfred.game.interact.person.gelaber.GelaberFacade;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +36,7 @@ public class GelaberComponentTest {
     }
 
     @Test
-    void oneText_selfReferencing() throws ManfredException {
+    void oneText_selfReferencing() throws InvalidInputException {
         HashMap<String, String> oneSelfReferencingText = new HashMap<>();
         oneSelfReferencingText.put("singleEntry", "singleEntry");
         GelaberDto input = setupGelaberDto(oneSelfReferencingText, "singleEntry");
@@ -47,7 +47,7 @@ public class GelaberComponentTest {
     }
 
     @Test
-    void twoTexts() throws ManfredException {
+    void twoTexts() throws InvalidInputException {
         HashMap<String, String> texts = new HashMap<>();
         texts.put("firstEntry", "secondEntry");
         texts.put("secondEntry", "firstEntry");
