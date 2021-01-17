@@ -18,9 +18,15 @@ public class TestMapFactory {
             for (String tileValue : columnAsStrings) {
                 MapTile tile;
                 switch (tileValue) {
-                    case MapConverter.ACCESSIBLE -> tile = Accessible.getInstance();
-                    case MapConverter.NOT_ACCESSIBLE -> tile = new NotAccessible();
-                    default -> tile = interactables.get(tileValue);
+                    case MapConverter.ACCESSIBLE:
+                        tile = Accessible.getInstance();
+                        break;
+                    case MapConverter.NOT_ACCESSIBLE:
+                        tile = new NotAccessible();
+                        break;
+                    default:
+                        tile = interactables.get(tileValue);
+                        break;
                 }
                 column.add(tile);
             }

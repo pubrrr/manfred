@@ -56,12 +56,24 @@ public class ManfredController implements ControllerInterface {
     @Override
     public ControllerInterface keyPressed(KeyEvent event) {
         switch (event.getKeyCode()) {
-            case KeyEvent.VK_A -> manfred.left();
-            case KeyEvent.VK_D -> manfred.right();
-            case KeyEvent.VK_S -> manfred.down();
-            case KeyEvent.VK_W -> manfred.up();
-            case KeyEvent.VK_SPACE -> attackCaster.cast(manfred.getSprite(), manfred.getDirection());
-            default -> CombinationElement.fromKeyEvent(event).ifPresent(attackCaster::addToCombination);
+            case KeyEvent.VK_A:
+                manfred.left();
+                break;
+            case KeyEvent.VK_D:
+                manfred.right();
+                break;
+            case KeyEvent.VK_S:
+                manfred.down();
+                break;
+            case KeyEvent.VK_W:
+                manfred.up();
+                break;
+            case KeyEvent.VK_SPACE:
+                attackCaster.cast(manfred.getSprite(), manfred.getDirection());
+                break;
+            default:
+                CombinationElement.fromKeyEvent(event).ifPresent(attackCaster::addToCombination);
+                break;
         }
         return this;
     }
@@ -69,18 +81,19 @@ public class ManfredController implements ControllerInterface {
     @Override
     public ControllerInterface keyReleased(KeyEvent event) {
         switch (event.getKeyCode()) {
-            case KeyEvent.VK_A, KeyEvent.VK_D -> {
+            case KeyEvent.VK_A:
+            case KeyEvent.VK_D:
                 manfred.stopX();
                 manfred.checkForVerticalViewDirection();
-            }
-            case KeyEvent.VK_S, KeyEvent.VK_W -> {
+                break;
+            case KeyEvent.VK_S:
+            case KeyEvent.VK_W:
                 manfred.stopY();
                 manfred.checkForHorizontalViewDirection();
-            }
-            case KeyEvent.VK_ENTER -> {
+                break;
+            case KeyEvent.VK_ENTER:
                 Point interactionMapTile = manfred.getInteractionMapTile();
                 return mapFacade.getMap().getInteractable(interactionMapTile).interact().apply(this);
-            }
         }
         return this;
     }
