@@ -1,2 +1,12 @@
 /.idea/
 ManfredsApocalypse.iml
+Data/.classpath
+Data/.project
+Data/.settings/
+Data/bin/
+Game/.classpath
+Game/.project
+Game/.settings/
+Manfreditor/.classpath
+Manfreditor/.project
+Manfreditor/.settings/

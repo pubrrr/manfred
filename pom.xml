@@ -116,5 +116,6 @@
         <module>Game</module>
         <module>Manfreditor</module>
         <module>Data</module>
+        <module>ShadowEngine</module>
     </modules>
 </project>
