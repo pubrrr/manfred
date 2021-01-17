@@ -121,8 +121,9 @@ public class GameContext {
     }
 
     @Bean
-    public TileConversionRule tileConversionRule() {
+    public TileConversionRule tileConversionRule(GameConfig gameConfig) {
         return createPerson()
+            .orElse(decorateWithImage(gameConfig).and(createAccessible().orElse(createNonAccessible())))
             .orElse(createAccessible())
             .orElse(createNonAccessible());
     }

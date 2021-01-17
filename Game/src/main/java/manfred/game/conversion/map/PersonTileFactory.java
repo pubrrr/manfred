@@ -16,6 +16,6 @@ public class PersonTileFactory implements TileConversionRule {
 //        return input.getPersons().stream()
 //            .filter(personDto -> personDto.getPositionX() == x && personDto.getPositionX() == y)
 //            .findFirst()
-//            .map(personDto -> this);
+//            .map(personDto -> new ReducedRule<>(personDto, personDto1 -> new Person(personDto1.getName(), )));
     }
 }

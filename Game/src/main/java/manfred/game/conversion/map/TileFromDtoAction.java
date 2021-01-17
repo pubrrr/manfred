@@ -6,7 +6,7 @@ import manfred.game.map.MapTile;
 import java.util.function.Function;
 
 @AllArgsConstructor
-public class ReducedRule<T> implements TileConversionAction {
+public class TileFromDtoAction<T> implements TileConversionAction {
 
     private final T dto;
     private final Function<T, MapTile> factory;

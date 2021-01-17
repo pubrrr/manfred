@@ -1,6 +1,7 @@
 package manfred.game.map;
 
 import lombok.AllArgsConstructor;
+import manfred.game.config.GameConfig;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -10,6 +11,9 @@ public class MapTileWithImageDecorator implements MapTile {
 
     private final MapTile baseMapTile;
     private final BufferedImage tileImage;
+    private final int imageWidth;
+    private final int imageHeight;
+    private final GameConfig gameConfig; // TODO this should not need to be here
 
     @Override
     public boolean isAccessible() {
@@ -18,15 +22,13 @@ public class MapTileWithImageDecorator implements MapTile {
 
     @Override
     public void paint(Graphics g, Point offset, Integer x, Integer y) {
-//        int imageWidth = gameConfig.getPixelBlockSize() * this.blocksWidth;
-//        int imageHeight = tileImage.getHeight() * imageWidth / tileImage.getWidth();
-//        g.drawImage(
-//            tileImage,
-//            x - offset.x,
-//            (y + gameConfig.getPixelBlockSize()) + yOffset * gameConfig.getPixelBlockSize() - offset.y - imageHeight,
-//            imageWidth,
-//            imageHeight,
-//            null
-//        );
+        g.drawImage(
+            tileImage,
+            x - offset.x,
+            (y + gameConfig.getPixelBlockSize()) - offset.y - imageHeight,
+            imageWidth,
+            imageHeight,
+            null
+        );
     }
 }

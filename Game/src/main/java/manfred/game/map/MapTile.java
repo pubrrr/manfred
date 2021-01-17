@@ -15,8 +15,4 @@ public interface MapTile extends Paintable {
     default Function<ManfredController, ControllerInterface> onStep(){
         return ControllerInterface::self;
     }
-
-    default Optional<BufferedImage> getImage() {
-        return Optional.empty();
-    }
 }

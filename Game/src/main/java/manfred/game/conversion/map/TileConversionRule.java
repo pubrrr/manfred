@@ -1,6 +1,7 @@
 package manfred.game.conversion.map;
 
 import manfred.data.map.ValidatedMapDto;
+import manfred.game.config.GameConfig;
 
 import java.util.Optional;
 
@@ -22,5 +23,9 @@ public interface TileConversionRule {
 
     static TileConversionRule createNonAccessible() {
         return new NonAccessibleTileFactory();
+    }
+
+    static DecorateTileWithImageRule.Builder decorateWithImage(GameConfig gameConfig) {
+        return DecorateTileWithImageRule.build(gameConfig);
     }
 }
