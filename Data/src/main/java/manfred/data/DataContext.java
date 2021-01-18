@@ -5,8 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import manfred.data.enemy.EnemyReader;
 import manfred.data.map.MapDtoValidator;
+import manfred.data.map.MapHelper;
 import manfred.data.map.tile.TileConverter;
+import manfred.data.map.validator.NoTwoObjectsAtSameTileValidator;
 import manfred.data.map.validator.PersonsValidator;
+import manfred.data.map.validator.PortalsValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +28,10 @@ public class DataContext {
 
     @Bean
     public MapDtoValidator mapDtoValidator(TileConverter tileConverter, EnemyReader enemyReader) {
-        return new MapDtoValidator(List.of(new PersonsValidator()), tileConverter, enemyReader);
+        return new MapDtoValidator(
+            List.of(new PersonsValidator(), new PortalsValidator(new MapHelper()), new NoTwoObjectsAtSameTileValidator()),
+            tileConverter,
+            enemyReader
+        );
     }
 }

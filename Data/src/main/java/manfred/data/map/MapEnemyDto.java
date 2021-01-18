@@ -8,7 +8,12 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class MapEnemyDto extends MapObjectDto {
     private String name;
+
+    public MapEnemyDto(String name, int positionX, int positionY) {
+        this.name = name;
+        this.positionX = positionX;
+        this.positionY = positionY;
+    }
 }
