@@ -1,26 +1,23 @@
 package manfred.data.map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import manfred.data.InvalidInputException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.function.Supplier;
 
 @Component
+@AllArgsConstructor
 public class RawMapReader {
 
     private final ObjectMapper objectMapper;
-
-    public RawMapReader(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
+    private final MapHelper mapHelper;
 
     public RawMapDto load(String name) throws InvalidInputException {
-        URL yamlURL = getClass().getResource("/maps/" + name + ".yaml");
-        if (yamlURL == null) {
-            throw new InvalidInputException("Did not find resource for map " + name);
-        }
+        URL yamlURL = mapHelper.getResourceForMap(name).orElseThrow(invalidInputException(name));
 
         return load(yamlURL);
     }
@@ -31,5 +28,9 @@ public class RawMapReader {
         } catch (IOException e) {
             throw new InvalidInputException("Could not read map from " + yamlURL, e);
         }
+    }
+
+    private Supplier<InvalidInputException> invalidInputException(String name) {
+        return () -> new InvalidInputException("Did not find resource for map " + name);
     }
 }

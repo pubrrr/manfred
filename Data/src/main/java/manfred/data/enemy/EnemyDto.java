@@ -1,15 +1,24 @@
 package manfred.data.enemy;
 
-import lombok.Value;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.awt.image.BufferedImage;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class EnemyDto {
-    String name;
-    int healthPoints;
-    int speed;
-    BufferedImage image;
-    int spawnX;
-    int spawnY;
+    private String name;
+    private int healthPoints;
+    private int speed;
+
+    @JsonIgnore
+    private BufferedImage image;
+
+    public LocatedEnemyDto at(int spawnX, int spawnY) {
+        return new LocatedEnemyDto(this.name, this.healthPoints, this.speed, this.image, spawnX, spawnY);
+    }
 }

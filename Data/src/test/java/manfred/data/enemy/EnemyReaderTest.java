@@ -30,7 +30,7 @@ class EnemyReaderTest {
     @Test
     void testConvert() throws InvalidInputException {
         URL url = getClass().getResource("/enemy/testMongo.yaml");
-        UnlocatedEnemyDto result = underTest.load(url, url);
+        EnemyDto result = underTest.load(url, url);
 
         assertThat(result.getName(), equalTo("Mongo"));
         assertThat(result.getHealthPoints(), equalTo(20));

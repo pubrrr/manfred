@@ -12,7 +12,7 @@ import java.util.List;
 public class RawMapDto {
     private String name;
     private List<String> map = List.of();
-    private List<PersonDto> persons = List.of();
+    private List<MapPersonDto> persons = List.of();
     private List<TransporterDto> portals = List.of();
     private List<TransporterDto> doors = List.of();
     private List<MapEnemyDto> enemies = List.of();

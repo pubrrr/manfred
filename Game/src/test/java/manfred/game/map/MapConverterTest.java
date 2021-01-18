@@ -2,7 +2,7 @@ package manfred.game.map;
 
 import manfred.data.InvalidInputException;
 import manfred.data.enemy.EnemyReader;
-import manfred.data.enemy.UnlocatedEnemyDto;
+import manfred.data.enemy.EnemyDto;
 import manfred.data.image.ImageLoader;
 import manfred.data.person.PersonReader;
 import manfred.game.config.GameConfig;
@@ -110,7 +110,7 @@ public class MapConverterTest {
 
     @Test
     void triggersLoadEnemies() throws ManfredException, InvalidInputException {
-        when(enemyReaderMock.load(any())).thenReturn(new UnlocatedEnemyDto());
+        when(enemyReaderMock.load(any())).thenReturn(new EnemyDto());
 
         String jsonWithEnemy = "{name: test, map: [[0]], enemies: [{name: testEnemy, spawnX: 0, spawnY: 55}]}";
         underTest.convert(jsonWithEnemy);

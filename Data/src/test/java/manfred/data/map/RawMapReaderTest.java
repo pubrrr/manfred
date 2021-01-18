@@ -18,7 +18,7 @@ class RawMapReaderTest {
 
     @BeforeEach
     void init() {
-        underTest = new RawMapReader(new ObjectMapper(new YAMLFactory()));
+        underTest = new RawMapReader(new ObjectMapper(new YAMLFactory()), new MapHelper());
     }
 
     @Test

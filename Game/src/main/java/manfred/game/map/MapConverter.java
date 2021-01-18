@@ -3,7 +3,7 @@ package manfred.game.map;
 import manfred.data.DataContext;
 import manfred.data.InvalidInputException;
 import manfred.data.ObjectConverter;
-import manfred.data.enemy.EnemyDto;
+import manfred.data.enemy.LocatedEnemyDto;
 import manfred.data.map.ValidatedMapDto;
 import manfred.data.map.matrix.MapMatrix;
 import manfred.data.map.tile.TilePrototype;
@@ -13,17 +13,9 @@ import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.enemy.Enemy;
 import manfred.game.enemy.EnemyConverter;
 import manfred.game.exception.ManfredException;
-import manfred.game.interact.Door;
-import manfred.game.interact.Interactable;
-import manfred.game.interact.Portal;
 import manfred.game.interact.person.PersonProvider;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -215,7 +207,7 @@ public class MapConverter implements ObjectConverter<ValidatedMapDto, Map> {
 //        );
 //    }
 
-    private List<Enemy> convertEnemies(List<EnemyDto> enemies) {
+    private List<Enemy> convertEnemies(List<LocatedEnemyDto> enemies) {
         return enemies.stream()
             .map(enemyConverter::convert)
             .collect(toList());

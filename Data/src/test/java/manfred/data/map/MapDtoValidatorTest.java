@@ -2,7 +2,7 @@ package manfred.data.map;
 
 import manfred.data.InvalidInputException;
 import manfred.data.enemy.EnemyReader;
-import manfred.data.enemy.UnlocatedEnemyDto;
+import manfred.data.enemy.EnemyDto;
 import manfred.data.map.matrix.MapMatrix;
 import manfred.data.map.tile.MapTileReader;
 import manfred.data.map.tile.TileConverter;
@@ -51,12 +51,12 @@ class MapDtoValidatorTest {
 
     @Test
     void nonEmptyOtherStructs() throws InvalidInputException {
-        when(enemyReaderMock.load(any())).thenReturn(new UnlocatedEnemyDto());
+        when(enemyReaderMock.load(any())).thenReturn(new EnemyDto());
 
         RawMapDto input = new RawMapDto(
             "test",
             List.of("1"),
-            List.of(new PersonDto()),
+            List.of(new MapPersonDto()),
             List.of(new TransporterDto()),
             List.of(new TransporterDto(), new TransporterDto()),
             List.of(new MapEnemyDto())
@@ -247,7 +247,7 @@ class MapDtoValidatorTest {
     void oneFailingValidator() {
         RawMapDto input = new RawMapDto("test", List.of("1"), List.of(), List.of(), List.of(), List.of());
 
-        when(validatorMock1.validate(any())).thenReturn(List.of("message1", "message2"));
+        when(validatorMock1.validate(any(), any())).thenReturn(List.of("message1", "message2"));
 
         InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.validate(input));
         assertThat(exception.getMessage(), containsString("Validation of map test failed:\nmessage1,\nmessage2"));
@@ -257,8 +257,8 @@ class MapDtoValidatorTest {
     void twoFailingValidators() {
         RawMapDto input = new RawMapDto("test", List.of("1"), List.of(), List.of(), List.of(), List.of());
 
-        when(validatorMock1.validate(any())).thenReturn(List.of("validator1_message1", "validator1_message2"));
-        when(validatorMock2.validate(any())).thenReturn(List.of("validator2_message1", "validator2_message2"));
+        when(validatorMock1.validate(any(), any())).thenReturn(List.of("validator1_message1", "validator1_message2"));
+        when(validatorMock2.validate(any(), any())).thenReturn(List.of("validator2_message1", "validator2_message2"));
 
         InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.validate(input));
         assertThat(exception.getMessage(), containsString("validator1_message1,\nvalidator1_message2"));

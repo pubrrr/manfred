@@ -2,7 +2,7 @@ package manfred.data.map;
 
 import lombok.AllArgsConstructor;
 import manfred.data.InvalidInputException;
-import manfred.data.enemy.EnemyDto;
+import manfred.data.enemy.LocatedEnemyDto;
 import manfred.data.enemy.EnemyReader;
 import manfred.data.map.matrix.MapMatrix;
 import manfred.data.map.tile.TileConverter;
@@ -28,7 +28,7 @@ public class MapDtoValidator {
         MapMatrix<TilePrototype> mapMatrix = buildMapMatrix(rawMap);
 
         // TODO properly implement validators
-        validateMapObjects(rawMap);
+        validateMapObjects(rawMap, mapMatrix);
 
         return new ValidatedMapDto(
             rawMap.getName(),
@@ -40,9 +40,9 @@ public class MapDtoValidator {
         );
     }
 
-    private void validateMapObjects(RawMapDto rawMap) throws InvalidInputException {
+    private void validateMapObjects(RawMapDto rawMap, MapMatrix<TilePrototype> mapMatrix) throws InvalidInputException {
         List<String> validationMessages = this.validators.stream()
-            .map(validator -> validator.validate(rawMap))
+            .map(validator -> validator.validate(rawMap, mapMatrix))
             .flatMap(Collection::stream)
             .collect(toList());
 
@@ -68,9 +68,9 @@ public class MapDtoValidator {
         return mapMatrix;
     }
 
-    private List<EnemyDto> validateAndLocateEnemies(RawMapDto rawMapDto) throws InvalidInputException {
+    private List<LocatedEnemyDto> validateAndLocateEnemies(RawMapDto rawMapDto) throws InvalidInputException {
         List<String> validationMessages = new LinkedList<>();
-        List<EnemyDto> result = rawMapDto.getEnemies().stream().map(mapEnemyDto -> {
+        List<LocatedEnemyDto> result = rawMapDto.getEnemies().stream().map(mapEnemyDto -> {
             try {
                 return enemyReader.load(mapEnemyDto.getName()).at(mapEnemyDto.positionX, mapEnemyDto.positionY);
             } catch (InvalidInputException e) {
