@@ -32,7 +32,11 @@ import org.springframework.context.annotation.Import;
 
 import java.util.Stack;
 
-import static manfred.game.conversion.map.TileConversionRule.*;
+import static manfred.game.conversion.map.TileConversionRule.createAccessible;
+import static manfred.game.conversion.map.TileConversionRule.createNonAccessible;
+import static manfred.game.conversion.map.TileConversionRule.createPerson;
+import static manfred.game.conversion.map.TileConversionRule.createPortal;
+import static manfred.game.conversion.map.TileConversionRule.decorateWithImage;
 
 @Configuration
 @ComponentScan(basePackages = "manfred.game")
@@ -123,6 +127,7 @@ public class GameContext {
     @Bean
     public TileConversionRule tileConversionRule(GameConfig gameConfig) {
         return createPerson()
+            .orElse(createPortal())
             .orElse(decorateWithImage(gameConfig).and(createAccessible().orElse(createNonAccessible())))
             .orElse(createAccessible())
             .orElse(createNonAccessible());

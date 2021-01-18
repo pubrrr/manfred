@@ -52,6 +52,14 @@ public class MapConverter implements ObjectConverter<ValidatedMapDto, Map> {
         int width = inputMap.sizeX();
         int height = inputMap.sizeY();
 
+        List<List<MapTile>> resultingMapMatrix = createResultingMap(input, width, height);
+
+        this.enemiesWrapper.setEnemies(convertEnemies(input.getEnemies()));
+
+        return new Map(resultingMapMatrix, this.gameConfig);
+    }
+
+    private List<List<MapTile>> createResultingMap(ValidatedMapDto input, int width, int height) {
         List<List<MapTile>> resultingMap = new ArrayList<>(width);
         for (int x = 0; x < width; x++) {
             List<MapTile> column = new ArrayList<>(height);
@@ -60,13 +68,7 @@ public class MapConverter implements ObjectConverter<ValidatedMapDto, Map> {
             }
             resultingMap.add(column);
         }
-
-        this.enemiesWrapper.setEnemies(convertEnemies(input.getEnemies()));
-
-        return new Map(
-            resultingMap,
-            this.gameConfig
-        );
+        return resultingMap;
     }
 
     private MapTile createMapTile(ValidatedMapDto input, int x, int y) {

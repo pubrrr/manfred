@@ -28,4 +28,8 @@ public interface TileConversionRule {
     static DecorateTileWithImageRule.Builder decorateWithImage(GameConfig gameConfig) {
         return DecorateTileWithImageRule.build(gameConfig);
     }
+
+    static TileConversionRule createPortal() {
+        return new PortalTileFactory();
+    }
 }
