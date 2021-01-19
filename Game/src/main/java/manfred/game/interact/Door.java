@@ -11,13 +11,11 @@ public class Door implements Interactable {
     private final String targetName;
     private final int targetSpawnX;
     private final int targetSpawnY;
-    private final GameConfig gameConfig;
 
-    public Door(String targetName, int targetSpawnX, int targetSpawnY, GameConfig gameConfig) {
+    public Door(String targetName, int targetSpawnX, int targetSpawnY) {
         this.targetName = targetName;
         this.targetSpawnX = targetSpawnX;
         this.targetSpawnY = targetSpawnY;
-        this.gameConfig = gameConfig;
     }
 
     @Override
@@ -35,12 +33,6 @@ public class Door implements Interactable {
 
     @Override
     public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        g.setColor(Color.YELLOW);
-        g.fillRect(
-                gameConfig.getPixelBlockSize() * x - offset.x,
-                gameConfig.getPixelBlockSize() * y - offset.y,
-                gameConfig.getPixelBlockSize(),
-                gameConfig.getPixelBlockSize()
-        );
+        // do nothing
     }
 }

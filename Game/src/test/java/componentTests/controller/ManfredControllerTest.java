@@ -177,7 +177,7 @@ class ManfredControllerTest extends ControllerTestCase {
         String targetName = "target";
         int targetSpawnX = 5;
         int targetSpawnY = 66;
-        setupMapWithInteractable(new Door(targetName, targetSpawnX, targetSpawnY, null));
+        setupMapWithInteractable(new Door(targetName, targetSpawnX, targetSpawnY));
 
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_ENTER);
         ControllerInterface controllerState = underTest.keyReleased(eventMock);

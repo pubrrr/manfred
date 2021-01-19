@@ -32,4 +32,8 @@ public interface TileConversionRule {
     static TileConversionRule createPortal() {
         return new PortalTileFactory();
     }
+
+    static TileConversionRule createDoor() {
+        return new DoorTileFactory();
+    }
 }
