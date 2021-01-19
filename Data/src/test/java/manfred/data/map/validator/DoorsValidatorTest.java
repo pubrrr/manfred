@@ -25,56 +25,56 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class PortalsValidatorTest {
+class DoorsValidatorTest {
 
-    private PortalsValidator underTest;
+    private DoorsValidator underTest;
     private MapHelper mapHelperMock;
 
     @BeforeEach
     void setUp() {
         mapHelperMock = mock(MapHelper.class);
-        underTest = new PortalsValidator(mapHelperMock);
+        underTest = new DoorsValidator(mapHelperMock);
     }
 
     @Test
-    void noPortals() {
-        RawMapDto input = getRawMapWithPortals();
+    void noDoors() {
+        RawMapDto input = getRawMapWithDoors();
 
-        List<String> result = underTest.validate(input, accessibleMap());
+        List<String> result = underTest.validate(input, nonAccessibleMap());
 
         assertThat(result, empty());
     }
 
     @Test
-    void accessibleMapIsValid() throws MalformedURLException {
+    void nonAccessibleMapIsValid() throws MalformedURLException {
         when(mapHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
 
-        RawMapDto input = getRawMapWithPortals(new TransporterDto("target", 0, 0, 0, 0));
-
-        MapMatrix<TilePrototype> mapMatrixMock = accessibleMap();
-        List<String> result = underTest.validate(input, mapMatrixMock);
-
-        assertThat(result, empty());
-    }
-
-    @Test
-    void nonAccessibleMapIsNotValid() throws MalformedURLException {
-        when(mapHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
-
-        RawMapDto input = getRawMapWithPortals(new TransporterDto("target", 0, 0, 0, 0));
+        RawMapDto input = getRawMapWithDoors(new TransporterDto("target", 0, 0, 0, 0));
 
         MapMatrix<TilePrototype> mapMatrixMock = nonAccessibleMap();
         List<String> result = underTest.validate(input, mapMatrixMock);
 
+        assertThat(result, empty());
+    }
+
+    @Test
+    void accessibleMapIsNotValid() throws MalformedURLException {
+        when(mapHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
+
+        RawMapDto input = getRawMapWithDoors(new TransporterDto("target", 0, 0, 0, 0));
+
+        MapMatrix<TilePrototype> mapMatrixMock = accessibleMap();
+        List<String> result = underTest.validate(input, mapMatrixMock);
+
         assertThat(result, hasSize(1));
-        assertThat(result, contains("Tile for portal to target is not accessible"));
+        assertThat(result, contains("Tile for door to target is not accessible"));
     }
 
     @Test
     void accessibleAndAccessibleTile() throws MalformedURLException {
         when(mapHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
 
-        RawMapDto input = getRawMapWithPortals(
+        RawMapDto input = getRawMapWithDoors(
             new TransporterDto("target1", 0, 0, 0, 0),
             new TransporterDto("target2", 0, 0, 0, 1)
         );
@@ -86,16 +86,16 @@ class PortalsValidatorTest {
         List<String> result = underTest.validate(input, mapMatrixMock);
 
         assertThat(result, hasSize(1));
-        assertThat(result, contains("Tile for portal to target2 is not accessible"));
+        assertThat(result, contains("Tile for door to target1 is not accessible"));
     }
 
     @Test
     void unknownResourceForTargetIsNotValid() {
         when(mapHelperMock.getResourceForMap(any())).thenReturn(Optional.empty());
 
-        RawMapDto input = getRawMapWithPortals(new TransporterDto("targetName", 0, 0, 0, 0));
+        RawMapDto input = getRawMapWithDoors(new TransporterDto("targetName", 0, 0, 0, 0));
 
-        List<String> result = underTest.validate(input, accessibleMap());
+        List<String> result = underTest.validate(input, nonAccessibleMap());
 
         assertThat(result, hasSize(1));
         assertThat(result, contains("Resource for target map targetName not found"));
@@ -105,19 +105,19 @@ class PortalsValidatorTest {
     void unknownResourceAndNonAccessibleMap() {
         when(mapHelperMock.getResourceForMap(any())).thenReturn(Optional.empty());
 
-        RawMapDto input = getRawMapWithPortals(new TransporterDto("targetName", 0, 0, 0, 0));
+        RawMapDto input = getRawMapWithDoors(new TransporterDto("targetName", 0, 0, 0, 0));
 
-        List<String> result = underTest.validate(input, nonAccessibleMap());
+        List<String> result = underTest.validate(input, accessibleMap());
 
         assertThat(result, hasSize(2));
         assertThat(
             result,
-            containsInAnyOrder("Tile for portal to targetName is not accessible", "Resource for target map targetName not found")
+            containsInAnyOrder("Tile for door to targetName is not accessible", "Resource for target map targetName not found")
         );
     }
 
-    private RawMapDto getRawMapWithPortals(TransporterDto... portals) {
-        return new RawMapDto("name", List.of(), List.of(), Arrays.asList(portals), List.of(), List.of());
+    private RawMapDto getRawMapWithDoors(TransporterDto... doors) {
+        return new RawMapDto("name", List.of(), List.of(), List.of(), Arrays.asList(doors), List.of());
     }
 
     private MapMatrix<TilePrototype> accessibleMap() {

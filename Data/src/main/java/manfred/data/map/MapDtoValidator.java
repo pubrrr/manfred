@@ -1,13 +1,14 @@
 package manfred.data.map;
 
-import lombok.AllArgsConstructor;
 import manfred.data.InvalidInputException;
-import manfred.data.enemy.LocatedEnemyDto;
 import manfred.data.enemy.EnemyReader;
+import manfred.data.enemy.LocatedEnemyDto;
 import manfred.data.map.matrix.MapMatrix;
 import manfred.data.map.tile.TileConverter;
 import manfred.data.map.tile.TilePrototype;
 import manfred.data.map.validator.Validator;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -16,12 +17,18 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import static manfred.data.helper.StringSplitter.splitAtCommas;
 
-@AllArgsConstructor
+@Component
 public class MapDtoValidator {
 
     private final List<Validator> validators;
     private final TileConverter tileConverter;
     private final EnemyReader enemyReader;
+
+    public MapDtoValidator(@Qualifier("mapValidators") List<Validator> validators, TileConverter tileConverter, EnemyReader enemyReader) {
+        this.validators = validators;
+        this.tileConverter = tileConverter;
+        this.enemyReader = enemyReader;
+    }
 
     public ValidatedMapDto validate(RawMapDto rawMap) throws InvalidInputException {
         // TODO validate that map tile image interferes with other images on the map

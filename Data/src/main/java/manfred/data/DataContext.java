@@ -7,9 +7,11 @@ import manfred.data.enemy.EnemyReader;
 import manfred.data.map.MapDtoValidator;
 import manfred.data.map.MapHelper;
 import manfred.data.map.tile.TileConverter;
+import manfred.data.map.validator.DoorsValidator;
 import manfred.data.map.validator.NoTwoObjectsAtSameTileValidator;
 import manfred.data.map.validator.PersonsValidator;
 import manfred.data.map.validator.PortalsValidator;
+import manfred.data.map.validator.Validator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -26,12 +28,13 @@ public class DataContext {
         return new ObjectMapper(new YAMLFactory());
     }
 
-    @Bean
-    public MapDtoValidator mapDtoValidator(TileConverter tileConverter, EnemyReader enemyReader) {
-        return new MapDtoValidator(
-            List.of(new PersonsValidator(), new PortalsValidator(new MapHelper()), new NoTwoObjectsAtSameTileValidator()),
-            tileConverter,
-            enemyReader
+    @Bean(name = "mapValidators")
+    public List<Validator> mapValidators(MapHelper mapHelper) {
+        return List.of(
+            new PersonsValidator(),
+            new PortalsValidator(mapHelper),
+            new DoorsValidator(mapHelper),
+            new NoTwoObjectsAtSameTileValidator()
         );
     }
 }
