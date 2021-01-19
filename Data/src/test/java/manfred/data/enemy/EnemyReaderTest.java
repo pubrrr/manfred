@@ -3,6 +3,7 @@ package manfred.data.enemy;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import manfred.data.InvalidInputException;
+import manfred.data.helper.UrlHelper;
 import manfred.data.image.ImageLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +25,7 @@ class EnemyReaderTest {
     void init() {
         imageLoaderMock = mock(ImageLoader.class);
 
-        underTest = new EnemyReader(imageLoaderMock, new ObjectMapper(new YAMLFactory()));
+        underTest = new EnemyReader(imageLoaderMock, new ObjectMapper(new YAMLFactory()), new UrlHelper());
     }
 
     @Test
@@ -41,6 +42,6 @@ class EnemyReaderTest {
     @Test
     void unknownInputFile() {
         InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.load("unknown"));
-        assertThat(exception.getMessage(), containsString("Did not find resource for enemy"));
+        assertThat(exception.getMessage(), containsString("Resource for enemy unknown not found"));
     }
 }

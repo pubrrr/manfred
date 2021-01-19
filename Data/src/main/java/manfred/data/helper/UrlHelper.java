@@ -19,4 +19,12 @@ public class UrlHelper {
     public Optional<URL> getImageResourceForPerson(String name) {
         return Optional.ofNullable(getClass().getResource("/persons/" + name + ".png"));
     }
+
+    public Optional<URL> getResourceForEnemy(Object name) {
+        return Optional.ofNullable(getClass().getResource("/enemies/" + name + ".yaml"));
+    }
+
+    public Optional<URL> getImageResourceForEnemy(String name) {
+        return Optional.ofNullable(getClass().getResource("/enemies/" + name + ".png"));
+    }
 }

@@ -3,35 +3,36 @@ package manfred.data.enemy;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import manfred.data.InvalidInputException;
 import manfred.data.ObjectReader;
+import manfred.data.helper.UrlHelper;
 import manfred.data.image.ImageLoader;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.function.Supplier;
 
 @Component
 public class EnemyReader implements ObjectReader<EnemyDto> {
 
     private final ImageLoader imageLoader;
     private final ObjectMapper objectMapper;
+    private final UrlHelper urlHelper;
 
-    public EnemyReader(ImageLoader imageLoader, ObjectMapper objectMapper) {
+    public EnemyReader(ImageLoader imageLoader, ObjectMapper objectMapper, UrlHelper urlHelper) {
         this.imageLoader = imageLoader;
         this.objectMapper = objectMapper;
+        this.urlHelper = urlHelper;
     }
 
     public EnemyDto load(String name) throws InvalidInputException {
-        URL yamlURL = getClass().getResource("/enemies/" + name + ".yaml");
-        if (yamlURL == null) {
-            throw new InvalidInputException("Did not find resource for enemy " + name);
-        }
+        return load(
+            urlHelper.getResourceForEnemy(name).orElseThrow(invalidInputException("Resource for enemy " + name + " not found")),
+            urlHelper.getImageResourceForEnemy(name).orElseThrow(invalidInputException("Image resource for enemy " + name + " not found"))
+        );
+    }
 
-        URL imageURL = getClass().getResource("/enemies/" + name + ".png");
-        if (imageURL == null) {
-            throw new InvalidInputException("Did not find image resource for enemy " + name);
-        }
-
-        return load(yamlURL, imageURL);
+    private Supplier<InvalidInputException> invalidInputException(String message) {
+        return () -> new InvalidInputException(message);
     }
 
     EnemyDto load(URL yamlURL, URL imageURL) throws InvalidInputException {

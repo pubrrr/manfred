@@ -75,6 +75,7 @@ public class MapDtoValidator {
     }
 
     private List<LocatedEnemyDto> validateAndLocateEnemies(RawMapDto rawMapDto) throws InvalidInputException {
+        // TODO only convert, don't validate, becuase it's already validated
         List<String> validationMessages = new LinkedList<>();
         List<LocatedEnemyDto> result = rawMapDto.getEnemies().stream().map(mapEnemyDto -> {
             try {
