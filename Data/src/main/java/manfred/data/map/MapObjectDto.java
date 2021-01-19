@@ -1,9 +1,8 @@
 package manfred.data.map;
 
-import lombok.Data;
+public interface MapObjectDto {
 
-@Data
-abstract public class MapObjectDto {
-    protected int positionX;
-    protected int positionY;
+    int getPositionX();
+    int getPositionY();
+    String getTargetToLoad();
 }

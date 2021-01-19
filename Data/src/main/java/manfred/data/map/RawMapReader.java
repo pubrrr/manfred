@@ -3,6 +3,7 @@ package manfred.data.map;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import manfred.data.InvalidInputException;
+import manfred.data.helper.UrlHelper;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -14,10 +15,10 @@ import java.util.function.Supplier;
 public class RawMapReader {
 
     private final ObjectMapper objectMapper;
-    private final MapHelper mapHelper;
+    private final UrlHelper urlHelper;
 
     public RawMapDto load(String name) throws InvalidInputException {
-        URL yamlURL = mapHelper.getResourceForMap(name).orElseThrow(invalidInputException(name));
+        URL yamlURL = urlHelper.getResourceForMap(name).orElseThrow(invalidInputException(name));
 
         return load(yamlURL);
     }

@@ -1,36 +1,41 @@
 package manfred.data.map.validator;
 
-import manfred.data.map.MapHelper;
+import lombok.AllArgsConstructor;
+import manfred.data.helper.UrlHelper;
 import manfred.data.map.RawMapDto;
 import manfred.data.map.TransporterDto;
 import manfred.data.map.matrix.MapMatrix;
 import manfred.data.map.tile.TilePrototype;
 
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
+import java.util.Optional;
+import java.util.function.Function;
 
-public class DoorsValidator extends TransporterDtoValidator implements Validator {
+@AllArgsConstructor
+public class DoorsValidator extends MapObjectDtoValidator<TransporterDto> implements Validator {
 
-    private final static Predicate<Map.Entry<String, Boolean>> ACCESSIBLE_TILES = Map.Entry::getValue;
-
-    public DoorsValidator(MapHelper mapHelper) {
-        super(mapHelper);
-    }
+    private final UrlHelper urlHelper;
 
     @Override
     public List<String> validate(RawMapDto rawMapDto, MapMatrix<TilePrototype> mapMatrix) {
         List<TransporterDto> doors = rawMapDto.getDoors();
 
-        List<String> validationMessages = new LinkedList<>(validateTargetsExist(doors));
-        validationMessages.addAll(validateAccessibility(mapMatrix, doors, ACCESSIBLE_TILES));
+        List<String> validationMessages = new LinkedList<>(validateTargetsExist(doors, urlHelper::getResourceForMap));
+        validationMessages.addAll(validateTilesAreNotAccessible(mapMatrix, doors));
 
         return validationMessages;
     }
 
     @Override
-    protected String transporterType() {
-        return "door";
+    protected Function<Map.Entry<String, Optional<URL>>, String> targetNotExistentErrorMessage() {
+        return emptyResourceByTarget -> "Resource for door target map " + emptyResourceByTarget.getKey() + " not found";
+    }
+
+    @Override
+    protected Function<Map.Entry<String, Boolean>, String> accessibilityErrorMessage() {
+        return targetEntry -> "Tile for door to " + targetEntry.getKey() + " is accessible";
     }
 }

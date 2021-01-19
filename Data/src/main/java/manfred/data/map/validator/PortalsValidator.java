@@ -1,37 +1,41 @@
 package manfred.data.map.validator;
 
-import manfred.data.map.MapHelper;
+import lombok.AllArgsConstructor;
+import manfred.data.helper.UrlHelper;
 import manfred.data.map.RawMapDto;
 import manfred.data.map.TransporterDto;
 import manfred.data.map.matrix.MapMatrix;
 import manfred.data.map.tile.TilePrototype;
 
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 
-public class PortalsValidator extends TransporterDtoValidator implements Validator {
+@AllArgsConstructor
+public class PortalsValidator extends MapObjectDtoValidator<TransporterDto> implements Validator {
 
-    public PortalsValidator(MapHelper mapHelper) {
-        super(mapHelper);
-    }
+    private final UrlHelper urlHelper;
 
     @Override
     public List<String> validate(RawMapDto rawMapDto, MapMatrix<TilePrototype> mapMatrix) {
         List<TransporterDto> portals = rawMapDto.getPortals();
 
-        List<String> validationMessages = new LinkedList<>(validateTargetsExist(portals));
-        validationMessages.addAll(validateAccessibility(mapMatrix, portals, this::notAccessibleTiles));
+        List<String> validationMessages = new LinkedList<>(validateTargetsExist(portals, urlHelper::getResourceForMap));
+        validationMessages.addAll(validateTilesAreAccessible(mapMatrix, portals));
 
         return validationMessages;
     }
 
-    private boolean notAccessibleTiles(Map.Entry<String, Boolean> accessibilityByTargetName) {
-        return !accessibilityByTargetName.getValue();
+    @Override
+    protected Function<Map.Entry<String, Optional<URL>>, String> targetNotExistentErrorMessage() {
+        return emptyResourceByTarget -> "Resource for portal target map " + emptyResourceByTarget.getKey() + " not found";
     }
 
     @Override
-    protected String transporterType() {
-        return "portal";
+    protected Function<Map.Entry<String, Boolean>, String> accessibilityErrorMessage() {
+        return targetEntry -> "Tile for portal to " + targetEntry.getKey() + " is not accessible";
     }
 }

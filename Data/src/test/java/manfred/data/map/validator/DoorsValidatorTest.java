@@ -1,6 +1,6 @@
 package manfred.data.map.validator;
 
-import manfred.data.map.MapHelper;
+import manfred.data.helper.UrlHelper;
 import manfred.data.map.RawMapDto;
 import manfred.data.map.TransporterDto;
 import manfred.data.map.matrix.MapMatrix;
@@ -28,12 +28,12 @@ import static org.mockito.Mockito.when;
 class DoorsValidatorTest {
 
     private DoorsValidator underTest;
-    private MapHelper mapHelperMock;
+    private UrlHelper urlHelperMock;
 
     @BeforeEach
     void setUp() {
-        mapHelperMock = mock(MapHelper.class);
-        underTest = new DoorsValidator(mapHelperMock);
+        urlHelperMock = mock(UrlHelper.class);
+        underTest = new DoorsValidator(urlHelperMock);
     }
 
     @Test
@@ -47,7 +47,7 @@ class DoorsValidatorTest {
 
     @Test
     void nonAccessibleMapIsValid() throws MalformedURLException {
-        when(mapHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
+        when(urlHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
 
         RawMapDto input = getRawMapWithDoors(new TransporterDto("target", 0, 0, 0, 0));
 
@@ -59,7 +59,7 @@ class DoorsValidatorTest {
 
     @Test
     void accessibleMapIsNotValid() throws MalformedURLException {
-        when(mapHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
+        when(urlHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
 
         RawMapDto input = getRawMapWithDoors(new TransporterDto("target", 0, 0, 0, 0));
 
@@ -67,12 +67,12 @@ class DoorsValidatorTest {
         List<String> result = underTest.validate(input, mapMatrixMock);
 
         assertThat(result, hasSize(1));
-        assertThat(result, contains("Tile for door to target is not accessible"));
+        assertThat(result, contains("Tile for door to target is accessible"));
     }
 
     @Test
     void accessibleAndAccessibleTile() throws MalformedURLException {
-        when(mapHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
+        when(urlHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
 
         RawMapDto input = getRawMapWithDoors(
             new TransporterDto("target1", 0, 0, 0, 0),
@@ -86,24 +86,24 @@ class DoorsValidatorTest {
         List<String> result = underTest.validate(input, mapMatrixMock);
 
         assertThat(result, hasSize(1));
-        assertThat(result, contains("Tile for door to target1 is not accessible"));
+        assertThat(result, contains("Tile for door to target1 is accessible"));
     }
 
     @Test
     void unknownResourceForTargetIsNotValid() {
-        when(mapHelperMock.getResourceForMap(any())).thenReturn(Optional.empty());
+        when(urlHelperMock.getResourceForMap(any())).thenReturn(Optional.empty());
 
         RawMapDto input = getRawMapWithDoors(new TransporterDto("targetName", 0, 0, 0, 0));
 
         List<String> result = underTest.validate(input, nonAccessibleMap());
 
         assertThat(result, hasSize(1));
-        assertThat(result, contains("Resource for target map targetName not found"));
+        assertThat(result, contains("Resource for door target map targetName not found"));
     }
 
     @Test
     void unknownResourceAndNonAccessibleMap() {
-        when(mapHelperMock.getResourceForMap(any())).thenReturn(Optional.empty());
+        when(urlHelperMock.getResourceForMap(any())).thenReturn(Optional.empty());
 
         RawMapDto input = getRawMapWithDoors(new TransporterDto("targetName", 0, 0, 0, 0));
 
@@ -112,7 +112,7 @@ class DoorsValidatorTest {
         assertThat(result, hasSize(2));
         assertThat(
             result,
-            containsInAnyOrder("Tile for door to targetName is not accessible", "Resource for target map targetName not found")
+            containsInAnyOrder("Tile for door to targetName is accessible", "Resource for door target map targetName not found")
         );
     }
 

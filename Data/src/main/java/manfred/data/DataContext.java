@@ -3,10 +3,7 @@ package manfred.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import manfred.data.enemy.EnemyReader;
-import manfred.data.map.MapDtoValidator;
-import manfred.data.map.MapHelper;
-import manfred.data.map.tile.TileConverter;
+import manfred.data.helper.UrlHelper;
 import manfred.data.map.validator.DoorsValidator;
 import manfred.data.map.validator.NoTwoObjectsAtSameTileValidator;
 import manfred.data.map.validator.PersonsValidator;
@@ -29,11 +26,11 @@ public class DataContext {
     }
 
     @Bean(name = "mapValidators")
-    public List<Validator> mapValidators(MapHelper mapHelper) {
+    public List<Validator> mapValidators(UrlHelper urlHelper) {
         return List.of(
-            new PersonsValidator(),
-            new PortalsValidator(mapHelper),
-            new DoorsValidator(mapHelper),
+            new PersonsValidator(urlHelper),
+            new PortalsValidator(urlHelper),
+            new DoorsValidator(urlHelper),
             new NoTwoObjectsAtSameTileValidator()
         );
     }

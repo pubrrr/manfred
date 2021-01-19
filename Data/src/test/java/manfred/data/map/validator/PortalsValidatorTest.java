@@ -1,6 +1,6 @@
 package manfred.data.map.validator;
 
-import manfred.data.map.MapHelper;
+import manfred.data.helper.UrlHelper;
 import manfred.data.map.RawMapDto;
 import manfred.data.map.TransporterDto;
 import manfred.data.map.matrix.MapMatrix;
@@ -28,12 +28,12 @@ import static org.mockito.Mockito.when;
 class PortalsValidatorTest {
 
     private PortalsValidator underTest;
-    private MapHelper mapHelperMock;
+    private UrlHelper urlHelperMock;
 
     @BeforeEach
     void setUp() {
-        mapHelperMock = mock(MapHelper.class);
-        underTest = new PortalsValidator(mapHelperMock);
+        urlHelperMock = mock(UrlHelper.class);
+        underTest = new PortalsValidator(urlHelperMock);
     }
 
     @Test
@@ -47,7 +47,7 @@ class PortalsValidatorTest {
 
     @Test
     void accessibleMapIsValid() throws MalformedURLException {
-        when(mapHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
+        when(urlHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
 
         RawMapDto input = getRawMapWithPortals(new TransporterDto("target", 0, 0, 0, 0));
 
@@ -59,7 +59,7 @@ class PortalsValidatorTest {
 
     @Test
     void nonAccessibleMapIsNotValid() throws MalformedURLException {
-        when(mapHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
+        when(urlHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
 
         RawMapDto input = getRawMapWithPortals(new TransporterDto("target", 0, 0, 0, 0));
 
@@ -72,7 +72,7 @@ class PortalsValidatorTest {
 
     @Test
     void accessibleAndAccessibleTile() throws MalformedURLException {
-        when(mapHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
+        when(urlHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
 
         RawMapDto input = getRawMapWithPortals(
             new TransporterDto("target1", 0, 0, 0, 0),
@@ -91,19 +91,19 @@ class PortalsValidatorTest {
 
     @Test
     void unknownResourceForTargetIsNotValid() {
-        when(mapHelperMock.getResourceForMap(any())).thenReturn(Optional.empty());
+        when(urlHelperMock.getResourceForMap(any())).thenReturn(Optional.empty());
 
         RawMapDto input = getRawMapWithPortals(new TransporterDto("targetName", 0, 0, 0, 0));
 
         List<String> result = underTest.validate(input, accessibleMap());
 
         assertThat(result, hasSize(1));
-        assertThat(result, contains("Resource for target map targetName not found"));
+        assertThat(result, contains("Resource for portal target map targetName not found"));
     }
 
     @Test
     void unknownResourceAndNonAccessibleMap() {
-        when(mapHelperMock.getResourceForMap(any())).thenReturn(Optional.empty());
+        when(urlHelperMock.getResourceForMap(any())).thenReturn(Optional.empty());
 
         RawMapDto input = getRawMapWithPortals(new TransporterDto("targetName", 0, 0, 0, 0));
 
@@ -112,7 +112,7 @@ class PortalsValidatorTest {
         assertThat(result, hasSize(2));
         assertThat(
             result,
-            containsInAnyOrder("Tile for portal to targetName is not accessible", "Resource for target map targetName not found")
+            containsInAnyOrder("Tile for portal to targetName is not accessible", "Resource for portal target map targetName not found")
         );
     }
 

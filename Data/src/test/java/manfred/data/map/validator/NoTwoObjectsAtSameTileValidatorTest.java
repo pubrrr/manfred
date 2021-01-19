@@ -70,8 +70,8 @@ class NoTwoObjectsAtSameTileValidatorTest {
 
         assertThat(result, hasSize(2));
         assertThat(result, containsInAnyOrder(
-            "The following map objects are at the same position:\n[TransporterDto(target=target, targetSpawnX=0, targetSpawnY=0), MapEnemyDto(name=name)]",
-            "The following map objects are at the same position:\n[TransporterDto(target=target, targetSpawnX=0, targetSpawnY=0), MapPersonDto(name=name)]"
+            "The following map objects are at the same position:\n[TransporterDto(target=target, targetSpawnX=0, targetSpawnY=0, positionX=10, positionY=15), MapEnemyDto(name=name, positionX=10, positionY=15)]",
+            "The following map objects are at the same position:\n[TransporterDto(target=target, targetSpawnX=0, targetSpawnY=0, positionX=0, positionY=5), MapPersonDto(name=name, positionX=0, positionY=5)]"
         ));
     }
 }

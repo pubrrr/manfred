@@ -3,6 +3,7 @@ package manfred.data.person;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import manfred.data.InvalidInputException;
+import manfred.data.helper.UrlHelper;
 import manfred.data.image.ImageLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,13 +25,13 @@ class PersonReaderTest {
     void init() {
         imageLoaderMock = mock(ImageLoader.class);
 
-        underTest = new PersonReader(imageLoaderMock, new ObjectMapper(new YAMLFactory()));
+        underTest = new PersonReader(imageLoaderMock, new ObjectMapper(new YAMLFactory()), new UrlHelper());
     }
 
     @Test
     void invalidFileContent() {
         InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.load("unknown"));
-        assertThat(exception.getMessage(), containsString("Resource for '/persons/unknown.yaml' no found"));
+        assertThat(exception.getMessage(), containsString("Resource for person unknown not found"));
     }
 
     @Test

@@ -34,7 +34,6 @@ public class MapDtoValidator {
         // TODO validate that map tile image interferes with other images on the map
         MapMatrix<TilePrototype> mapMatrix = buildMapMatrix(rawMap);
 
-        // TODO properly implement validators
         validateMapObjects(rawMap, mapMatrix);
 
         return new ValidatedMapDto(
@@ -79,7 +78,7 @@ public class MapDtoValidator {
         List<String> validationMessages = new LinkedList<>();
         List<LocatedEnemyDto> result = rawMapDto.getEnemies().stream().map(mapEnemyDto -> {
             try {
-                return enemyReader.load(mapEnemyDto.getName()).at(mapEnemyDto.positionX, mapEnemyDto.positionY);
+                return enemyReader.load(mapEnemyDto.getName()).at(mapEnemyDto.getPositionX(), mapEnemyDto.getPositionY());
             } catch (InvalidInputException e) {
                 validationMessages.add(e.getMessage());
                 return null;

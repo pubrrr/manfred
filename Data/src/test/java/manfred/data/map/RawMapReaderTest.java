@@ -3,6 +3,7 @@ package manfred.data.map;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import manfred.data.InvalidInputException;
+import manfred.data.helper.UrlHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ class RawMapReaderTest {
 
     @BeforeEach
     void init() {
-        underTest = new RawMapReader(new ObjectMapper(new YAMLFactory()), new MapHelper());
+        underTest = new RawMapReader(new ObjectMapper(new YAMLFactory()), new UrlHelper());
     }
 
     @Test
