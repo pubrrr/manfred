@@ -3,9 +3,9 @@ package manfred.game.interact.person.gelaber;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableMap;
 import manfred.data.InvalidInputException;
-import manfred.data.person.GelaberDto;
-import manfred.data.person.GelaberTextDto;
-import manfred.data.person.ReferenceDto;
+import manfred.data.person.gelaber.GelaberDto;
+import manfred.data.person.gelaber.GelaberTextDto;
+import manfred.data.person.gelaber.ReferenceDto;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

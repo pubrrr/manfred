@@ -1,4 +1,4 @@
-package manfred.data.person;
+package manfred.data.person.gelaber;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

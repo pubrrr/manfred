@@ -4,6 +4,7 @@ import lombok.Value;
 import manfred.data.enemy.LocatedEnemyDto;
 import manfred.data.map.matrix.MapMatrix;
 import manfred.data.map.tile.TilePrototype;
+import manfred.data.person.LocatedPersonDto;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 public class ValidatedMapDto {
     String name;
     MapMatrix<TilePrototype> map;
-    List<MapPersonDto> persons;
+    List<LocatedPersonDto> persons;
     List<TransporterDto> portals;
     List<TransporterDto> doors;
     List<LocatedEnemyDto> enemies;

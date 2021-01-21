@@ -1,10 +1,9 @@
 package manfred.game.interact.person.gelaber;
 
 import manfred.data.InvalidInputException;
-import manfred.data.person.GelaberDto;
-import manfred.data.person.GelaberTextDto;
-import manfred.data.person.ReferenceDto;
-import manfred.game.exception.ManfredException;
+import manfred.data.person.gelaber.GelaberDto;
+import manfred.data.person.gelaber.GelaberTextDto;
+import manfred.data.person.gelaber.ReferenceDto;
 import manfred.game.interact.person.textLineFactory.SimpleTextLineFactory;
 import manfred.game.interact.person.textLineFactory.TextLineFactory;
 import org.junit.jupiter.api.Assertions;

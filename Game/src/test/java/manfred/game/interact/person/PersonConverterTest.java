@@ -1,7 +1,7 @@
 package manfred.game.interact.person;
 
 import manfred.data.InvalidInputException;
-import manfred.data.person.GelaberDto;
+import manfred.data.person.gelaber.GelaberDto;
 import manfred.data.person.PersonDto;
 import manfred.game.config.GameConfig;
 import manfred.game.interact.person.gelaber.GelaberConverter;

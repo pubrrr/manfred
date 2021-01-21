@@ -6,6 +6,7 @@ import manfred.data.map.matrix.MapMatrix;
 import manfred.data.map.tile.TileConverter;
 import manfred.data.map.tile.TilePrototype;
 import manfred.data.map.validator.Validator;
+import manfred.data.person.PersonsLoader;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -21,11 +22,13 @@ public class MapDtoValidator {
     private final List<Validator> validators;
     private final TileConverter tileConverter;
     private final EnemiesLoader enemiesLoader;
+    private final PersonsLoader personsLoader;
 
-    public MapDtoValidator(@Qualifier("mapValidators") List<Validator> validators, TileConverter tileConverter, EnemiesLoader enemiesLoader) {
+    public MapDtoValidator(@Qualifier("mapValidators") List<Validator> validators, TileConverter tileConverter, EnemiesLoader enemiesLoader, PersonsLoader personsLoader) {
         this.validators = validators;
         this.tileConverter = tileConverter;
         this.enemiesLoader = enemiesLoader;
+        this.personsLoader = personsLoader;
     }
 
     public ValidatedMapDto validate(RawMapDto rawMap) throws InvalidInputException {
@@ -38,7 +41,7 @@ public class MapDtoValidator {
             return new ValidatedMapDto(
                 rawMap.getName(),
                 mapMatrix,
-                rawMap.getPersons(),
+                personsLoader.load(rawMap.getPersons()),
                 rawMap.getPortals(),
                 rawMap.getDoors(),
                 enemiesLoader.load(rawMap.getEnemies())

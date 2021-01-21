@@ -3,6 +3,7 @@ package manfred.data.person;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import manfred.data.person.gelaber.GelaberDto;
 
 import java.awt.image.BufferedImage;
 

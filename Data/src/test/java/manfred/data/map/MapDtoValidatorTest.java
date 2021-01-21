@@ -10,6 +10,9 @@ import manfred.data.map.tile.MapTileReader;
 import manfred.data.map.tile.TileConverter;
 import manfred.data.map.tile.TilePrototype;
 import manfred.data.map.validator.Validator;
+import manfred.data.person.LocatedPersonDto;
+import manfred.data.person.PersonsLoader;
+import manfred.data.person.gelaber.ValidatedGelaberDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,14 +32,16 @@ class MapDtoValidatorTest {
     private Validator validatorMock1;
     private Validator validatorMock2;
     private EnemiesLoader enemiesLoaderMock;
+    private PersonsLoader personsLoaderMock;
 
     @BeforeEach
     void setUp() {
         validatorMock1 = mock(Validator.class);
         validatorMock2 = mock(Validator.class);
         enemiesLoaderMock = mock(EnemiesLoader.class);
+        personsLoaderMock = mock(PersonsLoader.class);
 
-        underTest = new MapDtoValidator(List.of(validatorMock1, validatorMock2), new TileConverter(mock(MapTileReader.class)), enemiesLoaderMock);
+        underTest = new MapDtoValidator(List.of(validatorMock1, validatorMock2), new TileConverter(mock(MapTileReader.class)), enemiesLoaderMock, personsLoaderMock);
     }
 
     @Test
@@ -54,6 +59,7 @@ class MapDtoValidatorTest {
     @Test
     void nonEmptyOtherStructs() throws InvalidInputException {
         when(enemiesLoaderMock.load(any())).thenReturn(List.of(new LocatedEnemyDto("name", 0, 0, null, 0, 0)));
+        when(personsLoaderMock.load(any())).thenReturn(List.of(new LocatedPersonDto("name", mock(ValidatedGelaberDto.class), null, 0, 0)));
 
         RawMapDto input = new RawMapDto(
             "test",
@@ -74,6 +80,7 @@ class MapDtoValidatorTest {
 
     @Test
     void unknownEnemy() throws InvalidInputException {
+        when(personsLoaderMock.load(any())).thenReturn(List.of());
         when(enemiesLoaderMock.load(any())).thenThrow(new InvalidInputException("errorMessage"));
 
         RawMapDto input = new RawMapDto(
@@ -88,6 +95,25 @@ class MapDtoValidatorTest {
         InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.validate(input));
         assertThat(exception.getMessage(), containsString("Error when creating objects for map test"));
         assertThat(exception.getCause().getMessage(), containsString("errorMessage"));
+    }
+
+    @Test
+    void unknownPerson() throws InvalidInputException {
+        when(personsLoaderMock.load(any())).thenThrow(new InvalidInputException("personErrorMessage"));
+        when(enemiesLoaderMock.load(any())).thenReturn(List.of());
+
+        RawMapDto input = new RawMapDto(
+            "test",
+            List.of("1"),
+            List.of(),
+            List.of(),
+            List.of(),
+            List.of(new MapEnemyDto())
+        );
+
+        InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.validate(input));
+        assertThat(exception.getMessage(), containsString("Error when creating objects for map test"));
+        assertThat(exception.getCause().getMessage(), containsString("personErrorMessage"));
     }
 
     @Test
