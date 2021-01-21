@@ -24,6 +24,7 @@ public class EnemyReader implements ObjectReader<EnemyDto> {
         this.urlHelper = urlHelper;
     }
 
+    @Override
     public EnemyDto load(String name) throws InvalidInputException {
         return load(
             urlHelper.getResourceForEnemy(name).orElseThrow(invalidInputException("Resource for enemy " + name + " not found")),

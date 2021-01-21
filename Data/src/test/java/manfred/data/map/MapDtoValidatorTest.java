@@ -1,8 +1,10 @@
 package manfred.data.map;
 
 import manfred.data.InvalidInputException;
+import manfred.data.enemy.EnemiesLoader;
 import manfred.data.enemy.EnemyReader;
 import manfred.data.enemy.EnemyDto;
+import manfred.data.enemy.LocatedEnemyDto;
 import manfred.data.map.matrix.MapMatrix;
 import manfred.data.map.tile.MapTileReader;
 import manfred.data.map.tile.TileConverter;
@@ -26,15 +28,15 @@ class MapDtoValidatorTest {
 
     private Validator validatorMock1;
     private Validator validatorMock2;
-    private EnemyReader enemyReaderMock;
+    private EnemiesLoader enemiesLoaderMock;
 
     @BeforeEach
     void setUp() {
         validatorMock1 = mock(Validator.class);
         validatorMock2 = mock(Validator.class);
-        enemyReaderMock = mock(EnemyReader.class);
+        enemiesLoaderMock = mock(EnemiesLoader.class);
 
-        underTest = new MapDtoValidator(List.of(validatorMock1, validatorMock2), new TileConverter(mock(MapTileReader.class)), enemyReaderMock);
+        underTest = new MapDtoValidator(List.of(validatorMock1, validatorMock2), new TileConverter(mock(MapTileReader.class)), enemiesLoaderMock);
     }
 
     @Test
@@ -51,7 +53,7 @@ class MapDtoValidatorTest {
 
     @Test
     void nonEmptyOtherStructs() throws InvalidInputException {
-        when(enemyReaderMock.load(any())).thenReturn(new EnemyDto());
+        when(enemiesLoaderMock.load(any())).thenReturn(List.of(new LocatedEnemyDto("name", 0, 0, null, 0, 0)));
 
         RawMapDto input = new RawMapDto(
             "test",
@@ -72,7 +74,7 @@ class MapDtoValidatorTest {
 
     @Test
     void unknownEnemy() throws InvalidInputException {
-        when(enemyReaderMock.load(any())).thenThrow(new InvalidInputException("errorMessage"));
+        when(enemiesLoaderMock.load(any())).thenThrow(new InvalidInputException("errorMessage"));
 
         RawMapDto input = new RawMapDto(
             "test",
@@ -84,7 +86,8 @@ class MapDtoValidatorTest {
         );
 
         InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.validate(input));
-        assertThat(exception.getMessage(), containsString("Error when creating enemies on map test:\nerrorMessage"));
+        assertThat(exception.getMessage(), containsString("Error when creating objects for map test"));
+        assertThat(exception.getCause().getMessage(), containsString("errorMessage"));
     }
 
     @Test

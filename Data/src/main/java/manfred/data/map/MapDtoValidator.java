@@ -1,8 +1,7 @@
 package manfred.data.map;
 
 import manfred.data.InvalidInputException;
-import manfred.data.enemy.EnemyReader;
-import manfred.data.enemy.LocatedEnemyDto;
+import manfred.data.enemy.EnemiesLoader;
 import manfred.data.map.matrix.MapMatrix;
 import manfred.data.map.tile.TileConverter;
 import manfred.data.map.tile.TilePrototype;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -22,12 +20,12 @@ public class MapDtoValidator {
 
     private final List<Validator> validators;
     private final TileConverter tileConverter;
-    private final EnemyReader enemyReader;
+    private final EnemiesLoader enemiesLoader;
 
-    public MapDtoValidator(@Qualifier("mapValidators") List<Validator> validators, TileConverter tileConverter, EnemyReader enemyReader) {
+    public MapDtoValidator(@Qualifier("mapValidators") List<Validator> validators, TileConverter tileConverter, EnemiesLoader enemiesLoader) {
         this.validators = validators;
         this.tileConverter = tileConverter;
-        this.enemyReader = enemyReader;
+        this.enemiesLoader = enemiesLoader;
     }
 
     public ValidatedMapDto validate(RawMapDto rawMap) throws InvalidInputException {
@@ -36,14 +34,18 @@ public class MapDtoValidator {
 
         validateMapObjects(rawMap, mapMatrix);
 
-        return new ValidatedMapDto(
-            rawMap.getName(),
-            mapMatrix,
-            rawMap.getPersons(),
-            rawMap.getPortals(),
-            rawMap.getDoors(),
-            validateAndLocateEnemies(rawMap)
-        );
+        try {
+            return new ValidatedMapDto(
+                rawMap.getName(),
+                mapMatrix,
+                rawMap.getPersons(),
+                rawMap.getPortals(),
+                rawMap.getDoors(),
+                enemiesLoader.load(rawMap.getEnemies())
+            );
+        } catch (InvalidInputException e) {
+            throw new InvalidInputException("Error when creating objects for map " + rawMap.getName(), e);
+        }
     }
 
     private void validateMapObjects(RawMapDto rawMap, MapMatrix<TilePrototype> mapMatrix) throws InvalidInputException {
@@ -72,23 +74,5 @@ public class MapDtoValidator {
             throw new InvalidInputException("Could not convert map tiles:\n" + String.join(",\n", tileConverter.getValidationMessages()));
         }
         return mapMatrix;
-    }
-
-    private List<LocatedEnemyDto> validateAndLocateEnemies(RawMapDto rawMapDto) throws InvalidInputException {
-        // TODO only convert, don't validate, becuase it's already validated
-        List<String> validationMessages = new LinkedList<>();
-        List<LocatedEnemyDto> result = rawMapDto.getEnemies().stream().map(mapEnemyDto -> {
-            try {
-                return enemyReader.load(mapEnemyDto.getName()).at(mapEnemyDto.getPositionX(), mapEnemyDto.getPositionY());
-            } catch (InvalidInputException e) {
-                validationMessages.add(e.getMessage());
-                return null;
-            }
-        }).collect(toList());
-
-        if (!validationMessages.isEmpty()) {
-            throw new InvalidInputException("Error when creating enemies on map " + rawMapDto.getName() + ":\n" + String.join(",\n", validationMessages));
-        }
-        return result;
     }
 }
