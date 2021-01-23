@@ -1,10 +1,10 @@
 package manfred.game.map;
 
 import manfred.data.InvalidInputException;
-import manfred.data.enemy.EnemyReader;
-import manfred.data.enemy.EnemyDto;
-import manfred.data.image.ImageLoader;
-import manfred.data.person.PersonReader;
+import manfred.data.persistence.reader.EnemyReader;
+import manfred.data.persistence.dto.EnemyDto;
+import manfred.data.persistence.reader.ImageLoader;
+import manfred.data.persistence.reader.PersonReader;
 import manfred.game.config.GameConfig;
 import manfred.game.conversion.map.TileConversionRule;
 import manfred.game.enemy.EnemiesWrapper;

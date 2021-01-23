@@ -1,8 +1,8 @@
 package manfred.game.map;
 
 import manfred.data.ObjectProvider;
-import manfred.data.map.MapReader;
-import manfred.data.map.ValidatedMapDto;
+import manfred.data.infrastructure.map.MapReader;
+import manfred.data.infrastructure.map.ValidatedMapDto;
 import org.springframework.stereotype.Component;
 
 @Component

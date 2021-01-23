@@ -2,11 +2,11 @@ package manfred.game.map;
 
 import manfred.data.DataContext;
 import manfred.data.InvalidInputException;
-import manfred.data.ObjectConverter;
-import manfred.data.enemy.LocatedEnemyDto;
-import manfred.data.map.ValidatedMapDto;
-import manfred.data.map.matrix.MapMatrix;
-import manfred.data.map.tile.TilePrototype;
+import manfred.data.infrastructure.ObjectConverter;
+import manfred.data.infrastructure.enemy.LocatedEnemyDto;
+import manfred.data.infrastructure.map.ValidatedMapDto;
+import manfred.data.infrastructure.map.matrix.MapMatrix;
+import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.game.config.GameConfig;
 import manfred.game.conversion.map.TileConversionRule;
 import manfred.game.enemy.EnemiesWrapper;

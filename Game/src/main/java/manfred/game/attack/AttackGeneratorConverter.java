@@ -1,8 +1,8 @@
 package manfred.game.attack;
 
 import manfred.data.InvalidInputException;
-import manfred.data.ObjectConverter;
-import manfred.data.attack.AttackDto;
+import manfred.data.infrastructure.ObjectConverter;
+import manfred.data.persistence.dto.AttackDto;
 import manfred.game.enemy.MapColliderProvider;
 import org.springframework.stereotype.Component;
 

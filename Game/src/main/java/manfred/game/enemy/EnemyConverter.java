@@ -1,7 +1,7 @@
 package manfred.game.enemy;
 
-import manfred.data.ObjectConverter;
-import manfred.data.enemy.LocatedEnemyDto;
+import manfred.data.infrastructure.ObjectConverter;
+import manfred.data.infrastructure.enemy.LocatedEnemyDto;
 import manfred.game.config.GameConfig;
 import org.springframework.stereotype.Component;
 

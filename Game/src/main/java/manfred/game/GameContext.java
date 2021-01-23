@@ -2,8 +2,8 @@ package manfred.game;
 
 import manfred.data.DataContext;
 import manfred.data.InvalidInputException;
-import manfred.data.attack.AttackReader;
-import manfred.data.config.ConfigProvider;
+import manfred.data.persistence.reader.AttackReader;
+import manfred.data.persistence.reader.ConfigProvider;
 import manfred.game.attack.AttackGeneratorConverter;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.attack.CastModeOn;

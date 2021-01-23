@@ -1,11 +1,7 @@
 package manfred.game.conversion.map;
 
-import manfred.data.map.ValidatedMapDto;
-import manfred.game.interact.person.Person;
-import manfred.game.interact.person.gelaber.GelaberEdge;
-import manfred.game.map.MapTile;
+import manfred.data.infrastructure.map.ValidatedMapDto;
 
-import java.util.List;
 import java.util.Optional;
 
 public class PersonTileFactory implements TileConversionRule {

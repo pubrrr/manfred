@@ -1,6 +1,6 @@
 package manfred.game.conversion.map;
 
-import manfred.data.map.ValidatedMapDto;
+import manfred.data.infrastructure.map.ValidatedMapDto;
 import manfred.game.config.GameConfig;
 
 import java.util.Optional;

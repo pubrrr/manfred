@@ -1,7 +1,7 @@
 package manfred.data;
 
-import java.util.LinkedList;
-import java.util.List;
+import manfred.data.infrastructure.ObjectConverter;
+import manfred.data.persistence.ObjectReader;
 
 public abstract class ObjectProvider<Dto, Object> {
 

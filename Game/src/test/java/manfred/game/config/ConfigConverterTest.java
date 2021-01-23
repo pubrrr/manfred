@@ -1,13 +1,11 @@
 package manfred.game.config;
 
-import manfred.data.config.ConfigDto;
-import manfred.data.config.GelaberBoxPositionDto;
-import manfred.data.config.WindowSizeDto;
+import manfred.data.persistence.dto.ConfigDto;
+import manfred.data.persistence.dto.GelaberBoxPositionDto;
+import manfred.data.persistence.dto.WindowSizeDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ConfigConverterTest {
 

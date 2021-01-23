@@ -1,8 +1,8 @@
 package manfred.game.interact.person;
 
 import manfred.data.InvalidInputException;
-import manfred.data.person.gelaber.GelaberDto;
-import manfred.data.person.PersonDto;
+import manfred.data.persistence.dto.GelaberDto;
+import manfred.data.persistence.dto.PersonDto;
 import manfred.game.config.GameConfig;
 import manfred.game.interact.person.gelaber.GelaberConverter;
 import org.junit.jupiter.api.BeforeEach;

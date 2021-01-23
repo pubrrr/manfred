@@ -1,7 +1,7 @@
 package manfred.game.enemy;
 
 import helpers.TestGameConfig;
-import manfred.data.enemy.EnemyDto;
+import manfred.data.persistence.dto.EnemyDto;
 import manfred.game.characters.MapCollider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

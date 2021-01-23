@@ -1,8 +1,8 @@
 package manfred.game.attack;
 
 import manfred.data.ObjectProvider;
-import manfred.data.attack.AttackDto;
-import manfred.data.attack.AttackReader;
+import manfred.data.persistence.dto.AttackDto;
+import manfred.data.persistence.reader.AttackReader;
 import org.springframework.stereotype.Component;
 
 @Component

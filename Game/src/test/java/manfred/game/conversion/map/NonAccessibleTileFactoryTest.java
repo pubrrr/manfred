@@ -1,9 +1,9 @@
 package manfred.game.conversion.map;
 
-import manfred.data.map.ValidatedMapDto;
-import manfred.data.map.matrix.MapMatrix;
-import manfred.data.map.tile.AccessiblePrototype;
-import manfred.data.map.tile.NonAccessiblePrototype;
+import manfred.data.infrastructure.map.ValidatedMapDto;
+import manfred.data.infrastructure.map.matrix.MapMatrix;
+import manfred.data.infrastructure.map.tile.AccessiblePrototype;
+import manfred.data.infrastructure.map.tile.NonAccessiblePrototype;
 import manfred.game.map.MapTile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

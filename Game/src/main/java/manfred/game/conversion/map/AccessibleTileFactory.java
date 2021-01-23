@@ -1,7 +1,7 @@
 package manfred.game.conversion.map;
 
-import manfred.data.map.ValidatedMapDto;
-import manfred.data.map.tile.TilePrototype;
+import manfred.data.infrastructure.map.ValidatedMapDto;
+import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.game.map.Accessible;
 
 import java.util.Optional;

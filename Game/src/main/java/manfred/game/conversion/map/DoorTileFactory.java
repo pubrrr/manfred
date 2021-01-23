@@ -1,7 +1,7 @@
 package manfred.game.conversion.map;
 
-import manfred.data.map.TransporterDto;
-import manfred.data.map.ValidatedMapDto;
+import manfred.data.persistence.dto.TransporterDto;
+import manfred.data.infrastructure.map.ValidatedMapDto;
 import manfred.game.interact.Door;
 import manfred.game.map.MapTile;
 

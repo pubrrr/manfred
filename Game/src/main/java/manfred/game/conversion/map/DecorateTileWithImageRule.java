@@ -1,8 +1,8 @@
 package manfred.game.conversion.map;
 
-import manfred.data.map.ValidatedMapDto;
-import manfred.data.map.matrix.MapMatrix;
-import manfred.data.map.tile.ValidatedMapTileDto;
+import manfred.data.infrastructure.map.ValidatedMapDto;
+import manfred.data.infrastructure.map.matrix.MapMatrix;
+import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
 import manfred.game.config.GameConfig;
 import manfred.game.map.MapTile;
 import manfred.game.map.MapTileWithImageDecorator;

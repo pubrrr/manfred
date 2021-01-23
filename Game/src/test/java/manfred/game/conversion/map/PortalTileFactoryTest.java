@@ -1,8 +1,8 @@
 package manfred.game.conversion.map;
 
-import manfred.data.map.TransporterDto;
-import manfred.data.map.ValidatedMapDto;
-import manfred.data.map.matrix.MapMatrix;
+import manfred.data.persistence.dto.TransporterDto;
+import manfred.data.infrastructure.map.ValidatedMapDto;
+import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.game.interact.Portal;
 import manfred.game.map.MapTile;
 import org.junit.jupiter.api.BeforeEach;

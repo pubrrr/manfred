@@ -1,6 +1,6 @@
 package manfred.game.conversion.map;
 
-import manfred.data.map.MapObjectDto;
+import manfred.data.persistence.dto.MapObjectDto;
 
 import java.util.List;
 import java.util.Optional;

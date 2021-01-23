@@ -1,10 +1,10 @@
 package componentTests;
 
 import helpers.TestGameConfig;
-import manfred.data.config.ConfigProvider;
-import manfred.data.image.ImageLoader;
+import manfred.data.persistence.reader.ConfigProvider;
+import manfred.data.persistence.reader.ImageLoader;
 import manfred.game.GameContext;
-import manfred.data.attack.AttackReader;
+import manfred.data.persistence.reader.AttackReader;
 import manfred.game.attack.AttackGeneratorConverter;
 import manfred.game.config.ConfigConverter;
 import manfred.game.config.GameConfig;
