@@ -1,7 +1,5 @@
 package manfred.data;
 
-import java.net.MalformedURLException;
-
 public class InvalidInputException extends Exception {
     public InvalidInputException(String message, Exception cause) {
         super(message, cause);

@@ -1,9 +1,9 @@
 package manfred.game.conversion.map;
 
-import manfred.data.map.ValidatedMapDto;
-import manfred.data.map.matrix.MapMatrix;
-import manfred.data.map.tile.AccessiblePrototype;
-import manfred.data.map.tile.NonAccessiblePrototype;
+import manfred.data.infrastructure.map.MapPrototype;
+import manfred.data.infrastructure.map.matrix.MapMatrix;
+import manfred.data.infrastructure.map.tile.AccessiblePrototype;
+import manfred.data.infrastructure.map.tile.NonAccessiblePrototype;
 import manfred.game.map.MapTile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class NonAccessibleTileFactoryTest {
     void create() {
         MapMatrix mapMatrixMock = mock(MapMatrix.class);
         when(mapMatrixMock.get(0, 0)).thenReturn(new NonAccessiblePrototype());
-        ValidatedMapDto input = new ValidatedMapDto(
+        MapPrototype input = new MapPrototype(
             "name",
             mapMatrixMock,
             List.of(),
@@ -50,7 +50,7 @@ class NonAccessibleTileFactoryTest {
     void doesNotCreateForNonAccessibleTile() {
         MapMatrix mapMatrixMock = mock(MapMatrix.class);
         when(mapMatrixMock.get(0, 0)).thenReturn(new AccessiblePrototype());
-        ValidatedMapDto input = new ValidatedMapDto(
+        MapPrototype input = new MapPrototype(
             "name",
             mapMatrixMock,
             List.of(),

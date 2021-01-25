@@ -1,6 +1,6 @@
 package manfred.game.attack;
 
-import manfred.data.attack.AttackDto;
+import manfred.data.persistence.dto.AttackDto;
 import manfred.game.characters.Direction;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.Sprite;

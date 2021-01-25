@@ -1,6 +1,6 @@
 package manfred.game.conversion.map;
 
-import manfred.data.map.ValidatedMapDto;
+import manfred.data.infrastructure.map.MapPrototype;
 import manfred.game.map.NotAccessible;
 import org.junit.jupiter.api.Test;
 
@@ -63,7 +63,7 @@ class OrRuleTest {
         assertThat(tileConversionAction.isPresent(), is(false));
     }
 
-    private ValidatedMapDto validatedMapDto() {
-        return new ValidatedMapDto(null, null, null, null, null, null);
+    private MapPrototype validatedMapDto() {
+        return new MapPrototype(null, null, null, null, null, null);
     }
 }

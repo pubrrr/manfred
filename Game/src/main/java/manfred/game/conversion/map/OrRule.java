@@ -1,6 +1,6 @@
 package manfred.game.conversion.map;
 
-import manfred.data.map.ValidatedMapDto;
+import manfred.data.infrastructure.map.MapPrototype;
 
 import java.util.Optional;
 
@@ -14,7 +14,7 @@ public class OrRule implements TileConversionRule {
     }
 
     @Override
-    public Optional<TileConversionAction> applicableTo(ValidatedMapDto input, int x, int y) {
+    public Optional<TileConversionAction> applicableTo(MapPrototype input, int x, int y) {
         return wrapped.applicableTo(input, x, y)
             .or(() -> or.applicableTo(input, x, y));
     }

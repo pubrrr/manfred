@@ -1,20 +1,14 @@
 package manfred.game.interact.person.gelaber;
 
-import com.google.common.collect.ImmutableBiMap;
-import com.google.common.collect.ImmutableMap;
-import manfred.data.InvalidInputException;
-import manfred.data.person.GelaberDto;
-import manfred.data.person.GelaberTextDto;
-import manfred.data.person.ReferenceDto;
+import manfred.data.infrastructure.person.gelaber.GelaberPrototype;
+import manfred.data.infrastructure.person.gelaber.GelaberTextPrototype;
+import manfred.data.infrastructure.person.gelaber.ReferencePrototype;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.*;
 import static java.util.stream.Collectors.toMap;
 
 @Component
@@ -28,68 +22,45 @@ public class GelaberConverter {
         this.lineSplitter = lineSplitter;
     }
 
-    public GelaberFacade convert(GelaberDto gelaber) throws InvalidInputException {
-        ImmutableMap<String, GelaberNodeIdentifier> keyToIdMap = gelaber.getTexts().keySet().stream()
-            .collect(collectingAndThen(toMap(Function.identity(), GelaberNodeIdentifier::new), ImmutableMap::copyOf));
+    public GelaberFacade convert(GelaberPrototype gelaberPrototype) {
+        Map<GelaberPrototype.TextId, GelaberNodeIdentifier> idToNodeMap = gelaberPrototype.getTextIds().stream().collect(toMap(
+            textId -> textId,
+            GelaberNodeIdentifier::of
+        ));
 
-        checkReferences(keyToIdMap, gelaber);
-
-        ImmutableBiMap<GelaberNodeIdentifier, GelaberNode> gelaberNodes = mapDtosToTextLines(gelaber.getTexts());
+        Map<GelaberNodeIdentifier, GelaberNode> gelaberNodes = gelaberPrototype.mapTexts(
+            idToNodeMap::get,
+            this::mapToTextLine
+        );
 
         GelaberGraphMatrix gelaberGraphMatrix = new GelaberGraphMatrix(
-            gelaber.getTexts().entrySet().stream()
-                .map(entry -> mapKeyToSelection(entry, keyToIdMap))
-                .map(entry -> mapValueToGelaberEdges(entry, keyToIdMap))
-                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue))
+            gelaberPrototype.mapTexts(
+                idToNodeMap::get,
+                gelaberTextPrototype -> mapToGelaberEdges(gelaberTextPrototype.getReferences(), idToNodeMap)
+            )
         );
 
         return gelaberFacadeBuilder
             .withNodes(gelaberNodes)
             .withGraphMatrix(gelaberGraphMatrix)
-            .buildStartingAt(keyToIdMap.get(gelaber.getInitialTextReference()));
+            .buildStartingAt(idToNodeMap.get(gelaberPrototype.getInitialReference()));
     }
 
-    private void checkReferences(ImmutableMap<String, GelaberNodeIdentifier> keyToIdMap, GelaberDto gelaber) throws InvalidInputException {
-        if (!keyToIdMap.containsKey(gelaber.getInitialTextReference())) {
-            throw new InvalidInputException("Unknown initial gelaber reference " + gelaber.getInitialTextReference() + " not found in " + keyToIdMap.keySet());
-        }
-
-        Optional<ReferenceDto> unknownReference = gelaber.getTexts().values().stream()
-            .flatMap(gelaberTextDto -> gelaberTextDto.getReferences().stream())
-            .filter(referenceDto -> !keyToIdMap.containsKey(referenceDto.getTo()))
-            .findAny();
-
-        if (unknownReference.isPresent()) {
-            throw new InvalidInputException("Unknown gelaber reference: " + unknownReference.get().getTo() + " not found in " + keyToIdMap.keySet());
-        }
-    }
-
-    private ImmutableBiMap<GelaberNodeIdentifier, GelaberNode> mapDtosToTextLines(Map<String, GelaberTextDto> texts) {
-        return texts.entrySet().stream()
-            .map(entry -> Map.entry(new GelaberNodeIdentifier(entry.getKey()), mapToTextLine(entry.getValue())))
-            .collect(collectingAndThen(toMap(Map.Entry::getKey, Map.Entry::getValue), ImmutableBiMap::copyOf));
-    }
-
-    private GelaberNode mapToTextLine(GelaberTextDto gelaberTextDto) {
+    private GelaberNode mapToTextLine(GelaberTextPrototype gelaberTextDto) {
         return new GelaberNode(lineSplitter.splitIntoTextLinesFittingIntoTextBox(gelaberTextDto.getText()));
     }
 
-    private Map.Entry<GelaberNodeIdentifier, GelaberTextDto> mapKeyToSelection(Map.Entry<String, GelaberTextDto> entry, ImmutableMap<String, GelaberNodeIdentifier> keyToSelectionMap) {
-        return Map.entry(keyToSelectionMap.get(entry.getKey()), entry.getValue());
+    private List<GelaberEdge> mapToGelaberEdges(List<ReferencePrototype> gelaberTextPrototype, Map<GelaberPrototype.TextId, GelaberNodeIdentifier> idToNodeMap) {
+        return gelaberTextPrototype.stream()
+            .map(referencePrototype -> mapReferenceToGelaberEdge(referencePrototype, idToNodeMap))
+            .collect(toList());
     }
 
-    private Map.Entry<GelaberNodeIdentifier, List<GelaberEdge>> mapValueToGelaberEdges(Map.Entry<GelaberNodeIdentifier, GelaberTextDto> entry, ImmutableMap<String, GelaberNodeIdentifier> keyToIdMap) {
-        return Map.entry(
-            entry.getKey(),
-            entry.getValue().getReferences().stream()
-                .map(referenceDto -> mapReferenceToGelaberEdge(referenceDto, keyToIdMap))
-                .collect(Collectors.toList())
-        );
-    }
+    private GelaberEdge mapReferenceToGelaberEdge(ReferencePrototype referencePrototype, Map<GelaberPrototype.TextId, GelaberNodeIdentifier> idToNodeMap) {
+        GelaberNodeIdentifier nodeIdentifier = idToNodeMap.get(referencePrototype.getReferencedId());
 
-    private GelaberEdge mapReferenceToGelaberEdge(ReferenceDto referenceDto, ImmutableMap<String, GelaberNodeIdentifier> keyToIdMap) {
-        return referenceDto.isContinueTalking()
-            ? GelaberEdge.continuingWith(keyToIdMap.get(referenceDto.getTo()), referenceDto.getText())
-            : GelaberEdge.abortingReferencingTo(keyToIdMap.get(referenceDto.getTo()), referenceDto.getText());
+        return referencePrototype.isContinueTalking()
+            ? GelaberEdge.continuingWith(nodeIdentifier, referencePrototype.getEdgeText())
+            : GelaberEdge.abortingReferencingTo(nodeIdentifier, referencePrototype.getEdgeText());
     }
 }
