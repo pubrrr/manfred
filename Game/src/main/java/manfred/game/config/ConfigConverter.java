@@ -1,6 +1,6 @@
 package manfred.game.config;
 
-import manfred.data.config.ConfigDto;
+import manfred.data.persistence.dto.ConfigDto;
 import org.springframework.stereotype.Component;
 
 @Component

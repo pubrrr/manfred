@@ -3,9 +3,11 @@ package componentTests.infrastructure.person;
 import componentTests.TestGameContext;
 import helpers.TestGameConfig;
 import manfred.data.InvalidInputException;
-import manfred.data.person.GelaberDto;
-import manfred.data.person.GelaberTextDto;
-import manfred.data.person.ReferenceDto;
+import manfred.data.infrastructure.person.gelaber.GelaberPrototype;
+import manfred.data.infrastructure.person.gelaber.GelaberValidator;
+import manfred.data.persistence.dto.GelaberDto;
+import manfred.data.persistence.dto.GelaberTextDto;
+import manfred.data.persistence.dto.ReferenceDto;
 import manfred.game.interact.person.gelaber.GelaberConverter;
 import manfred.game.interact.person.gelaber.GelaberFacade;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static helpers.GelaberHelper.setupGelaber;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringJUnitConfig(TestGameContext.class)
@@ -37,9 +40,9 @@ public class GelaberComponentTest {
 
     @Test
     void oneText_selfReferencing() throws InvalidInputException {
-        HashMap<String, String> oneSelfReferencingText = new HashMap<>();
-        oneSelfReferencingText.put("singleEntry", "singleEntry");
-        GelaberDto input = setupGelaberDto(oneSelfReferencingText, "singleEntry");
+        HashMap<String, List<String>> oneSelfReferencingText = new HashMap<>();
+        oneSelfReferencingText.put("singleEntry", List.of("singleEntry"));
+        GelaberPrototype input = setupGelaber(oneSelfReferencingText, "singleEntry");
 
         GelaberFacade result = underTest.convert(input);
 
@@ -48,33 +51,13 @@ public class GelaberComponentTest {
 
     @Test
     void twoTexts() throws InvalidInputException {
-        HashMap<String, String> texts = new HashMap<>();
-        texts.put("firstEntry", "secondEntry");
-        texts.put("secondEntry", "firstEntry");
-        GelaberDto input = setupGelaberDto(texts, "firstEntry");
+        HashMap<String, List<String>> texts = new HashMap<>();
+        texts.put("firstEntry", List.of("secondEntry"));
+        texts.put("secondEntry", List.of("firstEntry"));
+        GelaberPrototype input = setupGelaber(texts, "firstEntry");
 
         GelaberFacade result = underTest.convert(input);
 
         assertNotNull(result);
-    }
-
-    private GelaberDto setupGelaberDto(HashMap<String, String> keyToReferenceMap, String initialReference) {
-        Map<String, GelaberTextDto> texts = keyToReferenceMap.entrySet().stream()
-            .map(keyToReference -> {
-                ReferenceDto referenceDto = new ReferenceDto();
-                referenceDto.setTo(keyToReference.getValue());
-
-                GelaberTextDto gelaberTextDto = new GelaberTextDto();
-                gelaberTextDto.setText("some text for " + keyToReference.getKey());
-                gelaberTextDto.setReferences(List.of(referenceDto));
-
-                return Map.entry(keyToReference.getKey(), gelaberTextDto);
-            })
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-        GelaberDto input = new GelaberDto();
-        input.setInitialTextReference(initialReference);
-        input.setTexts(texts);
-        return input;
     }
 }

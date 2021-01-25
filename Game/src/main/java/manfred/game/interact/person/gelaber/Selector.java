@@ -23,6 +23,12 @@ public class Selector implements Paintable {
             .map(edge -> new Choice(edge, new SelectionMarker(gameConfig, position.getAndIncrement())))
             .collect(Collectors.toList());
 
+        Choice first = linkAllChoices(choices);
+
+        return new Selector(first);
+    }
+
+    private static Choice linkAllChoices(List<Choice> choices) {
         Iterator<Choice> iterator = choices.iterator();
         Choice first = iterator.next();
         Choice previous = first;
@@ -34,8 +40,7 @@ public class Selector implements Paintable {
         }
         current.next = first;
         first.previous = current;
-
-        return new Selector(first);
+        return first;
     }
 
     public void selectPrevious() {

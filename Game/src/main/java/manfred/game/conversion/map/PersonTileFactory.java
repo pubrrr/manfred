@@ -1,21 +1,38 @@
 package manfred.game.conversion.map;
 
-import manfred.data.map.ValidatedMapDto;
+import lombok.AllArgsConstructor;
+import manfred.data.infrastructure.map.MapPrototype;
+import manfred.data.infrastructure.person.PersonPrototype;
+import manfred.game.config.GameConfig;
 import manfred.game.interact.person.Person;
-import manfred.game.interact.person.gelaber.GelaberEdge;
+import manfred.game.interact.person.gelaber.GelaberConverter;
 import manfred.game.map.MapTile;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
+@AllArgsConstructor
 public class PersonTileFactory implements TileConversionRule {
 
+    // TODO this should not need to be here
+    private final GameConfig gameConfig;
+
+    private final GelaberConverter gelaberConverter;
+
     @Override
-    public Optional<TileConversionAction> applicableTo(ValidatedMapDto input, int x, int y) {
-        return Optional.empty();
-//        return input.getPersons().stream()
-//            .filter(personDto -> personDto.getPositionX() == x && personDto.getPositionX() == y)
-//            .findFirst()
-//            .map(personDto -> this);
+    public Optional<TileConversionAction> applicableTo(MapPrototype input, int x, int y) {
+        return input.getPersons().stream()
+            .filter(personPrototype -> personPrototype.getPositionX() == x && personPrototype.getPositionY() == y)
+            .findFirst()
+            .map(personPrototype -> new TileFromDtoAction<>(personPrototype, personFactory()));
+    }
+
+    private Function<PersonPrototype, MapTile> personFactory() {
+        return personPrototype -> new Person(
+            personPrototype.getName(),
+            gelaberConverter.convert(personPrototype.getGelaber()),
+            gameConfig,
+            personPrototype.getImage()
+        );
     }
 }

@@ -1,130 +1,104 @@
 package manfred.game.map;
 
-import manfred.data.InvalidInputException;
-import manfred.data.enemy.EnemyReader;
-import manfred.data.enemy.UnlocatedEnemyDto;
-import manfred.data.image.ImageLoader;
-import manfred.data.person.PersonReader;
+import manfred.data.infrastructure.enemy.EnemyPrototype;
+import manfred.data.infrastructure.map.MapPrototype;
+import manfred.data.infrastructure.map.matrix.MapMatrix;
+import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.game.config.GameConfig;
 import manfred.game.conversion.map.TileConversionRule;
 import manfred.game.enemy.EnemiesWrapper;
+import manfred.game.enemy.Enemy;
 import manfred.game.enemy.EnemyConverter;
-import manfred.game.exception.ManfredException;
-import manfred.game.interact.Door;
-import manfred.game.interact.Portal;
-import manfred.game.interact.person.PersonProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
+import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class MapConverterTest {
     private MapConverter underTest;
     private EnemyConverter enemyConverterMock;
-    private EnemiesWrapper enemiesWrapperMock;
-    private ImageLoader imageLoaderMock;
-    private PersonReader personReaderMock;
-    private EnemyReader enemyReaderMock;
+    private EnemiesWrapper enemiesWrapper;
+    private TileConversionRule tileConverionRuleMock;
 
     @BeforeEach
     void init() {
-        PersonProvider personConverterMock = mock(PersonProvider.class);
         enemyConverterMock = mock(EnemyConverter.class);
-        enemiesWrapperMock = mock(EnemiesWrapper.class);
-        imageLoaderMock = mock(ImageLoader.class);
-        personReaderMock = mock(PersonReader.class);
-        enemyReaderMock = mock(EnemyReader.class);
+        enemiesWrapper = new EnemiesWrapper();
+        tileConverionRuleMock = mock(TileConversionRule.class);
 
-        underTest = new MapConverter(personConverterMock, enemyConverterMock, enemiesWrapperMock, mock(GameConfig.class), mock(TileConversionRule.class));
+        underTest = new MapConverter(enemyConverterMock, enemiesWrapper, mock(GameConfig.class), tileConverionRuleMock);
     }
 
     @Test
-    void convert() throws ManfredException, InvalidInputException {
-        Map result = underTest.convert("{name: test, map: [[]]}");
+    void convert() {
+        when(tileConverionRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.of(NotAccessible::new));
 
-        assertThat(result.sizeX(), is(0));
-        assertThat(result.sizeY(), is(0));
+        MapPrototype input = new MapPrototype(
+            "name",
+            mockMapMatrix(1, 1),
+            List.of(),
+            List.of(),
+            List.of(),
+            List.of()
+        );
+
+        Map result = underTest.convert(input);
+
+        assertThat(result.sizeX(), is(1));
+        assertThat(result.sizeY(), is(1));
     }
 
     @Test
-    void convertsMapWithString() throws ManfredException, InvalidInputException {
-        String jsonWithStrings = "{name: test, map: [['1', '0']]}";
+    void convert3x2() {
+        when(tileConverionRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.of(NotAccessible::new));
 
-        Map result = underTest.convert(jsonWithStrings);
+        MapPrototype input = new MapPrototype(
+            "name",
+            mockMapMatrix(3, 2),
+            List.of(),
+            List.of(),
+            List.of(),
+            List.of()
+        );
 
-        assertTrue(result.isAccessible(0, 0));
-        assertFalse(result.isAccessible(1, 0));
+        Map result = underTest.convert(input);
+
+        assertThat(result.sizeX(), is(3));
+        assertThat(result.sizeY(), is(2));
     }
 
     @Test
-    void convertsMapWithInt() throws ManfredException, InvalidInputException {
-        String jsonWithIntMap = "{name : test, map :[[0, 1], [1, 0]]}";
+    void triggersLoadEnemies() {
+        when(enemyConverterMock.convert(any())).thenReturn(mock(Enemy.class));
+        when(tileConverionRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.of(NotAccessible::new));
 
-        Map result = underTest.convert(jsonWithIntMap);
+        MapPrototype input = new MapPrototype(
+            "name",
+            mockMapMatrix(1, 1),
+            List.of(),
+            List.of(),
+            List.of(),
+            List.of(new EnemyPrototype("name", 0, 0, null, 0, 0))
+        );
 
-        assertFalse(result.isAccessible(0, 0));
-        assertTrue(result.isAccessible(1, 0));
-        assertTrue(result.isAccessible(0, 1));
-        assertFalse(result.isAccessible(1, 1));
-    }
-
-    @Test
-    void convertsMapWithStringAndInt() throws ManfredException, InvalidInputException {
-        String jsonWithStrings = "{name: test ,map: [['0', 0], [1,1], ['1', 1]]}";
-
-        Map result = underTest.convert(jsonWithStrings);
-
-        assertFalse(result.isAccessible(1, 0));
-        assertTrue(result.isAccessible(0, 1));
-    }
-
-//    @Test
-//    void triggersLoadPerson() throws IOException, ManfredException, InvalidInputException {
-//        String json = underTest.read("src\\test\\java\\manfred\\game\\map\\test.json");
-//        underTest.convert(json);
-//
-//        verify(personReaderMock).load("opa");
-//    }
-
-    @Test
-    void loadsDoor() throws ManfredException, InvalidInputException {
-        String jsonWithDoor = "{name: test, map: [[0, 0]], interactables: [{ type: Door, positionX: 1, positionY: 0, target: testTaraget, targetSpawnX: 1, targetSpawnY: 1}]}";
-        Map result = underTest.convert(jsonWithDoor);
-
-        assertTrue(result.getInteractable(new Point(1, 0)) instanceof Door);
-    }
-
-    @Test
-    void loadsPortal() throws ManfredException, InvalidInputException {
-        String jsonWithPortal = "{name: test, map: [[0, 0]], interactables: [{ type: Portal, positionX: 1, positionY: 0, target: testTaraget, targetSpawnX: 1, targetSpawnY: 1}]}";
-        Map result = underTest.convert(jsonWithPortal);
-
-        assertTrue(result.getInteractable(new Point(1, 0)) instanceof Portal);
-    }
-
-    @Test
-    void triggersLoadEnemies() throws ManfredException, InvalidInputException {
-        when(enemyReaderMock.load(any())).thenReturn(new UnlocatedEnemyDto());
-
-        String jsonWithEnemy = "{name: test, map: [[0]], enemies: [{name: testEnemy, spawnX: 0, spawnY: 55}]}";
-        underTest.convert(jsonWithEnemy);
-
-        verify(enemyReaderMock).load("testEnemy");
-//        verify(enemyConverterMock).convert(any(), eq(0), eq(55));
-        verify(enemiesWrapperMock).setEnemies(any());
-    }
-
-    @Test
-    void triggerLoadTileImage() throws ManfredException, InvalidInputException {
-        String input = "{name: test, map: [[tileName]]}";
         underTest.convert(input);
 
-        verify(imageLoaderMock).load("ManfredsApocalypse\\Data\\data\\maps\\tiles\\tileName.png");
+        assertThat(enemiesWrapper.getEnemies(), hasSize(1));
+    }
+
+    private MapMatrix<TilePrototype> mockMapMatrix(int sizeX, int sizeY) {
+        MapMatrix<TilePrototype> mapMatrixMock = mock(MapMatrix.class);
+        when(mapMatrixMock.sizeX()).thenReturn(sizeX);
+        when(mapMatrixMock.sizeY()).thenReturn(sizeY);
+        return mapMatrixMock;
     }
 }

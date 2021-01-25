@@ -1,6 +1,5 @@
 package manfred.game.interact.person.gelaber;
 
-import com.google.common.collect.ImmutableBiMap;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.GelaberController;
 import manfred.game.graphics.paintable.Paintable;
@@ -8,18 +7,19 @@ import manfred.game.interact.person.textLineFactory.TextLineFactory;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 public class GelaberFacade implements Paintable {
     private final GelaberGraphMatrix gelaberGraphMatrix;
-    private final ImmutableBiMap<GelaberNodeIdentifier, GelaberNode> nodesByIdentifier;
+    private final Map<GelaberNodeIdentifier, GelaberNode> nodesByIdentifier;
     private final TextLineFactory textLineFactory;
 
     private TextLine currentTextLine;
 
     public GelaberFacade(
         GelaberGraphMatrix gelaberGraphMatrix,
-        ImmutableBiMap<GelaberNodeIdentifier, GelaberNode> nodesByIdentifier,
+        Map<GelaberNodeIdentifier, GelaberNode> nodesByIdentifier,
         TextLineFactory textLineFactory,
         GelaberNodeIdentifier initialGelaberNodeIdentifier
     ) {

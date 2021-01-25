@@ -2,7 +2,10 @@ package helpers;
 
 import manfred.game.config.GameConfig;
 import manfred.game.interact.Interactable;
-import manfred.game.map.*;
+import manfred.game.map.Accessible;
+import manfred.game.map.Map;
+import manfred.game.map.MapTile;
+import manfred.game.map.NotAccessible;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +14,10 @@ import java.util.List;
 import static org.mockito.Mockito.mock;
 
 public class TestMapFactory {
+
+    public static final String ACCESSIBLE = "1";
+    public static final String NOT_ACCESSIBLE = "0";
+
     public static Map create(String[][] mapTilesAsStrings, HashMap<String, Interactable> interactables) {
         List<List<MapTile>> mapTiles = new ArrayList<>(mapTilesAsStrings.length);
         for (String[] columnAsStrings : mapTilesAsStrings) {
@@ -18,10 +25,10 @@ public class TestMapFactory {
             for (String tileValue : columnAsStrings) {
                 MapTile tile;
                 switch (tileValue) {
-                    case MapConverter.ACCESSIBLE:
+                    case ACCESSIBLE:
                         tile = Accessible.getInstance();
                         break;
-                    case MapConverter.NOT_ACCESSIBLE:
+                    case NOT_ACCESSIBLE:
                         tile = new NotAccessible();
                         break;
                     default:

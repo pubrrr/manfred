@@ -1,7 +1,7 @@
 package util;
 
 import manfred.data.InvalidInputException;
-import manfred.data.image.ImageLoader;
+import manfred.data.persistence.reader.ImageLoader;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

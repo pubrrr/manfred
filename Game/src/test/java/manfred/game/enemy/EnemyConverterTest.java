@@ -1,7 +1,7 @@
 package manfred.game.enemy;
 
 import helpers.TestGameConfig;
-import manfred.data.enemy.UnlocatedEnemyDto;
+import manfred.data.persistence.dto.EnemyDto;
 import manfred.game.characters.MapCollider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ class EnemyConverterTest {
     @Test
     void testConvert() {
         int speed = 10;
-        UnlocatedEnemyDto input = new UnlocatedEnemyDto("name", 100, speed, null);
+        EnemyDto input = new EnemyDto("name", 100, speed, null);
 
         Enemy result = underTest.convert(input.at(1, 22));
 
