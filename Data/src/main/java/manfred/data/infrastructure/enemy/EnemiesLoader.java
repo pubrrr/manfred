@@ -17,9 +17,9 @@ public class EnemiesLoader {
 
     private final EnemyReader enemyReader;
 
-    public List<LocatedEnemyDto> load(List<MapEnemyDto> enemiesOnMap) throws InvalidInputException {
+    public List<EnemyPrototype> load(List<MapEnemyDto> enemiesOnMap) throws InvalidInputException {
         List<String> errorMessages = new LinkedList<>();
-        List<LocatedEnemyDto> result = enemiesOnMap.stream().map(mapEnemyDto -> {
+        List<EnemyPrototype> result = enemiesOnMap.stream().map(mapEnemyDto -> {
             try {
                 return enemyReader.load(mapEnemyDto.getName()).at(mapEnemyDto.getPositionX(), mapEnemyDto.getPositionY());
             } catch (InvalidInputException e) {

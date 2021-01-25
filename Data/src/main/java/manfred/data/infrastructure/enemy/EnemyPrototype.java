@@ -5,7 +5,7 @@ import lombok.Value;
 import java.awt.image.BufferedImage;
 
 @Value
-public class LocatedEnemyDto {
+public class EnemyPrototype {
     String name;
     int healthPoints;
     int speed;

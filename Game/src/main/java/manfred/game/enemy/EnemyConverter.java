@@ -1,12 +1,12 @@
 package manfred.game.enemy;
 
 import manfred.data.infrastructure.ObjectConverter;
-import manfred.data.infrastructure.enemy.LocatedEnemyDto;
+import manfred.data.infrastructure.enemy.EnemyPrototype;
 import manfred.game.config.GameConfig;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EnemyConverter implements ObjectConverter<LocatedEnemyDto, Enemy> {
+public class EnemyConverter implements ObjectConverter<EnemyPrototype, Enemy> {
 
     private final MapColliderProvider mapColliderProvider;
     private final GameConfig gameConfig;
@@ -16,15 +16,15 @@ public class EnemyConverter implements ObjectConverter<LocatedEnemyDto, Enemy> {
         this.gameConfig = gameConfig;
     }
 
-    public Enemy convert(LocatedEnemyDto locatedEnemyDto) {
+    public Enemy convert(EnemyPrototype enemyPrototype) {
         try {
             return new Enemy(
-                locatedEnemyDto.getName(),
-                locatedEnemyDto.getSpeed(),
-                locatedEnemyDto.getSpawnX() * this.gameConfig.getPixelBlockSize(),
-                locatedEnemyDto.getSpawnY() * this.gameConfig.getPixelBlockSize(),
-                locatedEnemyDto.getHealthPoints(),
-                locatedEnemyDto.getImage(),
+                enemyPrototype.getName(),
+                enemyPrototype.getSpeed(),
+                enemyPrototype.getSpawnX() * this.gameConfig.getPixelBlockSize(),
+                enemyPrototype.getSpawnY() * this.gameConfig.getPixelBlockSize(),
+                enemyPrototype.getHealthPoints(),
+                enemyPrototype.getImage(),
                 mapColliderProvider.provide(),
                 gameConfig.getPixelBlockSize() * 5,
                 gameConfig

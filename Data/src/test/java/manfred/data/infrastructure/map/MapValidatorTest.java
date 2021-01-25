@@ -2,7 +2,7 @@ package manfred.data.infrastructure.map;
 
 import manfred.data.InvalidInputException;
 import manfred.data.infrastructure.enemy.EnemiesLoader;
-import manfred.data.infrastructure.enemy.LocatedEnemyDto;
+import manfred.data.infrastructure.enemy.EnemyPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.MapTileReader;
 import manfred.data.infrastructure.map.tile.TileConverter;
@@ -60,7 +60,7 @@ class MapValidatorTest {
 
     @Test
     void nonEmptyOtherStructs() throws InvalidInputException {
-        when(enemiesLoaderMock.load(any())).thenReturn(List.of(new LocatedEnemyDto("name", 0, 0, null, 0, 0)));
+        when(enemiesLoaderMock.load(any())).thenReturn(List.of(new EnemyPrototype("name", 0, 0, null, 0, 0)));
         when(personsLoaderMock.load(any())).thenReturn(List.of(new PersonPrototype("name", mock(GelaberPrototype.class), null, 0, 0)));
 
         RawMapDto input = new RawMapDto(

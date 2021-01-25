@@ -1,6 +1,6 @@
 package manfred.game.map;
 
-import manfred.data.infrastructure.enemy.LocatedEnemyDto;
+import manfred.data.infrastructure.enemy.EnemyPrototype;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
@@ -87,7 +87,7 @@ public class MapConverterTest {
             List.of(),
             List.of(),
             List.of(),
-            List.of(new LocatedEnemyDto("name", 0, 0, null, 0, 0))
+            List.of(new EnemyPrototype("name", 0, 0, null, 0, 0))
         );
 
         underTest.convert(input);

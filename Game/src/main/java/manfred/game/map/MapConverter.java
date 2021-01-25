@@ -1,7 +1,7 @@
 package manfred.game.map;
 
 import manfred.data.infrastructure.ObjectConverter;
-import manfred.data.infrastructure.enemy.LocatedEnemyDto;
+import manfred.data.infrastructure.enemy.EnemyPrototype;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
@@ -69,7 +69,7 @@ public class MapConverter implements ObjectConverter<MapPrototype, Map> {
         return () -> new RuntimeException("No applicable conversion rule for tile " + x + ", " + y + " in " + input.toString() + " found.");
     }
 
-    private List<Enemy> convertEnemies(List<LocatedEnemyDto> enemies) {
+    private List<Enemy> convertEnemies(List<EnemyPrototype> enemies) {
         return enemies.stream()
             .map(enemyConverter::convert)
             .collect(toList());

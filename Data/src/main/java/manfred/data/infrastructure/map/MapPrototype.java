@@ -1,7 +1,7 @@
 package manfred.data.infrastructure.map;
 
 import lombok.Value;
-import manfred.data.infrastructure.enemy.LocatedEnemyDto;
+import manfred.data.infrastructure.enemy.EnemyPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.data.infrastructure.person.PersonPrototype;
@@ -16,5 +16,5 @@ public class MapPrototype {
     List<PersonPrototype> persons;
     List<TransporterDto> portals;
     List<TransporterDto> doors;
-    List<LocatedEnemyDto> enemies;
+    List<EnemyPrototype> enemies;
 }

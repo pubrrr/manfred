@@ -2,7 +2,7 @@ package manfred.data.persistence.reader;
 
 import manfred.data.InvalidInputException;
 import manfred.data.infrastructure.enemy.EnemiesLoader;
-import manfred.data.infrastructure.enemy.LocatedEnemyDto;
+import manfred.data.infrastructure.enemy.EnemyPrototype;
 import manfred.data.persistence.dto.EnemyDto;
 import manfred.data.persistence.dto.MapEnemyDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +35,7 @@ class EnemiesLoaderTest {
 
     @Test
     void emptyInput() throws InvalidInputException {
-        List<LocatedEnemyDto> result = underTest.load(List.of());
+        List<EnemyPrototype> result = underTest.load(List.of());
 
         assertThat(result, empty());
     }
@@ -46,19 +46,19 @@ class EnemiesLoaderTest {
 
         int positionX = 5;
         int positionY = 10;
-        List<LocatedEnemyDto> result = underTest.load(List.of(new MapEnemyDto("test", positionX, positionY)));
+        List<EnemyPrototype> result = underTest.load(List.of(new MapEnemyDto("test", positionX, positionY)));
 
         assertThat(result, hasSize(1));
-        LocatedEnemyDto locatedEnemyDto = result.get(0);
-        assertThat(locatedEnemyDto.getSpawnX(), is(positionX));
-        assertThat(locatedEnemyDto.getSpawnY(), is(positionY));
+        EnemyPrototype enemyPrototype = result.get(0);
+        assertThat(enemyPrototype.getSpawnX(), is(positionX));
+        assertThat(enemyPrototype.getSpawnY(), is(positionY));
     }
 
     @Test
     void twoValidInputs() throws InvalidInputException {
         when(enemyReaderMock.load(any())).thenReturn(new EnemyDto("name", 0, 0, null));
 
-        List<LocatedEnemyDto> result = underTest.load(List.of(
+        List<EnemyPrototype> result = underTest.load(List.of(
             new MapEnemyDto("test", 1, 2),
             new MapEnemyDto("test", 1, 2)
         ));

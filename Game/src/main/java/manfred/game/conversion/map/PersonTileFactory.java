@@ -22,7 +22,7 @@ public class PersonTileFactory implements TileConversionRule {
     @Override
     public Optional<TileConversionAction> applicableTo(MapPrototype input, int x, int y) {
         return input.getPersons().stream()
-            .filter(personPrototype -> personPrototype.getPositionX() == x && personPrototype.getPositionX() == y)
+            .filter(personPrototype -> personPrototype.getPositionX() == x && personPrototype.getPositionY() == y)
             .findFirst()
             .map(personPrototype -> new TileFromDtoAction<>(personPrototype, personFactory()));
     }
