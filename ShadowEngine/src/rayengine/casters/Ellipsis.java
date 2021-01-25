@@ -1,43 +1,33 @@
 package rayengine.casters;
 
+import static rayengine.test.MathUtil.square;
+
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 
 import rayengine.test.MathUtil;
 import rayengine.test.Pair;
 
-public class Ellipsis {
+public class Ellipsis extends AbstractSection{
 
-	private int _bottomBound;
-	private int _leftBound;
-	private int _axisX;
-	private int _axisY;
-	
-	public Ellipsis(int bottomBound, int leftBound, int axisX, int axisY) {
-		_bottomBound = bottomBound;
-		_leftBound = leftBound;
-		_axisX = axisX;
-		_axisY = axisY;
+	public Ellipsis(int bottomBorder, int leftBorder, int width, int height) {
+		super(bottomBorder, leftBorder, width, height);
 	}
 	
-	public Ellipsis(int axisX, int axisY) {
-		_axisX = axisX;
-		_axisY = axisY;
+	public Ellipsis(int width, int height) {
+		super(width, height);
 	}
 	
 	public boolean contains(Point point) {
 		return contains(point.x, point.y);
 	}
 	
+	@Override
 	public boolean contains(int x, int y) {
-		if(_axisX == 0 || _axisY == 0) {
+		if(width == 0 || height == 0) {
 			return false;
 		}
-		return 4*x*x/((double) _axisX*_axisX) + 4*y*y/((double) _axisY*_axisY) <= 1;
-	}
-	
-	public Point getCenter() {
-		return new Point(_leftBound + _axisX/2, _bottomBound - _axisY/2);
+		return 4*(square(x/(double) width) + square(y/(double) height)) <= 1;
 	}
 	
 	public static boolean oneContainsTheOther(Ellipsis ellipsis1, Ellipsis ellipsis2) {
@@ -68,28 +58,8 @@ public class Ellipsis {
 		return MathUtil.calculateRelativePosition(ellipsis1.getCenter(), ellipsis2.getCenter());
 	}
 	
-	public void setBounds(int leftBound, int bottomBound) {
-		_leftBound = leftBound;
-		_bottomBound = bottomBound;
-	}
-
-	public int getBottomBound() {
-		return _bottomBound;
-	}
-
-	public int getLeftBound() {
-		return _leftBound;
-	}
-	
-	public int getAxisX() {
-		return _axisX;
-	}
-
-	public int getAxisY() {
-		return _axisY;
-	}
-	
+	@Override
 	public void draw(GC gc) {
-		gc.fillOval(_leftBound, _bottomBound-_axisY, _axisX, _axisY);
+		gc.fillOval(leftBorder, bottomBorder-height, width, height);
 	}
 }

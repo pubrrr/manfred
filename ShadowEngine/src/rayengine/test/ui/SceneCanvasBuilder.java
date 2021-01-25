@@ -34,8 +34,8 @@ public class SceneCanvasBuilder {
 			@Override
 			public void paintControl(PaintEvent e) {
 				Point canvasCenter = new Point(szeneCanvas.getClientArea().width/2, szeneCanvas.getClientArea().height/2);
-				character.setLeftBoundCoordinate(canvasCenter.x - character.getDisplayedWidth()/2);
-				character.setBottomBoundCoordinate(canvasCenter.y + character.getDisplayedHeight()/2);
+				character.setLeftBorderCoordinate(canvasCenter.x - character.getDisplayedWidth()/2);
+				character.setBottomBorderCoordinate(canvasCenter.y + character.getDisplayedHeight()/2);
 				IRayAlgorithm rayAlgorithm = RayModel.getRayAlgorithm();
 				if(rayAlgorithm != null) {
 					rayAlgorithm.castShadow(szeneCanvas, character, e.gc);

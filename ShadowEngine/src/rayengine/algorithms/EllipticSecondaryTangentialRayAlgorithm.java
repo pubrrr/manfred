@@ -34,7 +34,7 @@ public class EllipticSecondaryTangentialRayAlgorithm implements IRayAlgorithm{
 		int altitude = RayModel.getAltitude();
 		character.castSections(altitude, azimuth);
 		int leftBoundCoordinate = character.getLeftBoundCoordinate();
-		int bottomBoundCoordinate = character.getBottomBoundCoordinate();
+		int bottomBoundCoordinate = character.getBottomBorderCoordinate();
 		Ellipsis[] sections = character.getSections();
 		if(_showEllipsis) {
 			for(int row = 0; row < sections.length; row ++) {
@@ -51,13 +51,13 @@ public class EllipticSecondaryTangentialRayAlgorithm implements IRayAlgorithm{
 		
 		if(_fillPolygon) {
 			for(Point[] polygon : polygons.values()) {
-				gc.fillPolygon(MathUtil.extractCoordinates(polygon, new Point(character.getLeftBoundCoordinate(), character.getBottomBoundCoordinate())));
+				gc.fillPolygon(MathUtil.extractCoordinates(polygon, new Point(character.getLeftBoundCoordinate(), character.getBottomBorderCoordinate())));
 			}
 		} else {
 			gc.setForeground(canvas.getDisplay().getSystemColor(SWT.COLOR_RED));
 			for(Point[] polygon : polygons.values()) {
-				gc.drawLine(polygon[0].x+character.getLeftBoundCoordinate(), polygon[0].y+character.getBottomBoundCoordinate(), polygon[1].x+character.getLeftBoundCoordinate(), polygon[1].y+character.getBottomBoundCoordinate());
-				gc.drawLine(polygon[2].x+character.getLeftBoundCoordinate(), polygon[2].y+character.getBottomBoundCoordinate(), polygon[3].x+character.getLeftBoundCoordinate(), polygon[3].y+character.getBottomBoundCoordinate());
+				gc.drawLine(polygon[0].x+character.getLeftBoundCoordinate(), polygon[0].y+character.getBottomBorderCoordinate(), polygon[1].x+character.getLeftBoundCoordinate(), polygon[1].y+character.getBottomBorderCoordinate());
+				gc.drawLine(polygon[2].x+character.getLeftBoundCoordinate(), polygon[2].y+character.getBottomBorderCoordinate(), polygon[3].x+character.getLeftBoundCoordinate(), polygon[3].y+character.getBottomBorderCoordinate());
 			}
 		}
 	}

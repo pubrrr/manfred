@@ -19,7 +19,7 @@ public class EllipticRayAlgorithm implements IRayAlgorithm{
 		int altitude = RayModel.getAltitude();
 		character.castSections(altitude, azimuth);
 		int leftBoundCoordinate = character.getLeftBoundCoordinate();
-		int bottomBoundCoordinate = character.getBottomBoundCoordinate();
+		int bottomBoundCoordinate = character.getBottomBorderCoordinate();
 		Ellipsis[] sections = character.getSections();
 		for(int row = 0; row < sections.length; row ++) {
 			Ellipsis section = sections[row];
