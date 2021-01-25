@@ -4,11 +4,7 @@ import componentTests.TestGameContext;
 import helpers.TestGameConfig;
 import manfred.data.InvalidInputException;
 import manfred.data.infrastructure.person.gelaber.GelaberPrototype;
-import manfred.data.infrastructure.person.gelaber.GelaberValidator;
-import manfred.data.persistence.dto.GelaberDto;
-import manfred.data.persistence.dto.GelaberTextDto;
-import manfred.data.persistence.dto.ReferenceDto;
-import manfred.game.interact.person.gelaber.GelaberConverter;
+import manfred.infrastructureadapter.person.gelaber.GelaberConverter;
 import manfred.game.interact.person.gelaber.GelaberFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,8 +13,6 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static helpers.GelaberHelper.setupGelaber;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

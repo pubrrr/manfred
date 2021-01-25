@@ -4,6 +4,7 @@ import manfred.data.InvalidInputException;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.graphics.paintable.PaintableContainerElement;
 import manfred.game.graphics.paintable.PaintablesContainer;
+import manfred.infrastructureadapter.map.MapProvider;
 
 import java.util.Stack;
 

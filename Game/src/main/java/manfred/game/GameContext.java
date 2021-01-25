@@ -4,7 +4,8 @@ import manfred.data.DataContext;
 import manfred.data.InvalidInputException;
 import manfred.data.persistence.reader.AttackReader;
 import manfred.data.persistence.reader.ConfigProvider;
-import manfred.game.attack.AttackGeneratorConverter;
+import manfred.infrastructureadapter.InfrastructureAdapterContext;
+import manfred.infrastructureadapter.attack.AttackGeneratorConverter;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.attack.CastModeOn;
 import manfred.game.attack.CombinationElement;
@@ -12,20 +13,21 @@ import manfred.game.characters.Manfred;
 import manfred.game.characters.ManfredFramesLoader;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.SkillSet;
-import manfred.game.config.ConfigConverter;
+import manfred.infrastructureadapter.attack.AttackGeneratorProvider;
+import manfred.infrastructureadapter.config.ConfigConverter;
 import manfred.game.config.GameConfig;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
-import manfred.game.conversion.map.TileConversionRule;
+import manfred.infrastructureadapter.map.tile.TileConversionRule;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
-import manfred.game.interact.person.gelaber.GelaberConverter;
+import manfred.infrastructureadapter.person.gelaber.GelaberConverter;
 import manfred.game.interact.person.gelaber.LineSplitter;
 import manfred.game.interact.person.textLineFactory.ChoicesTextLineFactory;
 import manfred.game.interact.person.textLineFactory.SimpleTextLineFactory;
 import manfred.game.interact.person.textLineFactory.TextLineFactory;
 import manfred.game.map.MapFacade;
-import manfred.game.map.MapProvider;
+import manfred.infrastructureadapter.map.MapProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -33,16 +35,16 @@ import org.springframework.context.annotation.Import;
 
 import java.util.Stack;
 
-import static manfred.game.conversion.map.TileConversionRule.createAccessible;
-import static manfred.game.conversion.map.TileConversionRule.createDoor;
-import static manfred.game.conversion.map.TileConversionRule.createNonAccessible;
-import static manfred.game.conversion.map.TileConversionRule.createPerson;
-import static manfred.game.conversion.map.TileConversionRule.createPortal;
-import static manfred.game.conversion.map.TileConversionRule.decorateWithImage;
+import static manfred.infrastructureadapter.map.tile.TileConversionRule.createAccessible;
+import static manfred.infrastructureadapter.map.tile.TileConversionRule.createDoor;
+import static manfred.infrastructureadapter.map.tile.TileConversionRule.createNonAccessible;
+import static manfred.infrastructureadapter.map.tile.TileConversionRule.createPerson;
+import static manfred.infrastructureadapter.map.tile.TileConversionRule.createPortal;
+import static manfred.infrastructureadapter.map.tile.TileConversionRule.decorateWithImage;
 
 @Configuration
 @ComponentScan(basePackages = "manfred.game")
-@Import({DataContext.class})
+@Import({DataContext.class, InfrastructureAdapterContext.class})
 public class GameContext {
     @Bean
     public Game game(GameRunner gameRunner) {
@@ -83,13 +85,13 @@ public class GameContext {
     }
 
     @Bean
-    public MapFacade mapWrapper(MapProvider mapProvider, AttacksContainer attacksContainer) {
+    public MapFacade mapFacade(MapProvider mapProvider, AttacksContainer attacksContainer) {
         return new MapFacade(mapProvider, "Wald", attacksContainer);
     }
 
     @Bean
-    public SkillSet skillSet(AttackReader attackReader, AttackGeneratorConverter attackGeneratorConverter, MapCollider mapCollider) throws Exception {
-        //refactor this! the MapCollider is here because it needs to be constructed first.
+    public SkillSet skillSet(AttackGeneratorProvider attackGeneratorProvider, MapCollider mapCollider) throws Exception {
+        //TODO refactor this! the MapCollider is here because it needs to be constructed first.
 
         SkillSet skillSet = new SkillSet();
         Stack<CombinationElement> combination = new Stack<>();
@@ -98,7 +100,7 @@ public class GameContext {
         combination.push(CombinationElement.RIGHT);
         combination.push(CombinationElement.UP);
         combination.push(CombinationElement.LEFT);
-        skillSet.put(combination, attackGeneratorConverter.convert(attackReader.load("thunder")));
+        skillSet.put(combination, attackGeneratorProvider.provide("thunder"));
         return skillSet;
     }
 
@@ -123,15 +125,5 @@ public class GameContext {
         return new TextLineFactory(
             ChoicesTextLineFactory.withConfig(gameConfig).orElse(SimpleTextLineFactory.withConfig(gameConfig))
         );
-    }
-
-    @Bean
-    public TileConversionRule tileConversionRule(GameConfig gameConfig, GelaberConverter gelaberConverter) {
-        return createPerson(gameConfig, gelaberConverter)
-            .orElse(createPortal())
-            .orElse(createDoor())
-            .orElse(decorateWithImage(gameConfig).and(createAccessible().orElse(createNonAccessible())))
-            .orElse(createAccessible())
-            .orElse(createNonAccessible());
     }
 }
