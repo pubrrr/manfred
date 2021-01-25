@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
+import rayengine.casters.CasterBounds;
 import rayengine.casters.Character;
 import rayengine.test.databinding.RayModel;
 
@@ -34,9 +35,9 @@ public class EllipticTangentialRayAlgorithm implements IRayAlgorithm{
 		
 		int leftCharacterBorder = clientArea.width/2 - character.getSheetWidth()*pixelSize/2;
 		int bottomCharacterBorder = clientArea.height/2 + character.getSheetHeight()*pixelSize/2;
-		int[][] frontBounds = character.getFrontBounds();
-		int[][] rightBounds = character.getRightBounds();
-		int bottomOffsetY = rightBounds[rightBounds.length-1][0];
+		CasterBounds[] frontBounds = character.getFrontBounds();
+		CasterBounds[] rightBounds = character.getRightBounds();
+		int bottomOffsetY = rightBounds[rightBounds.length-1].getLowerBound();
 		
 		double squareTanOfAzimuth = square(Math.tan(RADIANTS_PER_DEGREE*azimuth));
 		
@@ -56,8 +57,8 @@ public class EllipticTangentialRayAlgorithm implements IRayAlgorithm{
 			int projectedAxisY = (int) Math.round(axisY*inclinationFactor);
 			
 			int distanceFromBottom = character.getSheetHeight()-row-1;
-			int leftProjectedEllipsisBorder = leftCharacterBorder + pixelSize*frontBounds[row][0] + (int) Math.round(distanceFromBottom*relativeProjectionShiftX*pixelSize);
-			int topProjectedEllipsisBorder = bottomCharacterBorder + (bottomOffsetY - rightBounds[row][0])*pixelSize - projectedAxisY + (int) Math.round(distanceFromBottom*relativeProjectionShiftY*pixelSize);
+			int leftProjectedEllipsisBorder = leftCharacterBorder + pixelSize*frontBounds[row].getLowerBound() + (int) Math.round(distanceFromBottom*relativeProjectionShiftX*pixelSize);
+			int topProjectedEllipsisBorder = bottomCharacterBorder + (bottomOffsetY - rightBounds[row].getLowerBound())*pixelSize - projectedAxisY + (int) Math.round(distanceFromBottom*relativeProjectionShiftY*pixelSize);
 			
 			if(_showEllipsis) {
 				gc.fillOval(leftProjectedEllipsisBorder, topProjectedEllipsisBorder, axisX, projectedAxisY);
@@ -77,10 +78,10 @@ public class EllipticTangentialRayAlgorithm implements IRayAlgorithm{
 	}
 
 	private void calculateAllAxisAndTangentialPoints(int azimuth, double squareTanOfAzimuth, int pixelSize
-			, int[][] frontBounds, int[][] rightBounds, Point[] axis, Point[][] tangentialPoints) {
+			, CasterBounds[] frontBounds, CasterBounds[] rightBounds, Point[] axis, Point[][] tangentialPoints) {
 		for(int row = 0; row < axis.length; row ++) {
-			int axisX = (frontBounds[row][1] - frontBounds[row][0] + 1)*pixelSize;
-			int axisY = (rightBounds[row][1] - rightBounds[row][0] + 1)*pixelSize;
+			int axisX = frontBounds[row].getWidth()*pixelSize;
+			int axisY = rightBounds[row].getWidth()*pixelSize;
 			axis[row] = new Point(axisX, axisY);
 			tangentialPoints[row] = calculateRayTangentialPoints(axisX, axisY, azimuth, squareTanOfAzimuth);
 		}
