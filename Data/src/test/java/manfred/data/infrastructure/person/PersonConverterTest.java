@@ -30,14 +30,14 @@ class PersonConverterTest {
         BufferedImage imageMock = mock(BufferedImage.class);
         GelaberDto gelaberDtoMock = mock(GelaberDto.class);
 
-        LocatedPersonDtoBuilder result = underTest.convert(new PersonDto("name", gelaberDtoMock, imageMock));
+        PersonPrototypeBuilder result = underTest.convert(new PersonDto("name", gelaberDtoMock, imageMock));
 
-        LocatedPersonDto locatedPersonDto = result.at(1, 2);
+        PersonPrototype personPrototype = result.at(1, 2);
 
-        assertThat(locatedPersonDto.getName(), is("name"));
-        assertThat(locatedPersonDto.getImage(), is(imageMock));
-        assertThat(locatedPersonDto.getPositionX(), is(1));
-        assertThat(locatedPersonDto.getPositionY(), is(2));
+        assertThat(personPrototype.getName(), is("name"));
+        assertThat(personPrototype.getImage(), is(imageMock));
+        assertThat(personPrototype.getPositionX(), is(1));
+        assertThat(personPrototype.getPositionY(), is(2));
         verify(gelaberValidatorMock).validate(gelaberDtoMock);
     }
 }

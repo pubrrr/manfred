@@ -70,6 +70,7 @@ class GelaberConverterTest {
         assertThat(result, instanceOf(GelaberFacade.class));
     }
 
+    // TODO modify (delete?) this
     private GelaberDto setupGelaber(Map<String, List<String>> gelaberToReferencesMap, String initialReference) {
         GelaberDto input = new GelaberDto();
 

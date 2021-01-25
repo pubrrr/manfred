@@ -2,7 +2,7 @@ package manfred.data.infrastructure.person;
 
 import manfred.data.InvalidInputException;
 import manfred.data.persistence.dto.MapPersonDto;
-import manfred.data.infrastructure.person.gelaber.ValidatedGelaberDto;
+import manfred.data.infrastructure.person.gelaber.GelaberPrototype;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,30 +32,30 @@ class PersonsLoaderTest {
 
     @Test
     void emptyInput() throws InvalidInputException {
-        List<LocatedPersonDto> result = underTest.load(List.of());
+        List<PersonPrototype> result = underTest.load(List.of());
 
         assertThat(result, empty());
     }
 
     @Test
     void oneValidInput() throws InvalidInputException {
-        when(personProviderMock.provide(any())).thenReturn(new LocatedPersonDtoBuilder("name", new ValidatedGelaberDto(), null));
+        when(personProviderMock.provide(any())).thenReturn(new PersonPrototypeBuilder("name", mock(GelaberPrototype.class), null));
 
         int positionX = 5;
         int positionY = 10;
-        List<LocatedPersonDto> result = underTest.load(List.of(new MapPersonDto("name", positionX, positionY)));
+        List<PersonPrototype> result = underTest.load(List.of(new MapPersonDto("name", positionX, positionY)));
 
         assertThat(result, hasSize(1));
-        LocatedPersonDto locatedPersonDto = result.get(0);
-        assertThat(locatedPersonDto.getPositionX(), is(positionX));
-        assertThat(locatedPersonDto.getPositionY(), is(positionY));
+        PersonPrototype personPrototype = result.get(0);
+        assertThat(personPrototype.getPositionX(), is(positionX));
+        assertThat(personPrototype.getPositionY(), is(positionY));
     }
 
     @Test
     void twoValidInputs() throws InvalidInputException {
-        when(personProviderMock.provide(any())).thenReturn(new LocatedPersonDtoBuilder("name", new ValidatedGelaberDto(), null));
+        when(personProviderMock.provide(any())).thenReturn(new PersonPrototypeBuilder("name", mock(GelaberPrototype.class), null));
 
-        List<LocatedPersonDto> result = underTest.load(List.of(
+        List<PersonPrototype> result = underTest.load(List.of(
             new MapPersonDto("name", 1, 2),
             new MapPersonDto("name", 1, 2)
         ));
@@ -65,7 +65,7 @@ class PersonsLoaderTest {
 
     @Test
     void oneValidOneInvalidInput() throws InvalidInputException {
-        when(personProviderMock.provide(same("valid"))).thenReturn(new LocatedPersonDtoBuilder("name", new ValidatedGelaberDto(), null));
+        when(personProviderMock.provide(same("valid"))).thenReturn(new PersonPrototypeBuilder("name", mock(GelaberPrototype.class), null));
         when(personProviderMock.provide(same("invalid"))).thenThrow(new InvalidInputException("personProviderEnemyMessage"));
 
         List<MapPersonDto> input = List.of(

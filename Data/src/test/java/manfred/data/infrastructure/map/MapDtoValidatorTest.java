@@ -8,9 +8,9 @@ import manfred.data.infrastructure.map.tile.MapTileReader;
 import manfred.data.infrastructure.map.tile.TileConverter;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.data.infrastructure.map.validator.Validator;
-import manfred.data.infrastructure.person.LocatedPersonDto;
+import manfred.data.infrastructure.person.PersonPrototype;
 import manfred.data.infrastructure.person.PersonsLoader;
-import manfred.data.infrastructure.person.gelaber.ValidatedGelaberDto;
+import manfred.data.infrastructure.person.gelaber.GelaberPrototype;
 import manfred.data.persistence.dto.MapEnemyDto;
 import manfred.data.persistence.dto.MapPersonDto;
 import manfred.data.persistence.dto.RawMapDto;
@@ -61,7 +61,7 @@ class MapDtoValidatorTest {
     @Test
     void nonEmptyOtherStructs() throws InvalidInputException {
         when(enemiesLoaderMock.load(any())).thenReturn(List.of(new LocatedEnemyDto("name", 0, 0, null, 0, 0)));
-        when(personsLoaderMock.load(any())).thenReturn(List.of(new LocatedPersonDto("name", mock(ValidatedGelaberDto.class), null, 0, 0)));
+        when(personsLoaderMock.load(any())).thenReturn(List.of(new PersonPrototype("name", mock(GelaberPrototype.class), null, 0, 0)));
 
         RawMapDto input = new RawMapDto(
             "test",

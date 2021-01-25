@@ -1,14 +1,14 @@
 package manfred.data.infrastructure.person;
 
 import lombok.Value;
-import manfred.data.infrastructure.person.gelaber.ValidatedGelaberDto;
+import manfred.data.infrastructure.person.gelaber.GelaberPrototype;
 
 import java.awt.image.BufferedImage;
 
 @Value
-public class LocatedPersonDto {
+public class PersonPrototype {
     String name;
-    ValidatedGelaberDto gelaber;
+    GelaberPrototype gelaber;
     BufferedImage image;
     int positionX;
     int positionY;

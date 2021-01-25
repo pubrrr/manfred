@@ -14,9 +14,9 @@ public class PersonsLoader {
 
     private final PersonProvider personProvider;
 
-    public List<LocatedPersonDto> load(List<MapPersonDto> personsOnMap) throws InvalidInputException {
+    public List<PersonPrototype> load(List<MapPersonDto> personsOnMap) throws InvalidInputException {
         List<String> errorMessages = new LinkedList<>();
-        List<LocatedPersonDto> result = personsOnMap.stream().map(mapPersonDto -> {
+        List<PersonPrototype> result = personsOnMap.stream().map(mapPersonDto -> {
             try {
                 return personProvider.provide(mapPersonDto.getName()).at(mapPersonDto.getPositionX(), mapPersonDto.getPositionY());
             } catch (InvalidInputException e) {
