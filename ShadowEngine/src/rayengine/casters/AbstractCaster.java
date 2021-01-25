@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Display;
 
 import rayengine.test.databinding.RayModel;
 
-public abstract class AbstractCaster {
+public abstract class AbstractCaster<T extends AbstractSection> {
 
 	private static final String BASE_PATH = new File("").getAbsolutePath();
 	protected int leftBorderCoordinate;
@@ -23,7 +23,7 @@ public abstract class AbstractCaster {
 	protected Image image;
 	protected CasterBounds[] leftToRightBounds;
 	protected CasterBounds[] frontToBackBounds;
-	protected Ellipsis[] sections;
+	protected T[] sections;
 	
 	public AbstractCaster(String relavitePath, Display display) {
 		image = new Image(display, BASE_PATH + File.separatorChar + relavitePath);
@@ -58,7 +58,7 @@ public abstract class AbstractCaster {
 				
 		for(int row = 0; row < height; row++) {
 			int distanceFromBottom = height-row-1;
-			Ellipsis section = sections[row];
+			AbstractSection section = sections[row];
 			int leftProjectedEllipsisBorder = pixelSize*leftToRightBounds[row].getLowerBound() + (int) Math.round(distanceFromBottom*relativeProjectionShiftX*pixelSize);
 			int bottomProjectedEllipsisBorder = (bottomOffsetY - frontToBackBounds[row].getLowerBound())*pixelSize + (int) Math.round(distanceFromBottom*relativeProjectionShiftY*pixelSize);
 			section.setBorderCoordinates(leftProjectedEllipsisBorder, bottomProjectedEllipsisBorder);
@@ -85,7 +85,7 @@ public abstract class AbstractCaster {
 		this.bottomBorderCoordinate = bottomBoundCoordinate;
 	}
 
-	public Ellipsis[] getSections() {
+	public T[] getSections() {
 		return sections;
 	}
 	
@@ -117,5 +117,18 @@ public abstract class AbstractCaster {
 		return image;
 	}
 	
-	protected abstract void calculateSections();
+	private void calculateSections() {
+		int pixelSize = RayModel.getPixelSize();
+		initializeSections(height);
+		
+		for(int row = 0; row < height; row++) {
+			int width = leftToRightBounds[row].getWidth()*pixelSize;
+			int height = (int) Math.round(frontToBackBounds[row].getWidth()*pixelSize*RayModel.getInclinationFactor());
+			sections[row] = createSection(width, height);
+		}
+	}
+	
+	protected abstract void initializeSections(int height);
+	
+	protected abstract T createSection(int width, int height);
 }

@@ -2,23 +2,19 @@ package rayengine.casters;
 
 import org.eclipse.swt.widgets.Display;
 
-import rayengine.test.databinding.RayModel;
-
-public class Character extends AbstractCaster{
+public class Character extends AbstractCaster<Ellipsis>{
 	
 	public Character(String relavitePath, Display display) {
 		super(relavitePath, display);
 	}
 
 	@Override
-	protected void calculateSections() {
-		int pixelSize = RayModel.getPixelSize();
+	protected void initializeSections(int height) {
 		sections = new Ellipsis[height];
-		
-		for(int row = 0; row < height; row++) {
-			int width = leftToRightBounds[row].getWidth()*pixelSize;
-			int height = (int) Math.round(frontToBackBounds[row].getWidth()*pixelSize*RayModel.getInclinationFactor());
-			sections[row] = new Ellipsis(width, height);
-		}
+	}
+
+	@Override
+	protected Ellipsis createSection(int width, int height) {
+		return new Ellipsis(width, height);
 	}
 }
