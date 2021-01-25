@@ -27,6 +27,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -165,7 +166,7 @@ class ManfredControllerTest extends ControllerTestCase {
 
     @Test
     void talkToPerson() {
-        setupMapWithInteractable(new Person("testOpa", mock(GelaberFacade.class), testGameConfig, null));
+        setupMapWithInteractable(new Person("testOpa", mock(GelaberFacade.class), testGameConfig, new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB)));
 
         ControllerInterface controllerState = underTest.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
 

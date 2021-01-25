@@ -2,6 +2,7 @@ package manfred.game.conversion.map;
 
 import manfred.data.infrastructure.map.ValidatedMapDto;
 import manfred.game.config.GameConfig;
+import manfred.game.interact.person.gelaber.GelaberConverter;
 
 import java.util.Optional;
 
@@ -13,8 +14,8 @@ public interface TileConversionRule {
         return new OrRule(this, next);
     }
 
-    static PersonTileFactory createPerson() {
-        return new PersonTileFactory();
+    static PersonTileFactory createPerson(GameConfig gameConfig, GelaberConverter gelaberConverter) {
+        return new PersonTileFactory(gameConfig, gelaberConverter);
     }
 
     static TileConversionRule createAccessible() {

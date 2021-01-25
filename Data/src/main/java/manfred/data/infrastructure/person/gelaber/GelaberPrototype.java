@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
@@ -38,6 +39,13 @@ public class GelaberPrototype {
 
     public GelaberTextPrototype getGelaber(TextId id) {
         return textPrototypes.get(id);
+    }
+
+    public <K, V> Map<K, V> mapTexts(Function<TextId, K> keyMap, Function<GelaberTextPrototype, V> valueMap) {
+        return textPrototypes.entrySet().stream().collect(toMap(
+            textPrototypeById -> keyMap.apply(textPrototypeById.getKey()),
+            textPrototypeById -> valueMap.apply(textPrototypeById.getValue())
+        ));
     }
 
     @Getter

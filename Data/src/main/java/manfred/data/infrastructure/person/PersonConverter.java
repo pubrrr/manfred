@@ -6,7 +6,9 @@ import manfred.data.infrastructure.ObjectConverter;
 import manfred.data.infrastructure.person.gelaber.GelaberPrototype;
 import manfred.data.infrastructure.person.gelaber.GelaberValidator;
 import manfred.data.persistence.dto.PersonDto;
+import org.springframework.stereotype.Component;
 
+@Component
 @AllArgsConstructor
 public class PersonConverter implements ObjectConverter<PersonDto, PersonPrototypeBuilder> {
 

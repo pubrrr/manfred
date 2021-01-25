@@ -19,6 +19,7 @@ import manfred.game.controls.ManfredController;
 import manfred.game.conversion.map.TileConversionRule;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
+import manfred.game.interact.person.gelaber.GelaberConverter;
 import manfred.game.interact.person.gelaber.LineSplitter;
 import manfred.game.interact.person.textLineFactory.ChoicesTextLineFactory;
 import manfred.game.interact.person.textLineFactory.SimpleTextLineFactory;
@@ -120,14 +121,13 @@ public class GameContext {
     @Bean
     public TextLineFactory textLineFactory(GameConfig gameConfig) {
         return new TextLineFactory(
-            ChoicesTextLineFactory.withConfig(gameConfig)
-                .orElse(SimpleTextLineFactory.withConfig(gameConfig))
+            ChoicesTextLineFactory.withConfig(gameConfig).orElse(SimpleTextLineFactory.withConfig(gameConfig))
         );
     }
 
     @Bean
-    public TileConversionRule tileConversionRule(GameConfig gameConfig) {
-        return createPerson()
+    public TileConversionRule tileConversionRule(GameConfig gameConfig, GelaberConverter gelaberConverter) {
+        return createPerson(gameConfig, gelaberConverter)
             .orElse(createPortal())
             .orElse(createDoor())
             .orElse(decorateWithImage(gameConfig).and(createAccessible().orElse(createNonAccessible())))
