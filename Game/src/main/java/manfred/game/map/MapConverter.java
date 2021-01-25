@@ -2,7 +2,7 @@ package manfred.game.map;
 
 import manfred.data.infrastructure.ObjectConverter;
 import manfred.data.infrastructure.enemy.LocatedEnemyDto;
-import manfred.data.infrastructure.map.ValidatedMapDto;
+import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.game.config.GameConfig;
@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 import static java.util.stream.Collectors.toList;
 
 @Component
-public class MapConverter implements ObjectConverter<ValidatedMapDto, Map> {
+public class MapConverter implements ObjectConverter<MapPrototype, Map> {
 
     private final EnemyConverter enemyConverter;
     private final EnemiesWrapper enemiesWrapper;
@@ -34,7 +34,7 @@ public class MapConverter implements ObjectConverter<ValidatedMapDto, Map> {
         this.tileFactories = tileFactories;
     }
 
-    public Map convert(ValidatedMapDto input) {
+    public Map convert(MapPrototype input) {
         MapMatrix<TilePrototype> inputMap = input.getMap();
         int width = inputMap.sizeX();
         int height = inputMap.sizeY();
@@ -46,7 +46,7 @@ public class MapConverter implements ObjectConverter<ValidatedMapDto, Map> {
         return new Map(resultingMapMatrix, this.gameConfig);
     }
 
-    private List<List<MapTile>> createResultingMap(ValidatedMapDto input, int width, int height) {
+    private List<List<MapTile>> createResultingMap(MapPrototype input, int width, int height) {
         List<List<MapTile>> resultingMap = new ArrayList<>(width);
         for (int x = 0; x < width; x++) {
             List<MapTile> column = new ArrayList<>(height);
@@ -58,14 +58,14 @@ public class MapConverter implements ObjectConverter<ValidatedMapDto, Map> {
         return resultingMap;
     }
 
-    private MapTile createMapTile(ValidatedMapDto input, int x, int y) {
+    private MapTile createMapTile(MapPrototype input, int x, int y) {
         return this.tileFactories
             .applicableTo(input, x, y)
             .orElseThrow(runtimeException(input, x, y))
             .create();
     }
 
-    private Supplier<RuntimeException> runtimeException(ValidatedMapDto input, int x, int y) {
+    private Supplier<RuntimeException> runtimeException(MapPrototype input, int x, int y) {
         return () -> new RuntimeException("No applicable conversion rule for tile " + x + ", " + y + " in " + input.toString() + " found.");
     }
 

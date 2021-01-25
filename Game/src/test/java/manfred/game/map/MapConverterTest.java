@@ -1,7 +1,7 @@
 package manfred.game.map;
 
 import manfred.data.infrastructure.enemy.LocatedEnemyDto;
-import manfred.data.infrastructure.map.ValidatedMapDto;
+import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.game.config.GameConfig;
@@ -42,7 +42,7 @@ public class MapConverterTest {
     void convert() {
         when(tileConverionRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.of(NotAccessible::new));
 
-        ValidatedMapDto input = new ValidatedMapDto(
+        MapPrototype input = new MapPrototype(
             "name",
             mockMapMatrix(1, 1),
             List.of(),
@@ -61,7 +61,7 @@ public class MapConverterTest {
     void convert3x2() {
         when(tileConverionRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.of(NotAccessible::new));
 
-        ValidatedMapDto input = new ValidatedMapDto(
+        MapPrototype input = new MapPrototype(
             "name",
             mockMapMatrix(3, 2),
             List.of(),
@@ -81,7 +81,7 @@ public class MapConverterTest {
         when(enemyConverterMock.convert(any())).thenReturn(mock(Enemy.class));
         when(tileConverionRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.of(NotAccessible::new));
 
-        ValidatedMapDto input = new ValidatedMapDto(
+        MapPrototype input = new MapPrototype(
             "name",
             mockMapMatrix(1, 1),
             List.of(),

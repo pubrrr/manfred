@@ -1,6 +1,6 @@
 package manfred.game.conversion.map;
 
-import manfred.data.infrastructure.map.ValidatedMapDto;
+import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.AccessiblePrototype;
 import manfred.data.infrastructure.map.tile.NonAccessiblePrototype;
@@ -29,7 +29,7 @@ class AccessibleTileFactoryTest {
     void create() {
         MapMatrix mapMatrixMock = mock(MapMatrix.class);
         when(mapMatrixMock.get(0, 0)).thenReturn(new AccessiblePrototype());
-        ValidatedMapDto input = new ValidatedMapDto(
+        MapPrototype input = new MapPrototype(
             "name",
             mapMatrixMock,
             List.of(),
@@ -50,7 +50,7 @@ class AccessibleTileFactoryTest {
     void doesNotCreateForNonAccessibleTile() {
         MapMatrix mapMatrixMock = mock(MapMatrix.class);
         when(mapMatrixMock.get(0, 0)).thenReturn(new NonAccessiblePrototype());
-        ValidatedMapDto input = new ValidatedMapDto(
+        MapPrototype input = new MapPrototype(
             "name",
             mapMatrixMock,
             List.of(),

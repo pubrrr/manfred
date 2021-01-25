@@ -1,7 +1,7 @@
 package manfred.game.conversion.map;
 
 import helpers.TestGameConfig;
-import manfred.data.infrastructure.map.ValidatedMapDto;
+import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
@@ -39,7 +39,7 @@ class DecorateTileWithImageRuleTest {
     void wrappedRuleNotApplicable_noObjectGiven() {
         when(wrappedRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.empty());
 
-        ValidatedMapDto input = prepareMapTileWithoutObject();
+        MapPrototype input = prepareMapTileWithoutObject();
 
         Optional<TileConversionAction> result = underTest.applicableTo(input, 0, 0);
 
@@ -48,7 +48,7 @@ class DecorateTileWithImageRuleTest {
 
     @Test
     void wrappedRuleNotApplicable_objectGiven() {
-        ValidatedMapDto input = prepareMapTileWithObject();
+        MapPrototype input = prepareMapTileWithObject();
 
         when(wrappedRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.empty());
 
@@ -61,7 +61,7 @@ class DecorateTileWithImageRuleTest {
     void wrappedruleApplicable_noObjectOnTileGiven() {
         when(wrappedRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.of(NotAccessible::new));
 
-        ValidatedMapDto input = prepareMapTileWithoutObject();
+        MapPrototype input = prepareMapTileWithoutObject();
 
         Optional<TileConversionAction> result = underTest.applicableTo(input, 0, 0);
 
@@ -72,7 +72,7 @@ class DecorateTileWithImageRuleTest {
     void wrappedRuleIsApplicable_objectGiven() {
         when(wrappedRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.of(NotAccessible::new));
 
-        ValidatedMapDto input = prepareMapTileWithObject();
+        MapPrototype input = prepareMapTileWithObject();
 
         Optional<TileConversionAction> result = underTest.applicableTo(input, 0, 0);
 
@@ -88,7 +88,7 @@ class DecorateTileWithImageRuleTest {
         verify(graphicsMock).drawImage(any(), anyInt(), anyInt(), anyInt(), anyInt(), isNull());
     }
 
-    private ValidatedMapDto prepareMapTileWithObject() {
+    private MapPrototype prepareMapTileWithObject() {
 
         ValidatedMapTileDto mapTileDto = new ValidatedMapTileDto("tileName", mock(MapMatrix.class), new BufferedImage(1, 2, 1));
 
@@ -101,7 +101,7 @@ class DecorateTileWithImageRuleTest {
         return validatedMapDto(mapMatrixMock);
     }
 
-    private ValidatedMapDto prepareMapTileWithoutObject() {
+    private MapPrototype prepareMapTileWithoutObject() {
         TilePrototype tilePrototypeMock = mock(TilePrototype.class);
         when(tilePrototypeMock.getTileObject()).thenReturn(Optional.empty());
 
@@ -111,7 +111,7 @@ class DecorateTileWithImageRuleTest {
         return validatedMapDto(mapMatrixMock);
     }
 
-    private ValidatedMapDto validatedMapDto(MapMatrix<TilePrototype> mapMatrix) {
-        return new ValidatedMapDto("name", mapMatrix, List.of(), List.of(), List.of(), List.of());
+    private MapPrototype validatedMapDto(MapMatrix<TilePrototype> mapMatrix) {
+        return new MapPrototype("name", mapMatrix, List.of(), List.of(), List.of(), List.of());
     }
 }

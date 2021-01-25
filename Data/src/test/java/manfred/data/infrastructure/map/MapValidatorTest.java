@@ -27,9 +27,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class MapDtoValidatorTest {
+class MapValidatorTest {
 
-    private MapDtoValidator underTest;
+    private MapValidator underTest;
 
     private Validator validatorMock1;
     private Validator validatorMock2;
@@ -43,14 +43,14 @@ class MapDtoValidatorTest {
         enemiesLoaderMock = mock(EnemiesLoader.class);
         personsLoaderMock = mock(PersonsLoader.class);
 
-        underTest = new MapDtoValidator(List.of(validatorMock1, validatorMock2), new TileConverter(mock(MapTileReader.class)), enemiesLoaderMock, personsLoaderMock);
+        underTest = new MapValidator(List.of(validatorMock1, validatorMock2), new TileConverter(mock(MapTileReader.class)), enemiesLoaderMock, personsLoaderMock);
     }
 
     @Test
     void emptyOtherStructs() throws InvalidInputException {
         RawMapDto input = new RawMapDto("test", List.of("1"), List.of(), List.of(), List.of(), List.of());
 
-        ValidatedMapDto result = underTest.validate(input);
+        MapPrototype result = underTest.validate(input);
 
         assertThat(result.getPersons(), empty());
         assertThat(result.getPortals(), empty());
@@ -72,7 +72,7 @@ class MapDtoValidatorTest {
             List.of(new MapEnemyDto())
         );
 
-        ValidatedMapDto result = underTest.validate(input);
+        MapPrototype result = underTest.validate(input);
 
         assertThat(result.getPersons(), hasSize(1));
         assertThat(result.getPortals(), hasSize(1));
@@ -132,7 +132,7 @@ class MapDtoValidatorTest {
             List.of()
         );
 
-        ValidatedMapDto result = underTest.validate(input);
+        MapPrototype result = underTest.validate(input);
 
         MapMatrix<TilePrototype> matrix = result.getMap();
         assertThat(matrix.sizeX(), is(1));
@@ -152,7 +152,7 @@ class MapDtoValidatorTest {
             List.of()
         );
 
-        ValidatedMapDto result = underTest.validate(input);
+        MapPrototype result = underTest.validate(input);
 
         MapMatrix<TilePrototype> matrix = result.getMap();
         assertThat(matrix.sizeX(), is(2));
@@ -173,7 +173,7 @@ class MapDtoValidatorTest {
             List.of()
         );
 
-        ValidatedMapDto result = underTest.validate(input);
+        MapPrototype result = underTest.validate(input);
 
         MapMatrix<TilePrototype> matrix = result.getMap();
         assertThat(matrix.sizeX(), is(2));
@@ -196,7 +196,7 @@ class MapDtoValidatorTest {
             List.of()
         );
 
-        ValidatedMapDto result = underTest.validate(input);
+        MapPrototype result = underTest.validate(input);
 
         MapMatrix<TilePrototype> matrix = result.getMap();
         assertThat(matrix.sizeX(), is(2));
@@ -219,7 +219,7 @@ class MapDtoValidatorTest {
             List.of()
         );
 
-        ValidatedMapDto result = underTest.validate(input);
+        MapPrototype result = underTest.validate(input);
 
         MapMatrix<TilePrototype> matrix = result.getMap();
         assertThat(matrix.sizeX(), is(3));

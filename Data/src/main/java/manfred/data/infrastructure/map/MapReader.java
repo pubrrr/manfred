@@ -7,18 +7,18 @@ import manfred.data.persistence.reader.RawMapReader;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MapReader implements ObjectReader<ValidatedMapDto> {
+public class MapReader implements ObjectReader<MapPrototype> {
 
     private final RawMapReader rawMapReader;
-    private final MapDtoValidator mapDtoValidator;
+    private final MapValidator mapValidator;
 
-    public MapReader(RawMapReader rawMapReader, MapDtoValidator mapDtoValidator) {
+    public MapReader(RawMapReader rawMapReader, MapValidator mapValidator) {
         this.rawMapReader = rawMapReader;
-        this.mapDtoValidator = mapDtoValidator;
+        this.mapValidator = mapValidator;
     }
 
-    public ValidatedMapDto load(String name) throws InvalidInputException {
+    public MapPrototype load(String name) throws InvalidInputException {
         RawMapDto rawMapDto = rawMapReader.load(name);
-        return mapDtoValidator.validate(rawMapDto);
+        return mapValidator.validate(rawMapDto);
     }
 }

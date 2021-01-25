@@ -1,7 +1,7 @@
 package manfred.game.conversion.map;
 
 import lombok.AllArgsConstructor;
-import manfred.data.infrastructure.map.ValidatedMapDto;
+import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.person.PersonPrototype;
 import manfred.game.config.GameConfig;
 import manfred.game.interact.person.Person;
@@ -20,7 +20,7 @@ public class PersonTileFactory implements TileConversionRule {
     private final GelaberConverter gelaberConverter;
 
     @Override
-    public Optional<TileConversionAction> applicableTo(ValidatedMapDto input, int x, int y) {
+    public Optional<TileConversionAction> applicableTo(MapPrototype input, int x, int y) {
         return input.getPersons().stream()
             .filter(personPrototype -> personPrototype.getPositionX() == x && personPrototype.getPositionX() == y)
             .findFirst()

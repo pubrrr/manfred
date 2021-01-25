@@ -1,7 +1,7 @@
 package manfred.game.conversion.map;
 
 import manfred.data.persistence.dto.TransporterDto;
-import manfred.data.infrastructure.map.ValidatedMapDto;
+import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.game.interact.Portal;
 import manfred.game.map.MapTile;
@@ -27,7 +27,7 @@ class PortalTileFactoryTest {
 
     @Test
     void noPortalsGiven() {
-        ValidatedMapDto input = new ValidatedMapDto(
+        MapPrototype input = new MapPrototype(
             "name",
             mock(MapMatrix.class),
             List.of(),
@@ -43,7 +43,7 @@ class PortalTileFactoryTest {
 
     @Test
     void portalAtWrongPositionGiven() {
-        ValidatedMapDto input = new ValidatedMapDto(
+        MapPrototype input = new MapPrototype(
             "name",
             mock(MapMatrix.class),
             List.of(),
@@ -62,7 +62,7 @@ class PortalTileFactoryTest {
         int positionX = 5;
         int positionY = 10;
 
-        ValidatedMapDto input = new ValidatedMapDto(
+        MapPrototype input = new MapPrototype(
             "name",
             mock(MapMatrix.class),
             List.of(),

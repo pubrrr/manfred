@@ -18,28 +18,28 @@ import static java.util.stream.Collectors.toList;
 import static manfred.data.infrastructure.StringSplitter.splitAtCommas;
 
 @Component
-public class MapDtoValidator {
+public class MapValidator {
 
     private final List<Validator> validators;
     private final TileConverter tileConverter;
     private final EnemiesLoader enemiesLoader;
     private final PersonsLoader personsLoader;
 
-    public MapDtoValidator(@Qualifier("mapValidators") List<Validator> validators, TileConverter tileConverter, EnemiesLoader enemiesLoader, PersonsLoader personsLoader) {
+    public MapValidator(@Qualifier("mapValidators") List<Validator> validators, TileConverter tileConverter, EnemiesLoader enemiesLoader, PersonsLoader personsLoader) {
         this.validators = validators;
         this.tileConverter = tileConverter;
         this.enemiesLoader = enemiesLoader;
         this.personsLoader = personsLoader;
     }
 
-    public ValidatedMapDto validate(RawMapDto rawMap) throws InvalidInputException {
+    public MapPrototype validate(RawMapDto rawMap) throws InvalidInputException {
         // TODO validate that map tile image interferes with other images on the map
         MapMatrix<TilePrototype> mapMatrix = buildMapMatrix(rawMap);
 
         validateMapObjects(rawMap, mapMatrix);
 
         try {
-            return new ValidatedMapDto(
+            return new MapPrototype(
                 rawMap.getName(),
                 mapMatrix,
                 personsLoader.load(rawMap.getPersons()),

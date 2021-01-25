@@ -1,6 +1,6 @@
 package manfred.game.conversion.map;
 
-import manfred.data.infrastructure.map.ValidatedMapDto;
+import manfred.data.infrastructure.map.MapPrototype;
 import manfred.game.config.GameConfig;
 import manfred.game.interact.person.gelaber.GelaberConverter;
 
@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface TileConversionRule {
 
-    Optional<TileConversionAction> applicableTo(ValidatedMapDto input, int x, int y);;
+    Optional<TileConversionAction> applicableTo(MapPrototype input, int x, int y);;
 
     default TileConversionRule orElse(TileConversionRule next) {
         return new OrRule(this, next);

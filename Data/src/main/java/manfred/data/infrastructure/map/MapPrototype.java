@@ -10,7 +10,7 @@ import manfred.data.persistence.dto.TransporterDto;
 import java.util.List;
 
 @Value
-public class ValidatedMapDto {
+public class MapPrototype {
     String name;
     MapMatrix<TilePrototype> map;
     List<PersonPrototype> persons;

@@ -1,6 +1,6 @@
 package manfred.game.conversion.map;
 
-import manfred.data.infrastructure.map.ValidatedMapDto;
+import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
 import manfred.game.config.GameConfig;
@@ -22,7 +22,7 @@ public class DecorateTileWithImageRule implements TileConversionRule {
     }
 
     @Override
-    public Optional<TileConversionAction> applicableTo(ValidatedMapDto input, int x, int y) {
+    public Optional<TileConversionAction> applicableTo(MapPrototype input, int x, int y) {
         Optional<ValidatedMapTileDto> tileObject = input.getMap().get(x, y).getTileObject();
         if (tileObject.isEmpty()) {
             return Optional.empty();
