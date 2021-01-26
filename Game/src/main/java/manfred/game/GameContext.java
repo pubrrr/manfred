@@ -85,8 +85,8 @@ public class GameContext {
     }
 
     @Bean
-    public MapFacade mapFacade(MapProvider mapProvider, AttacksContainer attacksContainer) {
-        return new MapFacade(mapProvider, "Wald", attacksContainer);
+    public MapFacade mapFacade(MapProvider mapProvider, AttacksContainer attacksContainer) throws InvalidInputException {
+        return new MapFacade(mapProvider, mapProvider.provide("Wald"), attacksContainer);
     }
 
     @Bean

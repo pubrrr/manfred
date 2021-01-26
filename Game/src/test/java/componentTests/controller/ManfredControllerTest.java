@@ -1,7 +1,6 @@
 package componentTests.controller;
 
 import helpers.TestGameConfig;
-import helpers.TestMapFactory;
 import manfred.data.InvalidInputException;
 import manfred.game.attack.Attack;
 import manfred.game.attack.AttackGenerator;
@@ -26,14 +25,12 @@ import manfred.game.interact.Interactable;
 import manfred.game.interact.Portal;
 import manfred.game.interact.person.Person;
 import manfred.game.interact.person.gelaber.GelaberFacade;
-import manfred.game.map.Map;
 import manfred.game.map.MapFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
 import java.util.Stack;
 
 import static helpers.AttackCombinationHelper.attackCombination;
@@ -65,10 +62,8 @@ class ManfredControllerTest extends ControllerTestCase {
         MapCollider colliderMock = mock(MapCollider.class);
         when(colliderMock.collides(0, 0, 0, 0)).thenReturn(true);
 
-        Map mapMock = mock(Map.class);
-        when(mapMock.stepOn(any())).thenReturn(null);
         mapFacadeMock = mock(MapFacade.class);
-        when(mapFacadeMock.getMap()).thenReturn(mapMock);
+        when(mapFacadeMock.stepOn(any())).thenReturn(null);
 
         skillSet = new SkillSet();
         attacksContainer = new AttacksContainer();
@@ -167,8 +162,7 @@ class ManfredControllerTest extends ControllerTestCase {
 
     @Test
     void interactDoesNothingWhenNoInteractInReach() {
-        Map map = TestMapFactory.create(new String[][]{{"1", "1"}}, null);
-        when(mapFacadeMock.getMap()).thenReturn(map);
+        when(mapFacadeMock.getInteractable(any())).thenReturn(Interactable.idle());
 
         ControllerInterface controllerState = underTest.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
 
@@ -218,7 +212,6 @@ class ManfredControllerTest extends ControllerTestCase {
         ControllerInterface controllerState = underTest.move();
 
         assertTrue(controllerState instanceof SleepingController);
-        assertTrue(controllerState.keyPressed(mockEventWithKey(KeyEvent.VK_ENTER)) instanceof SleepingController);
 
         Thread.sleep(1000); // Wait for swing worker to finish
 
@@ -263,10 +256,7 @@ class ManfredControllerTest extends ControllerTestCase {
     }
 
     private void setupMapWithInteractable(Interactable interactable) {
-        HashMap<String, Interactable> interactables = new HashMap<>();
-        interactables.put("interactable", interactable);
-
-        Map map = TestMapFactory.create(new String[][]{{"1", "interactable"}}, interactables);
-        when(mapFacadeMock.getMap()).thenReturn(map);
+        when(mapFacadeMock.getInteractable(any())).thenReturn(interactable);
+        when(mapFacadeMock.stepOn(any())).thenReturn(interactable.onStep());
     }
 }

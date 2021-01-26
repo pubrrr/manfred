@@ -26,10 +26,9 @@ public class MapCollider {
         int topMapTile = topBorder / gameConfig.getPixelBlockSize();
         int bottomMapTile = bottomBorder / gameConfig.getPixelBlockSize();
 
-        Map map = mapFacade.getMap();
         for (int x = leftMapTile; x <= rightMapTile; x++) {
             for (int y = topMapTile; y <= bottomMapTile; y++) {
-                if (!map.isAccessible(x, y)) {
+                if (!mapFacade.isAccessible(x, y)) {
                     return true;
                 }
             }

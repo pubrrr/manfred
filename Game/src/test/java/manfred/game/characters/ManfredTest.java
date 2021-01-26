@@ -5,8 +5,6 @@ import com.tngtech.junit.dataprovider.DataProviderExtension;
 import com.tngtech.junit.dataprovider.UseDataProvider;
 import com.tngtech.junit.dataprovider.UseDataProviderExtension;
 import helpers.TestGameConfig;
-import helpers.TestMapFactory;
-import manfred.game.map.Map;
 import manfred.game.map.MapFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -38,8 +37,7 @@ class ManfredTest {
 
     @Test
     void whenNoKeyPressed_thenDoesNotMove() {
-        Map map = TestMapFactory.create(new String[][]{{"1"}}, null);
-        when(mapFacadeMock.getMap()).thenReturn(map);
+        when(mapFacadeMock.isAccessible(anyInt(), anyInt())).thenReturn(true);
 
         int initialX = underTest.getX();
         int initialY = underTest.getY();

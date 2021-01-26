@@ -92,7 +92,7 @@ public class ManfredController implements ControllerInterface {
                 break;
             case KeyEvent.VK_ENTER:
                 Point interactionMapTile = manfred.getInteractionMapTile();
-                return mapFacade.getMap().getInteractable(interactionMapTile).interact().apply(this);
+                return mapFacade.getInteractable(interactionMapTile).interact().apply(this);
         }
         return this;
     }
@@ -106,7 +106,7 @@ public class ManfredController implements ControllerInterface {
 
     @Override
     public ControllerInterface move() {
-        ControllerInterface newControllerState = mapFacade.getMap().stepOn(this.manfred.moveTo()).apply(this);
+        ControllerInterface newControllerState = mapFacade.stepOn(this.manfred.moveTo()).apply(this);
 
         enemiesWrapper.getEnemies().forEach(enemy -> enemy.move(manfred));
         attacksContainer.forEach(Attack::move);

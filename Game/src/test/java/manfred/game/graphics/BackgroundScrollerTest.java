@@ -1,16 +1,13 @@
 package manfred.game.graphics;
 
 import helpers.TestGameConfig;
-import helpers.TestMapFactory;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.Sprite;
-import manfred.game.map.Map;
 import manfred.game.map.MapFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -22,22 +19,19 @@ class BackgroundScrollerTest {
 
     private BackgroundScroller underTest;
 
-    private Manfred manfredMock;
-    private Map map;
     private TestGameConfig testGameConfig;
 
     private Sprite manfredPosition;
+    private MapFacade mapFacadeMock;
 
     @BeforeEach
     void init() {
         manfredPosition = new Sprite(0, 0, 0, 0, 0, null);
 
-        manfredMock = mock(Manfred.class);
+        Manfred manfredMock = mock(Manfred.class);
         when(manfredMock.getSprite()).thenAnswer(invocationOnMock -> manfredPosition);
 
-        MapFacade mapFacadeMock = mock(MapFacade.class);
-        when(mapFacadeMock.getMap()).thenAnswer(invocationOnMock -> map);
-
+        mapFacadeMock = mock(MapFacade.class);
         testGameConfig = (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE);
 
         underTest = new BackgroundScroller(TRIGGER_SCROLL_DISTANCE_TO_BORDER, manfredMock, mapFacadeMock, testGameConfig);
@@ -272,10 +266,7 @@ class BackgroundScrollerTest {
     }
 
     private void setupMapWithDimensions(int x, int y) {
-        // lazy way to initialize a String[][] with "0" values
-        String[][] mapAsString = Arrays.stream(new int[x][y]).map(
-                a -> Arrays.stream(a).mapToObj(String::valueOf).toArray(String[]::new)
-        ).toArray(String[][]::new);
-        this.map = TestMapFactory.create(mapAsString, null);
+        when(mapFacadeMock.getMapSizeX()).thenReturn(x);
+        when(mapFacadeMock.getMapSizeY()).thenReturn(y);
     }
 }
