@@ -27,10 +27,6 @@ public class Person implements Interactable {
         return this.name;
     }
 
-    public GelaberFacade getGelaberFacade() {
-        return this.gelaberFacade;
-    }
-
     @Override
     public Function<ManfredController, ControllerInterface> interact() {
         return controller -> controller.talk(controller, this.gelaberFacade);

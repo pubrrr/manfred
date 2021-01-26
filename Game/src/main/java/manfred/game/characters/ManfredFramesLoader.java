@@ -1,8 +1,7 @@
 package manfred.game.characters;
 
-import manfred.data.DataContext;
 import manfred.data.InvalidInputException;
-import manfred.data.persistence.reader.ImageLoader;
+import manfred.data.persistence.reader.ManfredFrameLoader;
 import org.springframework.stereotype.Component;
 
 import java.awt.image.BufferedImage;
@@ -10,12 +9,11 @@ import java.util.HashMap;
 
 @Component
 public class ManfredFramesLoader {
-    private final static String PATH_MANFRED_FRAMES = DataContext.PATH_DATA + "manfred\\";
-    
-    private final ImageLoader imageLoader;
 
-    public ManfredFramesLoader(ImageLoader imageLoader) {
-        this.imageLoader = imageLoader;
+    private final ManfredFrameLoader manfredFrameLoader;
+
+    public ManfredFramesLoader(ManfredFrameLoader manfredFrameLoader) {
+        this.manfredFrameLoader = manfredFrameLoader;
     }
 
     public HashMap<Direction, BufferedImage[]> loadWalkAnimation() throws InvalidInputException {
@@ -24,7 +22,7 @@ public class ManfredFramesLoader {
             BufferedImage[] frames = new BufferedImage[Manfred.ANIMATION_IMAGES_NUMBER];
 
             for (int i = 0; i < Manfred.ANIMATION_IMAGES_NUMBER; i++) {
-                frames[i] = imageLoader.load(PATH_MANFRED_FRAMES + "manfred_" + direction.toString().toLowerCase() + i + ".png");
+                frames[i] = manfredFrameLoader.loadFrame("manfred_" + direction.toString().toLowerCase() + i);
             }
 
             walkAnimation.put(direction, frames);
@@ -33,6 +31,6 @@ public class ManfredFramesLoader {
     }
 
     public BufferedImage loadCastModeSprite() throws InvalidInputException {
-        return imageLoader.load(PATH_MANFRED_FRAMES + "castModeSprite.png");
+        return manfredFrameLoader.loadFrame("castModeSprite");
     }
 }

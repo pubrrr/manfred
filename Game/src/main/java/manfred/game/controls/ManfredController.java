@@ -1,14 +1,13 @@
 package manfred.game.controls;
 
 import manfred.data.InvalidInputException;
-import manfred.game.config.GameConfig;
 import manfred.game.attack.Attack;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.attack.Caster;
 import manfred.game.attack.CombinationElement;
 import manfred.game.characters.Manfred;
+import manfred.game.config.GameConfig;
 import manfred.game.enemy.EnemiesWrapper;
-import manfred.game.exception.ManfredException;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.paintable.GelaberOverlay;
