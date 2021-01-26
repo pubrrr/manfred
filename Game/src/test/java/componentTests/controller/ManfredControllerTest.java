@@ -15,6 +15,7 @@ import manfred.game.characters.SkillSet;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.ManfredController;
+import manfred.game.controls.ObjectsMover;
 import manfred.game.controls.SleepingController;
 import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.graphics.BackgroundScroller;
@@ -75,6 +76,14 @@ class ManfredControllerTest extends ControllerTestCase {
         Caster attackCaster = new Caster(new CastModeOff(castModeOn));
         EnemiesWrapper enemiesWrapper = new EnemiesWrapper();
 
+        ObjectsMover objectsMover = new ObjectsMover(
+            mapFacadeMock,
+            manfred,
+            enemiesWrapper,
+            attacksContainer,
+            mock(MapCollider.class)
+        );
+
         underTest = new ManfredController(
             manfred,
             attackCaster,
@@ -83,8 +92,8 @@ class ManfredControllerTest extends ControllerTestCase {
             backgroundScrollerMock,
             mock(GamePanel.class),
             attacksContainer,
-            enemiesWrapper,
-            mock(GelaberOverlay.class)
+            mock(GelaberOverlay.class),
+            objectsMover
         );
     }
 

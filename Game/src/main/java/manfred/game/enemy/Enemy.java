@@ -42,7 +42,7 @@ public class Enemy extends MovingObject implements Paintable {
         long distanceY = manfred.getY() - this.sprite.y;
         long distanceSquared = distanceX * distanceX + distanceY * distanceY;
 
-        if (distanceSquared <= aggroRadius * aggroRadius) {
+        if (distanceSquared <= (long) aggroRadius * aggroRadius) {
             // this actually makes the top left corner of the enemy move towards the top left corner of Manfred. Change when necessary
             double distance = Math.sqrt(distanceSquared);
             currentSpeedX = (int) (speed * ((float) distanceX) / distance);

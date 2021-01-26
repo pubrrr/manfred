@@ -2,13 +2,13 @@ package manfred.game.interact.person;
 
 import manfred.game.config.GameConfig;
 import manfred.game.controls.ControllerInterface;
+import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.ManfredController;
 import manfred.game.interact.Interactable;
 import manfred.game.interact.person.gelaber.GelaberFacade;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.function.Function;
 
 public class Person implements Interactable {
     private final String name;
@@ -28,7 +28,7 @@ public class Person implements Interactable {
     }
 
     @Override
-    public Function<ManfredController, ControllerInterface> interact() {
+    public ControllerStateMapper<ManfredController, ControllerInterface> interact() {
         return controller -> controller.talk(controller, this.gelaberFacade);
     }
 

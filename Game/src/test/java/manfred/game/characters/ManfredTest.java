@@ -42,7 +42,7 @@ class ManfredTest {
         int initialX = underTest.getX();
         int initialY = underTest.getY();
 
-        underTest.moveTo();
+        underTest.move();
 
         assertEquals(initialX, underTest.getX());
         assertEquals(initialY, underTest.getY());
@@ -54,7 +54,8 @@ class ManfredTest {
         underTest.setX(manfredX);
         underTest.setY(manfredY);
 
-        Point resultingMapTile = underTest.moveTo();
+        underTest.move();
+        Point resultingMapTile = underTest.getCenterMapTile();
 
         assertEquals(expectTriggerStepOn, resultingMapTile.equals(new Point(0,0)));
     }

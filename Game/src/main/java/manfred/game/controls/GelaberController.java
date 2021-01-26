@@ -25,7 +25,7 @@ public class GelaberController implements ControllerInterface {
     public ControllerInterface keyReleased(KeyEvent event) {
         switch (event.getKeyCode()) {
             case KeyEvent.VK_ENTER:
-                return gelaberFacade.next().apply(this);
+                return gelaberFacade.next().determineNewControllerState(this);
             case KeyEvent.VK_S:
             case KeyEvent.VK_DOWN:
                 gelaberFacade.down();

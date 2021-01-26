@@ -1,15 +1,15 @@
 package manfred.game.interact;
 
 import manfred.game.controls.ControllerInterface;
+import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.ManfredController;
 
 import java.awt.*;
-import java.util.function.Function;
 
 public class Idle implements Interactable {
     @Override
-    public Function<ManfredController, ControllerInterface> interact() {
-        return ControllerInterface::self;
+    public ControllerStateMapper<ManfredController, ControllerInterface> interact() {
+        return ControllerStateMapper::preserveState;
     }
 
     @Override

@@ -1,13 +1,11 @@
 package manfred.game.controls;
 
 import manfred.data.InvalidInputException;
-import manfred.game.attack.Attack;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.attack.Caster;
 import manfred.game.attack.CombinationElement;
 import manfred.game.characters.Manfred;
 import manfred.game.config.GameConfig;
-import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.paintable.GelaberOverlay;
@@ -27,8 +25,8 @@ public class ManfredController implements ControllerInterface {
     private final BackgroundScroller backgroundScroller;
     private final GamePanel gamePanel;
     private final AttacksContainer attacksContainer;
-    private final EnemiesWrapper enemiesWrapper;
     private final GelaberOverlay gelaberOverlay;
+    private final ObjectsMover objectsMover;
 
     public ManfredController(
         Manfred manfred,
@@ -38,8 +36,8 @@ public class ManfredController implements ControllerInterface {
         BackgroundScroller backgroundScroller,
         GamePanel gamePanel,
         AttacksContainer attacksContainer,
-        EnemiesWrapper enemiesWrapper,
-        GelaberOverlay gelaberOverlay
+        GelaberOverlay gelaberOverlay,
+        ObjectsMover objectsMover
     ) {
         this.manfred = manfred;
         this.attackCaster = attackCaster;
@@ -48,8 +46,8 @@ public class ManfredController implements ControllerInterface {
         this.backgroundScroller = backgroundScroller;
         this.gamePanel = gamePanel;
         this.attacksContainer = attacksContainer;
-        this.enemiesWrapper = enemiesWrapper;
         this.gelaberOverlay = gelaberOverlay;
+        this.objectsMover = objectsMover;
     }
 
     @Override
@@ -92,7 +90,8 @@ public class ManfredController implements ControllerInterface {
                 break;
             case KeyEvent.VK_ENTER:
                 Point interactionMapTile = manfred.getInteractionMapTile();
-                return mapFacade.getInteractable(interactionMapTile).interact().apply(this);
+                return mapFacade.getInteractable(interactionMapTile).interact()
+                    .determineNewControllerState(this);
         }
         return this;
     }
@@ -106,24 +105,12 @@ public class ManfredController implements ControllerInterface {
 
     @Override
     public ControllerInterface move() {
-        ControllerInterface newControllerState = mapFacade.stepOn(this.manfred.moveTo()).apply(this);
-
-        enemiesWrapper.getEnemies().forEach(enemy -> enemy.move(manfred));
-        attacksContainer.forEach(Attack::move);
-
-        enemiesWrapper.getEnemies().forEach(
-            enemy -> attacksContainer.forEach(
-                attack -> attack.checkHit(enemy)
-            )
-        );
-        enemiesWrapper.removeKilled();
-        attacksContainer.removeResolved();
-
-        return newControllerState;
+        return this.objectsMover.move().determineNewControllerState(this);
     }
 
     public void loadMap(String name) {
         try {
+            attacksContainer.clear();
             mapFacade.loadMap(name);
         } catch (InvalidInputException e) {
             System.out.println("ERROR: Failed to load map " + name + "\n");

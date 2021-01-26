@@ -2,10 +2,7 @@ package manfred.game;
 
 import manfred.data.DataContext;
 import manfred.data.InvalidInputException;
-import manfred.data.persistence.reader.AttackReader;
 import manfred.data.persistence.reader.ConfigProvider;
-import manfred.infrastructureadapter.InfrastructureAdapterContext;
-import manfred.infrastructureadapter.attack.AttackGeneratorConverter;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.attack.CastModeOn;
 import manfred.game.attack.CombinationElement;
@@ -13,20 +10,19 @@ import manfred.game.characters.Manfred;
 import manfred.game.characters.ManfredFramesLoader;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.SkillSet;
-import manfred.infrastructureadapter.attack.AttackGeneratorProvider;
-import manfred.infrastructureadapter.config.ConfigConverter;
 import manfred.game.config.GameConfig;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
-import manfred.infrastructureadapter.map.tile.TileConversionRule;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
-import manfred.infrastructureadapter.person.gelaber.GelaberConverter;
 import manfred.game.interact.person.gelaber.LineSplitter;
 import manfred.game.interact.person.textLineFactory.ChoicesTextLineFactory;
 import manfred.game.interact.person.textLineFactory.SimpleTextLineFactory;
 import manfred.game.interact.person.textLineFactory.TextLineFactory;
 import manfred.game.map.MapFacade;
+import manfred.infrastructureadapter.InfrastructureAdapterContext;
+import manfred.infrastructureadapter.attack.AttackGeneratorProvider;
+import manfred.infrastructureadapter.config.ConfigConverter;
 import manfred.infrastructureadapter.map.MapProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -34,13 +30,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import java.util.Stack;
-
-import static manfred.infrastructureadapter.map.tile.TileConversionRule.createAccessible;
-import static manfred.infrastructureadapter.map.tile.TileConversionRule.createDoor;
-import static manfred.infrastructureadapter.map.tile.TileConversionRule.createNonAccessible;
-import static manfred.infrastructureadapter.map.tile.TileConversionRule.createPerson;
-import static manfred.infrastructureadapter.map.tile.TileConversionRule.createPortal;
-import static manfred.infrastructureadapter.map.tile.TileConversionRule.decorateWithImage;
 
 @Configuration
 @ComponentScan(basePackages = "manfred.game")
@@ -85,8 +74,8 @@ public class GameContext {
     }
 
     @Bean
-    public MapFacade mapFacade(MapProvider mapProvider, AttacksContainer attacksContainer) throws InvalidInputException {
-        return new MapFacade(mapProvider, mapProvider.provide("Wald"), attacksContainer);
+    public MapFacade mapFacade(MapProvider mapProvider) throws InvalidInputException {
+        return new MapFacade(mapProvider, mapProvider.provide("Wald"));
     }
 
     @Bean

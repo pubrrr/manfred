@@ -47,7 +47,7 @@ public class Manfred extends MovingObject implements Paintable {
         this.sprite.y = y + sprite.getBaseHeight() - sprite.getSpriteHeight();
     }
 
-    public Point moveTo() {
+    public void move() {
         super.move();
 
         if (currentSpeedX == 0 && currentSpeedY == 0) {
@@ -63,11 +63,9 @@ public class Manfred extends MovingObject implements Paintable {
                 }
             }
         }
-
-        return getCenterMapTile();
     }
 
-    protected Point getCenterMapTile() {
+    public Point getCenterMapTile() {
         Point center = this.sprite.getCenter();
         return new Point(center.x / gameConfig.getPixelBlockSize(), center.y / gameConfig.getPixelBlockSize());
     }

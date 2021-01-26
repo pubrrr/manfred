@@ -2,6 +2,7 @@ package manfred.infrastructureadapter.enemy;
 
 import helpers.TestGameConfig;
 import manfred.data.persistence.dto.EnemyDto;
+import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
 import manfred.game.enemy.Enemy;
 import manfred.game.enemy.MapColliderProvider;
@@ -41,7 +42,7 @@ class EnemyConverterTest {
         assertEquals(100, result.getHealthPoints());
 
         result.right();
-        result.move();
+        result.move(mock(Manfred.class));
         assertEquals(PIXEL_BLOCK_SIZE + speed, result.getX());
     }
 }

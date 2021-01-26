@@ -1,11 +1,10 @@
 package manfred.game.interact;
 
-import manfred.game.config.GameConfig;
 import manfred.game.controls.ControllerInterface;
+import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.ManfredController;
 
 import java.awt.*;
-import java.util.function.Function;
 
 public class Door implements Interactable {
     private final String targetName;
@@ -19,7 +18,7 @@ public class Door implements Interactable {
     }
 
     @Override
-    public Function<ManfredController, ControllerInterface> interact() {
+    public ControllerStateMapper<ManfredController, ControllerInterface> interact() {
         return controllerInterface -> {
             controllerInterface.stop();
             return ControllerInterface.sleepWhileWorkingOn(new LoadMapWorker(this.targetName, this.targetSpawnX, this.targetSpawnY, controllerInterface));

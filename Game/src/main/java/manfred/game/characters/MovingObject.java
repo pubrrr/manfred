@@ -79,7 +79,7 @@ abstract public class MovingObject implements Paintable {
         currentSpeedY = 0;
     }
 
-    public void move() {
+    protected void move() {
         if (!collidesVertically()) {
             this.sprite.translate(currentSpeedX, 0);
         }
