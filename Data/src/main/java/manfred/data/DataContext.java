@@ -19,8 +19,6 @@ import java.util.List;
 @Configuration
 @ComponentScan(basePackages = "manfred.data")
 public class DataContext {
-    // TODO make this unused and delete it.
-    public static final String PATH_DATA = "Data\\data\\";
 
     @Bean
     public ObjectMapper objectMapper() {

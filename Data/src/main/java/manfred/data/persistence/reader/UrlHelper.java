@@ -27,4 +27,8 @@ public class UrlHelper {
     public Optional<URL> getImageResourceForEnemy(String name) {
         return Optional.ofNullable(getClass().getResource("/enemies/" + name + ".png"));
     }
+
+    public Optional<URL> getManfredFrame(String name) {
+        return Optional.ofNullable(getClass().getResource("/manfred/" + name + ".png"));
+    }
 }
