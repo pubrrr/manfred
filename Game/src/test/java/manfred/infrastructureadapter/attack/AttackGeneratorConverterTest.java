@@ -7,28 +7,33 @@ import manfred.game.characters.Direction;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.Sprite;
 import manfred.game.enemy.Enemy;
-import manfred.game.enemy.MapColliderProvider;
-import manfred.infrastructureadapter.attack.AttackGeneratorConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class AttackGeneratorConverterTest {
 
     private AttackGeneratorConverter underTest;
 
-    @BeforeEach
-    void init() throws Exception {
-        MapColliderProvider mapColliderProviderMock = mock(MapColliderProvider.class);
-        when(mapColliderProviderMock.provide()).thenReturn(mock(MapCollider.class));
+    private MapCollider mapColliderMock;
 
-        underTest = new AttackGeneratorConverter(mapColliderProviderMock);
+    @BeforeEach
+    void init() {
+        mapColliderMock = mock(MapCollider.class);
+        when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
+
+        underTest = new AttackGeneratorConverter();
     }
 
     @Test
@@ -47,7 +52,7 @@ class AttackGeneratorConverterTest {
     }
 
     private void assertMoves(Attack attack) {
-        attack.move();
+        attack.checkCollisionsAndMove(mapColliderMock);
         assertEquals(1, attack.getX());
         assertEquals(0, attack.getY());
     }
@@ -71,9 +76,9 @@ class AttackGeneratorConverterTest {
         Attack attack = result.generate(new Point(0,0), Direction.RIGHT);
 
         assertFalse(attack.isResolved());
-        attack.move();
+        attack.checkCollisionsAndMove(mapColliderMock);
         assertFalse(attack.isResolved());
-        attack.move();
+        attack.checkCollisionsAndMove(mapColliderMock);
         assertTrue(attack.isResolved());
     }
 }

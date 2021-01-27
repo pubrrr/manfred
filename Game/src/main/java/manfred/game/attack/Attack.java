@@ -27,13 +27,12 @@ public class Attack extends MovingObject implements Paintable {
         int y,
         int width,
         int height,
-        MapCollider collider,
         int damage,
         int range,
         List<BufferedImage> attackAnimation,
         int numberOfAnimationImages
     ) {
-        super(speed, x, y, width, height, height, null, collider);
+        super(speed, x, y, width, height, height, null);
         this.castPosition = this.sprite.getCenter();
         this.damage = damage;
         this.range = range;
@@ -43,9 +42,9 @@ public class Attack extends MovingObject implements Paintable {
     }
 
     @Override
-    public void move() {
-        if (collidesVertically() || collidesHorizontally()) {
-            resolve();
+    public void checkCollisionsAndMove(MapCollider mapCollider) {
+        if (collidesVertically(mapCollider) || collidesHorizontally(mapCollider)) {
+            this.resolve();
         }
         this.sprite.translate(currentSpeedX, currentSpeedY);
 

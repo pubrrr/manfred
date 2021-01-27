@@ -16,8 +16,8 @@ public class Enemy extends MovingObject implements Paintable {
 
     private int healthPoints;
 
-    public Enemy(String name, int speed, int x, int y, int healthPoints, BufferedImage image, MapCollider collider, int aggroRadius, GameConfig gameConfig) {
-        super(speed, x, y, 2 * gameConfig.getPixelBlockSize(), 2 * gameConfig.getPixelBlockSize(), 2 * gameConfig.getPixelBlockSize(), image, collider);
+    public Enemy(String name, int speed, int x, int y, int healthPoints, BufferedImage image, int aggroRadius, GameConfig gameConfig) {
+        super(speed, x, y, 2 * gameConfig.getPixelBlockSize(), 2 * gameConfig.getPixelBlockSize(), 2 * gameConfig.getPixelBlockSize(), image);
         this.name = name;
         this.healthPoints = healthPoints;
         this.aggroRadius = aggroRadius;
@@ -37,7 +37,7 @@ public class Enemy extends MovingObject implements Paintable {
         g.drawString(this.name, this.sprite.x + this.sprite.width / 4 - offset.x, this.sprite.y - (this.sprite.height / 4) - offset.y);
     }
 
-    public void move(Manfred manfred) {
+    public Enemy determineSpeed(Manfred manfred) {
         long distanceX = manfred.getX() - this.sprite.x;
         long distanceY = manfred.getY() - this.sprite.y;
         long distanceSquared = distanceX * distanceX + distanceY * distanceY;
@@ -51,8 +51,7 @@ public class Enemy extends MovingObject implements Paintable {
             currentSpeedX = 0;
             currentSpeedY = 0;
         }
-
-        super.move();
+        return this;
     }
 
     public int getHealthPoints() {

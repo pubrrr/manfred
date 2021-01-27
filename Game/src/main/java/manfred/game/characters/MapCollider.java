@@ -1,22 +1,17 @@
 package manfred.game.characters;
 
-import manfred.data.InvalidInputException;
 import manfred.game.config.GameConfig;
-import manfred.game.map.Map;
 import manfred.game.map.MapFacade;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MapCollider {
-    private static MapCollider instance = null;
 
     private final MapFacade mapFacade;
     private final GameConfig gameConfig;
 
     public MapCollider(MapFacade mapFacade, GameConfig gameConfig) {
         this.gameConfig = gameConfig;
-        instance = this;
-
         this.mapFacade = mapFacade;
     }
 
@@ -34,12 +29,5 @@ public class MapCollider {
             }
         }
         return false;
-    }
-
-    public static MapCollider getInstance() throws InvalidInputException {
-        if (instance == null) {
-            throw new InvalidInputException("Must call constuctor first.");
-        }
-        return instance;
     }
 }

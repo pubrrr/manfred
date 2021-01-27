@@ -26,11 +26,10 @@ public class Manfred extends MovingObject implements Paintable {
         int spriteWidth,
         int spriteHeight,
         int healthPoints,
-        MapCollider collider,
         GameConfig gameConfig,
         HashMap<Direction, BufferedImage[]> walkAnimation
     ) {
-        super(speed, x, y, spriteWidth, spriteHeight, gameConfig.getPixelBlockSize(), null, collider);
+        super(speed, x, y, spriteWidth, spriteHeight, gameConfig.getPixelBlockSize(), null);
         this.healthPoints = healthPoints;
         this.gameConfig = gameConfig;
         this.walkAnimation = walkAnimation;
@@ -47,8 +46,9 @@ public class Manfred extends MovingObject implements Paintable {
         this.sprite.y = y + sprite.getBaseHeight() - sprite.getSpriteHeight();
     }
 
-    public void move() {
-        super.move();
+    @Override
+    public void checkCollisionsAndMove(MapCollider mapCollider) {
+        super.checkCollisionsAndMove(mapCollider);
 
         if (currentSpeedX == 0 && currentSpeedY == 0) {
             framesCounter = 0;

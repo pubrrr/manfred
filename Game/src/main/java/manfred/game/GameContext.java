@@ -43,11 +43,7 @@ public class GameContext {
     }
 
     @Bean
-    public Manfred manfred(
-        MapCollider collider,
-        GameConfig gameConfig,
-        ManfredFramesLoader manfredFramesLoader
-    ) throws InvalidInputException {
+    public Manfred manfred(GameConfig gameConfig, ManfredFramesLoader manfredFramesLoader) throws InvalidInputException {
         return new Manfred(
             6,
             gameConfig.getPixelBlockSize() * 3,
@@ -55,7 +51,6 @@ public class GameContext {
             gameConfig.getPixelBlockSize(),
             2 * gameConfig.getPixelBlockSize(),
             100,
-            collider,
             gameConfig,
             manfredFramesLoader.loadWalkAnimation()
         );
@@ -79,9 +74,7 @@ public class GameContext {
     }
 
     @Bean
-    public SkillSet skillSet(AttackGeneratorProvider attackGeneratorProvider, MapCollider mapCollider) throws Exception {
-        //TODO refactor this! the MapCollider is here because it needs to be constructed first.
-
+    public SkillSet skillSet(AttackGeneratorProvider attackGeneratorProvider) throws Exception {
         SkillSet skillSet = new SkillSet();
         Stack<CombinationElement> combination = new Stack<>();
         combination.push(CombinationElement.LEFT);

@@ -3,6 +3,7 @@ package manfred.game.attack;
 import helpers.TestGameConfig;
 import manfred.game.characters.MapCollider;
 import manfred.game.enemy.Enemy;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,9 +16,17 @@ class AttackTest {
 
     private Attack underTest;
 
+    private MapCollider mapColliderMock;
+
+    @BeforeEach
+    void setUp() {
+        mapColliderMock = mock(MapCollider.class);
+        when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
+    }
+
     @Test
     void notResolvedWhenNothingHappens() {
-        underTest = new Attack(0, 0, 0, 0, 0, mock(MapCollider.class), 0, 0, null, 1);
+        underTest = new Attack(0, 0, 0, 0, 0, 0, 0, null, 1);
 
         assertFalse(underTest.isResolved());
     }
@@ -27,21 +36,20 @@ class AttackTest {
         int range = 5;
         int speed = 2 * range;
 
-        underTest = new Attack(speed, 0, 0, 0, 0, mock(MapCollider.class), 0, range, null, 1);
+        underTest = new Attack(speed, 0, 0, 0, 0, 0, range, null, 1);
 
         underTest.up();
-        underTest.move();
+        underTest.checkCollisionsAndMove(mapColliderMock);
         assertTrue(underTest.isResolved());
     }
 
     @Test
     void resolvesOnCollision() {
-        MapCollider mapColliderMock = mock(MapCollider.class);
         when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(true);
 
-        underTest = new Attack(0, 0, 0, 0, 0, mapColliderMock, 0, 0, null, 1);
+        underTest = new Attack(0, 0, 0, 0, 0, 0, 0, null, 1);
 
-        underTest.move();
+        underTest.checkCollisionsAndMove(mapColliderMock);
         assertTrue(underTest.isResolved());
     }
 
@@ -50,8 +58,8 @@ class AttackTest {
         int damage = 3;
         int healthPoints = 2;
 
-        underTest = new Attack(0, 0, 0, 5, 5, mock(MapCollider.class), damage, 0, null, 1);
-        Enemy enemy = new Enemy("test", 0, 3, 3, healthPoints, null, mock(MapCollider.class), 0, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
+        underTest = new Attack(0, 0, 0, 5, 5, damage, 0, null, 1);
+        Enemy enemy = new Enemy("test", 0, 3, 3, healthPoints, null, 0, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
 
         underTest.checkHit(enemy);
 
@@ -64,8 +72,8 @@ class AttackTest {
         int damage = 3;
         int healthPoints = 2;
 
-        underTest = new Attack(0, 0, 0, 0, 0, mock(MapCollider.class), 0, 0, null, 1);
-        Enemy enemy = new Enemy("test", 0, 8, 8, healthPoints, null, mock(MapCollider.class), 0, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
+        underTest = new Attack(0, 0, 0, 0, 0, damage, 0, null, 1);
+        Enemy enemy = new Enemy("test", 0, 8, 8, healthPoints, null, 0, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
 
         underTest.checkHit(enemy);
 

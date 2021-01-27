@@ -2,10 +2,8 @@ package manfred.infrastructureadapter.enemy;
 
 import helpers.TestGameConfig;
 import manfred.data.persistence.dto.EnemyDto;
-import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
 import manfred.game.enemy.Enemy;
-import manfred.game.enemy.MapColliderProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,15 +17,14 @@ class EnemyConverterTest {
 
     private EnemyConverter underTest;
 
+    private MapCollider mapColliderMock;
+
     @BeforeEach
-    void init() throws Exception {
-        MapCollider mapColliderMock = mock(MapCollider.class);
+    void init() {
+        mapColliderMock = mock(MapCollider.class);
         when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
 
-        MapColliderProvider mapColliderProviderMock = mock(MapColliderProvider.class);
-        when(mapColliderProviderMock.provide()).thenReturn(mapColliderMock);
-
-        underTest = new EnemyConverter(mapColliderProviderMock, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
+        underTest = new EnemyConverter((new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
     }
 
     @Test
@@ -42,7 +39,7 @@ class EnemyConverterTest {
         assertEquals(100, result.getHealthPoints());
 
         result.right();
-        result.move(mock(Manfred.class));
+        result.checkCollisionsAndMove(mapColliderMock);
         assertEquals(PIXEL_BLOCK_SIZE + speed, result.getX());
     }
 }

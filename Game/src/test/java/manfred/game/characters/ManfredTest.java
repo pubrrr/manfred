@@ -25,24 +25,23 @@ class ManfredTest {
 
     private Manfred underTest;
 
-    private MapFacade mapFacadeMock;
+    private MapCollider mapColliderMock;
 
     @BeforeEach
     void init() {
-        MapCollider colliderMock = mock(MapCollider.class);
-        mapFacadeMock = mock(MapFacade.class);
+        mapColliderMock = mock(MapCollider.class);
 
-        underTest = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, colliderMock, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE), null);
+        underTest = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE), null);
     }
 
     @Test
     void whenNoKeyPressed_thenDoesNotMove() {
-        when(mapFacadeMock.isAccessible(anyInt(), anyInt())).thenReturn(true);
+        when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
 
         int initialX = underTest.getX();
         int initialY = underTest.getY();
 
-        underTest.move();
+        underTest.checkCollisionsAndMove(mapColliderMock);
 
         assertEquals(initialX, underTest.getX());
         assertEquals(initialY, underTest.getY());
@@ -51,13 +50,15 @@ class ManfredTest {
     @TestTemplate
     @UseDataProvider("provideInitialManfredCoordinates")
     public void wouldTriggerOnStep(int manfredX, int manfredY, boolean expectTriggerStepOn) {
+        when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
+
         underTest.setX(manfredX);
         underTest.setY(manfredY);
 
-        underTest.move();
+        underTest.checkCollisionsAndMove(mapColliderMock);
         Point resultingMapTile = underTest.getCenterMapTile();
 
-        assertEquals(expectTriggerStepOn, resultingMapTile.equals(new Point(0,0)));
+        assertEquals(expectTriggerStepOn, resultingMapTile.equals(new Point(0, 0)));
     }
 
     @DataProvider

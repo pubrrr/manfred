@@ -53,6 +53,7 @@ class ManfredControllerTest extends ControllerTestCase {
     private AttacksContainer attacksContainer;
     private TestGameConfig testGameConfig;
     private BackgroundScroller backgroundScrollerMock;
+    private MapCollider mapColliderMock;
 
     private ManfredController underTest;
 
@@ -60,8 +61,8 @@ class ManfredControllerTest extends ControllerTestCase {
     void init() {
         testGameConfig = (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE);
 
-        MapCollider colliderMock = mock(MapCollider.class);
-        when(colliderMock.collides(0, 0, 0, 0)).thenReturn(true);
+        mapColliderMock = mock(MapCollider.class);
+        when(mapColliderMock.collides(0, 0, 0, 0)).thenReturn(false);
 
         mapFacadeMock = mock(MapFacade.class);
         when(mapFacadeMock.stepOn(any())).thenReturn(null);
@@ -70,7 +71,7 @@ class ManfredControllerTest extends ControllerTestCase {
         attacksContainer = new AttacksContainer();
         backgroundScrollerMock = mock(BackgroundScroller.class);
 
-        manfred = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, colliderMock, testGameConfig, null);
+        manfred = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, testGameConfig, null);
 
         CastModeOn castModeOn = new CastModeOn(skillSet, attacksContainer, testGameConfig, manfred.getSprite(), null);
         Caster attackCaster = new Caster(new CastModeOff(castModeOn));
@@ -81,7 +82,7 @@ class ManfredControllerTest extends ControllerTestCase {
             manfred,
             enemiesWrapper,
             attacksContainer,
-            mock(MapCollider.class)
+            mapColliderMock
         );
 
         underTest = new ManfredController(
@@ -105,7 +106,7 @@ class ManfredControllerTest extends ControllerTestCase {
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_D);
 
         underTest.keyPressed(eventMock);
-        manfred.move();
+        manfred.checkCollisionsAndMove(mapColliderMock);
 
         assertTrue(initialX < manfred.getX());
         assertSame(initialY, manfred.getY());
@@ -121,7 +122,7 @@ class ManfredControllerTest extends ControllerTestCase {
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_A);
 
         underTest.keyPressed(eventMock);
-        manfred.move();
+        manfred.checkCollisionsAndMove(mapColliderMock);
 
         assertTrue(initialX > manfred.getX());
         assertSame(initialY, manfred.getY());
@@ -137,7 +138,7 @@ class ManfredControllerTest extends ControllerTestCase {
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_W);
 
         underTest.keyPressed(eventMock);
-        manfred.move();
+        manfred.checkCollisionsAndMove(mapColliderMock);
 
         assertSame(initialX, manfred.getX());
         assertTrue(initialY > manfred.getY());
@@ -153,7 +154,7 @@ class ManfredControllerTest extends ControllerTestCase {
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_S);
 
         underTest.keyPressed(eventMock);
-        manfred.move();
+        manfred.checkCollisionsAndMove(mapColliderMock);
 
         assertSame(initialX, manfred.getX());
         assertTrue(initialY < manfred.getY());
@@ -163,7 +164,7 @@ class ManfredControllerTest extends ControllerTestCase {
 
     private void assertStops(KeyEvent eventMock, int afterMoveX, int afterMoveY) {
         underTest.keyReleased(eventMock);
-        manfred.move();
+        manfred.checkCollisionsAndMove(mapColliderMock);
 
         assertSame(afterMoveX, manfred.getX());
         assertSame(afterMoveY, manfred.getY());
