@@ -242,7 +242,7 @@ class ManfredControllerTest extends ControllerTestCase {
         underTest.keyPressed(mockEventWithKey(KeyEvent.VK_SPACE));
 
         assertFalse(attacksContainer.isEmpty());
-        assertEquals(attackMock, attacksContainer.getPaintableContainerElements().pop().getPaintable());
+        assertEquals(attackMock, attacksContainer.getPaintableContainerElements().pop().getLocatedPaintable());
     }
 
     @Test

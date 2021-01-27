@@ -26,7 +26,7 @@ class BackgroundScrollerTest {
 
     @BeforeEach
     void init() {
-        manfredPosition = new Sprite(0, 0, 0, 0, 0, null);
+        manfredPosition = new Sprite(0, 0, 0, 0, 0);
 
         Manfred manfredMock = mock(Manfred.class);
         when(manfredMock.getSprite()).thenAnswer(invocationOnMock -> manfredPosition);

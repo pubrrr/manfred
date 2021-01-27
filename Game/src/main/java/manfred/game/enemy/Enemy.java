@@ -2,31 +2,32 @@ package manfred.game.enemy;
 
 import manfred.game.config.GameConfig;
 import manfred.game.characters.Manfred;
-import manfred.game.characters.MapCollider;
 import manfred.game.characters.MovingObject;
-import manfred.game.graphics.paintable.Paintable;
+import manfred.game.graphics.paintable.LocatedPaintable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Enemy extends MovingObject implements Paintable {
+public class Enemy extends MovingObject implements LocatedPaintable {
     private final String name;
     private final GameConfig gameConfig;
+    private final BufferedImage image;
     private final int aggroRadius;
 
     private int healthPoints;
 
     public Enemy(String name, int speed, int x, int y, int healthPoints, BufferedImage image, int aggroRadius, GameConfig gameConfig) {
-        super(speed, x, y, 2 * gameConfig.getPixelBlockSize(), 2 * gameConfig.getPixelBlockSize(), 2 * gameConfig.getPixelBlockSize(), image);
+        super(speed, x, y, 2 * gameConfig.getPixelBlockSize(), 2 * gameConfig.getPixelBlockSize(), 2 * gameConfig.getPixelBlockSize());
         this.name = name;
         this.healthPoints = healthPoints;
+        this.image = image;
         this.aggroRadius = aggroRadius;
         this.gameConfig = gameConfig;
     }
 
     @Override
     public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        sprite.paint(g, offset, x, y);
+        g.drawImage(this.image, this.sprite.x - offset.x, this.sprite.y - offset.y, this.sprite.width, this.sprite.height, null);
 
         g.setFont(new Font("Palatino Linotype", Font.BOLD, gameConfig.getPixelBlockSize() / 2));
 

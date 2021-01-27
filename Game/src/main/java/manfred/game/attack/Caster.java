@@ -2,13 +2,13 @@ package manfred.game.attack;
 
 import manfred.game.characters.Direction;
 import manfred.game.characters.Sprite;
-import manfred.game.graphics.paintable.Paintable;
+import manfred.game.graphics.paintable.LocatedPaintable;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
 
 @Component
-public class Caster implements Paintable {
+public class Caster implements LocatedPaintable {
     private CastMode castMode;
 
     public Caster(CastModeOff initialCastModeOff) {

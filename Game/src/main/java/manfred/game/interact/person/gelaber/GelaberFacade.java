@@ -44,7 +44,7 @@ public class GelaberFacade implements Paintable {
     }
 
     @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
+    public void paint(Graphics g) {
         currentTextLine.paint(g);
     }
 

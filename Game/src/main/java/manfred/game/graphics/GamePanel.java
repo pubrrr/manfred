@@ -6,7 +6,7 @@ import manfred.game.attack.Caster;
 import manfred.game.characters.Manfred;
 import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.graphics.paintable.GelaberOverlay;
-import manfred.game.graphics.paintable.Paintable;
+import manfred.game.graphics.paintable.LocatedPaintable;
 import manfred.game.graphics.paintable.PaintableContainerElement;
 import manfred.game.graphics.paintable.PaintablesContainer;
 import manfred.game.map.MapFacade;
@@ -77,16 +77,14 @@ public class GamePanel extends JPanel {
 
         Point offset = backgroundScroller.getOffset();
 
-        TreeMap<Integer, TreeMap<Integer, Paintable>> paintablesSortedByYAndX = paintablesSorter.sortByYAndX(this.paintablesContainers);
+        TreeMap<Integer, TreeMap<Integer, LocatedPaintable>> paintablesSortedByYAndX = paintablesSorter.sortByYAndX(this.paintablesContainers);
         paintablesSortedByYAndX.forEach(
             (y, paintablesAtY) -> paintablesAtY.forEach(
-                (x, paintable) -> {
-                    paintable.paint(g, offset, x, y);
-                }
+                (x, paintable) -> paintable.paint(g, offset, x, y)
             )
         );
 
-        gelaberOverlay.paint(g, offset, 0, 0);
+        gelaberOverlay.paint(g);
 
         if (fadeTransparency > 0) {
             g.setColor(new Color(255, 255, 255, fadeTransparency));

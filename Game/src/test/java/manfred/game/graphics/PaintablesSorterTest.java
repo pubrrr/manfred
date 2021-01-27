@@ -1,6 +1,6 @@
 package manfred.game.graphics;
 
-import manfred.game.graphics.paintable.Paintable;
+import manfred.game.graphics.paintable.LocatedPaintable;
 import manfred.game.graphics.paintable.PaintableContainerElement;
 import manfred.game.graphics.paintable.PaintablesContainer;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,18 +31,18 @@ class PaintablesSorterTest {
         PaintableContainerElement third = getPaintableContainerElementMock(1, 20);
         PaintableContainerElement fourth = getPaintableContainerElementMock(20, 20);
 
-        Paintable[] paintablesInExpectedOrder = new Paintable[]{
-            first.getPaintable(),
-            second.getPaintable(),
-            third.getPaintable(),
-            fourth.getPaintable()
+        LocatedPaintable[] paintablesInExpectedOrder = new LocatedPaintable[]{
+            first.getLocatedPaintable(),
+            second.getLocatedPaintable(),
+            third.getLocatedPaintable(),
+            fourth.getLocatedPaintable()
         };
 
         List<PaintablesContainer> input = setupTwoContainersWithElements(first, second, third, fourth);
 
-        TreeMap<Integer, TreeMap<Integer, Paintable>> result = underTest.sortByYAndX(input);
+        TreeMap<Integer, TreeMap<Integer, LocatedPaintable>> result = underTest.sortByYAndX(input);
 
-        Paintable[] paintablesInActualOrder = new Paintable[4];
+        LocatedPaintable[] paintablesInActualOrder = new LocatedPaintable[4];
         AtomicInteger i = new AtomicInteger();
         result.forEach(
             (y, paintablesAtY) -> paintablesAtY.forEach(
@@ -75,10 +75,6 @@ class PaintablesSorterTest {
     }
 
     private PaintableContainerElement getPaintableContainerElementMock(int x, int y) {
-        PaintableContainerElement elementMock = mock(PaintableContainerElement.class);
-        when(elementMock.getPaintable()).thenReturn(mock(Paintable.class));
-        when(elementMock.getX()).thenReturn(x);
-        when(elementMock.getY()).thenReturn(y);
-        return elementMock;
+        return new PaintableContainerElement(mock(LocatedPaintable.class), x, y);
     }
 }

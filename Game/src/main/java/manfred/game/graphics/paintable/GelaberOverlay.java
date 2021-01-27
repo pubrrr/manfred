@@ -6,21 +6,17 @@ import org.springframework.stereotype.Component;
 import java.awt.*;
 
 @Component
-public class GelaberOverlay implements Paintable {
+public class GelaberOverlay {
+    public static final Paintable EMPTY = (graphics) -> {/* paint nothing */};
 
-    private Paintable gelaber;
+    private Paintable gelaber = EMPTY;
 
-    public GelaberOverlay(Empty empty) {
-        this.gelaber = empty;
-    }
-
-    @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        gelaber.paint(g, offset, x, y);
+    public void paint(Graphics g) {
+        gelaber.paint(g);
     }
 
     public void clear() {
-        this.gelaber = new Empty();
+        this.gelaber = EMPTY;
     }
 
     public void setGelaber(GelaberFacade gelaberFacade) {

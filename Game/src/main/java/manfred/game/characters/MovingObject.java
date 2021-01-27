@@ -1,11 +1,8 @@
 package manfred.game.characters;
 
-import manfred.game.graphics.paintable.Paintable;
+import manfred.game.graphics.paintable.LocatedPaintable;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-
-abstract public class MovingObject implements Paintable {
+abstract public class MovingObject implements LocatedPaintable {
     protected Sprite sprite;
     protected final int speed;
 
@@ -18,9 +15,9 @@ abstract public class MovingObject implements Paintable {
     protected int currentSpeedX = 0;
     protected int currentSpeedY = 0;
 
-    protected MovingObject(int speed, int x, int y, int width, int spriteHeight, int baseHeight, BufferedImage image) {
+    protected MovingObject(int speed, int x, int y, int width, int spriteHeight, int baseHeight) {
         this.speed = speed;
-        this.sprite = new Sprite(x, y, width, spriteHeight, baseHeight, image);
+        this.sprite = new Sprite(x, y, width, spriteHeight, baseHeight);
     }
 
     public int getX() {
@@ -110,11 +107,6 @@ abstract public class MovingObject implements Paintable {
 
     public Direction getDirection() {
         return this.viewDirection;
-    }
-
-    @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        this.sprite.paint(g, offset, x, y);
     }
 
     public void checkForVerticalViewDirection() {

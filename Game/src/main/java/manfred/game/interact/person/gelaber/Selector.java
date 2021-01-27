@@ -1,7 +1,6 @@
 package manfred.game.interact.person.gelaber;
 
 import manfred.game.config.GameConfig;
-import manfred.game.graphics.paintable.Paintable;
 
 import java.awt.*;
 import java.util.Iterator;
