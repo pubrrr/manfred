@@ -15,7 +15,7 @@ public abstract class BasicTextLine implements TextLine {
     }
 
     @Override
-    public final void paint(Graphics g, Point offset, Integer x, Integer y) {
+    public final void paint(Graphics g) {
         g.setColor(Color.YELLOW);
         g.fillRect(gameConfig.getTextBoxPositionX(), gameConfig.getTextBoxPositionY(), gameConfig.getTextBoxWidth(), gameConfig.getTextBoxHeight());
 
