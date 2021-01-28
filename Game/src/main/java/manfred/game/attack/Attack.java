@@ -3,13 +3,13 @@ package manfred.game.attack;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.MovingObject;
 import manfred.game.enemy.Enemy;
-import manfred.game.graphics.paintable.Paintable;
+import manfred.game.graphics.paintable.LocatedPaintable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class Attack extends MovingObject implements Paintable {
+public class Attack extends MovingObject implements LocatedPaintable {
     private final int damage;
     private final int range;
     private boolean resolved = false;
@@ -27,13 +27,12 @@ public class Attack extends MovingObject implements Paintable {
         int y,
         int width,
         int height,
-        MapCollider collider,
         int damage,
         int range,
         List<BufferedImage> attackAnimation,
         int numberOfAnimationImages
     ) {
-        super(speed, x, y, width, height, height, null, collider);
+        super(speed, x, y, width, height, height);
         this.castPosition = this.sprite.getCenter();
         this.damage = damage;
         this.range = range;
@@ -43,9 +42,9 @@ public class Attack extends MovingObject implements Paintable {
     }
 
     @Override
-    public void move() {
-        if (collidesVertically() || collidesHorizontally()) {
-            resolve();
+    public void checkCollisionsAndMove(MapCollider mapCollider) {
+        if (collidesVertically(mapCollider) || collidesHorizontally(mapCollider)) {
+            this.resolve();
         }
         this.sprite.translate(currentSpeedX, currentSpeedY);
 

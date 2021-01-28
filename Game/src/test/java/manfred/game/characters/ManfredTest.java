@@ -5,8 +5,6 @@ import com.tngtech.junit.dataprovider.DataProviderExtension;
 import com.tngtech.junit.dataprovider.UseDataProvider;
 import com.tngtech.junit.dataprovider.UseDataProviderExtension;
 import helpers.TestGameConfig;
-import helpers.TestMapFactory;
-import manfred.game.map.Map;
 import manfred.game.map.MapFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -26,25 +25,23 @@ class ManfredTest {
 
     private Manfred underTest;
 
-    private MapFacade mapFacadeMock;
+    private MapCollider mapColliderMock;
 
     @BeforeEach
     void init() {
-        MapCollider colliderMock = mock(MapCollider.class);
-        mapFacadeMock = mock(MapFacade.class);
+        mapColliderMock = mock(MapCollider.class);
 
-        underTest = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, colliderMock, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE), null);
+        underTest = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE), null);
     }
 
     @Test
     void whenNoKeyPressed_thenDoesNotMove() {
-        Map map = TestMapFactory.create(new String[][]{{"1"}}, null);
-        when(mapFacadeMock.getMap()).thenReturn(map);
+        when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
 
         int initialX = underTest.getX();
         int initialY = underTest.getY();
 
-        underTest.moveTo();
+        underTest.checkCollisionsAndMove(mapColliderMock);
 
         assertEquals(initialX, underTest.getX());
         assertEquals(initialY, underTest.getY());
@@ -53,12 +50,15 @@ class ManfredTest {
     @TestTemplate
     @UseDataProvider("provideInitialManfredCoordinates")
     public void wouldTriggerOnStep(int manfredX, int manfredY, boolean expectTriggerStepOn) {
+        when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
+
         underTest.setX(manfredX);
         underTest.setY(manfredY);
 
-        Point resultingMapTile = underTest.moveTo();
+        underTest.checkCollisionsAndMove(mapColliderMock);
+        Point resultingMapTile = underTest.getCenterMapTile();
 
-        assertEquals(expectTriggerStepOn, resultingMapTile.equals(new Point(0,0)));
+        assertEquals(expectTriggerStepOn, resultingMapTile.equals(new Point(0, 0)));
     }
 
     @DataProvider

@@ -2,6 +2,7 @@ package manfred.game.map;
 
 import manfred.game.config.GameConfig;
 import manfred.game.controls.ControllerInterface;
+import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.ManfredController;
 import manfred.game.graphics.paintable.PaintableContainerElement;
 import manfred.game.interact.Interactable;
@@ -44,7 +45,7 @@ public class Map {
             : Interactable.idle();
     }
 
-    public Function<ManfredController, ControllerInterface> stepOn(Point mapTile) {
+    public ControllerStateMapper<ManfredController, ControllerInterface> stepOn(Point mapTile) {
         return mapTiles.get(mapTile.x).get(mapTile.y).onStep();
     }
 

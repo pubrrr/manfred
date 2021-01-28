@@ -1,13 +1,12 @@
 package manfred.game.interact.person.gelaber;
 
 import manfred.game.config.GameConfig;
-import manfred.game.graphics.paintable.Paintable;
 
 import java.awt.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ChoicesFacade implements Paintable {
+public class ChoicesFacade {
     private final GameConfig gameConfig;
     private final java.util.List<GelaberEdge> edgesToChooseFrom;
     private final Selector selector;
@@ -30,15 +29,14 @@ public class ChoicesFacade implements Paintable {
         return this.selector.confirm();
     }
 
-    @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
+    public void paint(Graphics g) {
         g.setColor(Color.YELLOW);
         g.fillRect(gameConfig.getGelaberBoxPositionX(), gameConfig.getGelaberBoxPositionY(), 500, 500);
 
         g.setColor(Color.BLACK);
         g.setFont(new Font("Palatino Linotype", Font.BOLD, gameConfig.getTextPointSize()));
 
-        this.selector.paint(g, offset, x, y);
+        this.selector.paint(g);
 
         AtomicInteger idx = new AtomicInteger();
         edgesToChooseFrom.forEach(edge -> g.drawString(

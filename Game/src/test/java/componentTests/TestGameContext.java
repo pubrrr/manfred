@@ -21,19 +21,4 @@ public class TestGameContext extends GameContext {
     public GameConfig gameConfig(ConfigProvider configReader, ConfigConverter configConverter) {
         return new TestGameConfig();
     }
-
-    @Bean
-    public ImageLoader imageLoader() {
-        return mock(ImageLoader.class);
-    }
-
-    @Bean
-    public AttackReader attackReader() {
-        return mock(AttackReader.class);
-    }
-
-    @Bean
-    public AttackGeneratorConverter attackGeneratorConverter() {
-        return mock(AttackGeneratorConverter.class);
-    }
 }

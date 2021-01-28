@@ -1,7 +1,7 @@
 package manfred.game.graphics;
 
-import manfred.game.config.GameConfig;
 import manfred.game.characters.Manfred;
+import manfred.game.config.GameConfig;
 import manfred.game.map.MapFacade;
 
 import java.awt.*;
@@ -10,9 +10,9 @@ public class BackgroundScroller {
     private final int triggerScrollDistanceToBorder;
     private final Manfred manfred;
     private final MapFacade mapFacade;
-    private GameConfig gameConfig;
+    private final GameConfig gameConfig;
 
-    private Point offset = new Point(0, 0);
+    private final Point offset = new Point(0, 0);
 
     public BackgroundScroller(int triggerScrollDistanceToBorder, Manfred manfred, MapFacade mapFacade, GameConfig gameConfig) {
         this.triggerScrollDistanceToBorder = triggerScrollDistanceToBorder;
@@ -24,11 +24,11 @@ public class BackgroundScroller {
     public Point getOffset() {
         updateX();
         updateY();
-        return offset;
+        return new Point(offset);
     }
 
     private void updateX() {
-        int mapSizeX = mapFacade.getMap().sizeX() * gameConfig.getPixelBlockSize();
+        int mapSizeX = mapFacade.getMapSizeX() * gameConfig.getPixelBlockSize();
         if (mapSizeX < gameConfig.getWindowWidth()) {
             offset.x = -(gameConfig.getWindowWidth() - mapSizeX) / 2;
             return;
@@ -51,7 +51,7 @@ public class BackgroundScroller {
     }
 
     private void updateY() {
-        int mapSizeY = mapFacade.getMap().sizeY() * gameConfig.getPixelBlockSize();
+        int mapSizeY = mapFacade.getMapSizeY() * gameConfig.getPixelBlockSize();
         if (mapSizeY < gameConfig.getWindowHeight()) {
             offset.y = -(gameConfig.getWindowHeight() - mapSizeY) / 2;
             return;
@@ -74,7 +74,7 @@ public class BackgroundScroller {
     }
 
     public void centerTo(Point center) {
-        int mapSizeX = mapFacade.getMap().sizeX() * gameConfig.getPixelBlockSize();
+        int mapSizeX = mapFacade.getMapSizeX() * gameConfig.getPixelBlockSize();
         if (mapSizeX > gameConfig.getWindowWidth()) {
             offset.x = Math.max(
                     center.x - gameConfig.getWindowWidth() / 2,
@@ -87,7 +87,7 @@ public class BackgroundScroller {
             offset.x = -(gameConfig.getWindowWidth() - mapSizeX) / 2;
         }
 
-        int mapSizeY = mapFacade.getMap().sizeY() * gameConfig.getPixelBlockSize();
+        int mapSizeY = mapFacade.getMapSizeY() * gameConfig.getPixelBlockSize();
         if (mapSizeY > gameConfig.getWindowHeight()) {
             offset.y = Math.max(
                     center.y - gameConfig.getWindowHeight() / 2,

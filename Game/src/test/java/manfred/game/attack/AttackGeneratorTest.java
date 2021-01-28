@@ -19,19 +19,21 @@ class AttackGeneratorTest {
 
     AttackGenerator underTest;
 
+    private MapCollider mapColliderMock;
+
     @BeforeEach
     void init() {
-        MapCollider mapColliderMock = mock(MapCollider.class);
+        mapColliderMock = mock(MapCollider.class);
         when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
 
-        underTest = new AttackGenerator(SPEED, SIZE, SIZE, mapColliderMock, 3, 4, List.of(), 1);
+        underTest = new AttackGenerator(SPEED, SIZE, SIZE, 3, 4, List.of(), 1);
     }
 
     @Test
     void generateMovingLeft() {
         Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.LEFT);
 
-        result.move();
+        result.checkCollisionsAndMove(mapColliderMock);
         assertEquals(-SPEED, result.getX());
         assertEquals(0, result.getY());
     }
@@ -40,7 +42,7 @@ class AttackGeneratorTest {
     void generateMovingRight() {
         Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.RIGHT);
 
-        result.move();
+        result.checkCollisionsAndMove(mapColliderMock);
         assertEquals(SPEED, result.getX());
         assertEquals(0, result.getY());
     }
@@ -49,7 +51,7 @@ class AttackGeneratorTest {
     void generateMovingUp() {
         Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.UP);
 
-        result.move();
+        result.checkCollisionsAndMove(mapColliderMock);
         assertEquals(0, result.getX());
         assertEquals(-SPEED, result.getY());
     }
@@ -58,7 +60,7 @@ class AttackGeneratorTest {
     void generateMovingDown() {
         Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.DOWN);
 
-        result.move();
+        result.checkCollisionsAndMove(mapColliderMock);
         assertEquals(0, result.getX());
         assertEquals(SPEED, result.getY());
     }

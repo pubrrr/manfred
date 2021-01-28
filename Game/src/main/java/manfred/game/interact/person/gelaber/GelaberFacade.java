@@ -1,6 +1,7 @@
 package manfred.game.interact.person.gelaber;
 
 import manfred.game.controls.ControllerInterface;
+import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.GelaberController;
 import manfred.game.graphics.paintable.Paintable;
 import manfred.game.interact.person.textLineFactory.TextLineFactory;
@@ -8,7 +9,6 @@ import manfred.game.interact.person.textLineFactory.TextLineFactory;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 public class GelaberFacade implements Paintable {
     private final GelaberGraphMatrix gelaberGraphMatrix;
@@ -29,7 +29,7 @@ public class GelaberFacade implements Paintable {
         this.currentTextLine = buildTextLine(initialGelaberNodeIdentifier);
     }
 
-    public Function<GelaberController, ControllerInterface> next() {
+    public ControllerStateMapper<GelaberController, ControllerInterface> next() {
         GelaberResponseWrapper response = currentTextLine.next(this::buildTextLine);
         this.currentTextLine = response.getNextTextLine();
         return response.getContinueCommand();
@@ -44,8 +44,8 @@ public class GelaberFacade implements Paintable {
     }
 
     @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        currentTextLine.paint(g, offset, x, y);
+    public void paint(Graphics g) {
+        currentTextLine.paint(g);
     }
 
     private TextLine buildTextLine(GelaberNodeIdentifier identifier) {

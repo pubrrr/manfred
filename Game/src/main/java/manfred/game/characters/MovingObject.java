@@ -1,11 +1,8 @@
 package manfred.game.characters;
 
-import manfred.game.graphics.paintable.Paintable;
+import manfred.game.graphics.paintable.LocatedPaintable;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-
-abstract public class MovingObject implements Paintable {
+abstract public class MovingObject implements LocatedPaintable {
     protected Sprite sprite;
     protected final int speed;
 
@@ -15,15 +12,12 @@ abstract public class MovingObject implements Paintable {
     protected boolean movesDown = false;
     protected Direction viewDirection = Direction.DOWN;
 
-    protected MapCollider collider;
-
     protected int currentSpeedX = 0;
     protected int currentSpeedY = 0;
 
-    protected MovingObject(int speed, int x, int y, int width, int spriteHeight, int baseHeight, BufferedImage image, MapCollider collider) {
+    protected MovingObject(int speed, int x, int y, int width, int spriteHeight, int baseHeight) {
         this.speed = speed;
-        this.sprite = new Sprite(x, y, width, spriteHeight, baseHeight, image);
-        this.collider = collider;
+        this.sprite = new Sprite(x, y, width, spriteHeight, baseHeight);
     }
 
     public int getX() {
@@ -79,18 +73,18 @@ abstract public class MovingObject implements Paintable {
         currentSpeedY = 0;
     }
 
-    public void move() {
-        if (!collidesVertically()) {
+    public void checkCollisionsAndMove(MapCollider mapCollider) {
+        if (!collidesVertically(mapCollider)) {
             this.sprite.translate(currentSpeedX, 0);
         }
 
-        if (!collidesHorizontally()) {
+        if (!collidesHorizontally(mapCollider)) {
             this.sprite.translate(0, currentSpeedY);
         }
     }
 
-    protected boolean collidesVertically() {
-        return collider.collides(
+    protected boolean collidesVertically(MapCollider mapCollider) {
+        return mapCollider.collides(
                 this.sprite.getLeft() + currentSpeedX,
                 this.sprite.getRight() - 1 + currentSpeedX,
                 this.sprite.getBaseTop(),
@@ -98,8 +92,8 @@ abstract public class MovingObject implements Paintable {
         );
     }
 
-    protected boolean collidesHorizontally() {
-        return collider.collides(
+    protected boolean collidesHorizontally(MapCollider mapCollider) {
+        return mapCollider.collides(
                 this.sprite.getLeft(),
                 this.sprite.getRight() - 1,
                 this.sprite.getBaseTop() + currentSpeedY,
@@ -113,11 +107,6 @@ abstract public class MovingObject implements Paintable {
 
     public Direction getDirection() {
         return this.viewDirection;
-    }
-
-    @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        this.sprite.paint(g, offset, x, y);
     }
 
     public void checkForVerticalViewDirection() {

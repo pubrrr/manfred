@@ -1,7 +1,6 @@
 package manfred.game.interact.person.gelaber;
 
 import manfred.game.config.GameConfig;
-import manfred.game.graphics.paintable.Paintable;
 
 import java.awt.*;
 import java.util.Iterator;
@@ -9,7 +8,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class Selector implements Paintable {
+public class Selector {
 
     private Choice currentSelection;
 
@@ -55,11 +54,11 @@ public class Selector implements Paintable {
         return this.currentSelection.edge;
     }
 
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        this.currentSelection.paint(g, offset, x, y);
+    public void paint(Graphics g) {
+        this.currentSelection.paint(g);
     }
 
-    private static class Choice implements Paintable {
+    private static class Choice {
         private Choice next;
         private Choice previous;
         private final GelaberEdge edge;
@@ -75,8 +74,7 @@ public class Selector implements Paintable {
             previous.next = this;
         }
 
-        @Override
-        public void paint(Graphics g, Point offset, Integer x, Integer y) {
+        public void paint(Graphics g) {
             selectionMarker.paint(g);
         }
     }

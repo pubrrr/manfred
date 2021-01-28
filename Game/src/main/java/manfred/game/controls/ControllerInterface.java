@@ -12,10 +12,6 @@ public interface ControllerInterface {
 
     ControllerInterface move();
 
-    static ControllerInterface self(ControllerInterface self) {
-        return self;
-    }
-
     static ControllerInterface sleepWhileWorkingOn(SwingWorker<ManfredController, Void> worker) {
         SleepingController sleepingController = new SleepingController(worker);
         worker.execute();

@@ -29,9 +29,9 @@ public class ChoicesBox implements TextLine {
     }
 
     @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        choicesText.paint(g, offset, x, y);
+    public void paint(Graphics g) {
+        choicesText.paint(g);
 
-        choicesFacade.paint(g, offset, x, y);
+        choicesFacade.paint(g);
     }
 }

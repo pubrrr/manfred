@@ -10,18 +10,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class EnemyTest {
-    private final int AGGRO_RADIUS = 10;
-    private final int SPEED = 4;
-    private static final int PIXEL_BLOCK_SIZE = 40;
+    private final static int AGGRO_RADIUS = 10;
+    private final static int SPEED = 4;
+    private final static int PIXEL_BLOCK_SIZE = 40;
 
     private Enemy underTest;
 
+    private MapCollider mapColliderMock;
+
     @BeforeEach
     void init() {
-        MapCollider mapColliderMock = mock(MapCollider.class);
+        mapColliderMock = mock(MapCollider.class);
         when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
 
-        underTest = new Enemy("name", SPEED, 0, 0, 100, null, mapColliderMock, AGGRO_RADIUS, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
+        underTest = new Enemy("name", SPEED, 0, 0, 100, null, AGGRO_RADIUS, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
     }
 
     @Test
@@ -29,11 +31,13 @@ class EnemyTest {
         int initialX = underTest.getX();
         int initialY = underTest.getY();
 
-        underTest.move(mockManfredAtCoordinates(AGGRO_RADIUS + 1, 0));
+        underTest.determineSpeed(mockManfredAtCoordinates(AGGRO_RADIUS + 1, 0));
+        underTest.checkCollisionsAndMove(mapColliderMock);
         assertEquals(initialX, underTest.getX());
         assertEquals(initialY, underTest.getY());
 
-        underTest.move(mockManfredAtCoordinates(0, AGGRO_RADIUS + 1));
+        underTest.determineSpeed(mockManfredAtCoordinates(0, AGGRO_RADIUS + 1));
+        underTest.checkCollisionsAndMove(mapColliderMock);
         assertEquals(initialX, underTest.getX());
         assertEquals(initialY, underTest.getY());
     }
@@ -43,7 +47,8 @@ class EnemyTest {
         int initialX = underTest.getX();
         int initialY = underTest.getY();
 
-        underTest.move(mockManfredAtCoordinates(AGGRO_RADIUS, 0));
+        underTest.determineSpeed(mockManfredAtCoordinates(AGGRO_RADIUS, 0));
+        underTest.checkCollisionsAndMove(mapColliderMock);
         assertEquals(initialX + SPEED, underTest.getX());
         assertEquals(initialY, underTest.getY());
     }
@@ -53,7 +58,8 @@ class EnemyTest {
         int initialX = underTest.getX();
         int initialY = underTest.getY();
 
-        underTest.move(mockManfredAtCoordinates(0, AGGRO_RADIUS));
+        underTest.determineSpeed(mockManfredAtCoordinates(0, AGGRO_RADIUS));
+        underTest.checkCollisionsAndMove(mapColliderMock);
         assertEquals(initialX, underTest.getX());
         assertEquals(initialY + SPEED, underTest.getY());
     }
@@ -63,7 +69,8 @@ class EnemyTest {
         int initialX = underTest.getX();
         int initialY = underTest.getY();
 
-        underTest.move(mockManfredAtCoordinates(AGGRO_RADIUS / 2, AGGRO_RADIUS / 2));
+        underTest.determineSpeed(mockManfredAtCoordinates(AGGRO_RADIUS / 2, AGGRO_RADIUS / 2));
+        underTest.checkCollisionsAndMove(mapColliderMock);
         assertEquals(initialX + SPEED / 2, underTest.getX());
         assertEquals(initialY + SPEED / 2, underTest.getY());
     }
@@ -73,7 +80,8 @@ class EnemyTest {
         int initialX = underTest.getX();
         int initialY = underTest.getY();
 
-        underTest.move(mockManfredAtCoordinates(AGGRO_RADIUS * 3 / 4, AGGRO_RADIUS / 4));
+        underTest.determineSpeed(mockManfredAtCoordinates(AGGRO_RADIUS * 3 / 4, AGGRO_RADIUS / 4));
+        underTest.checkCollisionsAndMove(mapColliderMock);
         assertEquals(initialX + SPEED * 3 / 4, underTest.getX());
         assertEquals(initialY + SPEED / 4, underTest.getY());
     }

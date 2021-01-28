@@ -1,13 +1,13 @@
 package manfred.game.characters;
 
 import manfred.game.config.GameConfig;
-import manfred.game.graphics.paintable.Paintable;
+import manfred.game.graphics.paintable.LocatedPaintable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
-public class Manfred extends MovingObject implements Paintable {
+public class Manfred extends MovingObject implements LocatedPaintable {
     public static final int ANIMATION_IMAGES_NUMBER = 8;
     private static final int INTERACT_DISTANCE = 10;
     private static final int NEXT_ANIMATION_IMAGE_TRIGGER = 4;
@@ -26,11 +26,10 @@ public class Manfred extends MovingObject implements Paintable {
         int spriteWidth,
         int spriteHeight,
         int healthPoints,
-        MapCollider collider,
         GameConfig gameConfig,
         HashMap<Direction, BufferedImage[]> walkAnimation
     ) {
-        super(speed, x, y, spriteWidth, spriteHeight, gameConfig.getPixelBlockSize(), null, collider);
+        super(speed, x, y, spriteWidth, spriteHeight, gameConfig.getPixelBlockSize());
         this.healthPoints = healthPoints;
         this.gameConfig = gameConfig;
         this.walkAnimation = walkAnimation;
@@ -47,8 +46,9 @@ public class Manfred extends MovingObject implements Paintable {
         this.sprite.y = y + sprite.getBaseHeight() - sprite.getSpriteHeight();
     }
 
-    public Point moveTo() {
-        super.move();
+    @Override
+    public void checkCollisionsAndMove(MapCollider mapCollider) {
+        super.checkCollisionsAndMove(mapCollider);
 
         if (currentSpeedX == 0 && currentSpeedY == 0) {
             framesCounter = 0;
@@ -63,11 +63,9 @@ public class Manfred extends MovingObject implements Paintable {
                 }
             }
         }
-
-        return getCenterMapTile();
     }
 
-    protected Point getCenterMapTile() {
+    public Point getCenterMapTile() {
         Point center = this.sprite.getCenter();
         return new Point(center.x / gameConfig.getPixelBlockSize(), center.y / gameConfig.getPixelBlockSize());
     }
