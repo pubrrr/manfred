@@ -2,12 +2,12 @@ package rayengine.casters;
 
 import static rayengine.dummy.MathUtil.RADIANTS_PER_DEGREE;
 
+import java.awt.Point;
 import java.io.File;
 
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 
 import rayengine.dummy.databinding.RayModel;

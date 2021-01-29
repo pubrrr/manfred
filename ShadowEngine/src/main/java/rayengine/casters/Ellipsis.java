@@ -3,9 +3,8 @@ package rayengine.casters;
 import static rayengine.dummy.MathUtil.RADIANTS_PER_DEGREE;
 import static rayengine.dummy.MathUtil.square;
 
+import java.awt.Point;
 import java.util.Optional;
-
-import org.eclipse.swt.graphics.Point;
 
 import rayengine.dummy.MathUtil;
 import rayengine.dummy.Pair;

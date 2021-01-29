@@ -2,13 +2,13 @@ package rayengine.algorithms;
 
 import static rayengine.dummy.MathUtil.RADIANTS_PER_DEGREE;
 
+import java.awt.Point;
 import java.util.Optional;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;

@@ -1,6 +1,6 @@
 package rayengine.dummy;
 
-import org.eclipse.swt.graphics.Point;
+import java.awt.Point;
 
 public class MathUtil {
 

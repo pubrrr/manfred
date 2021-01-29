@@ -10,19 +10,25 @@ public class Bounds{
 	private int upperBound = -1;
 	
 	public Bounds(int lowerBound, int upperBound) {
-		if(lowerBound > -1 && upperBound > lowerBound) {
+		if(lowerBound > -1 && upperBound >= lowerBound) {
 			this.lowerBound = lowerBound;
 			this.upperBound = upperBound;
+		} else {
+			throw new IllegalArgumentException("Bounds have to be positive and upper bound has to be larger than lower bound.");
 		}
-		throw new IllegalArgumentException("Bounds have to be positive and upper bound has to be larger than lower bound.");
 	}
 	
 	public Bounds(byte[] alphaData, int startingIndex, int width) {
-		lowerBound = getFirstNonTransparentIndex(alphaData, startingIndex, startingIndex + width, true);
-		if(lowerBound != -1) {
-			lowerBound -= startingIndex;
-			upperBound = getFirstNonTransparentIndex(alphaData, startingIndex + lowerBound, startingIndex + width, false) - startingIndex;
+		if(startingIndex > -1 && width > 0 && startingIndex+width <= alphaData.length) {
+			lowerBound = getFirstNonTransparentIndex(alphaData, startingIndex, startingIndex + width, true);
+			if(lowerBound != -1) {
+				lowerBound -= startingIndex;
+				upperBound = getFirstNonTransparentIndex(alphaData, startingIndex + lowerBound, startingIndex + width, false) - startingIndex;
+			}
+		} else {
+			throw new IndexOutOfBoundsException();
 		}
+		
 	}
 	
 	private int getFirstNonTransparentIndex(byte[] alphaData, int smallestIndex, int biggestIndex, boolean fromLeftToRight) {

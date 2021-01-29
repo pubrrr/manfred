@@ -1,7 +1,8 @@
 package rayengine.casters;
 
+import java.awt.Point;
+
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Point;
 
 import rayengine.dummy.MathUtil;
 import rayengine.dummy.Pair;
