@@ -9,8 +9,8 @@ import manfred.game.interact.Interactable;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.Stack;
-import java.util.function.Function;
 
 public class Map {
     private final List<List<MapTile>> mapTiles;
@@ -63,5 +63,66 @@ public class Map {
         }
 
         return elements;
+    }
+
+    public Coordinate coordinateAt(int x, int y) {
+        Coordinate bottomRight = topRight();
+        if (x > bottomRight.x) {
+            x = bottomRight.x;
+        }
+        if (x < 0) {
+            x = 0;
+        }
+        if (y > bottomRight.y) {
+            y = bottomRight.y;
+        }
+        if (y < 0) {
+            y = 0;
+        }
+        return new Coordinate(x, y);
+    }
+
+    public Coordinate topRight() {
+        return new Coordinate(
+            this.sizeX() * Coordinate.TILE_SIZE - 1,
+            this.sizeY() * Coordinate.TILE_SIZE - 1
+        );
+    }
+
+    public static class Coordinate {
+        private static final int TILE_SIZE = 100;
+
+        private final int x;
+        private final int y;
+
+        private Coordinate(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        public Coordinate translate(Vector vector) {
+            return new Coordinate(this.x + vector.x(), this.y + vector.y());
+        }
+
+        public Vector distanceTo(Coordinate other) {
+            return Vector.of(other.x - this.x, other.y - this.y);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            Coordinate that = (Coordinate) o;
+            return x == that.x && y == that.y;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(x, y);
+        }
     }
 }
