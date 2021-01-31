@@ -8,7 +8,7 @@ import rayengine.algorithms.IShadowAlgorithm;
 public class RayModel {
 	private static int inclination;
 	private static double inclinationFactor;
-	private static int pixelSize = 4;
+	private static int pixelSize = 8;
 	private static int azimuth;
 	private static int altitude;
 	private static IShadowAlgorithm rayAlgorithm;

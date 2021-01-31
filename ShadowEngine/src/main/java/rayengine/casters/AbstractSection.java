@@ -1,6 +1,7 @@
 package rayengine.casters;
 
 import java.awt.Point;
+import java.text.MessageFormat;
 
 import org.eclipse.swt.graphics.GC;
 
@@ -8,25 +9,24 @@ import rayengine.dummy.MathUtil;
 import rayengine.dummy.Pair;
 
 public abstract class AbstractSection {
-	protected int bottomBorder;
 	protected int leftBorder;
+	protected int bottomBorder;
 	protected int width;
 	protected int height;
 	
-	public AbstractSection(int bottomBorder, int leftBorder, int width, int height) {
-		this.bottomBorder = bottomBorder;
+	public AbstractSection(int leftBorder, int bottomBorder, int width, int height) {
+		this(width, height);
 		this.leftBorder = leftBorder;
-		this.width = width;
-		this.height = height;
+		this.bottomBorder = bottomBorder;
 	}
 	
 	public AbstractSection(int width, int height) {
-		this.width = width;
-		this.height = height;
-	}
-	
-	public boolean contains(Point point) {
-		return contains(point.x, point.y);
+		if(width >= 0 && height >= 0) {
+			this.width = width;
+			this.height = height;
+		} else {
+			throw new IllegalArgumentException("Sections cannot have negative dimensions");
+		}
 	}
 	
 	public void setBorderCoordinates(int leftBorder, int bottomBorder) {
@@ -53,8 +53,6 @@ public abstract class AbstractSection {
 	public int getHeight() {
 		return height;
 	}
-	
-	public abstract boolean contains(int x, int y);
 	
 	public void drawFill(GC gc, Point displacement) {
 		draw(gc, displacement, getDrawFillConsumer());
@@ -87,18 +85,25 @@ public abstract class AbstractSection {
 		return MathUtil.add(getCenter(), relativeCoordinate);
 	}
 	
+	public final boolean oneContainsTheOther(AbstractSection otherSection) {
+		if(otherSection.getClass().equals(this.getClass())){
+			return internalOneContainsTheOther(otherSection);
+		}
+		throw new IllegalArgumentException("Fick deine Mama");
+	}
+	
 	protected abstract ISectionDrawConsumer getDrawFillConsumer();
 	
 	protected abstract ISectionDrawConsumer getDrawOutlineConsumer();
 	
 	public abstract Pair<Pair<Point>> calculateCommonTangents(AbstractSection otherSection);
 	
-	public final boolean oneContainsTheOther(AbstractSection otherSection) {
-		if(otherSection.getClass().equals(this.getClass())){
-			return doOneContainsTheOther(otherSection);
-		}
-		throw new IllegalArgumentException("Fick deine Mama");
-	}
+	public abstract boolean contains(Point point);
 
-	protected abstract boolean doOneContainsTheOther(AbstractSection otherSection);
+	protected abstract boolean internalOneContainsTheOther(AbstractSection otherSection);
+	
+	@Override
+	public String toString() {
+		return MessageFormat.format("at:[{0},{1}] with:[{2},{3}]", leftBorder, bottomBorder, width, height);
+	}
 }

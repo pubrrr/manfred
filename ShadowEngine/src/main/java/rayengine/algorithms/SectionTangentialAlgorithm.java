@@ -55,13 +55,13 @@ public class SectionTangentialAlgorithm implements IShadowAlgorithm{
 
 		for(int row = 0; row < sections.length; row++) {
 			Ellipsis ellipsis = (Ellipsis) sections[row];
-			Pair<Point> relativeTangentialPoints = ellipsis.calculateRayTangentialPoints(azimuth, squareTanOfAzimuth);
-			Point tangetialPoint1 = ellipsis.getAbsolute(relativeTangentialPoints.getValue1());
-			Point tangetialPoint2 = ellipsis.getAbsolute(relativeTangentialPoints.getValue2());
-			polygonCoordinates[row*2] = tangetialPoint1.x;
-			polygonCoordinates[row*2+1] = tangetialPoint1.y;
-			polygonCoordinates[polygonCoordinates.length - 2 - row*2] = tangetialPoint2.x;
-			polygonCoordinates[polygonCoordinates.length - 1 - row*2] = tangetialPoint2.y;
+			Pair<Point> relativeTangentialPoints = ellipsis.calculateRelativeTangentialPoints(azimuth, squareTanOfAzimuth);
+			Point tangetialPoint1 = ellipsis.getAbsolute(MathUtil.filpY(relativeTangentialPoints.getValue1()));
+			Point tangetialPoint2 = ellipsis.getAbsolute(MathUtil.filpY(relativeTangentialPoints.getValue2()));
+			polygonCoordinates[row*2] = tangetialPoint1.x + characterBottomLeft.x;
+			polygonCoordinates[row*2+1] = tangetialPoint1.y + characterBottomLeft.y;
+			polygonCoordinates[polygonCoordinates.length - 2 - row*2] = tangetialPoint2.x + characterBottomLeft.x;
+			polygonCoordinates[polygonCoordinates.length - 1 - row*2] = tangetialPoint2.y + characterBottomLeft.y;
 		}
 		return polygonCoordinates;
 	}

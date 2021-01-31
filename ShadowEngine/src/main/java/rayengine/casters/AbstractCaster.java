@@ -61,7 +61,7 @@ public abstract class AbstractCaster<T extends AbstractSection> {
 			int distanceFromBottom = height-row-1;
 			AbstractSection section = sections[row];
 			int leftProjectedEllipsisBorder = pixelSize*leftToRightBounds[row].getLowerBound() + (int) Math.round(distanceFromBottom*relativeProjectionShiftX*pixelSize);
-			int bottomProjectedEllipsisBorder = (bottomOffsetY - frontToBackBounds[row].getLowerBound())*pixelSize + (int) Math.round(distanceFromBottom*relativeProjectionShiftY*pixelSize);
+			int bottomProjectedEllipsisBorder = (int) Math.round((bottomOffsetY - frontToBackBounds[row].getLowerBound())*pixelSize*RayModel.getInclinationFactor()) + (int) Math.round(distanceFromBottom*relativeProjectionShiftY*pixelSize);
 			section.setBorderCoordinates(leftProjectedEllipsisBorder, bottomProjectedEllipsisBorder);
 		}
 	}

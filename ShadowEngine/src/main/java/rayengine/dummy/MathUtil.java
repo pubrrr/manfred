@@ -20,8 +20,8 @@ public class MathUtil {
 		return x*x;
 	}
 	
-	public static Point calculateRelativePosition(Point point1, Point point2) {
-		return new Point(point2.x - point1.x, point2.y - point1.y);
+	public static Point calculateRelativePosition(Point reference, Point point) {
+		return new Point(point.x - reference.x, point.y - reference.y);
 	}
 	
 	public static Point add(Point point1, Point point2) {
@@ -35,5 +35,10 @@ public class MathUtil {
 			coordinates[2*i+1] = points[i].y + offset.y;
 		}
 		return coordinates;
+	}
+	
+	public static Point filpY(Point point) {
+		point.y = -point.y;
+		return point;
 	}
 }

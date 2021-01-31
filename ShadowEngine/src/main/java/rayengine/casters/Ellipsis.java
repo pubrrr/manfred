@@ -20,15 +20,16 @@ public class Ellipsis extends AbstractSection{
 	}
 	
 	@Override
-	public boolean contains(int x, int y) {
+	public boolean contains(Point point) {
 		if(width == 0 || height == 0) {
 			return false;
 		}
-		return 4*(square(x/(double) width) + square(y/(double) height)) <= 1;
+		Point relativePosition = MathUtil.calculateRelativePosition(getCenter(), point);
+		return 4*(square(relativePosition.x/(double) width) + square(relativePosition.y/(double) height)) <= 1;
 	}
 	
 	@Override
-	public boolean doOneContainsTheOther(AbstractSection otherEllipsis) {
+	public boolean internalOneContainsTheOther(AbstractSection otherEllipsis) {
 		Pair<Ellipsis> sections = new Pair<Ellipsis>(this, (Ellipsis) otherEllipsis);
 		boolean sorted = sortBySize(sections);
 		if(sorted) {
@@ -52,15 +53,15 @@ public class Ellipsis extends AbstractSection{
 	}
 	
 	public Pair<Point> calculateRelativeTangentialPoints(Point tangentDirection) {
-		double c = MathUtil.square(tangentDirection.x/ (double) tangentDirection.y)* height/(double) width;
+		double c = MathUtil.square(tangentDirection.x*height/ (double) (tangentDirection.y*width));
 		Point firstTangentialPoint = getUnorientedTangentialPoint(c);
 		orientTangentialPoint(firstTangentialPoint, tangentDirection);
 		return createOpposingPoints(firstTangentialPoint);
 	}
 	
-	public Pair<Point> calculateRayTangentialPoints(int azimuth, Optional<Double> squareTanOfAzimuthIn) {
+	public Pair<Point> calculateRelativeTangentialPoints(int azimuth, Optional<Double> squareTanOfAzimuthIn) {
 		double squareTanOfAzimuth = squareTanOfAzimuthIn.orElse(MathUtil.square(Math.tan(RADIANTS_PER_DEGREE*azimuth)));
-		double c = squareTanOfAzimuth*height/((double) width);
+		double c = squareTanOfAzimuth*MathUtil.square(height/((double) width));
 		Point firstTangentialPoint = getUnorientedTangentialPoint(c);
 		orientTangentialPoint(firstTangentialPoint, azimuth);
 		return createOpposingPoints(firstTangentialPoint);
@@ -79,6 +80,7 @@ public class Ellipsis extends AbstractSection{
 		return new Pair<>(point, new Point(-point.x, -point.y));
 	}
 	
+	//tangents point anti-clockwise
 	private void orientTangentialPoint(Point tangentialPoint, Point tangentDirection) {
 		tangentialPoint.x = tangentialPoint.x*MathUtil.signum(tangentDirection.y);
 		tangentialPoint.y = -tangentialPoint.y*MathUtil.signum(tangentDirection.x);
