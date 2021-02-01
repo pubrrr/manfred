@@ -5,7 +5,8 @@ import com.tngtech.junit.dataprovider.DataProviderExtension;
 import com.tngtech.junit.dataprovider.UseDataProvider;
 import com.tngtech.junit.dataprovider.UseDataProviderExtension;
 import helpers.TestGameConfig;
-import manfred.game.map.MapFacade;
+import manfred.data.InvalidInputException;
+import manfred.data.shared.PositiveInt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestTemplate;
@@ -28,10 +29,10 @@ class ManfredTest {
     private MapCollider mapColliderMock;
 
     @BeforeEach
-    void init() {
+    void init() throws InvalidInputException {
         mapColliderMock = mock(MapCollider.class);
 
-        underTest = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE), null);
+        underTest = new Manfred(PositiveInt.of(10), 0, 0, PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(1), (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE), null);
     }
 
     @Test

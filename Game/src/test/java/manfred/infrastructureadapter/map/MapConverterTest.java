@@ -1,9 +1,11 @@
 package manfred.infrastructureadapter.map;
 
+import manfred.data.InvalidInputException;
 import manfred.data.infrastructure.enemy.EnemyPrototype;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
+import manfred.data.shared.PositiveInt;
 import manfred.game.config.GameConfig;
 import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.enemy.Enemy;
@@ -79,7 +81,7 @@ public class MapConverterTest {
     }
 
     @Test
-    void triggersLoadEnemies() {
+    void triggersLoadEnemies() throws InvalidInputException {
         when(enemyConverterMock.convert(any())).thenReturn(mock(Enemy.class));
         when(tileConverionRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.of(NotAccessible::new));
 
@@ -89,7 +91,7 @@ public class MapConverterTest {
             List.of(),
             List.of(),
             List.of(),
-            List.of(new EnemyPrototype("name", 0, 0, null, 0, 0))
+            List.of(new EnemyPrototype("name", PositiveInt.of(0), PositiveInt.of(0), null, PositiveInt.of(0), PositiveInt.of(0)))
         );
 
         underTest.convert(input);

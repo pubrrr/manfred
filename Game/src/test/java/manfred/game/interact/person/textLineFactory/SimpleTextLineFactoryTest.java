@@ -1,6 +1,7 @@
 package manfred.game.interact.person.textLineFactory;
 
 import helpers.TestGameConfig;
+import manfred.data.InvalidInputException;
 import manfred.game.interact.person.gelaber.GelaberNode;
 import manfred.game.interact.person.gelaber.SimpleTextLine;
 import manfred.game.interact.person.gelaber.TextLine;
@@ -23,7 +24,7 @@ class SimpleTextLineFactoryTest {
     private FactoryRule underTest;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws InvalidInputException {
         this.underTest = SimpleTextLineFactory.withConfig((new TestGameConfig()).withNumberOfTextLines(2));
     }
 

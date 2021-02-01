@@ -1,6 +1,7 @@
 package manfred.game.graphics;
 
 import helpers.TestGameConfig;
+import manfred.data.InvalidInputException;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.Sprite;
 import manfred.game.map.MapFacade;
@@ -25,7 +26,7 @@ class BackgroundScrollerTest {
     private MapFacade mapFacadeMock;
 
     @BeforeEach
-    void init() {
+    void init() throws InvalidInputException {
         manfredPosition = new Sprite(0, 0, 0, 0, 0);
 
         Manfred manfredMock = mock(Manfred.class);

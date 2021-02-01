@@ -18,6 +18,8 @@ import static org.hamcrest.Matchers.is;
 @ExtendWith(DataProviderExtension.class)
 @ExtendWith(UseDataProviderExtension.class)
 class MapCoordinateTest {
+    private static final int TILE_SIZE = 60;
+
 
     private Map map;
 
@@ -46,13 +48,13 @@ class MapCoordinateTest {
     static Object[][] provideCoordinateAndExpectedCoordinate() {
         return new Object[][]{
             {new Point(0, 0), new Point(0, 0)},
-            {new Point(0, 199), new Point(0, 199)},
-            {new Point(299, 0), new Point(299, 0)},
-            {new Point(299, 199), new Point(299, 199)},
+            {new Point(0, 119), new Point(0, 119)},
+            {new Point(179, 0), new Point(179, 0)},
+            {new Point(179, 119), new Point(179, 119)},
             {new Point(-5, -5), new Point(0, 0)},
             {new Point(-5, 5), new Point(0, 5)},
             {new Point(5, -5), new Point(5, 0)},
-            {new Point(999, 999), new Point(299, 199)},
+            {new Point(999, 999), new Point(179, 119)},
         };
     }
 
@@ -69,14 +71,36 @@ class MapCoordinateTest {
     static Object[][] provideTranslations() {
         return new Object[][]{
             {new Point(0, 0)},
-            {new Point(0, 199)},
-            {new Point(299, 0)},
-            {new Point(299, 199)},
+            {new Point(0, 119)},
+            {new Point(179, 0)},
+            {new Point(179, 119)},
             {new Point(-5, -5)},
             {new Point(-5, 5)},
             {new Point(5, -5)},
             {new Point(999, 999)},
             {new Point(100, 100)},
+        };
+    }
+
+    @TestTemplate
+    @UseDataProvider("provideCoordinates")
+    void coordinateToTile(Point input, Point expected) {
+        Map.TileCoordinate actual = map.coordinateAt(input.x, input.y).getTile();
+
+        Map.Coordinate expectedCoordinate = map.coordinateAt(expected.x * TILE_SIZE, expected.y * TILE_SIZE);
+        assertThat(actual.getBottomLeftCoordinate(), equalTo(expectedCoordinate));
+    }
+
+    @DataProvider
+    static Object[][] provideCoordinates() {
+        return new Object[][]{
+            {new Point(0, 0), new Point(0, 0)},
+            {new Point(TILE_SIZE - 1, TILE_SIZE - 1), new Point(0, 0)},
+            {new Point(TILE_SIZE - 1, 0), new Point(0, 0)},
+            {new Point(0, TILE_SIZE - 1), new Point(0, 0)},
+            {new Point(TILE_SIZE, 0), new Point(1, 0)},
+            {new Point(0, TILE_SIZE), new Point(0, 1)},
+            {new Point(TILE_SIZE, TILE_SIZE), new Point(1, 1)},
         };
     }
 }

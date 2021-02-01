@@ -12,7 +12,7 @@ import manfred.infrastructureadapter.map.MapProvider;
 import java.awt.*;
 import java.util.Stack;
 
-public class MapFacade implements PaintablesContainer {
+public class MapFacade implements PaintablesContainer, CollisionDetector {
     private final MapProvider mapProvider;
 
     private Map map;
@@ -49,5 +49,10 @@ public class MapFacade implements PaintablesContainer {
 
     public boolean isAccessible(int x, int y) {
         return this.map.isAccessible(x, y);
+    }
+
+    @Override
+    public boolean isAreaAccessible(Rectangle area) {
+        return this.map.isAreaAccessible(area);
     }
 }

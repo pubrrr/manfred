@@ -1,11 +1,13 @@
 package manfred.infrastructureadapter.map.tile;
 
 import helpers.TestGameConfig;
+import manfred.data.InvalidInputException;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.person.PersonPrototype;
 import manfred.data.infrastructure.person.gelaber.GelaberPrototype;
 import manfred.data.persistence.dto.TransporterDto;
+import manfred.data.shared.PositiveInt;
 import manfred.game.interact.person.Person;
 import manfred.game.interact.person.gelaber.GelaberFacade;
 import manfred.game.map.MapTile;
@@ -29,7 +31,7 @@ class PersonTileFactoryTest {
     private GelaberConverter gelaberConverterMock;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws InvalidInputException {
         gelaberConverterMock = mock(GelaberConverter.class);
         underTest = new PersonTileFactory(new TestGameConfig(), gelaberConverterMock);
     }
@@ -51,12 +53,12 @@ class PersonTileFactoryTest {
     }
 
     @Test
-    void personAtWrongPositionGiven() {
+    void personAtWrongPositionGiven() throws InvalidInputException {
         MapPrototype input = new MapPrototype(
             "name",
             mock(MapMatrix.class),
             List.of(),
-            List.of(new TransporterDto("target", 0, 0, 99, 99)),
+            List.of(new TransporterDto("target", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(99), PositiveInt.of(99))),
             List.of(),
             List.of()
         );
@@ -67,7 +69,7 @@ class PersonTileFactoryTest {
     }
 
     @Test
-    void personGiven() {
+    void personGiven() throws InvalidInputException {
         int positionX = 5;
         int positionY = 10;
 
@@ -76,7 +78,7 @@ class PersonTileFactoryTest {
         MapPrototype input = new MapPrototype(
             "name",
             mock(MapMatrix.class),
-            List.of(new PersonPrototype("name", mock(GelaberPrototype.class), null, positionX, positionY)),
+            List.of(new PersonPrototype("name", mock(GelaberPrototype.class), null, PositiveInt.of(positionX), PositiveInt.of(positionY))),
             List.of(),
             List.of(),
             List.of()

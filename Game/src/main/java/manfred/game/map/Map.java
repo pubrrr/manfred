@@ -11,6 +11,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
+import java.util.stream.IntStream;
 
 public class Map {
     private final List<List<MapTile>> mapTiles;
@@ -31,6 +32,22 @@ public class Map {
 
     public boolean isAccessible(int x, int y) {
         return isInBounds(x, y) && mapTiles.get(x).get(y).isAccessible();
+    }
+
+    private boolean isNotAccessible(TileCoordinate tileCoordinate) {
+        return !isAccessible(tileCoordinate.tileX, tileCoordinate.tileY);
+    }
+
+    public boolean isAreaAccessible(Rectangle area) {
+        TileCoordinate bottomLeftTile = area.getBottomLeft().getTile();
+        TileCoordinate topRightTile = area.getTopRight().getTile();
+
+        return IntStream.rangeClosed(bottomLeftTile.tileX, topRightTile.tileX)
+            .boxed()
+            .flatMap(x -> IntStream.rangeClosed(bottomLeftTile.tileY, topRightTile.tileY).boxed().map(y -> new TileCoordinate(x, y)))
+            .filter(this::isNotAccessible)
+            .findAny()
+            .isEmpty();
     }
 
     private boolean isInBounds(int x, int y) {
@@ -55,9 +72,9 @@ public class Map {
         for (int x = 0; x < sizeX(); x++) {
             for (int y = 0; y < sizeY(); y++) {
                 elements.push(new PaintableContainerElement(
-                        mapTiles.get(x).get(y),
-                        gameConfig.getPixelBlockSize() * x,
-                        gameConfig.getPixelBlockSize() * y
+                    mapTiles.get(x).get(y),
+                    gameConfig.getPixelBlockSize() * x,
+                    gameConfig.getPixelBlockSize() * y
                 ));
             }
         }
@@ -90,7 +107,7 @@ public class Map {
     }
 
     public static class Coordinate {
-        private static final int TILE_SIZE = 100;
+        private static final int TILE_SIZE = 60;
 
         private final int x;
         private final int y;
@@ -100,12 +117,16 @@ public class Map {
             this.y = y;
         }
 
-        public Coordinate translate(Vector vector) {
-            return new Coordinate(this.x + vector.x(), this.y + vector.y());
+        public Coordinate translate(Vector tranlsation) {
+            return new Coordinate(this.x + tranlsation.x(), this.y + tranlsation.y());
         }
 
         public Vector distanceTo(Coordinate other) {
             return Vector.of(other.x - this.x, other.y - this.y);
+        }
+
+        public TileCoordinate getTile() {
+            return new TileCoordinate(x / TILE_SIZE, y / TILE_SIZE);
         }
 
         @Override
@@ -123,6 +144,20 @@ public class Map {
         @Override
         public int hashCode() {
             return Objects.hash(x, y);
+        }
+    }
+
+    public static class TileCoordinate {
+        private final int tileX;
+        private final int tileY;
+
+        private TileCoordinate(int tileX, int tileY) {
+            this.tileX = tileX;
+            this.tileY = tileY;
+        }
+
+        public Coordinate getBottomLeftCoordinate() {
+            return new Coordinate(tileX * Coordinate.TILE_SIZE, tileY * Coordinate.TILE_SIZE);
         }
     }
 }

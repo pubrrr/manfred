@@ -1,13 +1,17 @@
 package manfred.game.enemy;
 
 import helpers.TestGameConfig;
+import manfred.data.InvalidInputException;
+import manfred.data.shared.PositiveInt;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class EnemyTest {
     private final static int AGGRO_RADIUS = 10;
@@ -19,11 +23,11 @@ class EnemyTest {
     private MapCollider mapColliderMock;
 
     @BeforeEach
-    void init() {
+    void init() throws InvalidInputException {
         mapColliderMock = mock(MapCollider.class);
         when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
 
-        underTest = new Enemy("name", SPEED, 0, 0, 100, null, AGGRO_RADIUS, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
+        underTest = new Enemy("name", PositiveInt.of(SPEED), 0, 0, PositiveInt.of(100), null, AGGRO_RADIUS, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
     }
 
     @Test

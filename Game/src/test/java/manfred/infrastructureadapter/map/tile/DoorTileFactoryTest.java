@@ -1,8 +1,10 @@
 package manfred.infrastructureadapter.map.tile;
 
+import manfred.data.InvalidInputException;
 import manfred.data.persistence.dto.TransporterDto;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
+import manfred.data.shared.PositiveInt;
 import manfred.game.interact.Door;
 import manfred.game.map.MapTile;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,13 +44,13 @@ class DoorTileFactoryTest {
     }
 
     @Test
-    void doorAtWrongPositionGiven() {
+    void doorAtWrongPositionGiven() throws InvalidInputException {
         MapPrototype input = new MapPrototype(
             "name",
             mock(MapMatrix.class),
             List.of(),
             List.of(),
-            List.of(new TransporterDto("target", 0, 0, 99, 99)),
+            List.of(new TransporterDto("target", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(99), PositiveInt.of(99))),
             List.of()
         );
 
@@ -58,7 +60,7 @@ class DoorTileFactoryTest {
     }
 
     @Test
-    void doorGiven() {
+    void doorGiven() throws InvalidInputException {
         int positionX = 5;
         int positionY = 10;
 
@@ -67,7 +69,7 @@ class DoorTileFactoryTest {
             mock(MapMatrix.class),
             List.of(),
             List.of(),
-            List.of(new TransporterDto("target", 0, 0, positionX, positionY)),
+            List.of(new TransporterDto("target", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(positionX), PositiveInt.of(positionY))),
             List.of()
         );
 

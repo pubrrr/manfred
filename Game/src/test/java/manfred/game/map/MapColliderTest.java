@@ -1,14 +1,12 @@
-package manfred.game.characters;
+package manfred.game.map;
 
 import com.tngtech.junit.dataprovider.DataProvider;
 import com.tngtech.junit.dataprovider.DataProviderExtension;
 import com.tngtech.junit.dataprovider.UseDataProvider;
 import com.tngtech.junit.dataprovider.UseDataProviderExtension;
-import helpers.TestGameConfig;
 import helpers.TestMapFactory;
-import manfred.game.map.Map;
-import manfred.game.map.MapFacade;
-import manfred.infrastructureadapter.map.MapProvider;
+import manfred.data.InvalidInputException;
+import manfred.data.shared.PositiveInt;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -16,29 +14,26 @@ import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(DataProviderExtension.class)
 @ExtendWith(UseDataProviderExtension.class)
 class MapColliderTest {
-    private static final int PIXEL_BLOCK_SIZE = 40;
+    private static final int PIXEL_BLOCK_SIZE = 60;
 
-    private MapCollider underTest;
+    private Map underTest;
 
-    void initMap(String[][] mapArray) {
-        Map map = TestMapFactory.create(mapArray, new HashMap<>());
-
-        MapFacade mapFacadeMock = new MapFacade(mock(MapProvider.class), map);
-
-        underTest = new MapCollider(mapFacadeMock, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
+    Map initMap(String[][] mapArray) {
+        return TestMapFactory.create(mapArray, new HashMap<>());
     }
 
     @TestTemplate
     @UseDataProvider("provideAccessibleCoords")
-    public void collidesNotOnAccessibleField(int left, int right, int top, int bottom) {
-        initMap(new String[][]{{"1", "1"}, {"1", "1"}});
+    public void collidesNotOnAccessibleField(int x, int y, int size) throws InvalidInputException {
+        underTest = initMap(new String[][]{{"1", "1"}, {"1", "1"}});
 
-        assertFalse(underTest.collides(left, right, top, bottom), "accessible");
+        Rectangle area = new Rectangle(underTest.coordinateAt(x, y), PositiveInt.of(size), PositiveInt.of(size));
+
+        assertTrue(underTest.isAreaAccessible(area), "accessible");
     }
 
     @DataProvider
@@ -53,14 +48,16 @@ class MapColliderTest {
 
     @TestTemplate
     @UseDataProvider("provideNonAccessibleCoords")
-    public void collidesOnNotAccessibleField(int left, int right, int top, int bottom) {
-        initMap(new String[][]{
+    public void collidesOnNotAccessibleField(int x, int y, int size) throws InvalidInputException {
+        underTest = initMap(new String[][]{
                 {"1", "1", "1"},
                 {"1", "0", "1"},
                 {"1", "1", "1"},
         });
 
-        assertTrue(underTest.collides(left, right, top, bottom), "accessible");
+        Rectangle area = new Rectangle(underTest.coordinateAt(x, y), PositiveInt.of(size), PositiveInt.of(size));
+
+        assertFalse(underTest.isAreaAccessible(area), "accessible");
     }
 
     @DataProvider
@@ -82,32 +79,9 @@ class MapColliderTest {
         };
     }
 
-    @TestTemplate
-    @UseDataProvider("provideOutOfBounds")
-    public void outOfBounds(int left, int right, int top, int bottom) {
-        initMap(new String[][]{{"0"}});
-
-        assertTrue(underTest.collides(left, right, top, bottom), "accessible");
-    }
-
-    @DataProvider
-    static Object[][] provideOutOfBounds() {
-        return new Object[][]{
-                {-1, 0, 0, 0,}, // out of bound left
-                {0, 5 * PIXEL_BLOCK_SIZE, 0, 0,}, // out of bound right
-                {0, 0, -1, 0,}, // out of bound up
-                {0, 0, 0, 5 * PIXEL_BLOCK_SIZE,}, // out of bound down
-        };
-    }
-
     private static Object[] getBoundaryCoordsByHalfBlockSize(int halfBlocksX, int halfBlocksY, int size) {
         int x = halfBlocksX * PIXEL_BLOCK_SIZE / 2;
         int y = halfBlocksY * PIXEL_BLOCK_SIZE / 2;
-        return new Object[]{
-                x,
-                x + size - 1,
-                y,
-                y + size - 1
-        };
+        return new Object[]{x, y, size};
     }
 }

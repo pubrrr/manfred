@@ -1,6 +1,7 @@
 package manfred.game.interact.person.textLineFactory;
 
 import helpers.TestGameConfig;
+import manfred.data.InvalidInputException;
 import manfred.game.interact.person.gelaber.ChoicesText;
 import manfred.game.interact.person.gelaber.GelaberNode;
 import manfred.game.interact.person.gelaber.TextLine;
@@ -23,7 +24,7 @@ class ChoicesTextLineFactoryTest {
     private FactoryRule underTest;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws InvalidInputException {
         this.underTest = ChoicesTextLineFactory.withConfig((new TestGameConfig()).withNumberOfTextLines(2));
     }
 

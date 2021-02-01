@@ -1,5 +1,7 @@
 package helpers;
 
+import manfred.data.InvalidInputException;
+import manfred.data.shared.PositiveInt;
 import manfred.game.config.GameConfig;
 
 import java.util.Objects;
@@ -20,16 +22,16 @@ public class TestGameConfig extends GameConfig {
     private Integer testWindowWidth = null;
     private Integer charactersPerLine = null;
 
-    public TestGameConfig() {
+    public TestGameConfig() throws InvalidInputException {
         super(
-                STANDARD_TEST_WINDOW_WIDTH,
-                STANDARD_TEST_WINDOW_HEIGTH,
-                STANDARD_TEST_PIXEL_BLOCK_SIZE,
-                STANDARD_TEST_TEXT_BOX_DISTANCE_TO_BORDER,
-                STANDARD_TEST_TEXT_POINT_SIZE,
-                STANDARD_TEST_TEXT_DISTANCE_TO_BOX,
-                STANDARD_TEST_GELABER_BOX_POSITION_X,
-                STANDARD_TEST_GELABER_BOX_POSITION_Y
+            PositiveInt.of(STANDARD_TEST_WINDOW_WIDTH),
+            PositiveInt.of(STANDARD_TEST_WINDOW_HEIGTH),
+            PositiveInt.of(STANDARD_TEST_PIXEL_BLOCK_SIZE),
+            PositiveInt.of(STANDARD_TEST_TEXT_BOX_DISTANCE_TO_BORDER),
+            PositiveInt.of(STANDARD_TEST_TEXT_POINT_SIZE),
+            PositiveInt.of(STANDARD_TEST_TEXT_DISTANCE_TO_BOX),
+            PositiveInt.of(STANDARD_TEST_GELABER_BOX_POSITION_X),
+            PositiveInt.of(STANDARD_TEST_GELABER_BOX_POSITION_Y)
         );
     }
 

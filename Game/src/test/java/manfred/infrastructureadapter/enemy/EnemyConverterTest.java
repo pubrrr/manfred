@@ -1,7 +1,9 @@
 package manfred.infrastructureadapter.enemy;
 
 import helpers.TestGameConfig;
+import manfred.data.InvalidInputException;
 import manfred.data.persistence.dto.EnemyDto;
+import manfred.data.shared.PositiveInt;
 import manfred.game.characters.MapCollider;
 import manfred.game.enemy.Enemy;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +22,7 @@ class EnemyConverterTest {
     private MapCollider mapColliderMock;
 
     @BeforeEach
-    void init() {
+    void init() throws InvalidInputException {
         mapColliderMock = mock(MapCollider.class);
         when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
 
@@ -28,11 +30,11 @@ class EnemyConverterTest {
     }
 
     @Test
-    void testConvert() {
+    void testConvert() throws InvalidInputException {
         int speed = 10;
-        EnemyDto input = new EnemyDto("name", 100, speed, null);
+        EnemyDto input = new EnemyDto("name", PositiveInt.of(100), PositiveInt.of(speed), null);
 
-        Enemy result = underTest.convert(input.at(1, 22));
+        Enemy result = underTest.convert(input.at(PositiveInt.of(1), PositiveInt.of(22)));
 
         assertEquals(PIXEL_BLOCK_SIZE, result.getX());
         assertEquals(PIXEL_BLOCK_SIZE * 22, result.getY());
