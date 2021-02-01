@@ -1,6 +1,8 @@
 package manfred.infrastructureadapter.attack;
 
+import manfred.data.InvalidInputException;
 import manfred.data.persistence.dto.AttackDto;
+import manfred.data.shared.PositiveInt;
 import manfred.game.attack.Attack;
 import manfred.game.attack.AttackGenerator;
 import manfred.game.characters.Direction;
@@ -47,8 +49,8 @@ class AttackGeneratorConverterTest {
         assertHitsEnemy(attack);
     }
 
-    private AttackDto getInput() {
-        return new AttackDto("testName", 1, 0, 0, 100, 2, 3, List.of());
+    private AttackDto getInput() throws InvalidInputException {
+        return new AttackDto("testName", PositiveInt.of(1), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(100), PositiveInt.of(2), PositiveInt.of(3), List.of());
     }
 
     private void assertMoves(Attack attack) {
@@ -57,14 +59,14 @@ class AttackGeneratorConverterTest {
         assertEquals(0, attack.getY());
     }
 
-    private void assertHitsEnemy(Attack attack) {
+    private void assertHitsEnemy(Attack attack) throws InvalidInputException {
         Sprite enemySpriteMock = mock(Sprite.class);
         when(enemySpriteMock.intersects(any())).thenReturn(true);
         Enemy enemyMock = mock(Enemy.class);
         when(enemyMock.getSprite()).thenReturn(enemySpriteMock);
 
         attack.checkHit(enemyMock);
-        verify(enemyMock).takeDamage(100);
+        verify(enemyMock).takeDamage(PositiveInt.of(100));
     }
 
     @Test

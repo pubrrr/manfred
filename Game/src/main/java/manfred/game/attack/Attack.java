@@ -1,5 +1,6 @@
 package manfred.game.attack;
 
+import manfred.data.shared.PositiveInt;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.MovingObject;
 import manfred.game.enemy.Enemy;
@@ -10,11 +11,11 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class Attack extends MovingObject implements LocatedPaintable {
-    private final int damage;
-    private final int range;
+    private final PositiveInt damage;
+    private final PositiveInt range;
     private boolean resolved = false;
     private final List<BufferedImage> attackAnimation;
-    private final int numberOfAnimationImages;
+    private final PositiveInt numberOfAnimationImages;
     private final long nextAnimationImageTrigger;
 
     private final Point castPosition;
@@ -22,15 +23,15 @@ public class Attack extends MovingObject implements LocatedPaintable {
     private int framesCounter = 0;
 
     public Attack(
-        int speed,
+        PositiveInt speed,
         int x,
         int y,
-        int width,
-        int height,
-        int damage,
-        int range,
+        PositiveInt width,
+        PositiveInt height,
+        PositiveInt damage,
+        PositiveInt range,
         List<BufferedImage> attackAnimation,
-        int numberOfAnimationImages
+        PositiveInt numberOfAnimationImages
     ) {
         super(speed, x, y, width, height, height);
         this.castPosition = this.sprite.getCenter();
@@ -38,7 +39,7 @@ public class Attack extends MovingObject implements LocatedPaintable {
         this.range = range;
         this.attackAnimation = attackAnimation;
         this.numberOfAnimationImages = numberOfAnimationImages;
-        this.nextAnimationImageTrigger = Math.round((double) range / speed / numberOfAnimationImages);
+        this.nextAnimationImageTrigger = Math.round((double) range.value() / speed.value() / numberOfAnimationImages.value());
     }
 
     @Override
@@ -48,14 +49,14 @@ public class Attack extends MovingObject implements LocatedPaintable {
         }
         this.sprite.translate(currentSpeedX, currentSpeedY);
 
-        if (castPosition.distance(this.sprite.getCenter()) >= range) {
+        if (castPosition.distance(this.sprite.getCenter()) >= range.value()) {
             this.resolve();
         }
 
         framesCounter++;
         if (framesCounter >= nextAnimationImageTrigger) {
             framesCounter = 0;
-            if (animationIdx + 1 < numberOfAnimationImages) {
+            if (animationIdx + 1 < numberOfAnimationImages.value()) {
                 animationIdx++;
             }
         }

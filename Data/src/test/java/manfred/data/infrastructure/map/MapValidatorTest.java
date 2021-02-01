@@ -15,6 +15,7 @@ import manfred.data.persistence.dto.MapEnemyDto;
 import manfred.data.persistence.dto.MapPersonDto;
 import manfred.data.persistence.dto.RawMapDto;
 import manfred.data.persistence.dto.TransporterDto;
+import manfred.data.shared.PositiveInt;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,8 +61,8 @@ class MapValidatorTest {
 
     @Test
     void nonEmptyOtherStructs() throws InvalidInputException {
-        when(enemiesLoaderMock.load(any())).thenReturn(List.of(new EnemyPrototype("name", 0, 0, null, 0, 0)));
-        when(personsLoaderMock.load(any())).thenReturn(List.of(new PersonPrototype("name", mock(GelaberPrototype.class), null, 0, 0)));
+        when(enemiesLoaderMock.load(any())).thenReturn(List.of(new EnemyPrototype("name", PositiveInt.of(0), PositiveInt.of(0), null, PositiveInt.of(0), PositiveInt.of(0))));
+        when(personsLoaderMock.load(any())).thenReturn(List.of(new PersonPrototype("name", mock(GelaberPrototype.class), null, PositiveInt.of(0), PositiveInt.of(0))));
 
         RawMapDto input = new RawMapDto(
             "test",

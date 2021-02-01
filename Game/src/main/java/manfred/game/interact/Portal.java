@@ -1,5 +1,6 @@
 package manfred.game.interact;
 
+import manfred.data.shared.PositiveInt;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.ManfredController;
@@ -8,10 +9,10 @@ import java.awt.*;
 
 public class Portal implements Interactable {
     private final String targetName;
-    private final int targetSpawnX;
-    private final int targetSpawnY;
+    private final PositiveInt targetSpawnX;
+    private final PositiveInt targetSpawnY;
 
-    public Portal(String targetName, int targetSpawnX, int targetSpawnY) {
+    public Portal(String targetName, PositiveInt targetSpawnX, PositiveInt targetSpawnY) {
         this.targetName = targetName;
         this.targetSpawnX = targetSpawnX;
         this.targetSpawnY = targetSpawnY;

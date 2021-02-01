@@ -1,8 +1,10 @@
 package manfred.infrastructureadapter.config;
 
+import manfred.data.InvalidInputException;
 import manfred.data.persistence.dto.ConfigDto;
 import manfred.data.persistence.dto.GelaberBoxPositionDto;
 import manfred.data.persistence.dto.WindowSizeDto;
+import manfred.data.shared.PositiveInt;
 import manfred.game.config.GameConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,14 +21,14 @@ class ConfigConverterTest {
     }
 
     @Test
-    void convert() {
+    void convert() throws InvalidInputException {
         GameConfig result = underTest.convert(new ConfigDto(
-            new WindowSizeDto(1, 2),
-            new GelaberBoxPositionDto(7, 8),
-            3,
-            4,
-            5,
-            6
+            new WindowSizeDto(PositiveInt.of(1), PositiveInt.of(2)),
+            new GelaberBoxPositionDto(PositiveInt.of(7), PositiveInt.of(8)),
+            PositiveInt.of(3),
+            PositiveInt.of(4),
+            PositiveInt.of(5),
+            PositiveInt.of(6)
         ));
 
         assertEquals(1, result.getWindowWidth());

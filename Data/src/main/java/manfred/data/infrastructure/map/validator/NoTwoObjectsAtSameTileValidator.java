@@ -33,7 +33,7 @@ public class NoTwoObjectsAtSameTileValidator implements Validator {
     }
 
     private Collector<MapObjectDto, ?, Map<Point, List<MapObjectDto>>> groupByPosition() {
-        return Collectors.groupingBy(mapObjectDto -> new Point(mapObjectDto.getPositionX(), mapObjectDto.getPositionY()));
+        return Collectors.groupingBy(mapObjectDto -> new Point(mapObjectDto.getPositionX().value(), mapObjectDto.getPositionY().value()));
     }
 
     private String toErrorMessage(List<MapObjectDto> mapObjectDtosAtSamePosition) {

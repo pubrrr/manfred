@@ -5,6 +5,7 @@ import manfred.data.infrastructure.enemy.EnemiesLoader;
 import manfred.data.infrastructure.enemy.EnemyPrototype;
 import manfred.data.persistence.dto.EnemyDto;
 import manfred.data.persistence.dto.MapEnemyDto;
+import manfred.data.shared.PositiveInt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,10 +43,10 @@ class EnemiesLoaderTest {
 
     @Test
     void oneValidInput() throws InvalidInputException {
-        when(enemyReaderMock.load(any())).thenReturn(new EnemyDto("name", 0, 0, null));
+        when(enemyReaderMock.load(any())).thenReturn(new EnemyDto("name", PositiveInt.of(0), PositiveInt.of(0), null));
 
-        int positionX = 5;
-        int positionY = 10;
+        PositiveInt positionX = PositiveInt.of(5);
+        PositiveInt positionY = PositiveInt.of(10);
         List<EnemyPrototype> result = underTest.load(List.of(new MapEnemyDto("test", positionX, positionY)));
 
         assertThat(result, hasSize(1));
@@ -56,11 +57,11 @@ class EnemiesLoaderTest {
 
     @Test
     void twoValidInputs() throws InvalidInputException {
-        when(enemyReaderMock.load(any())).thenReturn(new EnemyDto("name", 0, 0, null));
+        when(enemyReaderMock.load(any())).thenReturn(new EnemyDto("name", PositiveInt.of(0), PositiveInt.of(0), null));
 
         List<EnemyPrototype> result = underTest.load(List.of(
-            new MapEnemyDto("test", 1, 2),
-            new MapEnemyDto("test", 1, 2)
+            new MapEnemyDto("test", PositiveInt.of(1), PositiveInt.of(2)),
+            new MapEnemyDto("test", PositiveInt.of(1), PositiveInt.of(2))
         ));
 
         assertThat(result, hasSize(2));
@@ -68,12 +69,12 @@ class EnemiesLoaderTest {
 
     @Test
     void oneValidOneInvalidInput() throws InvalidInputException {
-        when(enemyReaderMock.load(same("valid"))).thenReturn(new EnemyDto("valid", 0, 0, null));
+        when(enemyReaderMock.load(same("valid"))).thenReturn(new EnemyDto("valid", PositiveInt.of(0), PositiveInt.of(0), null));
         when(enemyReaderMock.load(same("invalid"))).thenThrow(new InvalidInputException("enemyReaderEnemyMessage"));
 
         List<MapEnemyDto> input = List.of(
-            new MapEnemyDto("valid", 1, 2),
-            new MapEnemyDto("invalid", 1, 2)
+            new MapEnemyDto("valid", PositiveInt.of(1), PositiveInt.of(2)),
+            new MapEnemyDto("invalid", PositiveInt.of(1), PositiveInt.of(2))
         );
 
         InvalidInputException exception = assertThrows(InvalidInputException.class, () -> underTest.load(input));
@@ -86,8 +87,8 @@ class EnemiesLoaderTest {
         when(enemyReaderMock.load(same("invalid2"))).thenThrow(new InvalidInputException("invalid2"));
 
         List<MapEnemyDto> input = List.of(
-            new MapEnemyDto("invalid1", 1, 2),
-            new MapEnemyDto("invalid2", 1, 2)
+            new MapEnemyDto("invalid1", PositiveInt.of(1), PositiveInt.of(2)),
+            new MapEnemyDto("invalid2", PositiveInt.of(1), PositiveInt.of(2))
         );
 
         InvalidInputException exception = assertThrows(InvalidInputException.class, () -> underTest.load(input));

@@ -1,5 +1,7 @@
 package manfred.game.enemy;
 
+import manfred.data.InvalidInputException;
+import manfred.data.shared.PositiveInt;
 import manfred.game.config.GameConfig;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MovingObject;
@@ -16,10 +18,10 @@ public class Enemy extends MovingObject implements LocatedPaintable {
 
     private int healthPoints;
 
-    public Enemy(String name, int speed, int x, int y, int healthPoints, BufferedImage image, int aggroRadius, GameConfig gameConfig) {
-        super(speed, x, y, 2 * gameConfig.getPixelBlockSize(), 2 * gameConfig.getPixelBlockSize(), 2 * gameConfig.getPixelBlockSize());
+    public Enemy(String name, PositiveInt speed, int x, int y, PositiveInt healthPoints, BufferedImage image, int aggroRadius, GameConfig gameConfig) throws InvalidInputException {
+        super(speed, x, y, PositiveInt.of(2 * gameConfig.getPixelBlockSize()), PositiveInt.of(2 * gameConfig.getPixelBlockSize()), PositiveInt.of(2 * gameConfig.getPixelBlockSize()));
         this.name = name;
-        this.healthPoints = healthPoints;
+        this.healthPoints = healthPoints.value(); // TODO
         this.image = image;
         this.aggroRadius = aggroRadius;
         this.gameConfig = gameConfig;
@@ -59,8 +61,8 @@ public class Enemy extends MovingObject implements LocatedPaintable {
         return healthPoints;
     }
 
-    public void takeDamage(int damage) {
-        this.healthPoints -= damage;
+    public void takeDamage(PositiveInt damage) {
+        this.healthPoints -= damage.value();
     }
 }
 

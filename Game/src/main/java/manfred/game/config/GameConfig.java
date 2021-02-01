@@ -1,5 +1,7 @@
 package manfred.game.config;
 
+import manfred.data.shared.PositiveInt;
+
 public class GameConfig {
     private final int windowWidth;
     private final int windowHeight;
@@ -11,23 +13,23 @@ public class GameConfig {
     private final int gelaberBoxPositionY;
 
     public GameConfig(
-            int windowWidth,
-            int windowHeight,
-            int pixelBlockSize,
-            int textBoxDistanceToBorder,
-            int textPointSize,
-            int textDistanceToBox,
-            int gelaberBoxPositionX,
-            int gelaberBoxPositionY
+        PositiveInt windowWidth,
+        PositiveInt windowHeight,
+        PositiveInt pixelBlockSize,
+        PositiveInt textBoxDistanceToBorder,
+        PositiveInt textPointSize,
+        PositiveInt textDistanceToBox,
+        PositiveInt gelaberBoxPositionX,
+        PositiveInt gelaberBoxPositionY
     ) {
-        this.windowWidth = windowWidth;
-        this.windowHeight = windowHeight;
-        this.pixelBlockSize = pixelBlockSize;
-        this.textBoxDistanceToBorder = textBoxDistanceToBorder;
-        this.textPointSize = textPointSize;
-        this.textDistanceToBox = textDistanceToBox;
-        this.gelaberBoxPositionX = gelaberBoxPositionX;
-        this.gelaberBoxPositionY = gelaberBoxPositionY;
+        this.windowWidth = windowWidth.value();
+        this.windowHeight = windowHeight.value();
+        this.pixelBlockSize = pixelBlockSize.value();
+        this.textBoxDistanceToBorder = textBoxDistanceToBorder.value();
+        this.textPointSize = textPointSize.value();
+        this.textDistanceToBox = textDistanceToBox.value();
+        this.gelaberBoxPositionX = gelaberBoxPositionX.value();
+        this.gelaberBoxPositionY = gelaberBoxPositionY.value();
     }
 
     public int getWindowWidth() {

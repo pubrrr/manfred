@@ -20,8 +20,8 @@ public class EnemyConverter implements ObjectConverter<EnemyPrototype, Enemy> {
             return new Enemy(
                 enemyPrototype.getName(),
                 enemyPrototype.getSpeed(),
-                enemyPrototype.getSpawnX() * this.gameConfig.getPixelBlockSize(),
-                enemyPrototype.getSpawnY() * this.gameConfig.getPixelBlockSize(),
+                enemyPrototype.getSpawnX().value() * this.gameConfig.getPixelBlockSize(),
+                enemyPrototype.getSpawnY().value() * this.gameConfig.getPixelBlockSize(),
                 enemyPrototype.getHealthPoints(),
                 enemyPrototype.getImage(),
                 gameConfig.getPixelBlockSize() * 5,

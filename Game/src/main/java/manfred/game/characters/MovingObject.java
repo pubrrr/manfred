@@ -1,5 +1,6 @@
 package manfred.game.characters;
 
+import manfred.data.shared.PositiveInt;
 import manfred.game.graphics.paintable.LocatedPaintable;
 
 abstract public class MovingObject implements LocatedPaintable {
@@ -15,9 +16,9 @@ abstract public class MovingObject implements LocatedPaintable {
     protected int currentSpeedX = 0;
     protected int currentSpeedY = 0;
 
-    protected MovingObject(int speed, int x, int y, int width, int spriteHeight, int baseHeight) {
-        this.speed = speed;
-        this.sprite = new Sprite(x, y, width, spriteHeight, baseHeight);
+    protected MovingObject(PositiveInt speed, int x, int y, PositiveInt width, PositiveInt spriteHeight, PositiveInt baseHeight) {
+        this.speed = speed.value();
+        this.sprite = new Sprite(x, y, width.value(), spriteHeight.value(), baseHeight.value());
     }
 
     public int getX() {

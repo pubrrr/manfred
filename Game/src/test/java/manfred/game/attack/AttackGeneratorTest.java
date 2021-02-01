@@ -1,5 +1,7 @@
 package manfred.game.attack;
 
+import manfred.data.InvalidInputException;
+import manfred.data.shared.PositiveInt;
 import manfred.game.characters.Direction;
 import manfred.game.characters.MapCollider;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,11 +24,11 @@ class AttackGeneratorTest {
     private MapCollider mapColliderMock;
 
     @BeforeEach
-    void init() {
+    void init() throws InvalidInputException {
         mapColliderMock = mock(MapCollider.class);
         when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
 
-        underTest = new AttackGenerator(SPEED, SIZE, SIZE, 3, 4, List.of(), 1);
+        underTest = new AttackGenerator(PositiveInt.of(SPEED), PositiveInt.of(SIZE), PositiveInt.of(SIZE), PositiveInt.of(3), PositiveInt.of(4), List.of(), PositiveInt.of(1));
     }
 
     @Test

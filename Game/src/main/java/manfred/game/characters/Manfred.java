@@ -1,5 +1,7 @@
 package manfred.game.characters;
 
+import manfred.data.InvalidInputException;
+import manfred.data.shared.PositiveInt;
 import manfred.game.config.GameConfig;
 import manfred.game.graphics.paintable.LocatedPaintable;
 
@@ -20,17 +22,17 @@ public class Manfred extends MovingObject implements LocatedPaintable {
     private int animationPosition = 0;
 
     public Manfred(
-        int speed,
+        PositiveInt speed,
         int x,
         int y,
-        int spriteWidth,
-        int spriteHeight,
-        int healthPoints,
+        PositiveInt spriteWidth,
+        PositiveInt spriteHeight,
+        PositiveInt healthPoints,
         GameConfig gameConfig,
         HashMap<Direction, BufferedImage[]> walkAnimation
-    ) {
-        super(speed, x, y, spriteWidth, spriteHeight, gameConfig.getPixelBlockSize());
-        this.healthPoints = healthPoints;
+    ) throws InvalidInputException {
+        super(speed, x, y, spriteWidth, spriteHeight, PositiveInt.of(gameConfig.getPixelBlockSize()));
+        this.healthPoints = healthPoints.value();
         this.gameConfig = gameConfig;
         this.walkAnimation = walkAnimation;
     }

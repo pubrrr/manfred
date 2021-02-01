@@ -1,6 +1,8 @@
 package manfred.game.attack;
 
 import helpers.TestGameConfig;
+import manfred.data.InvalidInputException;
+import manfred.data.shared.PositiveInt;
 import manfred.game.characters.MapCollider;
 import manfred.game.enemy.Enemy;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,18 +27,18 @@ class AttackTest {
     }
 
     @Test
-    void notResolvedWhenNothingHappens() {
-        underTest = new Attack(0, 0, 0, 0, 0, 0, 0, null, 1);
+    void notResolvedWhenNothingHappens() throws InvalidInputException {
+        underTest = new Attack(PositiveInt.of(0), 0, 0, PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), null, PositiveInt.of(1));
 
         assertFalse(underTest.isResolved());
     }
 
     @Test
-    void resolvesOnTravelledTooFar() {
-        int range = 5;
-        int speed = 2 * range;
+    void resolvesOnTravelledTooFar() throws InvalidInputException {
+        PositiveInt range = PositiveInt.of(5);
+        PositiveInt speed = PositiveInt.of(2 * range.value());
 
-        underTest = new Attack(speed, 0, 0, 0, 0, 0, range, null, 1);
+        underTest = new Attack(speed, 0, 0, PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), range, null, PositiveInt.of(1));
 
         underTest.up();
         underTest.checkCollisionsAndMove(mapColliderMock);
@@ -44,22 +46,22 @@ class AttackTest {
     }
 
     @Test
-    void resolvesOnCollision() {
+    void resolvesOnCollision() throws InvalidInputException {
         when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(true);
 
-        underTest = new Attack(0, 0, 0, 0, 0, 0, 0, null, 1);
+        underTest = new Attack(PositiveInt.of(0), 0, 0, PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), null, PositiveInt.of(1));
 
         underTest.checkCollisionsAndMove(mapColliderMock);
         assertTrue(underTest.isResolved());
     }
 
     @Test
-    void givenEnemySpriteThatIntersects_thenDamagesAndResolves() {
+    void givenEnemySpriteThatIntersects_thenDamagesAndResolves() throws InvalidInputException {
         int damage = 3;
         int healthPoints = 2;
 
-        underTest = new Attack(0, 0, 0, 5, 5, damage, 0, null, 1);
-        Enemy enemy = new Enemy("test", 0, 3, 3, healthPoints, null, 0, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
+        underTest = new Attack(PositiveInt.of(0), 0, 0, PositiveInt.of(5), PositiveInt.of(5), PositiveInt.of(damage), PositiveInt.of(0), null, PositiveInt.of(1));
+        Enemy enemy = new Enemy("test", PositiveInt.of(0), 3, 3, PositiveInt.of(healthPoints), null, 0, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
 
         underTest.checkHit(enemy);
 
@@ -68,12 +70,12 @@ class AttackTest {
     }
 
     @Test
-    void givenEnemySpriteThatNotIntersects_thenDoesNotDamageAndResolve() {
+    void givenEnemySpriteThatNotIntersects_thenDoesNotDamageAndResolve() throws InvalidInputException {
         int damage = 3;
         int healthPoints = 2;
 
-        underTest = new Attack(0, 0, 0, 0, 0, damage, 0, null, 1);
-        Enemy enemy = new Enemy("test", 0, 8, 8, healthPoints, null, 0, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
+        underTest = new Attack(PositiveInt.of(0), 0, 0, PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(damage), PositiveInt.of(0), null, PositiveInt.of(1));
+        Enemy enemy = new Enemy("test", PositiveInt.of(0), 8, 8, PositiveInt.of(healthPoints), null, 0, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
 
         underTest.checkHit(enemy);
 

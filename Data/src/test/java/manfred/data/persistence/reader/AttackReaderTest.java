@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import manfred.data.InvalidInputException;
 import manfred.data.persistence.dto.AttackDto;
+import manfred.data.shared.PositiveInt;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,11 +26,11 @@ class AttackReaderTest {
         AttackDto result = underTest.load("test", getClass().getResource("/attack/testThunder.yaml"));
 
         assertThat(result.getName(), equalTo("thunder"));
-        assertThat(result.getSpeed(), equalTo(5));
-        assertThat(result.getSizeX(), equalTo(60));
-        assertThat(result.getSizeY(), equalTo(60));
-        assertThat(result.getRange(), equalTo(320));
-        assertThat(result.getNumberOfAnimationImages(), equalTo(5));
+        assertThat(result.getSpeed(), equalTo(PositiveInt.of(5)));
+        assertThat(result.getSizeX(), equalTo(PositiveInt.of(60)));
+        assertThat(result.getSizeY(), equalTo(PositiveInt.of(60)));
+        assertThat(result.getRange(), equalTo(PositiveInt.of(320)));
+        assertThat(result.getNumberOfAnimationImages(), equalTo(PositiveInt.of(5)));
         assertThat(result.getAttackAnimation(), not(empty()));
     }
 

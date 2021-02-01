@@ -3,8 +3,7 @@ package manfred.data.persistence.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import manfred.data.persistence.dto.GelaberBoxPositionDto;
-import manfred.data.persistence.dto.WindowSizeDto;
+import manfred.data.shared.PositiveInt;
 
 @Data
 @NoArgsConstructor
@@ -12,8 +11,8 @@ import manfred.data.persistence.dto.WindowSizeDto;
 public class ConfigDto {
     private WindowSizeDto windowSize;
     private GelaberBoxPositionDto gelaberBoxPosition;
-    private int pixelBlockSize;
-    private int textBoxDistanceToBorder;
-    private int textPointSize;
-    private int textDistanceToBox;
+    private PositiveInt pixelBlockSize;
+    private PositiveInt textBoxDistanceToBorder;
+    private PositiveInt textPointSize;
+    private PositiveInt textDistanceToBox;
 }

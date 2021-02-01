@@ -1,22 +1,22 @@
 package manfred.game.attack;
 
+import manfred.data.shared.PositiveInt;
 import manfred.game.characters.Direction;
-import manfred.game.characters.MapCollider;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class AttackGenerator {
-    private final int speed;
-    private final int sizeX;
-    private final int sizeY;
-    private final int damage;
-    private final int range;
+    private final PositiveInt speed;
+    private final PositiveInt sizeX;
+    private final PositiveInt sizeY;
+    private final PositiveInt damage;
+    private final PositiveInt range;
     private final List<BufferedImage> attackAnimation;
-    private final int numberOfAnimationImages;
+    private final PositiveInt numberOfAnimationImages;
 
-    public AttackGenerator(int speed, int sizeX, int sizeY, int damage, int range, List<BufferedImage> attackAnimation, int numberOfAnimationImages) {
+    public AttackGenerator(PositiveInt speed, PositiveInt sizeX, PositiveInt sizeY, PositiveInt damage, PositiveInt range, List<BufferedImage> attackAnimation, PositiveInt numberOfAnimationImages) {
         this.speed = speed;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
@@ -29,8 +29,8 @@ public class AttackGenerator {
     public Attack generate(Point center, Direction castDirection) {
         Attack attack = new Attack(
                 this.speed,
-                center.x - this.sizeX / 2,
-                center.y - this.sizeY / 2,
+                center.x - this.sizeX.value() / 2,
+                center.y - this.sizeY.value() / 2,
                 this.sizeX,
                 this.sizeY,
                 this.damage,

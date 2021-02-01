@@ -2,6 +2,7 @@ package componentTests.controller;
 
 import helpers.TestGameConfig;
 import manfred.data.InvalidInputException;
+import manfred.data.shared.PositiveInt;
 import manfred.game.attack.Attack;
 import manfred.game.attack.AttackGenerator;
 import manfred.game.attack.AttacksContainer;
@@ -58,7 +59,7 @@ class ManfredControllerTest extends ControllerTestCase {
     private ManfredController underTest;
 
     @BeforeEach
-    void init() {
+    void init() throws InvalidInputException {
         testGameConfig = (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE);
 
         mapColliderMock = mock(MapCollider.class);
@@ -71,7 +72,7 @@ class ManfredControllerTest extends ControllerTestCase {
         attacksContainer = new AttacksContainer();
         backgroundScrollerMock = mock(BackgroundScroller.class);
 
-        manfred = new Manfred(10, 0, 0, PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, 1, testGameConfig, null);
+        manfred = new Manfred(PositiveInt.of(10), 0, 0, PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(1), testGameConfig, null);
 
         CastModeOn castModeOn = new CastModeOn(skillSet, attacksContainer, testGameConfig, manfred.getSprite(), null);
         Caster attackCaster = new Caster(new CastModeOff(castModeOn));
@@ -191,8 +192,8 @@ class ManfredControllerTest extends ControllerTestCase {
     @Test
     void interactWithDoor() throws InterruptedException, InvalidInputException {
         String targetName = "target";
-        int targetSpawnX = 5;
-        int targetSpawnY = 66;
+        PositiveInt targetSpawnX = PositiveInt.of(5);
+        PositiveInt targetSpawnY = PositiveInt.of(66);
         setupMapWithInteractable(new Door(targetName, targetSpawnX, targetSpawnY));
 
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_ENTER);
@@ -207,15 +208,15 @@ class ManfredControllerTest extends ControllerTestCase {
 
         verify(mapFacadeMock).loadMap(targetName);
         verify(backgroundScrollerMock).centerTo(manfred.getSprite().getCenter());
-        assertEquals(PIXEL_BLOCK_SIZE * targetSpawnX, manfred.getX());
-        assertEquals(PIXEL_BLOCK_SIZE * targetSpawnY, manfred.getY());
+        assertEquals(PIXEL_BLOCK_SIZE * targetSpawnX.value(), manfred.getX());
+        assertEquals(PIXEL_BLOCK_SIZE * targetSpawnY.value(), manfred.getY());
     }
 
     @Test
     void stepOnPortal() throws InterruptedException, InvalidInputException {
         String targetName = "target";
-        int targetSpawnX = 5;
-        int targetSpawnY = 66;
+        PositiveInt targetSpawnX = PositiveInt.of(5);
+        PositiveInt targetSpawnY = PositiveInt.of(66);
         setupMapWithInteractable(new Portal(targetName, targetSpawnX, targetSpawnY));
 
         manfred.setY(PIXEL_BLOCK_SIZE);
@@ -229,8 +230,8 @@ class ManfredControllerTest extends ControllerTestCase {
 
         verify(mapFacadeMock).loadMap(targetName);
         verify(backgroundScrollerMock).centerTo(manfred.getSprite().getCenter());
-        assertEquals(PIXEL_BLOCK_SIZE * targetSpawnX, manfred.getX());
-        assertEquals(PIXEL_BLOCK_SIZE * targetSpawnY, manfred.getY());
+        assertEquals(PIXEL_BLOCK_SIZE * targetSpawnX.value(), manfred.getX());
+        assertEquals(PIXEL_BLOCK_SIZE * targetSpawnY.value(), manfred.getY());
     }
 
     @Test

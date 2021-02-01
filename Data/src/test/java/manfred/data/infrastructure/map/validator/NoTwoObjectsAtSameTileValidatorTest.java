@@ -1,10 +1,12 @@
 package manfred.data.infrastructure.map.validator;
 
+import manfred.data.InvalidInputException;
 import manfred.data.persistence.dto.MapEnemyDto;
 import manfred.data.persistence.dto.MapPersonDto;
 import manfred.data.persistence.dto.RawMapDto;
 import manfred.data.persistence.dto.TransporterDto;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
+import manfred.data.shared.PositiveInt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -35,14 +37,14 @@ class NoTwoObjectsAtSameTileValidatorTest {
     }
 
     @Test
-    void objectsAtDifferentPositions() {
+    void objectsAtDifferentPositions() throws InvalidInputException {
         RawMapDto input = new RawMapDto(
             "name",
             List.of(),
-            List.of(new MapPersonDto("name", 0, 0)),
-            List.of(new TransporterDto("target", 0, 0, 10, 10)),
-            List.of(new TransporterDto("target", 0, 0, 20, 20)),
-            List.of(new MapEnemyDto("name", 30, 30))
+            List.of(new MapPersonDto("name", PositiveInt.of(0), PositiveInt.of(0))),
+            List.of(new TransporterDto("target", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(10), PositiveInt.of(10))),
+            List.of(new TransporterDto("target", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(20), PositiveInt.of(20))),
+            List.of(new MapEnemyDto("name", PositiveInt.of(30), PositiveInt.of(30)))
         );
 
         List<String> result = underTest.validate(input, mock(MapMatrix.class));
@@ -51,18 +53,18 @@ class NoTwoObjectsAtSameTileValidatorTest {
     }
 
     @Test
-    void objectsAtSamePositions() {
-        int position1_x = 0;
-        int position1_y = 5;
-        int position2_x = 10;
-        int position2_y = 15;
+    void objectsAtSamePositions() throws InvalidInputException {
+        PositiveInt position1_x = PositiveInt.of(0);
+        PositiveInt position1_y = PositiveInt.of(5);
+        PositiveInt position2_x = PositiveInt.of(10);
+        PositiveInt position2_y = PositiveInt.of(15);
 
         RawMapDto input = new RawMapDto(
             "name",
             List.of(),
             List.of(new MapPersonDto("name", position1_x, position1_y)),
-            List.of(new TransporterDto("target", 0, 0, position1_x, position1_y)),
-            List.of(new TransporterDto("target", 0, 0, position2_x, position2_y)),
+            List.of(new TransporterDto("target", PositiveInt.of(0), PositiveInt.of(0), position1_x, position1_y)),
+            List.of(new TransporterDto("target", PositiveInt.of(0), PositiveInt.of(0), position2_x, position2_y)),
             List.of(new MapEnemyDto("name", position2_x, position2_y))
         );
 

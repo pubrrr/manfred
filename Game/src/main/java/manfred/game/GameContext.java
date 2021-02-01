@@ -3,6 +3,7 @@ package manfred.game;
 import manfred.data.DataContext;
 import manfred.data.InvalidInputException;
 import manfred.data.persistence.reader.ConfigProvider;
+import manfred.data.shared.PositiveInt;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.attack.CastModeOn;
 import manfred.game.attack.CombinationElement;
@@ -45,12 +46,12 @@ public class GameContext {
     @Bean
     public Manfred manfred(GameConfig gameConfig, ManfredFramesLoader manfredFramesLoader) throws InvalidInputException {
         return new Manfred(
-            6,
+            PositiveInt.of(6),
             gameConfig.getPixelBlockSize() * 3,
             gameConfig.getPixelBlockSize() * 3,
-            gameConfig.getPixelBlockSize(),
-            2 * gameConfig.getPixelBlockSize(),
-            100,
+            PositiveInt.of(gameConfig.getPixelBlockSize()),
+            PositiveInt.of(2 * gameConfig.getPixelBlockSize()),
+            PositiveInt.of(100),
             gameConfig,
             manfredFramesLoader.loadWalkAnimation()
         );
