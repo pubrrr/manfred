@@ -1,23 +1,30 @@
 package manfred.game.characters;
 
 import manfred.game.attack.Attack;
+import manfred.game.map.Vector;
 
 import java.awt.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 public enum Direction {
-    RIGHT(interactRight(), Attack::right),
-    LEFT(interactLeft(), Attack::left),
-    UP(interactUp(), Attack::up),
-    DOWN(interactDown(), Attack::down);
+    RIGHT(interactRight(), Attack::right, Vector.pointingRight(100)),
+    LEFT(interactLeft(), Attack::left, Vector.pointingRight(-100)),
+    UP(interactUp(), Attack::up, Vector.pointingUp(100)),
+    DOWN(interactDown(), Attack::down, Vector.pointingUp(-100));
 
     private final BiFunction<Sprite, Integer, Point> interactionPointDeterminator;
     private final Consumer<Attack> initialAttackMovement;
+    private final Vector vector;
 
-    Direction(BiFunction<Sprite, Integer, Point> interactionPointDeterminator, Consumer<Attack> initialAttackMovement) {
+    Direction(BiFunction<Sprite, Integer, Point> interactionPointDeterminator, Consumer<Attack> initialAttackMovement, Vector vector) {
         this.interactionPointDeterminator = interactionPointDeterminator;
         this.initialAttackMovement = initialAttackMovement;
+        this.vector = vector;
+    }
+
+    public Vector getVector() {
+        return this.vector;
     }
 
     public void kickAttack(Attack attack) {

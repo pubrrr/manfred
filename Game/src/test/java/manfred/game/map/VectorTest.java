@@ -20,6 +20,6 @@ class VectorTest {
 
         Vector inclined = Vector.of(someOddLength, 3 * someOddLength);
         double actualLength = someOddLength * Math.sqrt(10);
-        assertThat((double) inclined.length(), greaterThan(actualLength));
+        assertThat((double) inclined.length().value(), greaterThan(actualLength));
     }
 }

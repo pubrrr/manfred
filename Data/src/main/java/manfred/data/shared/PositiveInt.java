@@ -1,7 +1,8 @@
 package manfred.data.shared;
 
 import lombok.EqualsAndHashCode;
-import manfred.data.InvalidInputException;
+
+import java.util.Optional;
 
 @EqualsAndHashCode
 public class PositiveInt {
@@ -15,15 +16,21 @@ public class PositiveInt {
         return value;
     }
 
-    public static PositiveInt of(int value) throws InvalidInputException {
+    public static PositiveInt of(int value) {
         if (value < 0) {
-            throw new InvalidInputException("Value must be positive, " + value + " given");
+            throw new IllegalArgumentException("Value must be positive, " + value + " given");
         }
         return new PositiveInt(value);
     }
 
     @Override
     public String toString() {
-        return "" + value;
+        return String.valueOf(value);
+    }
+
+    public Optional<StrictlyPositiveInt> toStrictlyPositive() {
+        return this.value == 0
+            ? Optional.empty()
+            : Optional.of(StrictlyPositiveInt.of(this.value));
     }
 }

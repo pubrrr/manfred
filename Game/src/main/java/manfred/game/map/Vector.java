@@ -1,5 +1,10 @@
 package manfred.game.map;
 
+import lombok.EqualsAndHashCode;
+import manfred.data.shared.PositiveInt;
+import manfred.data.shared.StrictlyPositiveInt;
+
+@EqualsAndHashCode
 public class Vector {
     private final int x;
     private final int y;
@@ -27,6 +32,10 @@ public class Vector {
         return new HorizontalVector(x);
     }
 
+    public static Vector zero() {
+        return Vector.pointingUp(0);
+    }
+
     public int x() {
         return this.x;
     }
@@ -35,20 +44,20 @@ public class Vector {
         return this.y;
     }
 
-    public int length() {
-        return (int) Math.round(Math.sqrt(x * x + y * y));
+    public PositiveInt length() {
+        return PositiveInt.of((int) Math.round(Math.sqrt(x * x + y * y)));
     }
 
     public Vector add(Vector other) {
         return new Vector(this.x + other.x, this.y + other.y);
     }
 
-    public Vector scale(int multiply, int divide) {
-        return new Vector(this.x * multiply / divide, this.y * multiply / divide);
+    public Vector scale(PositiveInt multiply, StrictlyPositiveInt divide) {
+        return new Vector(this.x * multiply.value() / divide.value(), this.y * multiply.value() / divide.value());
     }
 
-    private Vector scale(int multiply) {
-        return new Vector(this.x * multiply, this.y * multiply);
+    public int scalarProduct(Vector vector) {
+        return this.x * vector.x + this.y * vector.y;
     }
 
     private static class VerticalVector extends Vector {
@@ -57,8 +66,8 @@ public class Vector {
         }
 
         @Override
-        public int length() {
-            return this.y();
+        public PositiveInt length() {
+            return PositiveInt.of(Math.abs(this.y()));
         }
     }
 
@@ -68,8 +77,8 @@ public class Vector {
         }
 
         @Override
-        public int length() {
-            return this.x();
+        public PositiveInt length() {
+            return PositiveInt.of(Math.abs(this.x()));
         }
     }
 }
