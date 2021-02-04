@@ -2,10 +2,12 @@ package manfred.game.enemy;
 
 import manfred.data.InvalidInputException;
 import manfred.data.shared.PositiveInt;
+import manfred.game.characters.Velocity;
 import manfred.game.config.GameConfig;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MovingObject;
 import manfred.game.graphics.paintable.LocatedPaintable;
+import manfred.game.map.Vector;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -14,16 +16,16 @@ public class Enemy extends MovingObject implements LocatedPaintable {
     private final String name;
     private final GameConfig gameConfig;
     private final BufferedImage image;
-    private final int aggroRadius;
+    private final int aggroRadiusSquared;
 
     private int healthPoints;
 
-    public Enemy(String name, PositiveInt speed, int x, int y, PositiveInt healthPoints, BufferedImage image, int aggroRadius, GameConfig gameConfig) throws InvalidInputException {
-        super(speed, x, y, PositiveInt.of(2 * gameConfig.getPixelBlockSize()), PositiveInt.of(2 * gameConfig.getPixelBlockSize()), PositiveInt.of(2 * gameConfig.getPixelBlockSize()));
+    public Enemy(String name, Velocity velocity, int x, int y, PositiveInt healthPoints, BufferedImage image, int aggroRadius, GameConfig gameConfig) throws InvalidInputException {
+        super(velocity, x, y, PositiveInt.of(2 * gameConfig.getPixelBlockSize()), PositiveInt.of(2 * gameConfig.getPixelBlockSize()), PositiveInt.of(2 * gameConfig.getPixelBlockSize()));
         this.name = name;
         this.healthPoints = healthPoints.value(); // TODO
         this.image = image;
-        this.aggroRadius = aggroRadius;
+        this.aggroRadiusSquared = aggroRadius * aggroRadius;
         this.gameConfig = gameConfig;
     }
 
@@ -41,18 +43,15 @@ public class Enemy extends MovingObject implements LocatedPaintable {
     }
 
     public Enemy determineSpeed(Manfred manfred) {
-        long distanceX = manfred.getX() - this.sprite.x;
-        long distanceY = manfred.getY() - this.sprite.y;
-        long distanceSquared = distanceX * distanceX + distanceY * distanceY;
+        // TODO take Manfred's center rather than some corner
+        int distanceX = manfred.getX() - this.sprite.x;
+        int distanceY = manfred.getY() - this.sprite.y;
 
-        if (distanceSquared <= (long) aggroRadius * aggroRadius) {
-            // this actually makes the top left corner of the enemy move towards the top left corner of Manfred. Change when necessary
-            double distance = Math.sqrt(distanceSquared);
-            currentSpeedX = (int) (speed * ((float) distanceX) / distance);
-            currentSpeedY = (int) (speed * ((float) distanceY) / distance);
+        Vector enemyToManfred = Vector.of(distanceX, distanceY);
+        if (enemyToManfred.lengthSquared().value() <= this.aggroRadiusSquared) {
+            this.velocity = velocity.moveInDirection(enemyToManfred);
         } else {
-            currentSpeedX = 0;
-            currentSpeedY = 0;
+            this.velocity = velocity.stop();
         }
         return this;
     }

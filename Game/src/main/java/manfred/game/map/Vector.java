@@ -48,6 +48,10 @@ public class Vector {
         return PositiveInt.of((int) Math.round(Math.sqrt(x * x + y * y)));
     }
 
+    public PositiveInt lengthSquared() {
+        return PositiveInt.of(x * x + y * y);
+    }
+
     public Vector add(Vector other) {
         return new Vector(this.x + other.x, this.y + other.y);
     }

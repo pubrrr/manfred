@@ -2,6 +2,7 @@ package manfred.infrastructureadapter.enemy;
 
 import manfred.data.infrastructure.ObjectConverter;
 import manfred.data.infrastructure.enemy.EnemyPrototype;
+import manfred.game.characters.Velocity;
 import manfred.game.config.GameConfig;
 import manfred.game.enemy.Enemy;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ public class EnemyConverter implements ObjectConverter<EnemyPrototype, Enemy> {
         try {
             return new Enemy(
                 enemyPrototype.getName(),
-                enemyPrototype.getSpeed(),
+                Velocity.withSpeed(enemyPrototype.getSpeed()),
                 enemyPrototype.getSpawnX().value() * this.gameConfig.getPixelBlockSize(),
                 enemyPrototype.getSpawnY().value() * this.gameConfig.getPixelBlockSize(),
                 enemyPrototype.getHealthPoints(),

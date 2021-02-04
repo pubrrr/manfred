@@ -32,7 +32,7 @@ class ManfredTest {
     void init() throws InvalidInputException {
         mapColliderMock = mock(MapCollider.class);
 
-        underTest = new Manfred(PositiveInt.of(10), 0, 0, PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(1), (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE), null);
+        underTest = new Manfred(Velocity.withSpeed(PositiveInt.of(10)), 0, 0, PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(1), (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE), null);
     }
 
     @Test

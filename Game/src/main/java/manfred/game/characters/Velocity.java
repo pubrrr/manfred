@@ -8,14 +8,13 @@ public class Velocity {
     private final PositiveInt speed;
     private final Vector directionVector;
 
-    public Velocity(PositiveInt speed) {
-        this.speed = speed;
-        this.directionVector = Vector.zero();
-    }
-
     private Velocity(PositiveInt speed, Vector directionVector) {
         this.speed = speed;
         this.directionVector = directionVector;
+    }
+
+    public static Velocity withSpeed(PositiveInt speed) {
+        return new Velocity(speed, Vector.zero());
     }
 
     public Velocity accelerate(Direction direction) {
@@ -28,9 +27,35 @@ public class Velocity {
         );
     }
 
+    public Velocity moveInDirection(Vector directionVector) {
+        return new Velocity(this.speed, directionVector);
+    }
+
     public Vector getVector() {
         return this.directionVector.length().toStrictlyPositive()
             .map(strictlyPositiveLength -> this.directionVector.scale(speed, strictlyPositiveLength))
             .orElse(this.directionVector);
+    }
+
+    public Velocity stopX() {
+        return new Velocity(
+            this.speed,
+            Vector.of(0, this.directionVector.y())
+        );
+    }
+
+    public Velocity stopY() {
+        return new Velocity(
+            this.speed,
+            Vector.of(this.directionVector.x(), 0)
+        );
+    }
+
+    public Velocity stop() {
+        return new Velocity(this.speed, Vector.zero());
+    }
+
+    public PositiveInt getMaxSpeed() {
+        return this.speed;
     }
 }

@@ -55,7 +55,7 @@ class AttackGeneratorTest {
 
         result.checkCollisionsAndMove(mapColliderMock);
         assertEquals(0, result.getX());
-        assertEquals(-SPEED, result.getY());
+        assertEquals(SPEED, result.getY());
     }
 
     @Test
@@ -64,6 +64,6 @@ class AttackGeneratorTest {
 
         result.checkCollisionsAndMove(mapColliderMock);
         assertEquals(0, result.getX());
-        assertEquals(SPEED, result.getY());
+        assertEquals(-SPEED, result.getY());
     }
 }

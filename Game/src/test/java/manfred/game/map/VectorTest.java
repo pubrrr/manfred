@@ -13,10 +13,10 @@ class VectorTest {
         int someOddLength = 977;
 
         Vector right = Vector.of(someOddLength, 0);
-        assertThat(right.length(), is(someOddLength));
+        assertThat(right.length().value(), is(someOddLength));
 
         Vector down = Vector.of(0, someOddLength);
-        assertThat(down.length(), is(someOddLength));
+        assertThat(down.length().value(), is(someOddLength));
 
         Vector inclined = Vector.of(someOddLength, 3 * someOddLength);
         double actualLength = someOddLength * Math.sqrt(10);

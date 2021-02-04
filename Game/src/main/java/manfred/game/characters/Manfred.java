@@ -22,7 +22,7 @@ public class Manfred extends MovingObject implements LocatedPaintable {
     private int animationPosition = 0;
 
     public Manfred(
-        PositiveInt speed,
+        Velocity velocity,
         int x,
         int y,
         PositiveInt spriteWidth,
@@ -31,7 +31,7 @@ public class Manfred extends MovingObject implements LocatedPaintable {
         GameConfig gameConfig,
         HashMap<Direction, BufferedImage[]> walkAnimation
     ) throws InvalidInputException {
-        super(speed, x, y, spriteWidth, spriteHeight, PositiveInt.of(gameConfig.getPixelBlockSize()));
+        super(velocity, x, y, spriteWidth, spriteHeight, PositiveInt.of(gameConfig.getPixelBlockSize()));
         this.healthPoints = healthPoints.value();
         this.gameConfig = gameConfig;
         this.walkAnimation = walkAnimation;
@@ -52,7 +52,7 @@ public class Manfred extends MovingObject implements LocatedPaintable {
     public void checkCollisionsAndMove(MapCollider mapCollider) {
         super.checkCollisionsAndMove(mapCollider);
 
-        if (currentSpeedX == 0 && currentSpeedY == 0) {
+        if (this.velocity.getVector().lengthSquared().value() == 0) {
             framesCounter = 0;
             animationPosition = 0;
         } else {
@@ -74,13 +74,14 @@ public class Manfred extends MovingObject implements LocatedPaintable {
 
     @Override
     public void paint(Graphics g, Point offset, Integer x, Integer y) {
+        System.out.println(viewDirection);
         g.drawImage(
-                walkAnimation.get(viewDirection)[animationPosition],
-                sprite.x - offset.x,
-                sprite.y - offset.y,
-                sprite.width,
-                sprite.height,
-                null
+            walkAnimation.get(viewDirection)[animationPosition],
+            sprite.x - offset.x,
+            sprite.y - offset.y,
+            sprite.width,
+            sprite.height,
+            null
         );
     }
 

@@ -9,8 +9,8 @@ import manfred.game.attack.CastModeOn;
 import manfred.game.attack.CombinationElement;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.ManfredFramesLoader;
-import manfred.game.characters.MapCollider;
 import manfred.game.characters.SkillSet;
+import manfred.game.characters.Velocity;
 import manfred.game.config.GameConfig;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
@@ -46,7 +46,7 @@ public class GameContext {
     @Bean
     public Manfred manfred(GameConfig gameConfig, ManfredFramesLoader manfredFramesLoader) throws InvalidInputException {
         return new Manfred(
-            PositiveInt.of(6),
+            Velocity.withSpeed(PositiveInt.of(6)),
             gameConfig.getPixelBlockSize() * 3,
             gameConfig.getPixelBlockSize() * 3,
             PositiveInt.of(gameConfig.getPixelBlockSize()),

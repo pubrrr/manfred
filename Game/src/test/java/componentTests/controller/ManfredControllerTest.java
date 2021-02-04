@@ -13,6 +13,7 @@ import manfred.game.attack.CombinationElement;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.SkillSet;
+import manfred.game.characters.Velocity;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.ManfredController;
@@ -72,7 +73,7 @@ class ManfredControllerTest extends ControllerTestCase {
         attacksContainer = new AttacksContainer();
         backgroundScrollerMock = mock(BackgroundScroller.class);
 
-        manfred = new Manfred(PositiveInt.of(10), 0, 0, PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(1), testGameConfig, null);
+        manfred = new Manfred(Velocity.withSpeed(PositiveInt.of(10)), 0, 0, PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(1), testGameConfig, null);
 
         CastModeOn castModeOn = new CastModeOn(skillSet, attacksContainer, testGameConfig, manfred.getSprite(), null);
         Caster attackCaster = new Caster(new CastModeOff(castModeOn));
@@ -142,7 +143,7 @@ class ManfredControllerTest extends ControllerTestCase {
         manfred.checkCollisionsAndMove(mapColliderMock);
 
         assertSame(initialX, manfred.getX());
-        assertTrue(initialY > manfred.getY());
+        assertTrue(initialY < manfred.getY());
 
         assertStops(eventMock, manfred.getX(), manfred.getY());
     }
@@ -158,7 +159,7 @@ class ManfredControllerTest extends ControllerTestCase {
         manfred.checkCollisionsAndMove(mapColliderMock);
 
         assertSame(initialX, manfred.getX());
-        assertTrue(initialY < manfred.getY());
+        assertTrue(initialY > manfred.getY());
 
         assertStops(eventMock, manfred.getX(), manfred.getY());
     }

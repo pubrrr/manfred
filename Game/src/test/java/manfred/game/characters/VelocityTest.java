@@ -14,8 +14,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
 @ExtendWith(DataProviderExtension.class)
@@ -27,7 +29,7 @@ class VelocityTest {
 
     @BeforeEach
     void setUp() {
-        underTest = new Velocity(SPEED);
+        underTest = Velocity.withSpeed(SPEED);
     }
 
     @Test
@@ -122,8 +124,8 @@ class VelocityTest {
     void accelerateInADirectionAndTwiceAnotherDirection(Direction direction1, Direction direction2) {
         Velocity result = underTest.accelerate(direction1).accelerate(direction2).accelerate(direction2);
 
-        assertThat(result.getVector().length().value(), greaterThanOrEqualTo(SPEED.value() - 5));
-        assertThat(result.getVector().length().value(), lessThanOrEqualTo(SPEED.value() + 5));
+        assertThat(result.getVector().length().value(), greaterThanOrEqualTo(SPEED.value() - 3));
+        assertThat(result.getVector().length().value(), lessThanOrEqualTo(SPEED.value() + 3));
         Vector directionVector = direction1.getVector().add(direction2.getVector());
         Vector scaledDirectionVector = directionVector.scale(SPEED, StrictlyPositiveInt.of(directionVector.length().value()));
         assertThat(result.getVector(), equalTo(scaledDirectionVector));
@@ -166,5 +168,25 @@ class VelocityTest {
             new Object[]{Direction.RIGHT, Direction.UP, Direction.DOWN},
             new Object[]{Direction.RIGHT, Direction.DOWN, Direction.UP}
         };
+    }
+
+    @Test
+    void moveInOddDirections() {
+        Vector direction1 = Vector.of(30, 70);
+        Velocity result1 = underTest.moveInDirection(direction1);
+
+        assertThat(result1.getVector().x(), lessThan(result1.getVector().y()));
+        assertThat(result1.getVector().length().value(), greaterThanOrEqualTo(SPEED.value() - 3));
+        assertThat(result1.getVector().length().value(), lessThanOrEqualTo(SPEED.value() + 3));
+
+        Vector direction2 = Vector.of(30, -20);
+        Velocity result2 = result1.moveInDirection(direction2);
+
+        assertThat(result2.getVector().x(), greaterThan(Math.abs(result2.getVector().y())));
+        assertThat(result2.getVector().length().value(), greaterThanOrEqualTo(SPEED.value() - 3));
+        assertThat(result2.getVector().length().value(), lessThanOrEqualTo(SPEED.value() + 3));
+
+        Velocity stop = result2.stop();
+        assertThat(stop.getVector().length().value(), is(0));
     }
 }

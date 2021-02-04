@@ -2,6 +2,7 @@ package manfred.game.attack;
 
 import manfred.data.shared.PositiveInt;
 import manfred.game.characters.Direction;
+import manfred.game.characters.Velocity;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -27,18 +28,16 @@ public class AttackGenerator {
     }
 
     public Attack generate(Point center, Direction castDirection) {
-        Attack attack = new Attack(
-                this.speed,
-                center.x - this.sizeX.value() / 2,
-                center.y - this.sizeY.value() / 2,
-                this.sizeX,
-                this.sizeY,
-                this.damage,
-                this.range,
-                this.attackAnimation,
-                this.numberOfAnimationImages
+        return new Attack(
+            Velocity.withSpeed(this.speed).accelerate(castDirection),
+            center.x - this.sizeX.value() / 2,
+            center.y - this.sizeY.value() / 2,
+            this.sizeX,
+            this.sizeY,
+            this.damage,
+            this.range,
+            this.attackAnimation,
+            this.numberOfAnimationImages
         );
-        castDirection.kickAttack(attack);
-        return attack;
     }
 }

@@ -5,7 +5,7 @@ import manfred.game.graphics.paintable.LocatedPaintable;
 
 abstract public class MovingObject implements LocatedPaintable {
     protected Sprite sprite;
-    protected final int speed;
+    protected Velocity velocity;
 
     protected boolean movesLeft = false;
     protected boolean movesRight = false;
@@ -13,11 +13,8 @@ abstract public class MovingObject implements LocatedPaintable {
     protected boolean movesDown = false;
     protected Direction viewDirection = Direction.DOWN;
 
-    protected int currentSpeedX = 0;
-    protected int currentSpeedY = 0;
-
-    protected MovingObject(PositiveInt speed, int x, int y, PositiveInt width, PositiveInt spriteHeight, PositiveInt baseHeight) {
-        this.speed = speed.value();
+    protected MovingObject(Velocity velocity, int x, int y, PositiveInt width, PositiveInt spriteHeight, PositiveInt baseHeight) {
+        this.velocity = velocity;
         this.sprite = new Sprite(x, y, width.value(), spriteHeight.value(), baseHeight.value());
     }
 
@@ -31,63 +28,63 @@ abstract public class MovingObject implements LocatedPaintable {
 
     public void left() {
         if (!movesLeft) {
-            viewDirection = Direction.LEFT;
+            accelerate(Direction.LEFT);
             movesLeft = true;
-            currentSpeedX -= speed;
         }
     }
 
     public void right() {
         if (!movesRight) {
-            viewDirection = Direction.RIGHT;
+            accelerate(Direction.RIGHT);
             movesRight = true;
-            currentSpeedX += speed;
         }
     }
 
     public void up() {
         if (!movesUp) {
-            viewDirection = Direction.UP;
+            accelerate(Direction.UP);
             movesUp = true;
-            // y-Achse ist invertiert: kleiner Werte werden weiter oben gezeichnet
-            currentSpeedY -= speed;
         }
     }
 
     public void down() {
         if (!movesDown) {
-            viewDirection = Direction.DOWN;
+            accelerate(Direction.DOWN);
             movesDown = true;
-            currentSpeedY += speed;
         }
+    }
+
+    private void accelerate(Direction direction) {
+        this.viewDirection = direction;
+        this.velocity = this.velocity.accelerate(direction);
     }
 
     public void stopX() {
         movesRight = false;
         movesLeft = false;
-        currentSpeedX = 0;
+        this.velocity = velocity.stopX();
     }
 
     public void stopY() {
         movesUp = false;
         movesDown = false;
-        currentSpeedY = 0;
+        this.velocity = velocity.stopY();
     }
 
     public void checkCollisionsAndMove(MapCollider mapCollider) {
         if (!collidesVertically(mapCollider)) {
-            this.sprite.translate(currentSpeedX, 0);
+            this.sprite.translate(this.velocity.getVector().x(), 0);
         }
 
         if (!collidesHorizontally(mapCollider)) {
-            this.sprite.translate(0, currentSpeedY);
+            this.sprite.translate(0, this.velocity.getVector().y());
         }
     }
 
     protected boolean collidesVertically(MapCollider mapCollider) {
         return mapCollider.collides(
-                this.sprite.getLeft() + currentSpeedX,
-                this.sprite.getRight() - 1 + currentSpeedX,
+                this.sprite.getLeft() + this.velocity.getVector().x(),
+                this.sprite.getRight() - 1 + this.velocity.getVector().x(),
                 this.sprite.getBaseTop(),
                 this.sprite.getBottom() - 1
         );
@@ -97,8 +94,8 @@ abstract public class MovingObject implements LocatedPaintable {
         return mapCollider.collides(
                 this.sprite.getLeft(),
                 this.sprite.getRight() - 1,
-                this.sprite.getBaseTop() + currentSpeedY,
-                this.sprite.getBottom() - 1 + currentSpeedY
+                this.sprite.getBaseTop() + this.velocity.getVector().y(),
+                this.sprite.getBottom() - 1 + this.velocity.getVector().y()
         );
     }
 
@@ -111,17 +108,17 @@ abstract public class MovingObject implements LocatedPaintable {
     }
 
     public void checkForVerticalViewDirection() {
-        if (currentSpeedY > 0) {
+        if (this.velocity.getVector().y() > 0) {
             viewDirection = Direction.DOWN;
-        } else if (currentSpeedY < 0) {
+        } else if (this.velocity.getVector().y() < 0) {
             viewDirection = Direction.UP;
         }
     }
 
     public void checkForHorizontalViewDirection() {
-        if (currentSpeedX > 0) {
+        if (this.velocity.getVector().x() > 0) {
             viewDirection = Direction.RIGHT;
-        } else if (currentSpeedX < 0) {
+        } else if (this.velocity.getVector().x() < 0) {
             viewDirection = Direction.LEFT;
         }
     }

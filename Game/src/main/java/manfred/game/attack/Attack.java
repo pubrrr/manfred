@@ -3,6 +3,7 @@ package manfred.game.attack;
 import manfred.data.shared.PositiveInt;
 import manfred.game.characters.MapCollider;
 import manfred.game.characters.MovingObject;
+import manfred.game.characters.Velocity;
 import manfred.game.enemy.Enemy;
 import manfred.game.graphics.paintable.LocatedPaintable;
 
@@ -23,7 +24,7 @@ public class Attack extends MovingObject implements LocatedPaintable {
     private int framesCounter = 0;
 
     public Attack(
-        PositiveInt speed,
+        Velocity velocity,
         int x,
         int y,
         PositiveInt width,
@@ -33,13 +34,13 @@ public class Attack extends MovingObject implements LocatedPaintable {
         List<BufferedImage> attackAnimation,
         PositiveInt numberOfAnimationImages
     ) {
-        super(speed, x, y, width, height, height);
+        super(velocity, x, y, width, height, height);
         this.castPosition = this.sprite.getCenter();
         this.damage = damage;
         this.range = range;
         this.attackAnimation = attackAnimation;
         this.numberOfAnimationImages = numberOfAnimationImages;
-        this.nextAnimationImageTrigger = Math.round((double) range.value() / speed.value() / numberOfAnimationImages.value());
+        this.nextAnimationImageTrigger = Math.round((double) range.value() / velocity.getMaxSpeed().value() / numberOfAnimationImages.value());
     }
 
     @Override
@@ -47,7 +48,7 @@ public class Attack extends MovingObject implements LocatedPaintable {
         if (collidesVertically(mapCollider) || collidesHorizontally(mapCollider)) {
             this.resolve();
         }
-        this.sprite.translate(currentSpeedX, currentSpeedY);
+        this.sprite.translate(velocity.getVector().x(), velocity.getVector().y());
 
         if (castPosition.distance(this.sprite.getCenter()) >= range.value()) {
             this.resolve();
