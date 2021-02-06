@@ -64,6 +64,10 @@ public class Vector {
         return this.x * vector.x + this.y * vector.y;
     }
 
+    public boolean pointsTopRight() {
+        return this.x >= 0 && this.y >= 0;
+    }
+
     private static class VerticalVector extends Vector {
         public VerticalVector(int y) {
             super(0, y);

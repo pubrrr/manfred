@@ -1,5 +1,7 @@
 package manfred.game.map;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import manfred.game.config.GameConfig;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ControllerStateMapper;
@@ -106,6 +108,8 @@ public class Map {
         );
     }
 
+    @ToString
+    @EqualsAndHashCode
     public static class Coordinate {
         private static final int TILE_SIZE = 60;
 
@@ -127,23 +131,6 @@ public class Map {
 
         public TileCoordinate getTile() {
             return new TileCoordinate(x / TILE_SIZE, y / TILE_SIZE);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            Coordinate that = (Coordinate) o;
-            return x == that.x && y == that.y;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(x, y);
         }
     }
 
