@@ -25,7 +25,7 @@ public class MapTileWithImageDecorator implements MapTile {
         g.drawImage(
             tileImage,
             x - offset.x,
-            (y + gameConfig.getPixelBlockSize()) - offset.y - imageHeight,
+            (y + gameConfig.getPixelBlockSize().value()) - offset.y - imageHeight,
             imageWidth,
             imageHeight,
             null

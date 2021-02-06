@@ -23,14 +23,35 @@ public class PositiveInt {
         return new PositiveInt(value);
     }
 
+    public static Strict ofNonZero(int value) {
+        if (value <= 0) {
+            throw new IllegalArgumentException("Value must be strictly positive, " + value + " given");
+        }
+        return new Strict(value);
+    }
+
     @Override
     public String toString() {
         return String.valueOf(value);
     }
 
-    public Optional<StrictlyPositiveInt> toStrictlyPositive() {
+    public Optional<Strict> toStrictlyPositive() {
         return this.value == 0
             ? Optional.empty()
-            : Optional.of(StrictlyPositiveInt.of(this.value));
+            : Optional.of(ofNonZero(this.value));
+    }
+
+    public int times(int factor) {
+        return this.value * factor;
+    }
+
+    public int divideBy(int divisor) {
+        return this.value / divisor;
+    }
+
+    public static class Strict extends PositiveInt{
+        protected Strict(int value) {
+            super(value);
+        }
     }
 }

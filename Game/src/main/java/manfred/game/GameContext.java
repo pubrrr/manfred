@@ -44,13 +44,12 @@ public class GameContext {
     }
 
     @Bean
-    public Manfred manfred(GameConfig gameConfig, ManfredFramesLoader manfredFramesLoader) throws InvalidInputException {
+    public Manfred manfred(GameConfig gameConfig, ManfredFramesLoader manfredFramesLoader, MapFacade mapFacade) throws InvalidInputException {
         return new Manfred(
             Velocity.withSpeed(PositiveInt.of(6)),
-            gameConfig.getPixelBlockSize() * 3,
-            gameConfig.getPixelBlockSize() * 3,
-            PositiveInt.of(gameConfig.getPixelBlockSize()),
-            PositiveInt.of(2 * gameConfig.getPixelBlockSize()),
+            mapFacade.tileAt(PositiveInt.of(3), PositiveInt.of(3)).getBottomLeftCoordinate(),
+            gameConfig.getPixelBlockSize(),
+            PositiveInt.of(gameConfig.getPixelBlockSize().times(2)),
             PositiveInt.of(100),
             gameConfig,
             manfredFramesLoader.loadWalkAnimation()

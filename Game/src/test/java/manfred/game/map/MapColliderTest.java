@@ -7,6 +7,7 @@ import com.tngtech.junit.dataprovider.UseDataProviderExtension;
 import helpers.TestMapFactory;
 import manfred.data.InvalidInputException;
 import manfred.data.shared.PositiveInt;
+import manfred.game.geometry.Rectangle;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 

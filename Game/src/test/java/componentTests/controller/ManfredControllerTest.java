@@ -11,9 +11,9 @@ import manfred.game.attack.CastModeOn;
 import manfred.game.attack.Caster;
 import manfred.game.attack.CombinationElement;
 import manfred.game.characters.Manfred;
-import manfred.game.characters.MapCollider;
 import manfred.game.characters.SkillSet;
 import manfred.game.characters.Velocity;
+import manfred.game.config.GameConfig;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.ManfredController;
@@ -28,6 +28,7 @@ import manfred.game.interact.Interactable;
 import manfred.game.interact.Portal;
 import manfred.game.interact.person.Person;
 import manfred.game.interact.person.gelaber.GelaberFacade;
+import manfred.game.map.Map;
 import manfred.game.map.MapFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,10 +38,14 @@ import java.awt.image.BufferedImage;
 import java.util.Stack;
 
 import static helpers.AttackCombinationHelper.attackCombination;
+import static helpers.TestMapFactory.coordinateAt;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -48,23 +53,21 @@ import static org.mockito.Mockito.when;
 
 class ManfredControllerTest extends ControllerTestCase {
     private static final int PIXEL_BLOCK_SIZE = 40;
+    private static final int INITIAL_X = 20;
+    public static final int INITIAL_Y = 20;
+    public static final PositiveInt SPEED = PositiveInt.of(10);
 
     private Manfred manfred;
     private MapFacade mapFacadeMock;
     private SkillSet skillSet;
     private AttacksContainer attacksContainer;
-    private TestGameConfig testGameConfig;
     private BackgroundScroller backgroundScrollerMock;
-    private MapCollider mapColliderMock;
 
     private ManfredController underTest;
 
     @BeforeEach
     void init() throws InvalidInputException {
-        testGameConfig = (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE);
-
-        mapColliderMock = mock(MapCollider.class);
-        when(mapColliderMock.collides(0, 0, 0, 0)).thenReturn(false);
+        TestGameConfig testGameConfig = (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE);
 
         mapFacadeMock = mock(MapFacade.class);
         when(mapFacadeMock.stepOn(any())).thenReturn(null);
@@ -73,25 +76,18 @@ class ManfredControllerTest extends ControllerTestCase {
         attacksContainer = new AttacksContainer();
         backgroundScrollerMock = mock(BackgroundScroller.class);
 
-        manfred = new Manfred(Velocity.withSpeed(PositiveInt.of(10)), 0, 0, PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(1), testGameConfig, null);
+        manfred = new Manfred(Velocity.withSpeed(SPEED), coordinateAt(INITIAL_X, INITIAL_Y), PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(1), testGameConfig, null);
 
-        CastModeOn castModeOn = new CastModeOn(skillSet, attacksContainer, testGameConfig, manfred.getSprite(), null);
+        CastModeOn castModeOn = new CastModeOn(skillSet, attacksContainer, mock(GameConfig.class), manfred.getSprite(), null);
         Caster attackCaster = new Caster(new CastModeOff(castModeOn));
         EnemiesWrapper enemiesWrapper = new EnemiesWrapper();
 
-        ObjectsMover objectsMover = new ObjectsMover(
-            mapFacadeMock,
-            manfred,
-            enemiesWrapper,
-            attacksContainer,
-            mapColliderMock
-        );
+        ObjectsMover objectsMover = new ObjectsMover(mapFacadeMock, manfred, enemiesWrapper, attacksContainer);
 
         underTest = new ManfredController(
             manfred,
             attackCaster,
             mapFacadeMock,
-            testGameConfig,
             backgroundScrollerMock,
             mock(GamePanel.class),
             attacksContainer,
@@ -102,74 +98,65 @@ class ManfredControllerTest extends ControllerTestCase {
 
     @Test
     void movesRightAndStops() {
-        int initialX = manfred.getX();
-        int initialY = manfred.getY();
+        Map.Coordinate initialBottomLeft = manfred.getBottomLeft();
 
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_D);
 
         underTest.keyPressed(eventMock);
-        manfred.checkCollisionsAndMove(mapColliderMock);
+        manfred.checkCollisionsAndMove(area -> true);
 
-        assertTrue(initialX < manfred.getX());
-        assertSame(initialY, manfred.getY());
+        assertThat(manfred.getBottomLeft(), is(coordinateAt(INITIAL_X + SPEED.value(), INITIAL_Y)));
 
-        assertStops(eventMock, manfred.getX(), manfred.getY());
+        assertStops(eventMock, manfred.getBottomLeft());
     }
 
     @Test
     void movesLeftAndStops() {
-        int initialX = manfred.getX();
-        int initialY = manfred.getY();
+        Map.Coordinate initialBottomLeft = manfred.getBottomLeft();
 
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_A);
 
         underTest.keyPressed(eventMock);
-        manfred.checkCollisionsAndMove(mapColliderMock);
+        manfred.checkCollisionsAndMove(area -> true);
 
-        assertTrue(initialX > manfred.getX());
-        assertSame(initialY, manfred.getY());
+        assertThat(manfred.getBottomLeft(), is(coordinateAt(INITIAL_X - SPEED.value(), INITIAL_Y)));
 
-        assertStops(eventMock, manfred.getX(), manfred.getY());
+        assertStops(eventMock, manfred.getBottomLeft());
     }
 
     @Test
     void movesUpAndStops() {
-        int initialX = manfred.getX();
-        int initialY = manfred.getY();
+        Map.Coordinate initialBottomLeft = manfred.getBottomLeft();
 
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_W);
 
         underTest.keyPressed(eventMock);
-        manfred.checkCollisionsAndMove(mapColliderMock);
+        manfred.checkCollisionsAndMove(area -> true);
 
-        assertSame(initialX, manfred.getX());
-        assertTrue(initialY < manfred.getY());
+        assertThat(manfred.getBottomLeft(), is(coordinateAt(INITIAL_X, INITIAL_Y + SPEED.value())));
 
-        assertStops(eventMock, manfred.getX(), manfred.getY());
+        assertStops(eventMock, manfred.getBottomLeft());
     }
 
     @Test
     void movesDownAndStops() {
-        int initialX = manfred.getX();
-        int initialY = manfred.getY();
+        Map.Coordinate initialBottomLeft = manfred.getBottomLeft();
 
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_S);
 
         underTest.keyPressed(eventMock);
-        manfred.checkCollisionsAndMove(mapColliderMock);
+        manfred.checkCollisionsAndMove(area -> true);
 
-        assertSame(initialX, manfred.getX());
-        assertTrue(initialY > manfred.getY());
+        assertThat(manfred.getBottomLeft(), is(coordinateAt(INITIAL_X, INITIAL_Y - SPEED.value())));
 
-        assertStops(eventMock, manfred.getX(), manfred.getY());
+        assertStops(eventMock, manfred.getBottomLeft());
     }
 
-    private void assertStops(KeyEvent eventMock, int afterMoveX, int afterMoveY) {
+    private void assertStops(KeyEvent eventMock, Map.Coordinate before) {
         underTest.keyReleased(eventMock);
-        manfred.checkCollisionsAndMove(mapColliderMock);
+        manfred.checkCollisionsAndMove(area -> true);
 
-        assertSame(afterMoveX, manfred.getX());
-        assertSame(afterMoveY, manfred.getY());
+        assertThat(manfred.getBottomLeft(), equalTo(before));
     }
 
     @Test
@@ -183,7 +170,7 @@ class ManfredControllerTest extends ControllerTestCase {
 
     @Test
     void talkToPerson() {
-        setupMapWithInteractable(new Person("testOpa", mock(GelaberFacade.class), testGameConfig, new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB)));
+        setupMapWithInteractable(new Person("testOpa", mock(GelaberFacade.class), mock(GameConfig.class), new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB)));
 
         ControllerInterface controllerState = underTest.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
 
@@ -193,8 +180,8 @@ class ManfredControllerTest extends ControllerTestCase {
     @Test
     void interactWithDoor() throws InterruptedException, InvalidInputException {
         String targetName = "target";
-        PositiveInt targetSpawnX = PositiveInt.of(5);
-        PositiveInt targetSpawnY = PositiveInt.of(66);
+        PositiveInt targetSpawnX = PositiveInt.of(2);
+        PositiveInt targetSpawnY = PositiveInt.of(3);
         setupMapWithInteractable(new Door(targetName, targetSpawnX, targetSpawnY));
 
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_ENTER);
@@ -206,11 +193,8 @@ class ManfredControllerTest extends ControllerTestCase {
         Thread.sleep(1000); // Wait for swing worker to finish
 
         assertTrue(controllerState.keyPressed(eventMock) instanceof ManfredController);
-
-        verify(mapFacadeMock).loadMap(targetName);
-        verify(backgroundScrollerMock).centerTo(manfred.getSprite().getCenter());
-        assertEquals(PIXEL_BLOCK_SIZE * targetSpawnX.value(), manfred.getX());
-        assertEquals(PIXEL_BLOCK_SIZE * targetSpawnY.value(), manfred.getY());
+        verify(mapFacadeMock).loadMap(eq(targetName), any());
+//        verify(backgroundScrollerMock).centerTo(manfred.getSprite().getCenter()); TODO
     }
 
     @Test
@@ -220,7 +204,6 @@ class ManfredControllerTest extends ControllerTestCase {
         PositiveInt targetSpawnY = PositiveInt.of(66);
         setupMapWithInteractable(new Portal(targetName, targetSpawnX, targetSpawnY));
 
-        manfred.setY(PIXEL_BLOCK_SIZE);
         ControllerInterface controllerState = underTest.move();
 
         assertTrue(controllerState instanceof SleepingController);
@@ -229,10 +212,8 @@ class ManfredControllerTest extends ControllerTestCase {
 
         assertTrue(controllerState.keyPressed(mockEventWithKey(KeyEvent.VK_ENTER)) instanceof ManfredController);
 
-        verify(mapFacadeMock).loadMap(targetName);
-        verify(backgroundScrollerMock).centerTo(manfred.getSprite().getCenter());
-        assertEquals(PIXEL_BLOCK_SIZE * targetSpawnX.value(), manfred.getX());
-        assertEquals(PIXEL_BLOCK_SIZE * targetSpawnY.value(), manfred.getY());
+        verify(mapFacadeMock).loadMap(eq(targetName), any());
+//        verify(backgroundScrollerMock).centerTo(manfred.getSprite().getCenter()); // TODO
     }
 
     @Test

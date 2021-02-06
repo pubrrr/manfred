@@ -1,7 +1,7 @@
 package manfred.game.characters;
 
 import manfred.data.shared.PositiveInt;
-import manfred.game.map.Vector;
+import manfred.game.geometry.Vector;
 
 public class Velocity {
 

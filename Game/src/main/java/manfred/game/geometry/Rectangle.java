@@ -1,7 +1,8 @@
-package manfred.game.map;
+package manfred.game.geometry;
 
 import lombok.ToString;
 import manfred.data.shared.PositiveInt;
+import manfred.game.map.Map;
 
 @ToString
 public class Rectangle {

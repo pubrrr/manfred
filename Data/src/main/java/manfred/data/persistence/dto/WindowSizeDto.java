@@ -9,6 +9,6 @@ import manfred.data.shared.PositiveInt;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WindowSizeDto {
-    private PositiveInt width;
-    private PositiveInt height;
+    private PositiveInt.Strict width;
+    private PositiveInt.Strict height;
 }

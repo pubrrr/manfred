@@ -11,7 +11,7 @@ import manfred.data.shared.PositiveInt;
 public class ConfigDto {
     private WindowSizeDto windowSize;
     private GelaberBoxPositionDto gelaberBoxPosition;
-    private PositiveInt pixelBlockSize;
+    private PositiveInt.Strict pixelBlockSize;
     private PositiveInt textBoxDistanceToBorder;
     private PositiveInt textPointSize;
     private PositiveInt textDistanceToBox;

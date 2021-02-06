@@ -21,8 +21,7 @@ public class LoadMapWorker extends SwingWorker<ManfredController, Void> {
     @Override
     protected ManfredController doInBackground() {
         sleepingController.getGamePanel().fadeOut();
-        sleepingController.loadMap(this.targetName);
-        sleepingController.resetManfredPositionTo(this.targetSpawnX.value(), this.targetSpawnY.value());
+        sleepingController.loadMap(this.targetName, this.targetSpawnX, this.targetSpawnY);
         sleepingController.getGamePanel().fadeIn();
         return sleepingController;
     }

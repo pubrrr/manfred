@@ -1,10 +1,10 @@
 package manfred.game.graphics.paintable;
 
 import lombok.Value;
+import manfred.game.map.Map;
 
 @Value
 public class PaintableContainerElement {
     LocatedPaintable locatedPaintable;
-    int x;
-    int y;
+    Map.Coordinate coordinate;
 }

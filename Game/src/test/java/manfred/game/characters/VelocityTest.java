@@ -5,8 +5,7 @@ import com.tngtech.junit.dataprovider.DataProviderExtension;
 import com.tngtech.junit.dataprovider.UseDataProvider;
 import com.tngtech.junit.dataprovider.UseDataProviderExtension;
 import manfred.data.shared.PositiveInt;
-import manfred.data.shared.StrictlyPositiveInt;
-import manfred.game.map.Vector;
+import manfred.game.geometry.Vector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestTemplate;
@@ -44,7 +43,7 @@ class VelocityTest {
 
         assertThat(result.getVector().length(), is(SPEED));
         Vector directionVector = direction.getVector();
-        Vector scaledDirectionVector = directionVector.scale(SPEED, StrictlyPositiveInt.of(directionVector.length().value()));
+        Vector scaledDirectionVector = directionVector.scale(SPEED, PositiveInt.ofNonZero(directionVector.length().value()));
         assertThat(result.getVector(), is(scaledDirectionVector));
     }
 
@@ -55,7 +54,7 @@ class VelocityTest {
 
         assertThat(result.getVector().length(), is(SPEED));
         Vector directionVector = direction.getVector();
-        Vector scaledDirectionVector = directionVector.scale(SPEED, StrictlyPositiveInt.of(directionVector.length().value()));
+        Vector scaledDirectionVector = directionVector.scale(SPEED, PositiveInt.ofNonZero(directionVector.length().value()));
         assertThat(result.getVector(), is(scaledDirectionVector));
     }
 
@@ -103,7 +102,7 @@ class VelocityTest {
         assertThat(result.getVector().length().value(), greaterThanOrEqualTo(SPEED.value() - 5));
         assertThat(result.getVector().length().value(), lessThanOrEqualTo(SPEED.value() + 5));
         Vector directionVector = direction1.getVector().add(direction2.getVector());
-        Vector scaledDirectionVector = directionVector.scale(SPEED, StrictlyPositiveInt.of(directionVector.length().value()));
+        Vector scaledDirectionVector = directionVector.scale(SPEED, PositiveInt.ofNonZero(directionVector.length().value()));
         assertThat(result.getVector(), equalTo(scaledDirectionVector));
     }
 
@@ -115,7 +114,7 @@ class VelocityTest {
         assertThat(result.getVector().length().value(), greaterThanOrEqualTo(SPEED.value() - 5));
         assertThat(result.getVector().length().value(), lessThanOrEqualTo(SPEED.value() + 5));
         Vector directionVector = direction1.getVector().add(direction2.getVector());
-        Vector scaledDirectionVector = directionVector.scale(SPEED, StrictlyPositiveInt.of(directionVector.length().value()));
+        Vector scaledDirectionVector = directionVector.scale(SPEED, PositiveInt.ofNonZero(directionVector.length().value()));
         assertThat(result.getVector(), equalTo(scaledDirectionVector));
     }
 
@@ -127,7 +126,7 @@ class VelocityTest {
         assertThat(result.getVector().length().value(), greaterThanOrEqualTo(SPEED.value() - 3));
         assertThat(result.getVector().length().value(), lessThanOrEqualTo(SPEED.value() + 3));
         Vector directionVector = direction1.getVector().add(direction2.getVector());
-        Vector scaledDirectionVector = directionVector.scale(SPEED, StrictlyPositiveInt.of(directionVector.length().value()));
+        Vector scaledDirectionVector = directionVector.scale(SPEED, PositiveInt.ofNonZero(directionVector.length().value()));
         assertThat(result.getVector(), equalTo(scaledDirectionVector));
     }
 
@@ -152,7 +151,7 @@ class VelocityTest {
 
         assertThat(result.getVector().length(), is(SPEED));
         Vector directionVector = direction1.getVector();
-        Vector scaledDirectionVector = directionVector.scale(SPEED, StrictlyPositiveInt.of(directionVector.length().value()));
+        Vector scaledDirectionVector = directionVector.scale(SPEED, PositiveInt.ofNonZero(directionVector.length().value()));
         assertThat(result.getVector(), is(scaledDirectionVector));
     }
 

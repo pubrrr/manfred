@@ -5,7 +5,7 @@ import manfred.data.shared.PositiveInt;
 public class GameConfig {
     private final int windowWidth;
     private final int windowHeight;
-    private final int pixelBlockSize;
+    private final PositiveInt.Strict pixelBlockSize;
     private final int textBoxDistanceToBorder;
     private final int textPointSize;
     private final int textDistanceToBox;
@@ -13,9 +13,9 @@ public class GameConfig {
     private final int gelaberBoxPositionY;
 
     public GameConfig(
-        PositiveInt windowWidth,
-        PositiveInt windowHeight,
-        PositiveInt pixelBlockSize,
+        PositiveInt.Strict windowWidth,
+        PositiveInt.Strict windowHeight,
+        PositiveInt.Strict pixelBlockSize,
         PositiveInt textBoxDistanceToBorder,
         PositiveInt textPointSize,
         PositiveInt textDistanceToBox,
@@ -24,7 +24,7 @@ public class GameConfig {
     ) {
         this.windowWidth = windowWidth.value();
         this.windowHeight = windowHeight.value();
-        this.pixelBlockSize = pixelBlockSize.value();
+        this.pixelBlockSize = pixelBlockSize;
         this.textBoxDistanceToBorder = textBoxDistanceToBorder.value();
         this.textPointSize = textPointSize.value();
         this.textDistanceToBox = textDistanceToBox.value();
@@ -40,7 +40,7 @@ public class GameConfig {
         return windowHeight;
     }
 
-    public int getPixelBlockSize() {
+    public PositiveInt.Strict getPixelBlockSize() {
         return pixelBlockSize;
     }
 

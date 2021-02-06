@@ -1,13 +1,13 @@
 package manfred.game.enemy;
 
-import manfred.data.InvalidInputException;
 import manfred.data.shared.PositiveInt;
-import manfred.game.characters.Velocity;
-import manfred.game.config.GameConfig;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MovingObject;
+import manfred.game.characters.Velocity;
+import manfred.game.config.GameConfig;
 import manfred.game.graphics.paintable.LocatedPaintable;
-import manfred.game.map.Vector;
+import manfred.game.map.Map;
+import manfred.game.geometry.Vector;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -20,8 +20,8 @@ public class Enemy extends MovingObject implements LocatedPaintable {
 
     private int healthPoints;
 
-    public Enemy(String name, Velocity velocity, int x, int y, PositiveInt healthPoints, BufferedImage image, int aggroRadius, GameConfig gameConfig) throws InvalidInputException {
-        super(velocity, x, y, PositiveInt.of(2 * gameConfig.getPixelBlockSize()), PositiveInt.of(2 * gameConfig.getPixelBlockSize()), PositiveInt.of(2 * gameConfig.getPixelBlockSize()));
+    public Enemy(String name, Velocity velocity, Map.Coordinate initialBottomLeft, PositiveInt healthPoints, BufferedImage image, int aggroRadius, GameConfig gameConfig) {
+        super(velocity, initialBottomLeft, PositiveInt.of(gameConfig.getPixelBlockSize().times(2)), PositiveInt.of(gameConfig.getPixelBlockSize().times(2)), PositiveInt.of(gameConfig.getPixelBlockSize().times(2)));
         this.name = name;
         this.healthPoints = healthPoints.value(); // TODO
         this.image = image;
@@ -31,23 +31,19 @@ public class Enemy extends MovingObject implements LocatedPaintable {
 
     @Override
     public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        g.drawImage(this.image, this.sprite.x - offset.x, this.sprite.y - offset.y, this.sprite.width, this.sprite.height, null);
+        g.drawImage(this.image, x - offset.x, y - offset.y, this.sprite.getWidth(), this.sprite.getSpriteHeight(), null);
 
-        g.setFont(new Font("Palatino Linotype", Font.BOLD, gameConfig.getPixelBlockSize() / 2));
-
-        g.setColor(Color.BLACK);
-        g.drawString(String.valueOf(this.healthPoints), this.sprite.x + this.sprite.width / 4 - offset.x, this.sprite.getBottom() + (this.sprite.height / 2) - offset.y);
+        g.setFont(new Font("Palatino Linotype", Font.BOLD, gameConfig.getPixelBlockSize().divideBy(2)));
 
         g.setColor(Color.BLACK);
-        g.drawString(this.name, this.sprite.x + this.sprite.width / 4 - offset.x, this.sprite.y - (this.sprite.height / 4) - offset.y);
+        g.drawString(String.valueOf(this.healthPoints), x + this.sprite.getWidth() / 4 - offset.x, y + (this.sprite.getSpriteHeight() / 2) - offset.y);
+
+        g.setColor(Color.BLACK);
+        g.drawString(this.name, x + this.sprite.getWidth() / 4 - offset.x, y - (this.sprite.getSpriteHeight() / 4) - offset.y);
     }
 
     public Enemy determineSpeed(Manfred manfred) {
-        // TODO take Manfred's center rather than some corner
-        int distanceX = manfred.getX() - this.sprite.x;
-        int distanceY = manfred.getY() - this.sprite.y;
-
-        Vector enemyToManfred = Vector.of(distanceX, distanceY);
+        Vector enemyToManfred = this.baseObject.getCenter().distanceTo(manfred.getCenter());
         if (enemyToManfred.lengthSquared().value() <= this.aggroRadiusSquared) {
             this.velocity = velocity.moveInDirection(enemyToManfred);
         } else {

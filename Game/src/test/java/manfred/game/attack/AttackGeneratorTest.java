@@ -1,69 +1,58 @@
 package manfred.game.attack;
 
-import manfred.data.InvalidInputException;
 import manfred.data.shared.PositiveInt;
 import manfred.game.characters.Direction;
-import manfred.game.characters.MapCollider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static helpers.TestMapFactory.coordinateAt;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 class AttackGeneratorTest {
-    private final static int SPEED = 10;
-    public static final int SIZE = 5;
+    private final static int SPEED = 3;
+    public static final int SIZE = 8;
+    public static final int INITIAL_Y = 20;
+    public static final int INITIAL_X = 30;
 
     AttackGenerator underTest;
 
-    private MapCollider mapColliderMock;
-
     @BeforeEach
-    void init() throws InvalidInputException {
-        mapColliderMock = mock(MapCollider.class);
-        when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
-
+    void init() {
         underTest = new AttackGenerator(PositiveInt.of(SPEED), PositiveInt.of(SIZE), PositiveInt.of(SIZE), PositiveInt.of(3), PositiveInt.of(4), List.of(), PositiveInt.of(1));
     }
 
     @Test
     void generateMovingLeft() {
-        Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.LEFT);
+        Attack result = underTest.generate(coordinateAt(INITIAL_X, INITIAL_Y), Direction.LEFT);
 
-        result.checkCollisionsAndMove(mapColliderMock);
-        assertEquals(-SPEED, result.getX());
-        assertEquals(0, result.getY());
+        result.checkCollisionsAndMove(area -> true);
+        assertThat(result.getBottomLeft(), is(coordinateAt(INITIAL_X - SPEED, INITIAL_Y)));
     }
 
     @Test
     void generateMovingRight() {
-        Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.RIGHT);
+        Attack result = underTest.generate(coordinateAt(INITIAL_X, INITIAL_Y), Direction.RIGHT);
 
-        result.checkCollisionsAndMove(mapColliderMock);
-        assertEquals(SPEED, result.getX());
-        assertEquals(0, result.getY());
+        result.checkCollisionsAndMove(area -> true);
+        assertThat(result.getBottomLeft(), is(coordinateAt(INITIAL_X + SPEED, INITIAL_Y)));
     }
 
     @Test
     void generateMovingUp() {
-        Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.UP);
+        Attack result = underTest.generate(coordinateAt(INITIAL_X, INITIAL_Y), Direction.UP);
 
-        result.checkCollisionsAndMove(mapColliderMock);
-        assertEquals(0, result.getX());
-        assertEquals(SPEED, result.getY());
+        result.checkCollisionsAndMove(area -> true);
+        assertThat(result.getBottomLeft(), is(coordinateAt(INITIAL_X, INITIAL_Y + SPEED)));
     }
 
     @Test
     void generateMovingDown() {
-        Attack result = underTest.generate(new Point(SIZE / 2, SIZE / 2), Direction.DOWN);
+        Attack result = underTest.generate(coordinateAt(INITIAL_X, INITIAL_Y), Direction.DOWN);
 
-        result.checkCollisionsAndMove(mapColliderMock);
-        assertEquals(0, result.getX());
-        assertEquals(-SPEED, result.getY());
+        result.checkCollisionsAndMove(area -> true);
+        assertThat(result.getBottomLeft(), is(coordinateAt(INITIAL_X, INITIAL_Y - SPEED)));
     }
 }

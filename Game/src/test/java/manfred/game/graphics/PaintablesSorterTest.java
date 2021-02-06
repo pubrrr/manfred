@@ -1,5 +1,6 @@
 package manfred.game.graphics;
 
+import manfred.data.shared.PositiveInt;
 import manfred.game.graphics.paintable.LocatedPaintable;
 import manfred.game.graphics.paintable.PaintableContainerElement;
 import manfred.game.graphics.paintable.PaintablesContainer;
@@ -8,10 +9,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.SortedMap;
 import java.util.Stack;
-import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static helpers.TestMapFactory.coordinateAt;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -26,10 +28,10 @@ class PaintablesSorterTest {
 
     @Test
     void foreachOverResultWorksObjectInCorrectOrder() {
-        PaintableContainerElement first = getPaintableContainerElementMock(1, 1);
-        PaintableContainerElement second = getPaintableContainerElementMock(20, 1);
-        PaintableContainerElement third = getPaintableContainerElementMock(1, 20);
-        PaintableContainerElement fourth = getPaintableContainerElementMock(20, 20);
+        PaintableContainerElement first = getPaintableContainerElementMock(1, 20);
+        PaintableContainerElement second = getPaintableContainerElementMock(20, 20);
+        PaintableContainerElement third = getPaintableContainerElementMock(1, 1);
+        PaintableContainerElement fourth = getPaintableContainerElementMock(20, 1);
 
         LocatedPaintable[] paintablesInExpectedOrder = new LocatedPaintable[]{
             first.getLocatedPaintable(),
@@ -40,14 +42,12 @@ class PaintablesSorterTest {
 
         List<PaintablesContainer> input = setupTwoContainersWithElements(first, second, third, fourth);
 
-        TreeMap<Integer, TreeMap<Integer, LocatedPaintable>> result = underTest.sortByYAndX(input);
+        SortedMap<PanelCoordinate, LocatedPaintable> result = underTest.sortByYAndX(input, mapCoordinate -> mapCoordinate.scaleTo(PositiveInt.ofNonZero(60)));
 
         LocatedPaintable[] paintablesInActualOrder = new LocatedPaintable[4];
         AtomicInteger i = new AtomicInteger();
         result.forEach(
-            (y, paintablesAtY) -> paintablesAtY.forEach(
-                (x, paintable) -> paintablesInActualOrder[i.getAndIncrement()] = paintable
-            )
+            (panelCoordinate, paintable) -> paintablesInActualOrder[i.getAndIncrement()] = paintable
         );
 
         assertArrayEquals(paintablesInExpectedOrder, paintablesInActualOrder);
@@ -75,6 +75,6 @@ class PaintablesSorterTest {
     }
 
     private PaintableContainerElement getPaintableContainerElementMock(int x, int y) {
-        return new PaintableContainerElement(mock(LocatedPaintable.class), x, y);
+        return new PaintableContainerElement(mock(LocatedPaintable.class), coordinateAt(x, y));
     }
 }

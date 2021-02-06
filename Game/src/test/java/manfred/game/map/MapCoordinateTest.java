@@ -5,6 +5,7 @@ import com.tngtech.junit.dataprovider.DataProviderExtension;
 import com.tngtech.junit.dataprovider.UseDataProvider;
 import com.tngtech.junit.dataprovider.UseDataProviderExtension;
 import helpers.TestMapFactory;
+import manfred.game.geometry.Vector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;

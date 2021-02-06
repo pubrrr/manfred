@@ -3,8 +3,8 @@ package manfred.game.attack;
 import manfred.data.shared.PositiveInt;
 import manfred.game.characters.Direction;
 import manfred.game.characters.Velocity;
+import manfred.game.map.Map;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
@@ -27,11 +27,10 @@ public class AttackGenerator {
         this.numberOfAnimationImages = numberOfAnimationImages;
     }
 
-    public Attack generate(Point center, Direction castDirection) {
+    public Attack generate(Map.Coordinate castCoordinate, Direction castDirection) {
         return new Attack(
             Velocity.withSpeed(this.speed).accelerate(castDirection),
-            center.x - this.sizeX.value() / 2,
-            center.y - this.sizeY.value() / 2,
+            castCoordinate,
             this.sizeX,
             this.sizeY,
             this.damage,

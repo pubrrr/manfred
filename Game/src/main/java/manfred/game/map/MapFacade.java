@@ -1,15 +1,16 @@
 package manfred.game.map;
 
 import manfred.data.InvalidInputException;
+import manfred.data.shared.PositiveInt;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.ManfredController;
 import manfred.game.graphics.paintable.PaintableContainerElement;
 import manfred.game.graphics.paintable.PaintablesContainer;
 import manfred.game.interact.Interactable;
+import manfred.game.geometry.Rectangle;
 import manfred.infrastructureadapter.map.MapProvider;
 
-import java.awt.*;
 import java.util.Stack;
 
 public class MapFacade implements PaintablesContainer, CollisionDetector {
@@ -22,8 +23,9 @@ public class MapFacade implements PaintablesContainer, CollisionDetector {
         this.map = initialMap;
     }
 
-    public void loadMap(String name) throws InvalidInputException {
+    public void loadMap(String name, ManfredPositionSetter manfredPositionSetter) throws InvalidInputException {
         this.map = mapProvider.provide(name);
+        manfredPositionSetter.resetManfredOnMap(this.map);
     }
 
     @Override
@@ -31,20 +33,12 @@ public class MapFacade implements PaintablesContainer, CollisionDetector {
         return this.map.getPaintableContainerElements();
     }
 
-    public Interactable getInteractable(Point interactionMapTile) {
+    public Interactable getInteractable(Map.TileCoordinate interactionMapTile) {
         return this.map.getInteractable(interactionMapTile);
     }
 
-    public ControllerStateMapper<ManfredController, ControllerInterface> stepOn(Point moveTo) {
+    public ControllerStateMapper<ManfredController, ControllerInterface> stepOn(Map.TileCoordinate moveTo) {
         return this.map.stepOn(moveTo);
-    }
-
-    public int getMapSizeX() {
-        return this.map.sizeX();
-    }
-
-    public int getMapSizeY() {
-        return this.map.sizeY();
     }
 
     public boolean isAccessible(int x, int y) {
@@ -54,5 +48,9 @@ public class MapFacade implements PaintablesContainer, CollisionDetector {
     @Override
     public boolean isAreaAccessible(Rectangle area) {
         return this.map.isAreaAccessible(area);
+    }
+
+    public Map.TileCoordinate tileAt(PositiveInt tileX, PositiveInt tileY) {
+        return this.map.tileAt(tileX, tileY);
     }
 }

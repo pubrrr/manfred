@@ -1,78 +1,34 @@
 package manfred.game.characters;
 
-import com.tngtech.junit.dataprovider.DataProvider;
-import com.tngtech.junit.dataprovider.DataProviderExtension;
-import com.tngtech.junit.dataprovider.UseDataProvider;
-import com.tngtech.junit.dataprovider.UseDataProviderExtension;
 import helpers.TestGameConfig;
+import helpers.TestMapFactory;
 import manfred.data.InvalidInputException;
 import manfred.data.shared.PositiveInt;
+import manfred.game.map.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestTemplate;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.awt.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-@ExtendWith(DataProviderExtension.class)
-@ExtendWith(UseDataProviderExtension.class)
 class ManfredTest {
-    private static final int PIXEL_BLOCK_SIZE = 40;
+    private static final int BLOCK_SIZE = 60;
+
+    private static final Map coordinateProvider = TestMapFactory.defaultCoordinateProvider();
 
     private Manfred underTest;
 
-    private MapCollider mapColliderMock;
-
     @BeforeEach
     void init() throws InvalidInputException {
-        mapColliderMock = mock(MapCollider.class);
-
-        underTest = new Manfred(Velocity.withSpeed(PositiveInt.of(10)), 0, 0, PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(1), (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE), null);
+        underTest = new Manfred(Velocity.withSpeed(PositiveInt.of(10)), coordinateProvider.coordinateAt(0, 0), PositiveInt.of(BLOCK_SIZE), PositiveInt.of(BLOCK_SIZE), PositiveInt.of(1), (new TestGameConfig()).withPixelBlockSize(BLOCK_SIZE), null);
     }
 
     @Test
     void whenNoKeyPressed_thenDoesNotMove() {
-        when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
+        Map.Coordinate initialBottomLeft = underTest.getBottomLeft();
 
-        int initialX = underTest.getX();
-        int initialY = underTest.getY();
+        underTest.checkCollisionsAndMove(area -> true);
 
-        underTest.checkCollisionsAndMove(mapColliderMock);
-
-        assertEquals(initialX, underTest.getX());
-        assertEquals(initialY, underTest.getY());
-    }
-
-    @TestTemplate
-    @UseDataProvider("provideInitialManfredCoordinates")
-    public void wouldTriggerOnStep(int manfredX, int manfredY, boolean expectTriggerStepOn) {
-        when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
-
-        underTest.setX(manfredX);
-        underTest.setY(manfredY);
-
-        underTest.checkCollisionsAndMove(mapColliderMock);
-        Point resultingMapTile = underTest.getCenterMapTile();
-
-        assertEquals(expectTriggerStepOn, resultingMapTile.equals(new Point(0, 0)));
-    }
-
-    @DataProvider
-    static Object[][] provideInitialManfredCoordinates() {
-        int halfBlockSize = PIXEL_BLOCK_SIZE / 2;
-        return new Object[][]{
-            {0, 0, true},
-            {halfBlockSize - 1, 0, true},
-            {0, halfBlockSize - 1, true},
-            {halfBlockSize - 1, halfBlockSize - 1, true},
-            {halfBlockSize, 0, false},
-            {0, halfBlockSize, false},
-            {halfBlockSize, halfBlockSize, false},
-        };
+        assertThat(underTest.getBottomLeft(), is(initialBottomLeft));
     }
 }

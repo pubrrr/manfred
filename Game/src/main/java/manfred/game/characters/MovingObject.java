@@ -1,9 +1,13 @@
 package manfred.game.characters;
 
 import manfred.data.shared.PositiveInt;
+import manfred.game.geometry.Rectangle;
 import manfred.game.graphics.paintable.LocatedPaintable;
+import manfred.game.map.CollisionDetector;
+import manfred.game.map.Map;
 
 abstract public class MovingObject implements LocatedPaintable {
+    protected Rectangle baseObject;
     protected Sprite sprite;
     protected Velocity velocity;
 
@@ -13,17 +17,10 @@ abstract public class MovingObject implements LocatedPaintable {
     protected boolean movesDown = false;
     protected Direction viewDirection = Direction.DOWN;
 
-    protected MovingObject(Velocity velocity, int x, int y, PositiveInt width, PositiveInt spriteHeight, PositiveInt baseHeight) {
+    protected MovingObject(Velocity velocity, Map.Coordinate initialBottomLeft, PositiveInt width, PositiveInt spriteHeight, PositiveInt baseHeight) {
         this.velocity = velocity;
-        this.sprite = new Sprite(x, y, width.value(), spriteHeight.value(), baseHeight.value());
-    }
-
-    public int getX() {
-        return this.sprite.x;
-    }
-
-    public int getY() {
-        return this.sprite.y + sprite.getSpriteHeight() - sprite.getBaseHeight();
+        this.baseObject = new Rectangle(initialBottomLeft, width, baseHeight);
+        this.sprite = new Sprite(width.value(), spriteHeight.value());
     }
 
     public void left() {
@@ -71,32 +68,18 @@ abstract public class MovingObject implements LocatedPaintable {
         this.velocity = velocity.stopY();
     }
 
-    public void checkCollisionsAndMove(MapCollider mapCollider) {
-        if (!collidesVertically(mapCollider)) {
-            this.sprite.translate(this.velocity.getVector().x(), 0);
-        }
+    public void checkCollisionsAndMove(CollisionDetector collisionDetector) {
+        Rectangle verticallyMoved = this.baseObject.translate(this.velocity.getVector().projectOnXAxis());
+        this.baseObject = moveToIfAccessible(verticallyMoved, collisionDetector);
 
-        if (!collidesHorizontally(mapCollider)) {
-            this.sprite.translate(0, this.velocity.getVector().y());
-        }
+        Rectangle horizontallyMoved = this.baseObject.translate(this.velocity.getVector().projectOnYAxis());
+        this.baseObject = moveToIfAccessible(horizontallyMoved, collisionDetector);
     }
 
-    protected boolean collidesVertically(MapCollider mapCollider) {
-        return mapCollider.collides(
-                this.sprite.getLeft() + this.velocity.getVector().x(),
-                this.sprite.getRight() - 1 + this.velocity.getVector().x(),
-                this.sprite.getBaseTop(),
-                this.sprite.getBottom() - 1
-        );
-    }
-
-    protected boolean collidesHorizontally(MapCollider mapCollider) {
-        return mapCollider.collides(
-                this.sprite.getLeft(),
-                this.sprite.getRight() - 1,
-                this.sprite.getBaseTop() + this.velocity.getVector().y(),
-                this.sprite.getBottom() - 1 + this.velocity.getVector().y()
-        );
+    protected Rectangle moveToIfAccessible(Rectangle newPosition, CollisionDetector collisionDetector) {
+        return collisionDetector.isAreaAccessible(newPosition)
+            ? newPosition
+            : this.baseObject;
     }
 
     public Sprite getSprite() {
@@ -121,6 +104,14 @@ abstract public class MovingObject implements LocatedPaintable {
         } else if (this.velocity.getVector().x() < 0) {
             viewDirection = Direction.LEFT;
         }
+    }
+
+    protected boolean collidesWith(MovingObject other) {
+        return this.baseObject.intersects(other.baseObject);
+    }
+
+    public Map.Coordinate getBottomLeft() {
+        return this.baseObject.getBottomLeft();
     }
 }
 

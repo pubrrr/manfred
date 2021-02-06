@@ -1,17 +1,16 @@
 package manfred.infrastructureadapter.map;
 
-import manfred.data.InvalidInputException;
 import manfred.data.infrastructure.enemy.EnemyPrototype;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.data.shared.PositiveInt;
-import manfred.game.config.GameConfig;
 import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.enemy.Enemy;
 import manfred.game.map.Map;
 import manfred.game.map.NotAccessible;
 import manfred.infrastructureadapter.enemy.EnemyConverter;
+import manfred.infrastructureadapter.enemy.EnemyFactory;
 import manfred.infrastructureadapter.map.tile.TileConversionRule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,7 +38,7 @@ public class MapConverterTest {
         enemiesWrapper = new EnemiesWrapper();
         tileConverionRuleMock = mock(TileConversionRule.class);
 
-        underTest = new MapConverter(enemyConverterMock, enemiesWrapper, mock(GameConfig.class), tileConverionRuleMock);
+        underTest = new MapConverter(enemyConverterMock, enemiesWrapper, tileConverionRuleMock);
     }
 
     @Test
@@ -81,8 +80,11 @@ public class MapConverterTest {
     }
 
     @Test
-    void triggersLoadEnemies() throws InvalidInputException {
-        when(enemyConverterMock.convert(any())).thenReturn(mock(Enemy.class));
+    void triggersLoadEnemies() {
+        EnemyFactory enemyFactoryMock = mock(EnemyFactory.class);
+        when(enemyFactoryMock.createOnMap(any())).thenReturn(mock(Enemy.class));
+
+        when(enemyConverterMock.convert(any())).thenReturn(enemyFactoryMock);
         when(tileConverionRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.of(NotAccessible::new));
 
         MapPrototype input = new MapPrototype(

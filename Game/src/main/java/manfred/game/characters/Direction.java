@@ -1,57 +1,20 @@
 package manfred.game.characters;
 
-import manfred.game.map.Vector;
-
-import java.awt.*;
-import java.util.function.BiFunction;
+import manfred.game.geometry.Vector;
 
 public enum Direction {
-    RIGHT(interactRight(), Vector.pointingRight(100)),
-    LEFT(interactLeft(), Vector.pointingRight(-100)),
-    UP(interactUp(), Vector.pointingUp(100)),
-    DOWN(interactDown(), Vector.pointingUp(-100));
+    RIGHT(Vector.nonZero(100, 0)),
+    LEFT(Vector.nonZero(-100, 0)),
+    UP(Vector.nonZero(0, 100)),
+    DOWN(Vector.nonZero(0, -100));
 
-    private final BiFunction<Sprite, Integer, Point> interactionPointDeterminator;
-    private final Vector vector;
+    private final Vector.NonZero vector;
 
-    Direction(BiFunction<Sprite, Integer, Point> interactionPointDeterminator, Vector vector) {
-        this.interactionPointDeterminator = interactionPointDeterminator;
+    Direction(Vector.NonZero vector) {
         this.vector = vector;
     }
 
-    public Vector getVector() {
+    public Vector.NonZero getVector() {
         return this.vector;
-    }
-
-    public Point interactAtDistance(Sprite sprite, int interactionDistance) {
-        return this.interactionPointDeterminator.apply(sprite, interactionDistance);
-    }
-
-    private static BiFunction<Sprite, Integer, Point> interactRight() {
-        return (Sprite sprite, Integer interactionDistance) -> new Point(
-            sprite.getRight() + interactionDistance,
-            sprite.getCenter().y
-        );
-    }
-
-    private static BiFunction<Sprite, Integer, Point> interactLeft() {
-        return (Sprite sprite, Integer interactionDistance) -> new Point(
-            sprite.getLeft() - interactionDistance,
-            sprite.getCenter().y
-        );
-    }
-
-    private static BiFunction<Sprite, Integer, Point> interactUp() {
-        return (Sprite sprite, Integer interactionDistance) -> new Point(
-            sprite.getCenter().x,
-            sprite.getBaseTop() - interactionDistance
-        );
-    }
-
-    private static BiFunction<Sprite, Integer, Point> interactDown() {
-        return (Sprite sprite, Integer interactionDistance) -> new Point(
-            sprite.getCenter().x,
-            sprite.getBottom() + interactionDistance
-        );
     }
 }

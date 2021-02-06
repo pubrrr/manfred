@@ -1,9 +1,9 @@
 package manfred.game.graphics;
 
-import manfred.game.config.GameConfig;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.attack.Caster;
 import manfred.game.characters.Manfred;
+import manfred.game.config.GameConfig;
 import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.graphics.paintable.GelaberOverlay;
 import manfred.game.graphics.paintable.LocatedPaintable;
@@ -16,8 +16,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.SortedMap;
 import java.util.Stack;
-import java.util.TreeMap;
 
 @Component
 public class GamePanel extends JPanel {
@@ -55,8 +55,8 @@ public class GamePanel extends JPanel {
         registerPaintableContainer(mapFacade);
         registerPaintableContainer(() -> {
             Stack<PaintableContainerElement> elements = new Stack<>();
-            elements.push(new PaintableContainerElement(attackCaster, manfred.getX() - gameConfig.getPixelBlockSize() / 2, manfred.getY()));
-            elements.push(new PaintableContainerElement(manfred, manfred.getX(), manfred.getY()));
+            elements.push(new PaintableContainerElement(attackCaster, manfred.getBottomLeft()));
+            elements.push(new PaintableContainerElement(manfred, manfred.getBottomLeft()));
             return elements;
         });
         registerPaintableContainer(enemiesWrapper);
@@ -77,11 +77,13 @@ public class GamePanel extends JPanel {
 
         Point offset = backgroundScroller.getOffset();
 
-        TreeMap<Integer, TreeMap<Integer, LocatedPaintable>> paintablesSortedByYAndX = paintablesSorter.sortByYAndX(this.paintablesContainers);
+        SortedMap<PanelCoordinate, LocatedPaintable> paintablesSortedByYAndX = paintablesSorter.sortByYAndX(
+            this.paintablesContainers,
+            mapCoordinate -> mapCoordinate.scaleTo(gameConfig.getPixelBlockSize())
+        );
+
         paintablesSortedByYAndX.forEach(
-            (y, paintablesAtY) -> paintablesAtY.forEach(
-                (x, paintable) -> paintable.paint(g, offset, x, y)
-            )
+            (coordinate, paintable) -> paintable.paint(g, offset, coordinate.getX(), coordinate.getY())
         );
 
         gelaberOverlay.paint(g);

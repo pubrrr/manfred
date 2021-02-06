@@ -1,40 +1,27 @@
 package manfred.infrastructureadapter.attack;
 
-import manfred.data.InvalidInputException;
 import manfred.data.persistence.dto.AttackDto;
 import manfred.data.shared.PositiveInt;
 import manfred.game.attack.Attack;
 import manfred.game.attack.AttackGenerator;
 import manfred.game.characters.Direction;
-import manfred.game.characters.MapCollider;
-import manfred.game.characters.Sprite;
-import manfred.game.enemy.Enemy;
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static helpers.TestMapFactory.coordinateAt;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 class AttackGeneratorConverterTest {
 
     private AttackGeneratorConverter underTest;
 
-    private MapCollider mapColliderMock;
-
     @BeforeEach
     void init() {
-        mapColliderMock = mock(MapCollider.class);
-        when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
-
         underTest = new AttackGeneratorConverter();
     }
 
@@ -44,29 +31,17 @@ class AttackGeneratorConverterTest {
 
         AttackGenerator result = underTest.convert(input);
 
-        Attack attack = result.generate(new Point(0,0), Direction.RIGHT);
+        Attack attack = result.generate(coordinateAt(0, 0), Direction.RIGHT);
         assertMoves(attack);
-        assertHitsEnemy(attack);
     }
 
-    private AttackDto getInput() throws InvalidInputException {
+    private AttackDto getInput() {
         return new AttackDto("testName", PositiveInt.of(1), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(100), PositiveInt.of(2), PositiveInt.of(3), List.of());
     }
 
     private void assertMoves(Attack attack) {
-        attack.checkCollisionsAndMove(mapColliderMock);
-        assertEquals(1, attack.getX());
-        assertEquals(0, attack.getY());
-    }
-
-    private void assertHitsEnemy(Attack attack) throws InvalidInputException {
-        Sprite enemySpriteMock = mock(Sprite.class);
-        when(enemySpriteMock.intersects(any())).thenReturn(true);
-        Enemy enemyMock = mock(Enemy.class);
-        when(enemyMock.getSprite()).thenReturn(enemySpriteMock);
-
-        attack.checkHit(enemyMock);
-        verify(enemyMock).takeDamage(PositiveInt.of(100));
+        attack.checkCollisionsAndMove(area -> true);
+        MatcherAssert.assertThat(attack.getBottomLeft(), is(coordinateAt(1, 0)));
     }
 
     @Test
@@ -75,12 +50,12 @@ class AttackGeneratorConverterTest {
 
         AttackGenerator result = underTest.convert(input);
 
-        Attack attack = result.generate(new Point(0,0), Direction.RIGHT);
+        Attack attack = result.generate(coordinateAt(0, 0), Direction.RIGHT);
 
         assertFalse(attack.isResolved());
-        attack.checkCollisionsAndMove(mapColliderMock);
+        attack.checkCollisionsAndMove(area -> true);
         assertFalse(attack.isResolved());
-        attack.checkCollisionsAndMove(mapColliderMock);
+        attack.checkCollisionsAndMove(area -> true);
         assertTrue(attack.isResolved());
     }
 }

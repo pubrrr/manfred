@@ -2,13 +2,11 @@ package manfred.infrastructureadapter.enemy;
 
 import manfred.data.infrastructure.ObjectConverter;
 import manfred.data.infrastructure.enemy.EnemyPrototype;
-import manfred.game.characters.Velocity;
 import manfred.game.config.GameConfig;
-import manfred.game.enemy.Enemy;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EnemyConverter implements ObjectConverter<EnemyPrototype, Enemy> {
+public class EnemyConverter implements ObjectConverter<EnemyPrototype, EnemyFactory> {
 
     private final GameConfig gameConfig;
 
@@ -16,20 +14,8 @@ public class EnemyConverter implements ObjectConverter<EnemyPrototype, Enemy> {
         this.gameConfig = gameConfig;
     }
 
-    public Enemy convert(EnemyPrototype enemyPrototype) {
-        try {
-            return new Enemy(
-                enemyPrototype.getName(),
-                Velocity.withSpeed(enemyPrototype.getSpeed()),
-                enemyPrototype.getSpawnX().value() * this.gameConfig.getPixelBlockSize(),
-                enemyPrototype.getSpawnY().value() * this.gameConfig.getPixelBlockSize(),
-                enemyPrototype.getHealthPoints(),
-                enemyPrototype.getImage(),
-                gameConfig.getPixelBlockSize() * 5,
-                gameConfig
-            );
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
+    @Override
+    public EnemyFactory convert(EnemyPrototype enemyPrototype) {
+        return new EnemyFactory(enemyPrototype, gameConfig);
     }
 }

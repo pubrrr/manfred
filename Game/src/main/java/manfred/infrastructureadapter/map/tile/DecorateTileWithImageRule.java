@@ -41,7 +41,7 @@ public class DecorateTileWithImageRule implements TileConversionRule {
             BufferedImage image = validatedMapTileDto.getImage();
             MapMatrix<String> tileStructure = validatedMapTileDto.getStructure();
 
-            int imageWidth = this.gameConfig.getPixelBlockSize() * tileStructure.sizeX();
+            int imageWidth = this.gameConfig.getPixelBlockSize().times(tileStructure.sizeX());
             int imageHeight = image.getHeight() * imageWidth / image.getWidth();
 
             MapTile wrappedTile = tileConversionAction.create();

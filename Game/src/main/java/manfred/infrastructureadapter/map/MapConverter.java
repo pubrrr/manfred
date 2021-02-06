@@ -5,13 +5,12 @@ import manfred.data.infrastructure.enemy.EnemyPrototype;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
-import manfred.game.config.GameConfig;
-import manfred.infrastructureadapter.map.tile.TileConversionRule;
 import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.enemy.Enemy;
-import manfred.infrastructureadapter.enemy.EnemyConverter;
 import manfred.game.map.Map;
 import manfred.game.map.MapTile;
+import manfred.infrastructureadapter.enemy.EnemyConverter;
+import manfred.infrastructureadapter.map.tile.TileConversionRule;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -25,14 +24,12 @@ public class MapConverter implements ObjectConverter<MapPrototype, Map> {
 
     private final EnemyConverter enemyConverter;
     private final EnemiesWrapper enemiesWrapper;
-    private final GameConfig gameConfig;
 
     private final TileConversionRule tileFactories;
 
-    public MapConverter(EnemyConverter enemyConverter, EnemiesWrapper enemiesWrapper, GameConfig gameConfig, TileConversionRule tileFactories) {
+    public MapConverter(EnemyConverter enemyConverter, EnemiesWrapper enemiesWrapper, TileConversionRule tileFactories) {
         this.enemyConverter = enemyConverter;
         this.enemiesWrapper = enemiesWrapper;
-        this.gameConfig = gameConfig;
         this.tileFactories = tileFactories;
     }
 
@@ -43,9 +40,9 @@ public class MapConverter implements ObjectConverter<MapPrototype, Map> {
 
         List<List<MapTile>> resultingMapMatrix = createResultingMap(input, width, height);
 
-        this.enemiesWrapper.setEnemies(convertEnemies(input.getEnemies()));
-
-        return new Map(resultingMapMatrix, this.gameConfig);
+        Map map = new Map(resultingMapMatrix);
+        this.enemiesWrapper.setEnemies(convertEnemies(input.getEnemies(), map));
+        return map;
     }
 
     private List<List<MapTile>> createResultingMap(MapPrototype input, int width, int height) {
@@ -71,9 +68,10 @@ public class MapConverter implements ObjectConverter<MapPrototype, Map> {
         return () -> new RuntimeException("No applicable conversion rule for tile " + x + ", " + y + " in " + input.toString() + " found.");
     }
 
-    private List<Enemy> convertEnemies(List<EnemyPrototype> enemies) {
+    private List<Enemy> convertEnemies(List<EnemyPrototype> enemies, Map map) {
         return enemies.stream()
             .map(enemyConverter::convert)
+            .map(enemyFactory -> enemyFactory.createOnMap(map))
             .collect(toList());
     }
 }

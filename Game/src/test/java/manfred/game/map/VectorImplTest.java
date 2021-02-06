@@ -1,5 +1,6 @@
 package manfred.game.map;
 
+import manfred.game.geometry.Vector;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

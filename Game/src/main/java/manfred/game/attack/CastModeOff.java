@@ -1,7 +1,7 @@
 package manfred.game.attack;
 
 import manfred.game.characters.Direction;
-import manfred.game.characters.Sprite;
+import manfred.game.map.Map;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
@@ -15,7 +15,7 @@ public class CastModeOff implements CastMode {
     }
 
     @Override
-    public CastMode cast(Sprite sprite, Direction viewDirection) {
+    public CastMode cast(Map.Coordinate castCoordinate, Direction viewDirection) {
         return this.castModeOn;
     }
 

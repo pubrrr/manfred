@@ -1,6 +1,6 @@
 package helpers;
 
-import manfred.game.config.GameConfig;
+import manfred.data.shared.PositiveInt;
 import manfred.game.interact.Interactable;
 import manfred.game.map.Accessible;
 import manfred.game.map.Map;
@@ -10,8 +10,6 @@ import manfred.game.map.NotAccessible;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import static org.mockito.Mockito.mock;
 
 public class TestMapFactory {
 
@@ -45,7 +43,7 @@ public class TestMapFactory {
             }
             mapTiles.add(column);
         }
-        return new Map(mapTiles, mock(GameConfig.class));
+        return new Map(mapTiles);
     }
 
     private static String[][] transpose(String[][] input) {
@@ -58,5 +56,23 @@ public class TestMapFactory {
         }
 
         return transposed;
+    }
+
+    public static Map defaultCoordinateProvider() {
+        return create(new String[][]{
+            {"1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1"},
+        });
+    }
+
+    public static Map.Coordinate coordinateAt(int x, int y) {
+        return defaultCoordinateProvider().coordinateAt(x, y);
+    }
+
+    public static Map.TileCoordinate tileAt(PositiveInt x, PositiveInt y) {
+        return defaultCoordinateProvider().tileAt(x, y);
     }
 }

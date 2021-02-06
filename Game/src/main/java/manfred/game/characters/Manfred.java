@@ -1,9 +1,11 @@
 package manfred.game.characters;
 
-import manfred.data.InvalidInputException;
 import manfred.data.shared.PositiveInt;
 import manfred.game.config.GameConfig;
+import manfred.game.geometry.Vector;
 import manfred.game.graphics.paintable.LocatedPaintable;
+import manfred.game.map.CollisionDetector;
+import manfred.game.map.Map;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,7 +13,7 @@ import java.util.HashMap;
 
 public class Manfred extends MovingObject implements LocatedPaintable {
     public static final int ANIMATION_IMAGES_NUMBER = 8;
-    private static final int INTERACT_DISTANCE = 10;
+    private static final PositiveInt.Strict INTERACT_DISTANCE = PositiveInt.ofNonZero(40);
     private static final int NEXT_ANIMATION_IMAGE_TRIGGER = 4;
 
     private int healthPoints;
@@ -23,34 +25,26 @@ public class Manfred extends MovingObject implements LocatedPaintable {
 
     public Manfred(
         Velocity velocity,
-        int x,
-        int y,
+        Map.Coordinate initialBottomLeft,
         PositiveInt spriteWidth,
         PositiveInt spriteHeight,
         PositiveInt healthPoints,
         GameConfig gameConfig,
         HashMap<Direction, BufferedImage[]> walkAnimation
-    ) throws InvalidInputException {
-        super(velocity, x, y, spriteWidth, spriteHeight, PositiveInt.of(gameConfig.getPixelBlockSize()));
+    ) {
+        super(velocity, initialBottomLeft, spriteWidth, spriteHeight, gameConfig.getPixelBlockSize());
         this.healthPoints = healthPoints.value();
         this.gameConfig = gameConfig;
         this.walkAnimation = walkAnimation;
     }
 
-    public void setX(int x) {
-        this.sprite.x = x;
-    }
-
-    public void setY(int y) {
-        // TODO this needs to be reworked: one has to differentiate between the base y and the sprite y
-        // base y is the coordinate that should be used for collisions, so to say the projection to the floor
-        // the sprite y is the position of the top edge of the sprite
-        this.sprite.y = y + sprite.getBaseHeight() - sprite.getSpriteHeight();
+    public void setToTile(Map.TileCoordinate tileCoordinate) {
+        this.baseObject = baseObject.moveTo(tileCoordinate.getBottomLeftCoordinate());
     }
 
     @Override
-    public void checkCollisionsAndMove(MapCollider mapCollider) {
-        super.checkCollisionsAndMove(mapCollider);
+    public void checkCollisionsAndMove(CollisionDetector collisionDetector) {
+        super.checkCollisionsAndMove(collisionDetector);
 
         if (this.velocity.getVector().lengthSquared().value() == 0) {
             framesCounter = 0;
@@ -67,29 +61,26 @@ public class Manfred extends MovingObject implements LocatedPaintable {
         }
     }
 
-    public Point getCenterMapTile() {
-        Point center = this.sprite.getCenter();
-        return new Point(center.x / gameConfig.getPixelBlockSize(), center.y / gameConfig.getPixelBlockSize());
+    public Map.Coordinate getCenter() {
+        return this.baseObject.getCenter();
     }
 
     @Override
     public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        System.out.println(viewDirection);
         g.drawImage(
             walkAnimation.get(viewDirection)[animationPosition],
-            sprite.x - offset.x,
-            sprite.y - offset.y,
-            sprite.width,
-            sprite.height,
+            x - offset.x,
+            y - offset.y,
+            sprite.getWidth(),
+            sprite.getSpriteHeight(),
             null
         );
     }
 
-    public Point getInteractionMapTile() {
-        Point interactionPoint = viewDirection.interactAtDistance(this.sprite, INTERACT_DISTANCE);
-        return new Point(
-            interactionPoint.x / gameConfig.getPixelBlockSize(),
-            interactionPoint.y / gameConfig.getPixelBlockSize()
-        );
+    public Map.TileCoordinate getInteractionMapTile() {
+        Vector.NonZero toInteractionPoint = this.viewDirection.getVector().scalteToLength(INTERACT_DISTANCE);
+        Map.Coordinate interactionPoint = this.baseObject.getCenter().translate(toInteractionPoint);
+
+        return interactionPoint.getTile();
     }
 }

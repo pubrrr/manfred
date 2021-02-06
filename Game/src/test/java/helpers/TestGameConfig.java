@@ -16,7 +16,7 @@ public class TestGameConfig extends GameConfig {
     public static final int STANDARD_TEST_GELABER_BOX_POSITION_X = 100;
     public static final int STANDARD_TEST_GELABER_BOX_POSITION_Y = 100;
 
-    private Integer testPixelBlockSize = null;
+    private PositiveInt.Strict testPixelBlockSize = null;
     private Integer testNumberOfTextLines = null;
     private Integer testWindowHeight = null;
     private Integer testWindowWidth = null;
@@ -24,9 +24,9 @@ public class TestGameConfig extends GameConfig {
 
     public TestGameConfig() throws InvalidInputException {
         super(
-            PositiveInt.of(STANDARD_TEST_WINDOW_WIDTH),
-            PositiveInt.of(STANDARD_TEST_WINDOW_HEIGTH),
-            PositiveInt.of(STANDARD_TEST_PIXEL_BLOCK_SIZE),
+            PositiveInt.ofNonZero(STANDARD_TEST_WINDOW_WIDTH),
+            PositiveInt.ofNonZero(STANDARD_TEST_WINDOW_HEIGTH),
+            PositiveInt.ofNonZero(STANDARD_TEST_PIXEL_BLOCK_SIZE),
             PositiveInt.of(STANDARD_TEST_TEXT_BOX_DISTANCE_TO_BORDER),
             PositiveInt.of(STANDARD_TEST_TEXT_POINT_SIZE),
             PositiveInt.of(STANDARD_TEST_TEXT_DISTANCE_TO_BOX),
@@ -36,12 +36,12 @@ public class TestGameConfig extends GameConfig {
     }
 
     public TestGameConfig withPixelBlockSize(int pixelBlockSize) {
-        this.testPixelBlockSize = pixelBlockSize;
+        this.testPixelBlockSize = PositiveInt.ofNonZero(pixelBlockSize);
         return this;
     }
 
     @Override
-    public int getPixelBlockSize() {
+    public PositiveInt.Strict getPixelBlockSize() {
         if (testPixelBlockSize == null) {
             return super.getPixelBlockSize();
         }

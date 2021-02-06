@@ -1,9 +1,10 @@
 package manfred.game.attack;
 
-import manfred.game.config.GameConfig;
 import manfred.game.characters.Direction;
 import manfred.game.characters.SkillSet;
 import manfred.game.characters.Sprite;
+import manfred.game.config.GameConfig;
+import manfred.game.map.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +14,10 @@ import java.util.Stack;
 import static helpers.AttackCombinationHelper.attackCombination;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class CastModeOnTest {
     private CastModeOn underTest;
@@ -40,7 +44,7 @@ class CastModeOnTest {
 
         when(skillSetMock.get(attackCombination)).thenReturn(Optional.of(attackGeneratorMock));
 
-        CastMode result = underTest.cast(mock(Sprite.class), Direction.RIGHT);
+        CastMode result = underTest.cast(mock(Map.Coordinate.class), Direction.RIGHT);
 
         verify(attacksContainerMock).add(attackMock);
         assertTrue(result instanceof CastModeOff);
@@ -54,7 +58,7 @@ class CastModeOnTest {
 
         when(skillSetMock.get(attackCombination)).thenReturn(Optional.empty());
 
-        CastMode result = underTest.cast(mock(Sprite.class), Direction.RIGHT);
+        CastMode result = underTest.cast(mock(Map.Coordinate.class), Direction.RIGHT);
 
         verify(skillSetMock).get(attackCombination);
         verify(attacksContainerMock, never()).add(any());
@@ -79,15 +83,15 @@ class CastModeOnTest {
 
         underTest.addToCombination(CombinationElement.LEFT);
 
-        CastMode modeOff = underTest.cast(mock(Sprite.class), Direction.RIGHT);
-        underTest = (CastModeOn) modeOff.cast(mock(Sprite.class), Direction.RIGHT);
+        CastMode modeOff = underTest.cast(mock(Map.Coordinate.class), Direction.RIGHT);
+        underTest = (CastModeOn) modeOff.cast(mock(Map.Coordinate.class), Direction.RIGHT);
 
         verify(skillSetMock).get(attackCombinationLeft);
         verify(attacksContainerMock).add(attackLeftMock);
         verify(attacksContainerMock, never()).add(attackRightMock);
 
         underTest.addToCombination(CombinationElement.RIGHT);
-        underTest.cast(mock(Sprite.class), Direction.RIGHT);
+        underTest.cast(mock(Map.Coordinate.class), Direction.RIGHT);
 
         verify(skillSetMock).get(attackCombinationRight);
         verify(attacksContainerMock).add(attackRightMock);
