@@ -34,10 +34,10 @@ map:
 persons:
   - name: opa
     positionX: 14
-    positionY: 1
+    positionY: 28
 portals:
   - positionX: 9
-    positionY: 27
+    positionY: 2
     target: baum
     targetSpawnX: 5
     targetSpawnY: 10
@@ -45,4 +45,4 @@ doors: []
 enemies:
   - name: mongo
     positionX: 9
-    positionY: 9
+    positionY: 20

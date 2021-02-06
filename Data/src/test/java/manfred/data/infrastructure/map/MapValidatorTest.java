@@ -225,9 +225,9 @@ class MapValidatorTest {
         MapMatrix<TilePrototype> matrix = result.getMap();
         assertThat(matrix.sizeX(), is(3));
         assertThat(matrix.sizeY(), is(2));
-        assertThat(matrix.get(0, 1).isAccessible(), is(true));
-        assertThat(matrix.get(1, 1).isAccessible(), is(false));
-        assertThat(matrix.get(2, 1).isAccessible(), is(true));
+        assertThat(matrix.get(0, 1).isAccessible(), is(false));
+        assertThat(matrix.get(1, 1).isAccessible(), is(true));
+        assertThat(matrix.get(2, 1).isAccessible(), is(false));
     }
 
     @Test

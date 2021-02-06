@@ -47,7 +47,7 @@ public class GameContext {
     public Manfred manfred(GameConfig gameConfig, ManfredFramesLoader manfredFramesLoader, MapFacade mapFacade) throws InvalidInputException {
         return new Manfred(
             Velocity.withSpeed(PositiveInt.of(6)),
-            mapFacade.tileAt(PositiveInt.of(3), PositiveInt.of(3)).getBottomLeftCoordinate(),
+            mapFacade.tileAt(PositiveInt.of(5), PositiveInt.of(27)).getBottomLeftCoordinate(),
             gameConfig.getPixelBlockSize(),
             PositiveInt.of(gameConfig.getPixelBlockSize().times(2)),
             PositiveInt.of(100),
