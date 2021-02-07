@@ -40,7 +40,7 @@ portals:
     positionY: 2
     target: baum
     targetSpawnX: 5
-    targetSpawnY: 10
+    targetSpawnY: 1
 doors: []
 enemies:
   - name: mongo

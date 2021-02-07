@@ -20,8 +20,8 @@ persons:
 portals: []
 doors:
   - positionX: 5
-    positionY: 11
+    positionY: 0
     target: wald
     targetSpawnX: 9
-    targetSpawnY: 2
+    targetSpawnY: 1
 enemies: []

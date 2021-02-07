@@ -23,6 +23,7 @@ import manfred.game.controls.SleepingController;
 import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
+import manfred.game.graphics.coordinatetransformation.MapCoordinateToPanelCoordinateTransformer;
 import manfred.game.graphics.paintable.GelaberOverlay;
 import manfred.game.interact.Door;
 import manfred.game.interact.Portal;
@@ -67,7 +68,7 @@ class ManfredControllerTest extends ControllerTestCase {
     private ManfredController underTest;
 
     @BeforeEach
-    void init() throws InvalidInputException {
+    void init() {
         TestGameConfig testGameConfig = (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE);
 
         mapFacadeMock = mock(MapFacade.class);
@@ -93,14 +94,13 @@ class ManfredControllerTest extends ControllerTestCase {
             mock(GamePanel.class),
             attacksContainer,
             mock(GelaberOverlay.class),
-            objectsMover
+            objectsMover,
+            new MapCoordinateToPanelCoordinateTransformer(PositiveInt.ofNonZero(PIXEL_BLOCK_SIZE))
         );
     }
 
     @Test
     void movesRightAndStops() {
-        Map.Coordinate initialBottomLeft = manfred.getBottomLeft();
-
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_D);
 
         underTest.keyPressed(eventMock);
@@ -113,8 +113,6 @@ class ManfredControllerTest extends ControllerTestCase {
 
     @Test
     void movesLeftAndStops() {
-        Map.Coordinate initialBottomLeft = manfred.getBottomLeft();
-
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_A);
 
         underTest.keyPressed(eventMock);
@@ -127,8 +125,6 @@ class ManfredControllerTest extends ControllerTestCase {
 
     @Test
     void movesUpAndStops() {
-        Map.Coordinate initialBottomLeft = manfred.getBottomLeft();
-
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_W);
 
         underTest.keyPressed(eventMock);
@@ -141,8 +137,6 @@ class ManfredControllerTest extends ControllerTestCase {
 
     @Test
     void movesDownAndStops() {
-        Map.Coordinate initialBottomLeft = manfred.getBottomLeft();
-
         KeyEvent eventMock = mockEventWithKey(KeyEvent.VK_S);
 
         underTest.keyPressed(eventMock);
@@ -195,7 +189,7 @@ class ManfredControllerTest extends ControllerTestCase {
 
         assertTrue(controllerState.keyPressed(eventMock) instanceof ManfredController);
         verify(mapFacadeMock).loadMap(eq(targetName), any());
-//        verify(backgroundScrollerMock).centerTo(manfred.getSprite().getCenter()); TODO
+        verify(backgroundScrollerMock).centerTo(any());
     }
 
     @Test
@@ -214,7 +208,7 @@ class ManfredControllerTest extends ControllerTestCase {
         assertTrue(controllerState.keyPressed(mockEventWithKey(KeyEvent.VK_ENTER)) instanceof ManfredController);
 
         verify(mapFacadeMock).loadMap(eq(targetName), any());
-//        verify(backgroundScrollerMock).centerTo(manfred.getSprite().getCenter()); // TODO
+        verify(backgroundScrollerMock).centerTo(any());
     }
 
     @Test

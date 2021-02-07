@@ -163,8 +163,8 @@ class BackgroundScrollerTest {
         underTest.centerTo(manfredAt(initialPosition, initialPosition));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(initialPosition, initialPosition));
 
-        assertEquals(initialPosition - screenSize / 2, result.x());
-        assertEquals(initialPosition - screenSize / 2, result.y());
+        assertEquals(-(initialPosition - screenSize / 2), result.x());
+        assertEquals(-(initialPosition - screenSize / 2), result.y());
     }
 
     @Test
@@ -180,7 +180,7 @@ class BackgroundScrollerTest {
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(0, initialPosition));
 
         assertEquals(0, result.x());
-        assertEquals(initialPosition - screenSize / 2, result.y());
+        assertEquals(-initialPosition + screenSize / 2, result.y());
     }
 
     @Test
@@ -195,8 +195,8 @@ class BackgroundScrollerTest {
         underTest.centerTo(manfredAt(8 * PIXEL_BLOCK_SIZE - 1, initialPosition));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(8 * PIXEL_BLOCK_SIZE - 1, initialPosition));
 
-        assertEquals(8 * PIXEL_BLOCK_SIZE - screenSize, result.x());
-        assertEquals(initialPosition - screenSize / 2, result.y());
+        assertEquals(-(8 * PIXEL_BLOCK_SIZE - screenSize), result.x());
+        assertEquals(-(initialPosition - screenSize / 2), result.y());
     }
 
     @Test
@@ -211,7 +211,7 @@ class BackgroundScrollerTest {
         underTest.centerTo(manfredAt(initialPosition, 0));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(initialPosition, 0));
 
-        assertEquals(initialPosition - screenSize / 2, result.x());
+        assertEquals(-(initialPosition - screenSize / 2), result.x());
         assertEquals(0, result.y());
     }
 
@@ -227,8 +227,8 @@ class BackgroundScrollerTest {
         underTest.centerTo(manfredAt(initialPosition, 8 * PIXEL_BLOCK_SIZE - 1));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(initialPosition, 8 * PIXEL_BLOCK_SIZE - 1));
 
-        assertEquals(initialPosition - screenSize / 2, result.x());
-        assertEquals(8 * PIXEL_BLOCK_SIZE - screenSize, result.y());
+        assertEquals(-(initialPosition - screenSize / 2), result.x());
+        assertEquals(-(8 * PIXEL_BLOCK_SIZE - screenSize), result.y());
     }
 
     private PanelCoordinate manfredAt(int x, int y) {

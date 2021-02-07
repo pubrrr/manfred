@@ -33,7 +33,7 @@ public class Manfred extends MovingObject implements LocatedPaintable {
         GameConfig gameConfig,
         HashMap<Direction, BufferedImage[]> walkAnimation
     ) {
-        super(velocity, initialBottomLeft, spriteWidth, spriteHeight, gameConfig.getPixelBlockSize());
+        super(velocity, initialBottomLeft, PositiveInt.of(spriteWidth.value() - 2), spriteHeight, PositiveInt.of(gameConfig.getPixelBlockSize().value() - 2));
         this.healthPoints = healthPoints.value();
         this.gameConfig = gameConfig;
         this.walkAnimation = walkAnimation;

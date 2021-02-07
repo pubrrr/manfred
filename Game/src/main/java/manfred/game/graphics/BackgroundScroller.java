@@ -71,31 +71,36 @@ public class BackgroundScroller {
         return offset.y();
     }
 
-    public void centerTo(Point center) {
-        int mapSizeX = mapFacade.getMapSizeX() * gameConfig.getPixelBlockSize();
+    public void centerTo(PanelCoordinate center) {
+        int mapSizeX = mapFacade.getMapSizeX() * gameConfig.getPixelBlockSize().value();
+        int offsetX;
+        int offsetY;
+
         if (mapSizeX > gameConfig.getWindowWidth()) {
-            offset.x = Math.max(
-                    center.x - gameConfig.getWindowWidth() / 2,
+            offsetX = -Math.max(
+                    center.getX() - gameConfig.getWindowWidth() / 2,
                     0
             );
-            if (offset.x + gameConfig.getWindowWidth() > mapSizeX) {
-                offset.x = mapSizeX - gameConfig.getWindowWidth();
+            if (-offsetX + gameConfig.getWindowWidth() > mapSizeX) {
+                offsetX = mapSizeX - gameConfig.getWindowWidth();
             }
         } else {
-            offset.x = -(gameConfig.getWindowWidth() - mapSizeX) / 2;
+            offsetX = (gameConfig.getWindowWidth() - mapSizeX) / 2;
         }
 
-        int mapSizeY = mapFacade.getMapSizeY() * gameConfig.getPixelBlockSize();
+        int mapSizeY = mapFacade.getMapSizeY() * gameConfig.getPixelBlockSize().value();
         if (mapSizeY > gameConfig.getWindowHeight()) {
-            offset.y = Math.max(
-                    center.y - gameConfig.getWindowHeight() / 2,
+            offsetY = - Math.max(
+                    center.getY() - gameConfig.getWindowHeight() / 2,
                     0
             );
-            if (offset.y + gameConfig.getWindowHeight() > mapSizeY) {
-                offset.y = mapSizeY - gameConfig.getWindowHeight();
+            if (-offsetY + gameConfig.getWindowHeight() > mapSizeY) {
+                offsetY = mapSizeY - gameConfig.getWindowHeight();
             }
         } else {
-            offset.y = -(gameConfig.getWindowHeight() - mapSizeY) / 2;
+            offsetY = (gameConfig.getWindowHeight() - mapSizeY) / 2;
         }
+
+        this.offset = Vector.of(offsetX, offsetY);
     }
 }

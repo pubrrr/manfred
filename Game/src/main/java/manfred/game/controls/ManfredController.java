@@ -9,6 +9,8 @@ import manfred.game.attack.CombinationElement;
 import manfred.game.characters.Manfred;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
+import manfred.game.graphics.PanelCoordinate;
+import manfred.game.graphics.coordinatetransformation.MapCoordinateToPanelCoordinateTransformer;
 import manfred.game.graphics.paintable.GelaberOverlay;
 import manfred.game.interact.person.gelaber.GelaberFacade;
 import manfred.game.map.ManfredPositionSetter;
@@ -29,6 +31,7 @@ public class ManfredController implements ControllerInterface {
     private final AttacksContainer attacksContainer;
     private final GelaberOverlay gelaberOverlay;
     private final ObjectsMover objectsMover;
+    private final MapCoordinateToPanelCoordinateTransformer mapCoordinateToPanelCoordinateTransformer;
 
     @Override
     public ControllerInterface keyPressed(KeyEvent event) {
@@ -91,7 +94,9 @@ public class ManfredController implements ControllerInterface {
         try {
             attacksContainer.clear();
             mapFacade.loadMap(name, new ManfredPositionSetter(this.manfred, targetSpawnX, targetSpawnY));
-//            this.backgroundScroller.centerTo(this.manfred.getCenter()); TODO
+
+            PanelCoordinate newManfredCenterCoordinate = mapCoordinateToPanelCoordinateTransformer.toPanelCoordinate(this.manfred.getCenter());
+            this.backgroundScroller.centerTo(newManfredCenterCoordinate);
         } catch (InvalidInputException e) {
             System.out.println("ERROR: Failed to load map " + name + "\n");
             e.printStackTrace();
