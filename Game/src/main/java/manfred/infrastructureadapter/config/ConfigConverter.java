@@ -16,7 +16,8 @@ public class ConfigConverter {
             configDto.getTextPointSize(),
             configDto.getTextDistanceToBox(),
             configDto.getGelaberBoxPosition().getBoxPositionX(),
-            configDto.getGelaberBoxPosition().getBoxPositionY()
+            configDto.getGelaberBoxPosition().getBoxPositionY(),
+            configDto.isDebugGraphics()
         );
     }
 }

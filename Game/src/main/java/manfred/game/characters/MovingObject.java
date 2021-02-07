@@ -92,9 +92,9 @@ abstract public class MovingObject implements LocatedPaintable {
 
     public void checkForVerticalViewDirection() {
         if (this.velocity.getVector().y() > 0) {
-            viewDirection = Direction.DOWN;
-        } else if (this.velocity.getVector().y() < 0) {
             viewDirection = Direction.UP;
+        } else if (this.velocity.getVector().y() < 0) {
+            viewDirection = Direction.DOWN;
         }
     }
 

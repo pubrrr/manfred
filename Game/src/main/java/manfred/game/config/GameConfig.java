@@ -11,6 +11,7 @@ public class GameConfig {
     private final int textDistanceToBox;
     private final int gelaberBoxPositionX;
     private final int gelaberBoxPositionY;
+    private final boolean debugGraphics;
 
     public GameConfig(
         PositiveInt.Strict windowWidth,
@@ -20,7 +21,8 @@ public class GameConfig {
         PositiveInt textPointSize,
         PositiveInt textDistanceToBox,
         PositiveInt gelaberBoxPositionX,
-        PositiveInt gelaberBoxPositionY
+        PositiveInt gelaberBoxPositionY,
+        boolean debugGraphics
     ) {
         this.windowWidth = windowWidth.value();
         this.windowHeight = windowHeight.value();
@@ -30,6 +32,7 @@ public class GameConfig {
         this.textDistanceToBox = textDistanceToBox.value();
         this.gelaberBoxPositionX = gelaberBoxPositionX.value();
         this.gelaberBoxPositionY = gelaberBoxPositionY.value();
+        this.debugGraphics = debugGraphics;
     }
 
     public int getWindowWidth() {
@@ -90,5 +93,9 @@ public class GameConfig {
 
     public int getNumberOfTextLines() {
         return (getTextBoxHeight() - 2 * textDistanceToBox) / (textPointSize + getDistanceBetweenLines());
+    }
+
+    public boolean isDebugGraphics() {
+        return debugGraphics;
     }
 }

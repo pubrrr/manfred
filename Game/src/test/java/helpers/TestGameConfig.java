@@ -22,7 +22,7 @@ public class TestGameConfig extends GameConfig {
     private Integer testWindowWidth = null;
     private Integer charactersPerLine = null;
 
-    public TestGameConfig() throws InvalidInputException {
+    public TestGameConfig() {
         super(
             PositiveInt.ofNonZero(STANDARD_TEST_WINDOW_WIDTH),
             PositiveInt.ofNonZero(STANDARD_TEST_WINDOW_HEIGTH),
@@ -31,7 +31,8 @@ public class TestGameConfig extends GameConfig {
             PositiveInt.of(STANDARD_TEST_TEXT_POINT_SIZE),
             PositiveInt.of(STANDARD_TEST_TEXT_DISTANCE_TO_BOX),
             PositiveInt.of(STANDARD_TEST_GELABER_BOX_POSITION_X),
-            PositiveInt.of(STANDARD_TEST_GELABER_BOX_POSITION_Y)
+            PositiveInt.of(STANDARD_TEST_GELABER_BOX_POSITION_Y),
+            false
         );
     }
 

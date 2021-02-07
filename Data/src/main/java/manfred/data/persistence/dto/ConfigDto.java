@@ -15,4 +15,5 @@ public class ConfigDto {
     private PositiveInt textBoxDistanceToBorder;
     private PositiveInt textPointSize;
     private PositiveInt textDistanceToBox;
+    private boolean debugGraphics;
 }

@@ -13,6 +13,7 @@ import static manfred.infrastructureadapter.map.tile.TileConversionRule.createNo
 import static manfred.infrastructureadapter.map.tile.TileConversionRule.createPerson;
 import static manfred.infrastructureadapter.map.tile.TileConversionRule.createPortal;
 import static manfred.infrastructureadapter.map.tile.TileConversionRule.decorateWithImage;
+import static manfred.infrastructureadapter.map.tile.TileConversionRule.wrapForGraphicsDebugging;
 
 @Configuration
 @ComponentScan(basePackages = "manfred.infrastructureadapter")
@@ -20,11 +21,15 @@ public class InfrastructureAdapterContext {
 
     @Bean
     public TileConversionRule tileConversionRule(GameConfig gameConfig, GelaberConverter gelaberConverter) {
-        return createPerson(gameConfig, gelaberConverter)
+        TileConversionRule tileConversionRule = createPerson(gameConfig, gelaberConverter)
             .orElse(createPortal())
             .orElse(createDoor())
             .orElse(decorateWithImage(gameConfig).and(createAccessible().orElse(createNonAccessible())))
             .orElse(createAccessible())
             .orElse(createNonAccessible());
+        if (gameConfig.isDebugGraphics()) {
+            return wrapForGraphicsDebugging(tileConversionRule, gameConfig);
+        }
+        return tileConversionRule;
     }
 }

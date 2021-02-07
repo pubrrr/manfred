@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ConfigConverterTest {
 
@@ -28,7 +29,8 @@ class ConfigConverterTest {
             PositiveInt.ofNonZero(3),
             PositiveInt.of(4),
             PositiveInt.of(5),
-            PositiveInt.of(6)
+            PositiveInt.of(6),
+            true
         ));
 
         assertEquals(1, result.getWindowWidth());
@@ -39,5 +41,6 @@ class ConfigConverterTest {
         assertEquals(6, result.getTextDistanceToBox());
         assertEquals(7, result.getGelaberBoxPositionX());
         assertEquals(8, result.getGelaberBoxPositionY());
+        assertTrue(result.isDebugGraphics());
     }
 }
