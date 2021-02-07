@@ -7,7 +7,6 @@ import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.ManfredController;
 import manfred.game.graphics.paintable.PaintableContainerElement;
 import manfred.game.graphics.paintable.PaintablesContainer;
-import manfred.game.interact.Interactable;
 import manfred.game.geometry.Rectangle;
 import manfred.infrastructureadapter.map.MapProvider;
 
@@ -33,8 +32,8 @@ public class MapFacade implements PaintablesContainer, CollisionDetector {
         return this.map.getPaintableContainerElements();
     }
 
-    public Interactable getInteractable(Map.TileCoordinate interactionMapTile) {
-        return this.map.getInteractable(interactionMapTile);
+    public ControllerStateMapper<ManfredController, ControllerInterface> interactWithTile(Map.TileCoordinate interactionMapTile) {
+        return this.map.interactWithTile(interactionMapTile);
     }
 
     public ControllerStateMapper<ManfredController, ControllerInterface> stepOn(Map.TileCoordinate moveTo) {

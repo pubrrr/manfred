@@ -36,4 +36,9 @@ public class DebugTileWrapper implements MapTile {
     public ControllerStateMapper<ManfredController, ControllerInterface> onStep() {
         return wrapped.onStep();
     }
+
+    @Override
+    public ControllerStateMapper<ManfredController, ControllerInterface> interact() {
+        return wrapped.interact();
+    }
 }

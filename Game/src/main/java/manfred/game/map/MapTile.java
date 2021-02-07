@@ -12,4 +12,8 @@ public interface MapTile extends LocatedPaintable {
     default ControllerStateMapper<ManfredController, ControllerInterface> onStep(){
         return ControllerStateMapper::preserveState;
     }
+
+    default ControllerStateMapper<ManfredController, ControllerInterface> interact() {
+        return ControllerStateMapper::preserveState;
+    }
 }

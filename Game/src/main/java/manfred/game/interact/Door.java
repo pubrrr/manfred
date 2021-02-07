@@ -4,10 +4,11 @@ import manfred.data.shared.PositiveInt;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.ManfredController;
+import manfred.game.map.MapTile;
 
 import java.awt.*;
 
-public class Door implements Interactable {
+public class Door implements MapTile {
     private final String targetName;
     private final PositiveInt targetSpawnX;
     private final PositiveInt targetSpawnY;

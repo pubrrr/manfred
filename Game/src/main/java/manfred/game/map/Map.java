@@ -10,7 +10,6 @@ import manfred.game.geometry.Rectangle;
 import manfred.game.geometry.Vector;
 import manfred.game.graphics.PanelCoordinate;
 import manfred.game.graphics.paintable.PaintableContainerElement;
-import manfred.game.interact.Interactable;
 
 import java.util.List;
 import java.util.Stack;
@@ -56,11 +55,8 @@ public class Map {
             && y >= 0 && y < sizeY();
     }
 
-    public Interactable getInteractable(TileCoordinate mapTile) {
-        MapTile tile = mapTiles.get(mapTile.tileX).get(mapTile.tileY);
-        return tile instanceof Interactable
-            ? (Interactable) tile
-            : Interactable.idle();
+    public ControllerStateMapper<ManfredController, ControllerInterface> interactWithTile(TileCoordinate mapTile) {
+        return mapTiles.get(mapTile.tileX).get(mapTile.tileY).interact();
     }
 
     public ControllerStateMapper<ManfredController, ControllerInterface> stepOn(TileCoordinate mapTile) {

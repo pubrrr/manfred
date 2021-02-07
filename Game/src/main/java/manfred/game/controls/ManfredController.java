@@ -16,7 +16,6 @@ import manfred.game.map.Map;
 import manfred.game.map.MapFacade;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 
 @Component
@@ -71,8 +70,7 @@ public class ManfredController implements ControllerInterface {
                 break;
             case KeyEvent.VK_ENTER:
                 Map.TileCoordinate interactionMapTile = manfred.getInteractionMapTile();
-                return mapFacade.getInteractable(interactionMapTile).interact()
-                    .determineNewControllerState(this);
+                return mapFacade.interactWithTile(interactionMapTile).determineNewControllerState(this);
         }
         return this;
     }

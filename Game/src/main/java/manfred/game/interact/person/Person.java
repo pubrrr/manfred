@@ -4,13 +4,13 @@ import manfred.game.config.GameConfig;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.ManfredController;
-import manfred.game.interact.Interactable;
 import manfred.game.interact.person.gelaber.GelaberFacade;
+import manfred.game.map.MapTile;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Person implements Interactable {
+public class Person implements MapTile {
     private final String name;
     private final GelaberFacade gelaberFacade;
     private final GameConfig gameConfig;

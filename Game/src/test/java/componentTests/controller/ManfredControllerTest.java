@@ -15,6 +15,7 @@ import manfred.game.characters.SkillSet;
 import manfred.game.characters.Velocity;
 import manfred.game.config.GameConfig;
 import manfred.game.controls.ControllerInterface;
+import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.GelaberController;
 import manfred.game.controls.ManfredController;
 import manfred.game.controls.ObjectsMover;
@@ -24,12 +25,12 @@ import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.paintable.GelaberOverlay;
 import manfred.game.interact.Door;
-import manfred.game.interact.Interactable;
 import manfred.game.interact.Portal;
 import manfred.game.interact.person.Person;
 import manfred.game.interact.person.gelaber.GelaberFacade;
 import manfred.game.map.Map;
 import manfred.game.map.MapFacade;
+import manfred.game.map.MapTile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -161,7 +162,7 @@ class ManfredControllerTest extends ControllerTestCase {
 
     @Test
     void interactDoesNothingWhenNoInteractInReach() {
-        when(mapFacadeMock.getInteractable(any())).thenReturn(Interactable.idle());
+        when(mapFacadeMock.interactWithTile(any())).thenReturn(ControllerStateMapper::preserveState);
 
         ControllerInterface controllerState = underTest.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
 
@@ -248,8 +249,8 @@ class ManfredControllerTest extends ControllerTestCase {
         return attackMock;
     }
 
-    private void setupMapWithInteractable(Interactable interactable) {
-        when(mapFacadeMock.getInteractable(any())).thenReturn(interactable);
+    private void setupMapWithInteractable(MapTile interactable) {
+        when(mapFacadeMock.interactWithTile(any())).thenReturn(interactable.interact());
         when(mapFacadeMock.stepOn(any())).thenReturn(interactable.onStep());
     }
 }

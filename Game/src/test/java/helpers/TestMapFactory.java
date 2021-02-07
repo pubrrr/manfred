@@ -1,7 +1,6 @@
 package helpers;
 
 import manfred.data.shared.PositiveInt;
-import manfred.game.interact.Interactable;
 import manfred.game.map.Accessible;
 import manfred.game.map.Map;
 import manfred.game.map.MapTile;
@@ -20,7 +19,7 @@ public class TestMapFactory {
         return create(mapTilesAsStrings, new HashMap<>());
     }
 
-    public static Map create(String[][] mapTilesAsStrings, HashMap<String, Interactable> interactables) {
+    public static Map create(String[][] mapTilesAsStrings, HashMap<String, MapTile> interactables) {
         String[][] transposed = transpose(mapTilesAsStrings);
 
         List<List<MapTile>> mapTiles = new ArrayList<>(transposed.length);
