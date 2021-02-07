@@ -4,6 +4,7 @@ import helpers.TestGameConfig;
 import manfred.data.InvalidInputException;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.Sprite;
+import manfred.game.geometry.Vector;
 import manfred.game.map.MapFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,20 +23,14 @@ class BackgroundScrollerTest {
 
     private TestGameConfig testGameConfig;
 
-    private Sprite manfredPosition;
     private MapFacade mapFacadeMock;
 
     @BeforeEach
-    void init() throws InvalidInputException {
-        manfredPosition = new Sprite(0, 0, 0, 0, 0);
-
-        Manfred manfredMock = mock(Manfred.class);
-        when(manfredMock.getSprite()).thenAnswer(invocationOnMock -> manfredPosition);
-
+    void init() {
         mapFacadeMock = mock(MapFacade.class);
         testGameConfig = (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE);
 
-        underTest = new BackgroundScroller(TRIGGER_SCROLL_DISTANCE_TO_BORDER, manfredMock, mapFacadeMock, testGameConfig);
+        underTest = new BackgroundScroller(TRIGGER_SCROLL_DISTANCE_TO_BORDER, mapFacadeMock, testGameConfig);
     }
 
     @Test
@@ -44,10 +39,10 @@ class BackgroundScrollerTest {
         testGameConfig.setWindowWidth(6 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(5 * PIXEL_BLOCK_SIZE);
 
-        Point result = underTest.getOffset();
+        Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(1, 1));
 
-        assertEquals(-3 * PIXEL_BLOCK_SIZE / 2, result.x);
-        assertEquals(-PIXEL_BLOCK_SIZE, result.y);
+        assertEquals(3 * PIXEL_BLOCK_SIZE / 2, result.x());
+        assertEquals(PIXEL_BLOCK_SIZE, result.y());
     }
 
     @Test
@@ -55,13 +50,11 @@ class BackgroundScrollerTest {
         setupMapWithDimensions(6, 6);
         testGameConfig.setWindowWidth(3 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(3 * PIXEL_BLOCK_SIZE);
-        manfredPosition.x = 2 * PIXEL_BLOCK_SIZE;
-        manfredPosition.y = 2 * PIXEL_BLOCK_SIZE;
 
-        Point result = underTest.getOffset();
+        Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(2 * PIXEL_BLOCK_SIZE, 2 * PIXEL_BLOCK_SIZE));
 
-        assertEquals(0, result.x);
-        assertEquals(0, result.y);
+        assertEquals(0, result.x());
+        assertEquals(0, result.y());
     }
 
     @Test
@@ -69,13 +62,11 @@ class BackgroundScrollerTest {
         setupMapWithDimensions(6, 6);
         testGameConfig.setWindowWidth(3 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(3 * PIXEL_BLOCK_SIZE);
-        manfredPosition.x = 2 * PIXEL_BLOCK_SIZE + 1;
-        manfredPosition.y = 2 * PIXEL_BLOCK_SIZE;
 
-        Point result = underTest.getOffset();
+        Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(2 * PIXEL_BLOCK_SIZE + 1, 2 * PIXEL_BLOCK_SIZE));
 
-        assertEquals(1, result.x);
-        assertEquals(0, result.y);
+        assertEquals(-1, result.x());
+        assertEquals(0, result.y());
     }
 
     @Test
@@ -83,13 +74,11 @@ class BackgroundScrollerTest {
         setupMapWithDimensions(6, 6);
         testGameConfig.setWindowWidth(3 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(3 * PIXEL_BLOCK_SIZE);
-        manfredPosition.x = 2 * PIXEL_BLOCK_SIZE;
-        manfredPosition.y = 2 * PIXEL_BLOCK_SIZE + 2;
 
-        Point result = underTest.getOffset();
+        Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(2 * PIXEL_BLOCK_SIZE, 2 * PIXEL_BLOCK_SIZE + 2));
 
-        assertEquals(0, result.x);
-        assertEquals(2, result.y);
+        assertEquals(0, result.x());
+        assertEquals(-2, result.y());
     }
 
     @Test
@@ -97,13 +86,11 @@ class BackgroundScrollerTest {
         setupMapWithDimensions(6, 6);
         testGameConfig.setWindowWidth(3 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(3 * PIXEL_BLOCK_SIZE);
-        manfredPosition.x = 3 * PIXEL_BLOCK_SIZE - 1;
-        manfredPosition.y = 3 * PIXEL_BLOCK_SIZE - 1;
 
-        Point result = underTest.getOffset();
+        Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(3 * PIXEL_BLOCK_SIZE - 1, 3 * PIXEL_BLOCK_SIZE - 1));
 
-        assertEquals(PIXEL_BLOCK_SIZE - 1, result.x);
-        assertEquals(PIXEL_BLOCK_SIZE - 1, result.y);
+        assertEquals(-(PIXEL_BLOCK_SIZE - 1), result.x());
+        assertEquals(-(PIXEL_BLOCK_SIZE - 1), result.y());
     }
 
     @Test
@@ -111,13 +98,11 @@ class BackgroundScrollerTest {
         setupMapWithDimensions(3, 3);
         testGameConfig.setWindowWidth(3 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(3 * PIXEL_BLOCK_SIZE);
-        manfredPosition.x = 3 * PIXEL_BLOCK_SIZE - 1;
-        manfredPosition.y = 3 * PIXEL_BLOCK_SIZE - 1;
 
-        Point result = underTest.getOffset();
+        Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(3 * PIXEL_BLOCK_SIZE - 1, 3 * PIXEL_BLOCK_SIZE - 1));
 
-        assertEquals(0, result.x);
-        assertEquals(0, result.y);
+        assertEquals(0, result.x());
+        assertEquals(0, result.y());
     }
 
     @Test
@@ -125,13 +110,11 @@ class BackgroundScrollerTest {
         setupMapWithDimensions(6, 6);
         testGameConfig.setWindowWidth(3 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(3 * PIXEL_BLOCK_SIZE);
-        manfredPosition.x = 0;
-        manfredPosition.y = 0;
 
-        Point result = underTest.getOffset();
+        Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(0, 0));
 
-        assertEquals(0, result.x);
-        assertEquals(0, result.y);
+        assertEquals(0, result.x());
+        assertEquals(0, result.y());
     }
 
     @Test
@@ -139,20 +122,16 @@ class BackgroundScrollerTest {
         setupMapWithDimensions(6, 6);
         testGameConfig.setWindowWidth(3 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(3 * PIXEL_BLOCK_SIZE);
-        manfredPosition.x = 3 * PIXEL_BLOCK_SIZE;
-        manfredPosition.y = 0;
 
-        Point result = underTest.getOffset();
+        Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(3 * PIXEL_BLOCK_SIZE, 0));
 
-        assertEquals(TRIGGER_SCROLL_DISTANCE_TO_BORDER, result.x);
-        assertEquals(0, result.y);
+        assertEquals(-TRIGGER_SCROLL_DISTANCE_TO_BORDER, result.x());
+        assertEquals(0, result.y());
 
-        manfredPosition.x = PIXEL_BLOCK_SIZE * 3 / 2;
+        Vector<PanelCoordinate> result2 = underTest.getOffset(manfredAt(PIXEL_BLOCK_SIZE * 3 / 2, 0));
 
-        Point result2 = underTest.getOffset();
-
-        assertEquals(TRIGGER_SCROLL_DISTANCE_TO_BORDER / 2, result2.x);
-        assertEquals(0, result2.y);
+        assertEquals(-TRIGGER_SCROLL_DISTANCE_TO_BORDER / 2, result2.x());
+        assertEquals(0, result2.y());
     }
 
     @Test
@@ -160,20 +139,16 @@ class BackgroundScrollerTest {
         setupMapWithDimensions(6, 6);
         testGameConfig.setWindowWidth(3 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(3 * PIXEL_BLOCK_SIZE);
-        manfredPosition.x = 0;
-        manfredPosition.y = 3 * PIXEL_BLOCK_SIZE;
 
-        Point result = underTest.getOffset();
+        Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(0, 3 * PIXEL_BLOCK_SIZE));
 
-        assertEquals(0, result.x);
-        assertEquals(TRIGGER_SCROLL_DISTANCE_TO_BORDER, result.y);
+        assertEquals(0, result.x());
+        assertEquals(-TRIGGER_SCROLL_DISTANCE_TO_BORDER, result.y());
 
-        manfredPosition.y = PIXEL_BLOCK_SIZE * 3 / 2;
+        Vector<PanelCoordinate> result2 = underTest.getOffset(manfredAt(0, PIXEL_BLOCK_SIZE * 3 / 2));
 
-        Point result2 = underTest.getOffset();
-
-        assertEquals(0, result2.x);
-        assertEquals(TRIGGER_SCROLL_DISTANCE_TO_BORDER / 2, result2.y);
+        assertEquals(0, result2.x());
+        assertEquals(-TRIGGER_SCROLL_DISTANCE_TO_BORDER / 2, result2.y());
     }
 
     @Test
@@ -184,14 +159,12 @@ class BackgroundScrollerTest {
         setupMapWithDimensions(8, 8);
         testGameConfig.setWindowWidth(screenSize);
         testGameConfig.setWindowHeight(screenSize);
-        manfredPosition.x = initialPosition;
-        manfredPosition.y = initialPosition;
 
-        underTest.centerTo(manfredPosition.getCenter());
-        Point result = underTest.getOffset();
+        underTest.centerTo(manfredAt(initialPosition, initialPosition));
+        Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(initialPosition, initialPosition));
 
-        assertEquals(initialPosition - screenSize / 2, result.x);
-        assertEquals(initialPosition - screenSize / 2, result.y);
+        assertEquals(initialPosition - screenSize / 2, result.x());
+        assertEquals(initialPosition - screenSize / 2, result.y());
     }
 
     @Test
@@ -202,14 +175,12 @@ class BackgroundScrollerTest {
         setupMapWithDimensions(8, 8);
         testGameConfig.setWindowWidth(screenSize);
         testGameConfig.setWindowHeight(screenSize);
-        manfredPosition.x = 0;
-        manfredPosition.y = initialPosition;
 
-        underTest.centerTo(manfredPosition.getCenter());
-        Point result = underTest.getOffset();
+        underTest.centerTo(manfredAt(0, initialPosition));
+        Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(0, initialPosition));
 
-        assertEquals(0, result.x);
-        assertEquals(initialPosition - screenSize / 2, result.y);
+        assertEquals(0, result.x());
+        assertEquals(initialPosition - screenSize / 2, result.y());
     }
 
     @Test
@@ -220,14 +191,12 @@ class BackgroundScrollerTest {
         setupMapWithDimensions(8, 8);
         testGameConfig.setWindowWidth(screenSize);
         testGameConfig.setWindowHeight(screenSize);
-        manfredPosition.x = 8 * PIXEL_BLOCK_SIZE - 1;
-        manfredPosition.y = initialPosition;
 
-        underTest.centerTo(manfredPosition.getCenter());
-        Point result = underTest.getOffset();
+        underTest.centerTo(manfredAt(8 * PIXEL_BLOCK_SIZE - 1, initialPosition));
+        Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(8 * PIXEL_BLOCK_SIZE - 1, initialPosition));
 
-        assertEquals(8 * PIXEL_BLOCK_SIZE - screenSize, result.x);
-        assertEquals(initialPosition - screenSize / 2, result.y);
+        assertEquals(8 * PIXEL_BLOCK_SIZE - screenSize, result.x());
+        assertEquals(initialPosition - screenSize / 2, result.y());
     }
 
     @Test
@@ -238,14 +207,12 @@ class BackgroundScrollerTest {
         setupMapWithDimensions(8, 8);
         testGameConfig.setWindowWidth(screenSize);
         testGameConfig.setWindowHeight(screenSize);
-        manfredPosition.x = initialPosition;
-        manfredPosition.y = 0;
 
-        underTest.centerTo(manfredPosition.getCenter());
-        Point result = underTest.getOffset();
+        underTest.centerTo(manfredAt(initialPosition, 0));
+        Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(initialPosition, 0));
 
-        assertEquals(initialPosition - screenSize / 2, result.x);
-        assertEquals(0, result.y);
+        assertEquals(initialPosition - screenSize / 2, result.x());
+        assertEquals(0, result.y());
     }
 
     @Test
@@ -256,14 +223,16 @@ class BackgroundScrollerTest {
         setupMapWithDimensions(8, 8);
         testGameConfig.setWindowWidth(screenSize);
         testGameConfig.setWindowHeight(screenSize);
-        manfredPosition.x = initialPosition;
-        manfredPosition.y = 8 * PIXEL_BLOCK_SIZE - 1;
 
-        underTest.centerTo(manfredPosition.getCenter());
-        Point result = underTest.getOffset();
+        underTest.centerTo(manfredAt(initialPosition, 8 * PIXEL_BLOCK_SIZE - 1));
+        Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(initialPosition, 8 * PIXEL_BLOCK_SIZE - 1));
 
-        assertEquals(initialPosition - screenSize / 2, result.x);
-        assertEquals(8 * PIXEL_BLOCK_SIZE - screenSize, result.y);
+        assertEquals(initialPosition - screenSize / 2, result.x());
+        assertEquals(8 * PIXEL_BLOCK_SIZE - screenSize, result.y());
+    }
+
+    private PanelCoordinate manfredAt(int x, int y) {
+        return new PanelCoordinate(x, y);
     }
 
     private void setupMapWithDimensions(int x, int y) {

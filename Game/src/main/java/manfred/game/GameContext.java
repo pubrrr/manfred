@@ -88,9 +88,9 @@ public class GameContext {
     }
 
     @Bean
-    public BackgroundScroller backgroundScroller(Manfred manfred, MapFacade mapFacade, GameConfig gameConfig) {
+    public BackgroundScroller backgroundScroller(MapFacade mapFacade, GameConfig gameConfig) {
         int triggerScrollDistanceToBorder = Math.min(gameConfig.getWindowHeight(), gameConfig.getWindowWidth()) / 3;
-        return new BackgroundScroller(triggerScrollDistanceToBorder, manfred, mapFacade, gameConfig);
+        return new BackgroundScroller(triggerScrollDistanceToBorder, mapFacade, gameConfig);
     }
 
     @Bean

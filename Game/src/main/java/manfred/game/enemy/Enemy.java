@@ -5,6 +5,7 @@ import manfred.game.characters.Manfred;
 import manfred.game.characters.MovingObject;
 import manfred.game.characters.Velocity;
 import manfred.game.config.GameConfig;
+import manfred.game.graphics.PanelCoordinate;
 import manfred.game.graphics.paintable.LocatedPaintable;
 import manfred.game.map.Map;
 import manfred.game.geometry.Vector;
@@ -30,20 +31,20 @@ public class Enemy extends MovingObject implements LocatedPaintable {
     }
 
     @Override
-    public void paint(Graphics g, Integer x, Integer y) {
-        g.drawImage(this.image, x, y, this.sprite.getWidth(), this.sprite.getSpriteHeight(), null);
+    public void paint(Graphics g, PanelCoordinate coordinate) {
+        g.drawImage(this.image, coordinate.getX(), coordinate.getY(), this.sprite.getWidth(), this.sprite.getSpriteHeight(), null);
 
         g.setFont(new Font("Palatino Linotype", Font.BOLD, gameConfig.getPixelBlockSize().divideBy(2)));
 
         g.setColor(Color.BLACK);
-        g.drawString(String.valueOf(this.healthPoints), x + this.sprite.getWidth() / 4, y + (this.sprite.getSpriteHeight() / 2));
+        g.drawString(String.valueOf(this.healthPoints), coordinate.getX() + this.sprite.getWidth() / 4, coordinate.getY() + (this.sprite.getSpriteHeight() / 2));
 
         g.setColor(Color.BLACK);
-        g.drawString(this.name, x + this.sprite.getWidth() / 4, y - (this.sprite.getSpriteHeight() / 4));
+        g.drawString(this.name, coordinate.getX() + this.sprite.getWidth() / 4, coordinate.getY() - (this.sprite.getSpriteHeight() / 4));
     }
 
     public Enemy determineSpeed(Manfred manfred) {
-        Vector enemyToManfred = this.baseObject.getCenter().distanceTo(manfred.getCenter());
+        Vector<Map.Coordinate> enemyToManfred = this.baseObject.getCenter().distanceTo(manfred.getCenter());
         if (enemyToManfred.lengthSquared().value() <= this.aggroRadiusSquared) {
             this.velocity = velocity.moveInDirection(enemyToManfred);
         } else {

@@ -1,5 +1,7 @@
 package manfred.game.map;
 
+import manfred.game.graphics.PanelCoordinate;
+
 import java.awt.*;
 
 public class Accessible implements MapTile {
@@ -18,7 +20,7 @@ public class Accessible implements MapTile {
     }
 
     @Override
-    public void paint(Graphics g, Integer x, Integer y) {
+    public void paint(Graphics g, PanelCoordinate coordinate) {
         // do nothing
     }
 }

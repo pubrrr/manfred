@@ -2,6 +2,7 @@ package manfred.game.map;
 
 import lombok.AllArgsConstructor;
 import manfred.game.config.GameConfig;
+import manfred.game.graphics.PanelCoordinate;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -21,11 +22,11 @@ public class MapTileWithImageDecorator implements MapTile {
     }
 
     @Override
-    public void paint(Graphics g, Integer x, Integer y) {
+    public void paint(Graphics g, PanelCoordinate coordinate) {
         g.drawImage(
             tileImage,
-            x,
-            (y + gameConfig.getPixelBlockSize().value()) - imageHeight,
+            coordinate.getX(),
+            (coordinate.getY() + gameConfig.getPixelBlockSize().value()) - imageHeight,
             imageWidth,
             imageHeight,
             null

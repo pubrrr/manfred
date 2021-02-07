@@ -4,6 +4,7 @@ import manfred.data.shared.PositiveInt;
 import manfred.game.characters.MovingObject;
 import manfred.game.characters.Velocity;
 import manfred.game.enemy.Enemy;
+import manfred.game.graphics.PanelCoordinate;
 import manfred.game.graphics.paintable.LocatedPaintable;
 import manfred.game.map.CollisionDetector;
 import manfred.game.map.Map;
@@ -66,11 +67,11 @@ public class Attack extends MovingObject implements LocatedPaintable {
     }
 
     @Override
-    public void paint(Graphics g, Integer x, Integer y) {
+    public void paint(Graphics g, PanelCoordinate coordinate) {
         g.drawImage(
             attackAnimation.get(animationIdx),
-            x,
-            y,
+            coordinate.getX(),
+            coordinate.getY(),
             sprite.getWidth(),
             sprite.getSpriteHeight(),
             null

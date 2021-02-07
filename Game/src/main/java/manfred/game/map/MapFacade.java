@@ -52,4 +52,12 @@ public class MapFacade implements PaintablesContainer, CollisionDetector {
     public Map.TileCoordinate tileAt(PositiveInt tileX, PositiveInt tileY) {
         return this.map.tileAt(tileX, tileY);
     }
+
+    public int getMapSizeX() {
+        return this.map.sizeX();
+    }
+
+    public int getMapSizeY() {
+        return this.map.sizeY();
+    }
 }

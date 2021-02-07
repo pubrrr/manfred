@@ -4,6 +4,7 @@ import manfred.game.config.GameConfig;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.ManfredController;
+import manfred.game.graphics.PanelCoordinate;
 import manfred.game.interact.person.gelaber.GelaberFacade;
 import manfred.game.map.MapTile;
 
@@ -38,7 +39,7 @@ public class Person implements MapTile {
     }
 
     @Override
-    public void paint(Graphics g, Integer x, Integer y) {
-        g.drawImage(image, x, y, gameConfig.getPixelBlockSize().value(), gameConfig.getPixelBlockSize().value(), null);
+    public void paint(Graphics g, PanelCoordinate coordinate) {
+        g.drawImage(image, coordinate.getX(), coordinate.getY(), gameConfig.getPixelBlockSize().value(), gameConfig.getPixelBlockSize().value(), null);
     }
 }

@@ -5,6 +5,7 @@ import manfred.data.shared.PositiveInt;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.ManfredController;
+import manfred.game.graphics.PanelCoordinate;
 import manfred.game.interact.Door;
 import manfred.game.interact.person.Person;
 
@@ -17,9 +18,9 @@ public class DebugTileWrapper implements MapTile {
     private final PositiveInt.Strict pixelBlockSize;
 
     @Override
-    public void paint(Graphics g, Integer x, Integer y) {
+    public void paint(Graphics g, PanelCoordinate coordinate) {
         g.setColor(Color.BLACK);
-        g.drawRect(x, y, pixelBlockSize.value(), pixelBlockSize.value());
+        g.drawRect(coordinate.getX(), coordinate.getY(), pixelBlockSize.value(), pixelBlockSize.value());
 
         if (!wrapped.isAccessible()) {
             if (wrapped instanceof Person || wrapped instanceof Door) {
@@ -27,10 +28,10 @@ public class DebugTileWrapper implements MapTile {
             } else {
                 g.setColor(Color.RED);
             }
-            g.fillRect(x, y, pixelBlockSize.value(), pixelBlockSize.value());
+            g.fillRect(coordinate.getX(), coordinate.getY(), pixelBlockSize.value(), pixelBlockSize.value());
         }
 
-        wrapped.paint(g, x, y);
+        wrapped.paint(g, coordinate);
     }
 
     @Override

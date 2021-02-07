@@ -6,6 +6,7 @@ import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
+import manfred.game.graphics.PanelCoordinate;
 import manfred.game.map.MapTile;
 import manfred.game.map.MapTileWithImageDecorator;
 import manfred.game.map.NotAccessible;
@@ -88,7 +89,7 @@ class DecorateTileWithImageRuleTest {
 
     private void assertTilePaintsImage(MapTile resultingTile) {
         Graphics graphicsMock = mock(Graphics.class);
-        resultingTile.paint(graphicsMock, 0, 0);
+        resultingTile.paint(graphicsMock, new PanelCoordinate(0, 0));
         verify(graphicsMock).drawImage(any(), anyInt(), anyInt(), anyInt(), anyInt(), isNull());
     }
 

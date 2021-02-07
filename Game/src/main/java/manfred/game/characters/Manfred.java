@@ -3,6 +3,7 @@ package manfred.game.characters;
 import manfred.data.shared.PositiveInt;
 import manfred.game.config.GameConfig;
 import manfred.game.geometry.Vector;
+import manfred.game.graphics.PanelCoordinate;
 import manfred.game.graphics.paintable.LocatedPaintable;
 import manfred.game.map.CollisionDetector;
 import manfred.game.map.Map;
@@ -66,12 +67,12 @@ public class Manfred extends MovingObject implements LocatedPaintable {
     }
 
     @Override
-    public void paint(Graphics g, Integer x, Integer y) {
+    public void paint(Graphics g, PanelCoordinate coordinate) {
         System.out.println("buh");
         g.drawImage(
             walkAnimation.get(viewDirection)[animationPosition],
-            x,
-            y - gameConfig.getPixelBlockSize().value(), // TODO!
+            coordinate.getX(),
+            coordinate.getY() - gameConfig.getPixelBlockSize().value(), // TODO!
             sprite.getWidth(),
             sprite.getSpriteHeight(),
             null

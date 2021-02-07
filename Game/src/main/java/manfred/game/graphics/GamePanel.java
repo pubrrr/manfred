@@ -5,6 +5,7 @@ import manfred.game.attack.Caster;
 import manfred.game.characters.Manfred;
 import manfred.game.config.GameConfig;
 import manfred.game.enemy.EnemiesWrapper;
+import manfred.game.geometry.Vector;
 import manfred.game.graphics.coordinatetransformation.MapCoordinateToPanelCoordinateTransformer;
 import manfred.game.graphics.paintable.GelaberOverlay;
 import manfred.game.graphics.paintable.LocatedPaintable;
@@ -26,6 +27,7 @@ public class GamePanel extends JPanel {
     public static final int FADE_TRANSPARENCY_INTERVAL = 20;
 
     private final BackgroundScroller backgroundScroller;
+    private final Manfred manfred;
     private final GameConfig gameConfig;
     private final PaintablesSorter paintablesSorter;
     private final GelaberOverlay gelaberOverlay;
@@ -47,6 +49,7 @@ public class GamePanel extends JPanel {
         MapCoordinateToPanelCoordinateTransformer mapCoordinateToPanelCoordinateTransformer
     ) {
         super();
+        this.manfred = manfred;
         this.gameConfig = gameConfig;
         this.paintablesSorter = paintablesSorter;
         this.gelaberOverlay = gelaberOverlay;
@@ -79,7 +82,8 @@ public class GamePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        Point offset = backgroundScroller.getOffset();
+        PanelCoordinate manfredCenterPanelCoordinate = mapCoordinateToPanelCoordinateTransformer.toPanelCoordinate(manfred.getCenter());
+        Vector<PanelCoordinate> offset = backgroundScroller.getOffset(manfredCenterPanelCoordinate);
 
         SortedMap<PanelCoordinate, LocatedPaintable> paintablesSortedByYAndX = paintablesSorter.sortByYAndX(
             this.paintablesContainers,
@@ -87,7 +91,7 @@ public class GamePanel extends JPanel {
         );
 
         paintablesSortedByYAndX.forEach(
-            (coordinate, paintable) -> paintable.paint(g, offset, coordinate.getX(), coordinate.getY())
+            (coordinate, paintable) -> paintable.paint(g, coordinate.translate(offset))
         );
 
         gelaberOverlay.paint(g);
