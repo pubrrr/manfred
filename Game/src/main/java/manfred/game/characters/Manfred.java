@@ -66,11 +66,12 @@ public class Manfred extends MovingObject implements LocatedPaintable {
     }
 
     @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
+    public void paint(Graphics g, Integer x, Integer y) {
+        System.out.println("buh");
         g.drawImage(
             walkAnimation.get(viewDirection)[animationPosition],
-            x - offset.x,
-            y - gameConfig.getPixelBlockSize().value() - offset.y, // TODO!
+            x,
+            y - gameConfig.getPixelBlockSize().value(), // TODO!
             sprite.getWidth(),
             sprite.getSpriteHeight(),
             null

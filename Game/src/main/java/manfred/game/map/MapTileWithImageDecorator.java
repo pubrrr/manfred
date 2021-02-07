@@ -21,11 +21,11 @@ public class MapTileWithImageDecorator implements MapTile {
     }
 
     @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
+    public void paint(Graphics g, Integer x, Integer y) {
         g.drawImage(
             tileImage,
-            x - offset.x,
-            (y + gameConfig.getPixelBlockSize().value()) - offset.y - imageHeight,
+            x,
+            (y + gameConfig.getPixelBlockSize().value()) - imageHeight,
             imageWidth,
             imageHeight,
             null

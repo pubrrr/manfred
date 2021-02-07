@@ -66,11 +66,11 @@ public class Attack extends MovingObject implements LocatedPaintable {
     }
 
     @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
+    public void paint(Graphics g, Integer x, Integer y) {
         g.drawImage(
             attackAnimation.get(animationIdx),
-            x - offset.x,
-            y - offset.y,
+            x,
+            y,
             sprite.getWidth(),
             sprite.getSpriteHeight(),
             null

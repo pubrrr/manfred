@@ -50,7 +50,7 @@ public class TestMapFactory {
 
         for (int i = 0; i < input.length; i++) {
             for (int j = 0; j < input[0].length; j++) {
-                transposed[j][i] = input[i][j];
+                transposed[j][i] = input[i][j] != null ? input[i][j] : "1";
             }
         }
 

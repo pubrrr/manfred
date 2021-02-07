@@ -30,16 +30,16 @@ public class Enemy extends MovingObject implements LocatedPaintable {
     }
 
     @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        g.drawImage(this.image, x - offset.x, y - offset.y, this.sprite.getWidth(), this.sprite.getSpriteHeight(), null);
+    public void paint(Graphics g, Integer x, Integer y) {
+        g.drawImage(this.image, x, y, this.sprite.getWidth(), this.sprite.getSpriteHeight(), null);
 
         g.setFont(new Font("Palatino Linotype", Font.BOLD, gameConfig.getPixelBlockSize().divideBy(2)));
 
         g.setColor(Color.BLACK);
-        g.drawString(String.valueOf(this.healthPoints), x + this.sprite.getWidth() / 4 - offset.x, y + (this.sprite.getSpriteHeight() / 2) - offset.y);
+        g.drawString(String.valueOf(this.healthPoints), x + this.sprite.getWidth() / 4, y + (this.sprite.getSpriteHeight() / 2));
 
         g.setColor(Color.BLACK);
-        g.drawString(this.name, x + this.sprite.getWidth() / 4 - offset.x, y - (this.sprite.getSpriteHeight() / 4) - offset.y);
+        g.drawString(this.name, x + this.sprite.getWidth() / 4, y - (this.sprite.getSpriteHeight() / 4));
     }
 
     public Enemy determineSpeed(Manfred manfred) {

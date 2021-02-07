@@ -29,8 +29,7 @@ public class CastModeOff implements CastMode {
         //do nothing
     }
 
-    @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
+    public void paint(Graphics g, Integer x, Integer y) {
         //paint nothing
     }
 }

@@ -34,7 +34,7 @@ class DecorateTileWithImageRuleTest {
     private TileConversionRule wrappedRuleMock;
 
     @BeforeEach
-    void setUp() throws InvalidInputException {
+    void setUp() {
         wrappedRuleMock = mock(TileConversionRule.class);
         underTest = DecorateTileWithImageRule.build(new TestGameConfig()).and(wrappedRuleMock);
     }
@@ -88,7 +88,7 @@ class DecorateTileWithImageRuleTest {
 
     private void assertTilePaintsImage(MapTile resultingTile) {
         Graphics graphicsMock = mock(Graphics.class);
-        resultingTile.paint(graphicsMock, new Point(0, 0), 0, 0);
+        resultingTile.paint(graphicsMock, 0, 0);
         verify(graphicsMock).drawImage(any(), anyInt(), anyInt(), anyInt(), anyInt(), isNull());
     }
 

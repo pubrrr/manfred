@@ -33,7 +33,7 @@ public class Door implements MapTile {
     }
 
     @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
+    public void paint(Graphics g, Integer x, Integer y) {
         // do nothing
     }
 }

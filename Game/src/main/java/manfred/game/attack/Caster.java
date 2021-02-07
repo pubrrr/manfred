@@ -24,8 +24,8 @@ public class Caster implements LocatedPaintable {
     }
 
     @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        castMode.paint(g, offset, x, y);
+    public void paint(Graphics g, Integer x, Integer y) {
+        castMode.paint(g, x, y);
     }
 
     public void off() {

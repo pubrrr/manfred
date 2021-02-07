@@ -49,11 +49,11 @@ public class CastModeOn implements CastMode {
     }
 
     @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
+    public void paint(Graphics g, Integer x, Integer y) {
         g.drawImage(
             castModeSprite,
-            x - gameConfig.getPixelBlockSize().divideBy(2) - offset.x,
-            y - gameConfig.getPixelBlockSize().divideBy(2) - offset.y,
+            x - gameConfig.getPixelBlockSize().divideBy(2),
+            y - gameConfig.getPixelBlockSize().divideBy(2),
             manfredSprite.getWidth() + gameConfig.getPixelBlockSize().value(),
             manfredSprite.getSpriteHeight() + gameConfig.getPixelBlockSize().value(),
             null

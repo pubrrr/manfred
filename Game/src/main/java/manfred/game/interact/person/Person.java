@@ -38,7 +38,7 @@ public class Person implements MapTile {
     }
 
     @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        g.drawImage(image, x - offset.x, y - offset.y, gameConfig.getPixelBlockSize().value(), gameConfig.getPixelBlockSize().value(), null);
+    public void paint(Graphics g, Integer x, Integer y) {
+        g.drawImage(image, x, y, gameConfig.getPixelBlockSize().value(), gameConfig.getPixelBlockSize().value(), null);
     }
 }

@@ -17,7 +17,7 @@ public class DebugTileWrapper implements MapTile {
     private final PositiveInt.Strict pixelBlockSize;
 
     @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
+    public void paint(Graphics g, Integer x, Integer y) {
         g.setColor(Color.BLACK);
         g.drawRect(x, y, pixelBlockSize.value(), pixelBlockSize.value());
 
@@ -30,7 +30,7 @@ public class DebugTileWrapper implements MapTile {
             g.fillRect(x, y, pixelBlockSize.value(), pixelBlockSize.value());
         }
 
-        wrapped.paint(g, offset, x, y);
+        wrapped.paint(g, x, y);
     }
 
     @Override
