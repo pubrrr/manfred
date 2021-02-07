@@ -5,6 +5,8 @@ import manfred.data.shared.PositiveInt;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.ManfredController;
+import manfred.game.interact.Door;
+import manfred.game.interact.person.Person;
 
 import java.awt.*;
 
@@ -20,7 +22,11 @@ public class DebugTileWrapper implements MapTile {
         g.drawRect(x, y, pixelBlockSize.value(), pixelBlockSize.value());
 
         if (!wrapped.isAccessible()) {
-            g.setColor(Color.RED);
+            if (wrapped instanceof Person || wrapped instanceof Door) {
+                g.setColor(Color.YELLOW);
+            } else {
+                g.setColor(Color.RED);
+            }
             g.fillRect(x, y, pixelBlockSize.value(), pixelBlockSize.value());
         }
 

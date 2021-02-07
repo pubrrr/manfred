@@ -1,6 +1,7 @@
 package manfred.game.graphics;
 
 import manfred.data.shared.PositiveInt;
+import manfred.game.graphics.coordinatetransformation.MapCoordinateToPanelCoordinateTransformer;
 import manfred.game.graphics.paintable.LocatedPaintable;
 import manfred.game.graphics.paintable.PaintableContainerElement;
 import manfred.game.graphics.paintable.PaintablesContainer;
@@ -42,7 +43,7 @@ class PaintablesSorterTest {
 
         List<PaintablesContainer> input = setupTwoContainersWithElements(first, second, third, fourth);
 
-        SortedMap<PanelCoordinate, LocatedPaintable> result = underTest.sortByYAndX(input, mapCoordinate -> mapCoordinate.scaleTo(PositiveInt.ofNonZero(60)));
+        SortedMap<PanelCoordinate, LocatedPaintable> result = underTest.sortByYAndX(input, new MapCoordinateToPanelCoordinateTransformer(PositiveInt.ofNonZero(60)));
 
         LocatedPaintable[] paintablesInActualOrder = new LocatedPaintable[4];
         AtomicInteger i = new AtomicInteger();

@@ -113,5 +113,9 @@ abstract public class MovingObject implements LocatedPaintable {
     public Map.Coordinate getBottomLeft() {
         return this.baseObject.getBottomLeft();
     }
+
+    public Map.Coordinate getTopLeft() {
+        return this.baseObject.getTopLeft();
+    }
 }
 

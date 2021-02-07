@@ -16,6 +16,7 @@ import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
 import manfred.game.graphics.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
+import manfred.game.graphics.coordinatetransformation.MapCoordinateToPanelCoordinateTransformer;
 import manfred.game.interact.person.gelaber.LineSplitter;
 import manfred.game.interact.person.textLineFactory.ChoicesTextLineFactory;
 import manfred.game.interact.person.textLineFactory.SimpleTextLineFactory;
@@ -107,5 +108,10 @@ public class GameContext {
         return new TextLineFactory(
             ChoicesTextLineFactory.withConfig(gameConfig).orElse(SimpleTextLineFactory.withConfig(gameConfig))
         );
+    }
+
+    @Bean
+    public MapCoordinateToPanelCoordinateTransformer mapCoordinateToPanelCoordinateTransformer(GameConfig gameConfig) {
+        return new MapCoordinateToPanelCoordinateTransformer(gameConfig.getPixelBlockSize());
     }
 }

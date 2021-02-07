@@ -70,7 +70,7 @@ public class Map {
             for (int y = 0; y < sizeY(); y++) {
                 elements.push(new PaintableContainerElement(
                     mapTiles.get(x).get(y),
-                    tileAt(PositiveInt.of(x), PositiveInt.of(y)).getBottomLeftCoordinate()
+                    tileAt(PositiveInt.of(x), PositiveInt.of(y)).getTopLeftCoordinate()
                 ));
             }
         }
@@ -167,6 +167,10 @@ public class Map {
 
         public Coordinate getBottomLeftCoordinate() {
             return new Coordinate(tileX * Coordinate.TILE_SIZE, tileY * Coordinate.TILE_SIZE);
+        }
+
+        public Coordinate getTopLeftCoordinate() {
+            return new Coordinate(tileX * Coordinate.TILE_SIZE, tileY * Coordinate.TILE_SIZE + (Coordinate.TILE_SIZE - 1));
         }
     }
 }

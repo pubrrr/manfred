@@ -5,6 +5,7 @@ import manfred.game.attack.Caster;
 import manfred.game.characters.Manfred;
 import manfred.game.config.GameConfig;
 import manfred.game.enemy.EnemiesWrapper;
+import manfred.game.graphics.coordinatetransformation.MapCoordinateToPanelCoordinateTransformer;
 import manfred.game.graphics.paintable.GelaberOverlay;
 import manfred.game.graphics.paintable.LocatedPaintable;
 import manfred.game.graphics.paintable.PaintableContainerElement;
@@ -28,6 +29,7 @@ public class GamePanel extends JPanel {
     private final GameConfig gameConfig;
     private final PaintablesSorter paintablesSorter;
     private final GelaberOverlay gelaberOverlay;
+    private final MapCoordinateToPanelCoordinateTransformer mapCoordinateToPanelCoordinateTransformer;
 
     private int fadeTransparency = 0;
     private final List<PaintablesContainer> paintablesContainers = new LinkedList<>();
@@ -41,12 +43,14 @@ public class GamePanel extends JPanel {
         BackgroundScroller backgroundScroller,
         GameConfig gameConfig,
         PaintablesSorter paintablesSorter,
-        GelaberOverlay gelaberOverlay
+        GelaberOverlay gelaberOverlay,
+        MapCoordinateToPanelCoordinateTransformer mapCoordinateToPanelCoordinateTransformer
     ) {
         super();
         this.gameConfig = gameConfig;
         this.paintablesSorter = paintablesSorter;
         this.gelaberOverlay = gelaberOverlay;
+        this.mapCoordinateToPanelCoordinateTransformer = mapCoordinateToPanelCoordinateTransformer;
         setFocusable(true);
         requestFocus();
 
@@ -55,8 +59,8 @@ public class GamePanel extends JPanel {
         registerPaintableContainer(mapFacade);
         registerPaintableContainer(() -> {
             Stack<PaintableContainerElement> elements = new Stack<>();
-            elements.push(new PaintableContainerElement(attackCaster, manfred.getBottomLeft()));
-            elements.push(new PaintableContainerElement(manfred, manfred.getBottomLeft()));
+            elements.push(new PaintableContainerElement(attackCaster, manfred.getTopLeft()));
+            elements.push(new PaintableContainerElement(manfred, manfred.getTopLeft()));
             return elements;
         });
         registerPaintableContainer(enemiesWrapper);
@@ -79,7 +83,7 @@ public class GamePanel extends JPanel {
 
         SortedMap<PanelCoordinate, LocatedPaintable> paintablesSortedByYAndX = paintablesSorter.sortByYAndX(
             this.paintablesContainers,
-            mapCoordinate -> mapCoordinate.scaleTo(gameConfig.getPixelBlockSize())
+            mapCoordinateToPanelCoordinateTransformer
         );
 
         paintablesSortedByYAndX.forEach(

@@ -70,7 +70,7 @@ public class Manfred extends MovingObject implements LocatedPaintable {
         g.drawImage(
             walkAnimation.get(viewDirection)[animationPosition],
             x - offset.x,
-            y - offset.y,
+            y - gameConfig.getPixelBlockSize().value() - offset.y, // TODO!
             sprite.getWidth(),
             sprite.getSpriteHeight(),
             null
