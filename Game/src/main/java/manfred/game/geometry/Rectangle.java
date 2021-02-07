@@ -34,7 +34,7 @@ public class Rectangle {
         return this.bottomLeft.translate(Vector.pointingRight(width.value() - 1));
     }
 
-    public Rectangle translate(Vector vector) {
+    public Rectangle translate(Vector<Map.Coordinate> vector) {
         return new Rectangle(bottomLeft.translate(vector), this.width, this.height);
     }
 
@@ -49,16 +49,16 @@ public class Rectangle {
     }
 
     public boolean intersects(Rectangle other) {
-        Vector thisBottomLeftToOtherRopRight = this.bottomLeft.distanceTo(other.getTopRight());
-        Vector otherBottomLeftToThisTopRight = other.bottomLeft.distanceTo(this.getTopRight());
+        Vector<Map.Coordinate> thisBottomLeftToOtherRopRight = this.bottomLeft.distanceTo(other.getTopRight());
+        Vector<Map.Coordinate> otherBottomLeftToThisTopRight = other.bottomLeft.distanceTo(this.getTopRight());
 
         return thisBottomLeftToOtherRopRight.pointsTopRight()
             && otherBottomLeftToThisTopRight.pointsTopRight();
     }
 
     public boolean contains(Map.Coordinate coordinate) {
-        Vector bottomLeftToCoordinate = this.bottomLeft.distanceTo(coordinate);
-        Vector coordinateToTopRight = coordinate.distanceTo(this.getTopRight());
+        Vector<Map.Coordinate> bottomLeftToCoordinate = this.bottomLeft.distanceTo(coordinate);
+        Vector<Map.Coordinate> coordinateToTopRight = coordinate.distanceTo(this.getTopRight());
 
         return bottomLeftToCoordinate.pointsTopRight() && coordinateToTopRight.pointsTopRight();
     }

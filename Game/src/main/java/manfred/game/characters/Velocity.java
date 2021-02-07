@@ -2,13 +2,14 @@ package manfred.game.characters;
 
 import manfred.data.shared.PositiveInt;
 import manfred.game.geometry.Vector;
+import manfred.game.map.Map;
 
 public class Velocity {
 
     private final PositiveInt speed;
-    private final Vector directionVector;
+    private final Vector<Map.Coordinate> directionVector;
 
-    private Velocity(PositiveInt speed, Vector directionVector) {
+    private Velocity(PositiveInt speed, Vector<Map.Coordinate> directionVector) {
         this.speed = speed;
         this.directionVector = directionVector;
     }
@@ -27,11 +28,11 @@ public class Velocity {
         );
     }
 
-    public Velocity moveInDirection(Vector directionVector) {
+    public Velocity moveInDirection(Vector<Map.Coordinate> directionVector) {
         return new Velocity(this.speed, directionVector);
     }
 
-    public Vector getVector() {
+    public Vector<Map.Coordinate> getVector() {
         return this.directionVector.length().toStrictlyPositive()
             .map(strictlyPositiveLength -> this.directionVector.scale(speed, strictlyPositiveLength))
             .orElse(this.directionVector);

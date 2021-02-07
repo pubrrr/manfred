@@ -2,27 +2,27 @@ package manfred.game.geometry;
 
 import manfred.data.shared.PositiveInt;
 
-public interface Vector {
-    static Vector of(int x, int y) {
+public interface Vector<COORDINATE> {
+    static <COORDINATE> Vector<COORDINATE> of(int x, int y) {
         return VectorImpl.of(x, y);
     }
 
-    static Vector pointingUp(int y) {
+    static <COORDINATE> Vector<COORDINATE> pointingUp(int y) {
         return VectorImpl.pointingUp(y);
     }
 
-    static Vector pointingRight(int x) {
+    static <COORDINATE> Vector<COORDINATE> pointingRight(int x) {
         return VectorImpl.pointingRight(x);
     }
 
-    static NonZero nonZero(int x, int y) {
+    static <COORDINATE> NonZero<COORDINATE> nonZero(int x, int y) {
         if (x == 0 && y == 0) {
             throw new IllegalArgumentException("x and y must not both be zero for non zero vector");
         }
-        return new NonZero(Vector.of(x, y));
+        return new NonZero<>(Vector.of(x, y));
     }
 
-    static Vector zero() {
+    static <COORDINATE> Vector<COORDINATE> zero() {
         return VectorImpl.pointingUp(0);
     }
 
@@ -34,27 +34,27 @@ public interface Vector {
 
     PositiveInt lengthSquared();
 
-    Vector add(Vector other);
+    Vector<COORDINATE> add(Vector<COORDINATE> other);
 
-    Vector scale(PositiveInt multiply, PositiveInt.Strict divide);
+    Vector<COORDINATE> scale(PositiveInt multiply, PositiveInt.Strict divide);
 
-    int scalarProduct(Vector other);
+    int scalarProduct(Vector<COORDINATE> other);
 
     boolean pointsTopRight();
 
-    Vector projectOnXAxis();
+    Vector<COORDINATE> projectOnXAxis();
 
-    Vector projectOnYAxis();
+    Vector<COORDINATE> projectOnYAxis();
 
-    class NonZero implements Vector {
-        private final Vector wrapped;
+    class NonZero<COORDINATE> implements Vector<COORDINATE> {
+        private final Vector<COORDINATE> wrapped;
 
-        private NonZero(Vector wrapped) {
+        private NonZero(Vector<COORDINATE> wrapped) {
             this.wrapped = wrapped;
         }
 
-        public NonZero scalteToLength(PositiveInt.Strict requiredLength) {
-            return new NonZero(wrapped.scale(requiredLength, this.length()));
+        public NonZero<COORDINATE> scalteToLength(PositiveInt.Strict requiredLength) {
+            return new NonZero<>(wrapped.scale(requiredLength, this.length()));
         }
 
         @Override
@@ -78,17 +78,17 @@ public interface Vector {
         }
 
         @Override
-        public Vector add(Vector other) {
+        public Vector<COORDINATE> add(Vector<COORDINATE> other) {
             return this.wrapped.add(other);
         }
 
         @Override
-        public Vector scale(PositiveInt multiply, PositiveInt.Strict divide) {
+        public Vector<COORDINATE> scale(PositiveInt multiply, PositiveInt.Strict divide) {
             return this.wrapped.scale(multiply, divide);
         }
 
         @Override
-        public int scalarProduct(Vector other) {
+        public int scalarProduct(Vector<COORDINATE> other) {
             return this.wrapped.scalarProduct(other);
         }
 
@@ -98,12 +98,12 @@ public interface Vector {
         }
 
         @Override
-        public Vector projectOnXAxis() {
+        public Vector<COORDINATE> projectOnXAxis() {
             return this.wrapped.projectOnXAxis();
         }
 
         @Override
-        public Vector projectOnYAxis() {
+        public Vector<COORDINATE> projectOnYAxis() {
             return this.wrapped.projectOnYAxis();
         }
     }

@@ -13,13 +13,13 @@ class VectorTest {
     void length() {
         int someOddLength = 977;
 
-        Vector right = Vector.of(someOddLength, 0);
+        Vector<Map.Coordinate> right = Vector.of(someOddLength, 0);
         assertThat(right.length().value(), is(someOddLength));
 
-        Vector down = Vector.of(0, someOddLength);
+        Vector<Map.Coordinate> down = Vector.of(0, someOddLength);
         assertThat(down.length().value(), is(someOddLength));
 
-        Vector inclined = Vector.of(someOddLength, 3 * someOddLength);
+        Vector<Map.Coordinate> inclined = Vector.of(someOddLength, 3 * someOddLength);
         double actualLength = someOddLength * Math.sqrt(10);
         assertThat((double) inclined.length().value(), greaterThan(actualLength));
     }

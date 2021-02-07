@@ -132,11 +132,11 @@ public class Map {
             this.y = y;
         }
 
-        public Coordinate translate(Vector tranlsation) {
+        public Coordinate translate(Vector<Map.Coordinate> tranlsation) {
             return new Coordinate(this.x + tranlsation.x(), this.y + tranlsation.y());
         }
 
-        public Vector distanceTo(Coordinate other) {
+        public Vector<Map.Coordinate> distanceTo(Coordinate other) {
             return Vector.of(other.x - this.x, other.y - this.y);
         }
 

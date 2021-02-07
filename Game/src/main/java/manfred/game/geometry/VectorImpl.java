@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 import manfred.data.shared.PositiveInt;
 
 @EqualsAndHashCode
-class VectorImpl implements Vector {
+class VectorImpl<COORDINATE> implements Vector<COORDINATE> {
     private final int x;
     private final int y;
 
@@ -13,22 +13,22 @@ class VectorImpl implements Vector {
         this.y = y;
     }
 
-    static Vector of(int x, int y) {
+    static <COORDINATE> Vector<COORDINATE> of(int x, int y) {
         if (x == 0) {
             return VectorImpl.pointingUp(y);
         }
         if (y == 0) {
             return VectorImpl.pointingRight(x);
         }
-        return new VectorImpl(x, y);
+        return new VectorImpl<>(x, y);
     }
 
-    static Vector pointingUp(int y) {
-        return new VectorImpl.VerticalVector(y);
+    static <COORDINATE> Vector<COORDINATE> pointingUp(int y) {
+        return new VectorImpl.VerticalVector<>(y);
     }
 
-    static Vector pointingRight(int x) {
-        return new VectorImpl.HorizontalVector(x);
+    static <COORDINATE> Vector<COORDINATE> pointingRight(int x) {
+        return new VectorImpl.HorizontalVector<>(x);
     }
 
     @Override
@@ -52,17 +52,17 @@ class VectorImpl implements Vector {
     }
 
     @Override
-    public Vector add(Vector other) {
-        return new VectorImpl(this.x + other.x(), this.y + other.y());
+    public Vector<COORDINATE> add(Vector<COORDINATE> other) {
+        return new VectorImpl<>(this.x + other.x(), this.y + other.y());
     }
 
     @Override
-    public Vector scale(PositiveInt multiply, PositiveInt.Strict divide) {
-        return new VectorImpl(this.x * multiply.value() / divide.value(), this.y * multiply.value() / divide.value());
+    public Vector<COORDINATE> scale(PositiveInt multiply, PositiveInt.Strict divide) {
+        return new VectorImpl<>(this.x * multiply.value() / divide.value(), this.y * multiply.value() / divide.value());
     }
 
     @Override
-    public int scalarProduct(Vector other) {
+    public int scalarProduct(Vector<COORDINATE> other) {
         return this.x * other.x() + this.y * other.y();
     }
 
@@ -72,16 +72,16 @@ class VectorImpl implements Vector {
     }
 
     @Override
-    public Vector projectOnXAxis() {
+    public Vector<COORDINATE> projectOnXAxis() {
         return VectorImpl.pointingRight(this.x);
     }
 
     @Override
-    public Vector projectOnYAxis() {
+    public Vector<COORDINATE> projectOnYAxis() {
         return VectorImpl.pointingUp(this.y);
     }
 
-    protected static class VerticalVector extends VectorImpl {
+    protected static class VerticalVector<COORDINATE> extends VectorImpl<COORDINATE> {
         private VerticalVector(int y) {
             super(0, y);
         }
@@ -92,7 +92,7 @@ class VectorImpl implements Vector {
         }
     }
 
-    protected static class HorizontalVector extends VectorImpl {
+    protected static class HorizontalVector<COORDINATE> extends VectorImpl<COORDINATE> {
         private HorizontalVector(int x) {
             super(x, 0);
         }

@@ -79,7 +79,7 @@ public class Manfred extends MovingObject implements LocatedPaintable {
     }
 
     public Map.TileCoordinate getInteractionMapTile() {
-        Vector.NonZero toInteractionPoint = this.viewDirection.getVector().scalteToLength(INTERACT_DISTANCE);
+        Vector.NonZero<Map.Coordinate> toInteractionPoint = this.viewDirection.getVector().scalteToLength(INTERACT_DISTANCE);
         Map.Coordinate interactionPoint = this.baseObject.getCenter().translate(toInteractionPoint);
 
         return interactionPoint.getTile();
