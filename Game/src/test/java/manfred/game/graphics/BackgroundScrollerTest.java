@@ -39,6 +39,7 @@ class BackgroundScrollerTest {
         testGameConfig.setWindowWidth(6 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(5 * PIXEL_BLOCK_SIZE);
 
+        underTest.centerTo(manfredAt(1, 1));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(1, 1));
 
         assertEquals(3 * PIXEL_BLOCK_SIZE / 2, result.x());

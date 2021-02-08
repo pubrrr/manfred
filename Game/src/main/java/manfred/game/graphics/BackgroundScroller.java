@@ -35,14 +35,14 @@ public class BackgroundScroller {
         int distanceToRightBorder = gameConfig.getWindowWidth() - (manfredCenterPanelCoordinate.getX() + offset.x());
 
         if (distanceToLeftBorder < triggerScrollDistanceToBorder) {
-            return -Math.max(
-                -offset.x() - (triggerScrollDistanceToBorder - distanceToLeftBorder),
+            return Math.min(
+                offset.x() + (triggerScrollDistanceToBorder - distanceToLeftBorder),
                 0
             );
         } else if (distanceToRightBorder < triggerScrollDistanceToBorder) {
-            return -Math.min(
-                -offset.x() + (triggerScrollDistanceToBorder - distanceToRightBorder),
-                mapSizeX - gameConfig.getWindowWidth()
+            return Math.max(
+                offset.x() - (triggerScrollDistanceToBorder - distanceToRightBorder),
+                gameConfig.getWindowWidth() - mapSizeX
             );
         }
         return offset.x();
@@ -58,14 +58,14 @@ public class BackgroundScroller {
         int distanceToBottomBorder = gameConfig.getWindowHeight() - (manfredCenterPanelCoordinate.getY() + offset.y());
 
         if (distanceToTopBorder < triggerScrollDistanceToBorder) {
-            return -Math.max(
-                -offset.y() - (triggerScrollDistanceToBorder - distanceToTopBorder),
+            return Math.min(
+                offset.y() + (triggerScrollDistanceToBorder - distanceToTopBorder),
                 0
             );
         } else if (distanceToBottomBorder < triggerScrollDistanceToBorder) {
-            return -Math.min(
-                -offset.y() + (triggerScrollDistanceToBorder - distanceToBottomBorder),
-                mapSizeY - gameConfig.getWindowHeight()
+            return Math.max(
+                offset.y() - (triggerScrollDistanceToBorder - distanceToBottomBorder),
+                gameConfig.getWindowHeight() - mapSizeY
             );
         }
         return offset.y();
@@ -77,11 +77,11 @@ public class BackgroundScroller {
         int offsetY;
 
         if (mapSizeX > gameConfig.getWindowWidth()) {
-            offsetX = -Math.max(
-                    center.getX() - gameConfig.getWindowWidth() / 2,
-                    0
+            offsetX = Math.min(
+                gameConfig.getWindowWidth() / 2 - center.getX(),
+                0
             );
-            if (-offsetX + gameConfig.getWindowWidth() > mapSizeX) {
+            if (gameConfig.getWindowWidth() - offsetX > mapSizeX) {
                 offsetX = mapSizeX - gameConfig.getWindowWidth();
             }
         } else {
@@ -90,11 +90,11 @@ public class BackgroundScroller {
 
         int mapSizeY = mapFacade.getMapSizeY() * gameConfig.getPixelBlockSize().value();
         if (mapSizeY > gameConfig.getWindowHeight()) {
-            offsetY = - Math.max(
-                    center.getY() - gameConfig.getWindowHeight() / 2,
-                    0
+            offsetY = Math.min(
+                gameConfig.getWindowHeight() / 2 - center.getY(),
+                0
             );
-            if (-offsetY + gameConfig.getWindowHeight() > mapSizeY) {
+            if (gameConfig.getWindowHeight() - offsetY > mapSizeY) {
                 offsetY = mapSizeY - gameConfig.getWindowHeight();
             }
         } else {
