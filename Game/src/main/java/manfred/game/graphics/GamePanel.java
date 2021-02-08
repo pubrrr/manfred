@@ -11,6 +11,7 @@ import manfred.game.graphics.paintable.GelaberOverlay;
 import manfred.game.graphics.paintable.LocatedPaintable;
 import manfred.game.graphics.paintable.PaintableContainerElement;
 import manfred.game.graphics.paintable.PaintablesContainer;
+import manfred.game.graphics.scrolling.BackgroundScroller;
 import manfred.game.map.MapFacade;
 import org.springframework.stereotype.Component;
 

@@ -21,7 +21,7 @@ import manfred.game.controls.ManfredController;
 import manfred.game.controls.ObjectsMover;
 import manfred.game.controls.SleepingController;
 import manfred.game.enemy.EnemiesWrapper;
-import manfred.game.graphics.BackgroundScroller;
+import manfred.game.graphics.scrolling.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.coordinatetransformation.MapCoordinateToPanelCoordinateTransformer;
 import manfred.game.graphics.paintable.GelaberOverlay;

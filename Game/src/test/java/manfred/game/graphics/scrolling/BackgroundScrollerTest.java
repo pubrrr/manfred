@@ -1,15 +1,11 @@
-package manfred.game.graphics;
+package manfred.game.graphics.scrolling;
 
 import helpers.TestGameConfig;
-import manfred.data.InvalidInputException;
-import manfred.game.characters.Manfred;
-import manfred.game.characters.Sprite;
 import manfred.game.geometry.Vector;
+import manfred.game.graphics.PanelCoordinate;
 import manfred.game.map.MapFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -19,7 +15,7 @@ class BackgroundScrollerTest {
     private final static int PIXEL_BLOCK_SIZE = 10;
     public static final int TRIGGER_SCROLL_DISTANCE_TO_BORDER = 10;
 
-    private BackgroundScroller underTest;
+    private BackgroundScroller.Factory underTestFactory;
 
     private TestGameConfig testGameConfig;
 
@@ -30,7 +26,7 @@ class BackgroundScrollerTest {
         mapFacadeMock = mock(MapFacade.class);
         testGameConfig = (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE);
 
-        underTest = new BackgroundScroller(TRIGGER_SCROLL_DISTANCE_TO_BORDER, mapFacadeMock, testGameConfig);
+        underTestFactory = BackgroundScroller.factoryWith(TRIGGER_SCROLL_DISTANCE_TO_BORDER, mapFacadeMock, testGameConfig);
     }
 
     @Test
@@ -39,7 +35,7 @@ class BackgroundScrollerTest {
         testGameConfig.setWindowWidth(6 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(5 * PIXEL_BLOCK_SIZE);
 
-        underTest.centerTo(manfredAt(1, 1));
+        BackgroundScroller underTest = underTestFactory.buildCenteredAt(manfredAt(1, 1));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(1, 1));
 
         assertEquals(3 * PIXEL_BLOCK_SIZE / 2, result.x());
@@ -52,6 +48,7 @@ class BackgroundScrollerTest {
         testGameConfig.setWindowWidth(3 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(3 * PIXEL_BLOCK_SIZE);
 
+        BackgroundScroller underTest = underTestFactory.buildCenteredAt(new PanelCoordinate(0, 0));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(2 * PIXEL_BLOCK_SIZE, 2 * PIXEL_BLOCK_SIZE));
 
         assertEquals(0, result.x());
@@ -64,6 +61,7 @@ class BackgroundScrollerTest {
         testGameConfig.setWindowWidth(3 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(3 * PIXEL_BLOCK_SIZE);
 
+        BackgroundScroller underTest = underTestFactory.buildCenteredAt(new PanelCoordinate(0, 0));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(2 * PIXEL_BLOCK_SIZE + 1, 2 * PIXEL_BLOCK_SIZE));
 
         assertEquals(-1, result.x());
@@ -76,6 +74,7 @@ class BackgroundScrollerTest {
         testGameConfig.setWindowWidth(3 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(3 * PIXEL_BLOCK_SIZE);
 
+        BackgroundScroller underTest = underTestFactory.buildCenteredAt(new PanelCoordinate(0, 0));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(2 * PIXEL_BLOCK_SIZE, 2 * PIXEL_BLOCK_SIZE + 2));
 
         assertEquals(0, result.x());
@@ -88,6 +87,7 @@ class BackgroundScrollerTest {
         testGameConfig.setWindowWidth(3 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(3 * PIXEL_BLOCK_SIZE);
 
+        BackgroundScroller underTest = underTestFactory.buildCenteredAt(new PanelCoordinate(0, 0));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(3 * PIXEL_BLOCK_SIZE - 1, 3 * PIXEL_BLOCK_SIZE - 1));
 
         assertEquals(-(PIXEL_BLOCK_SIZE - 1), result.x());
@@ -100,6 +100,7 @@ class BackgroundScrollerTest {
         testGameConfig.setWindowWidth(3 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(3 * PIXEL_BLOCK_SIZE);
 
+        BackgroundScroller underTest = underTestFactory.buildCenteredAt(new PanelCoordinate(0, 0));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(3 * PIXEL_BLOCK_SIZE - 1, 3 * PIXEL_BLOCK_SIZE - 1));
 
         assertEquals(0, result.x());
@@ -112,6 +113,7 @@ class BackgroundScrollerTest {
         testGameConfig.setWindowWidth(3 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(3 * PIXEL_BLOCK_SIZE);
 
+        BackgroundScroller underTest = underTestFactory.buildCenteredAt(new PanelCoordinate(0, 0));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(0, 0));
 
         assertEquals(0, result.x());
@@ -124,6 +126,7 @@ class BackgroundScrollerTest {
         testGameConfig.setWindowWidth(3 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(3 * PIXEL_BLOCK_SIZE);
 
+        BackgroundScroller underTest = underTestFactory.buildCenteredAt(new PanelCoordinate(0, 0));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(3 * PIXEL_BLOCK_SIZE, 0));
 
         assertEquals(-TRIGGER_SCROLL_DISTANCE_TO_BORDER, result.x());
@@ -141,6 +144,7 @@ class BackgroundScrollerTest {
         testGameConfig.setWindowWidth(3 * PIXEL_BLOCK_SIZE);
         testGameConfig.setWindowHeight(3 * PIXEL_BLOCK_SIZE);
 
+        BackgroundScroller underTest = underTestFactory.buildCenteredAt(new PanelCoordinate(0, 0));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(0, 3 * PIXEL_BLOCK_SIZE));
 
         assertEquals(0, result.x());
@@ -161,7 +165,7 @@ class BackgroundScrollerTest {
         testGameConfig.setWindowWidth(screenSize);
         testGameConfig.setWindowHeight(screenSize);
 
-        underTest.centerTo(manfredAt(initialPosition, initialPosition));
+        BackgroundScroller underTest = underTestFactory.buildCenteredAt(manfredAt(initialPosition, initialPosition));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(initialPosition, initialPosition));
 
         assertEquals(-(initialPosition - screenSize / 2), result.x());
@@ -177,7 +181,7 @@ class BackgroundScrollerTest {
         testGameConfig.setWindowWidth(screenSize);
         testGameConfig.setWindowHeight(screenSize);
 
-        underTest.centerTo(manfredAt(0, initialPosition));
+        BackgroundScroller underTest = underTestFactory.buildCenteredAt(manfredAt(0, initialPosition));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(0, initialPosition));
 
         assertEquals(0, result.x());
@@ -193,7 +197,7 @@ class BackgroundScrollerTest {
         testGameConfig.setWindowWidth(screenSize);
         testGameConfig.setWindowHeight(screenSize);
 
-        underTest.centerTo(manfredAt(8 * PIXEL_BLOCK_SIZE - 1, initialPosition));
+        BackgroundScroller underTest = underTestFactory.buildCenteredAt(manfredAt(8 * PIXEL_BLOCK_SIZE - 1, initialPosition));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(8 * PIXEL_BLOCK_SIZE - 1, initialPosition));
 
         assertEquals(-(8 * PIXEL_BLOCK_SIZE - screenSize), result.x());
@@ -209,7 +213,7 @@ class BackgroundScrollerTest {
         testGameConfig.setWindowWidth(screenSize);
         testGameConfig.setWindowHeight(screenSize);
 
-        underTest.centerTo(manfredAt(initialPosition, 0));
+        BackgroundScroller underTest = underTestFactory.buildCenteredAt(manfredAt(initialPosition, 0));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(initialPosition, 0));
 
         assertEquals(-(initialPosition - screenSize / 2), result.x());
@@ -225,7 +229,7 @@ class BackgroundScrollerTest {
         testGameConfig.setWindowWidth(screenSize);
         testGameConfig.setWindowHeight(screenSize);
 
-        underTest.centerTo(manfredAt(initialPosition, 8 * PIXEL_BLOCK_SIZE - 1));
+        BackgroundScroller underTest = underTestFactory.buildCenteredAt(manfredAt(initialPosition, 8 * PIXEL_BLOCK_SIZE - 1));
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(initialPosition, 8 * PIXEL_BLOCK_SIZE - 1));
 
         assertEquals(-(initialPosition - screenSize / 2), result.x());

@@ -14,7 +14,7 @@ import manfred.game.characters.Velocity;
 import manfred.game.config.GameConfig;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
-import manfred.game.graphics.BackgroundScroller;
+import manfred.game.graphics.scrolling.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.coordinatetransformation.MapCoordinateToPanelCoordinateTransformer;
 import manfred.game.interact.person.gelaber.LineSplitter;
@@ -88,9 +88,11 @@ public class GameContext {
     }
 
     @Bean
-    public BackgroundScroller backgroundScroller(MapFacade mapFacade, GameConfig gameConfig) {
+    public BackgroundScroller backgroundScroller(MapFacade mapFacade, GameConfig gameConfig, Manfred manfred, MapCoordinateToPanelCoordinateTransformer coordinateTransformer) {
         int triggerScrollDistanceToBorder = Math.min(gameConfig.getWindowHeight(), gameConfig.getWindowWidth()) / 3;
-        return new BackgroundScroller(triggerScrollDistanceToBorder, mapFacade, gameConfig);
+        return BackgroundScroller
+            .factoryWith(triggerScrollDistanceToBorder, mapFacade, gameConfig)
+            .buildCenteredAt(coordinateTransformer.toPanelCoordinate(manfred.getCenter()));
     }
 
     @Bean

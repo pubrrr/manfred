@@ -7,7 +7,7 @@ import manfred.game.attack.AttacksContainer;
 import manfred.game.attack.Caster;
 import manfred.game.attack.CombinationElement;
 import manfred.game.characters.Manfred;
-import manfred.game.graphics.BackgroundScroller;
+import manfred.game.graphics.scrolling.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.PanelCoordinate;
 import manfred.game.graphics.coordinatetransformation.MapCoordinateToPanelCoordinateTransformer;
