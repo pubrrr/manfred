@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import manfred.data.InvalidInputException;
 import manfred.data.persistence.dto.EnemyDto;
+import manfred.data.shared.PositiveInt;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,8 +36,8 @@ class EnemyReaderTest {
         EnemyDto result = underTest.load(url, url);
 
         assertThat(result.getName(), equalTo("Mongo"));
-        assertThat(result.getHealthPoints(), equalTo(20));
-        assertThat(result.getSpeed(), equalTo(5));
+        assertThat(result.getHealthPoints(), equalTo(PositiveInt.of(20)));
+        assertThat(result.getSpeed(), equalTo(PositiveInt.of(5)));
         verify(imageLoaderMock).load(any(URL.class));
     }
 

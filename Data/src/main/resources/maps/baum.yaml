@@ -16,12 +16,12 @@ map:
 persons:
   - name: depp
     positionX: 5
-    positionY: 3
+    positionY: 8
 portals: []
 doors:
   - positionX: 5
-    positionY: 11
+    positionY: 0
     target: wald
     targetSpawnX: 9
-    targetSpawnY: 28
+    targetSpawnY: 1
 enemies: []

@@ -1,65 +1,57 @@
 package manfred.game.attack;
 
 import helpers.TestGameConfig;
-import manfred.game.characters.MapCollider;
+import manfred.data.InvalidInputException;
+import manfred.data.shared.PositiveInt;
+import manfred.game.characters.Velocity;
 import manfred.game.enemy.Enemy;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static helpers.TestMapFactory.coordinateAt;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AttackTest {
     private static final int PIXEL_BLOCK_SIZE = 40;
+    private static final Velocity VELOCITY_ZERO = Velocity.withSpeed(PositiveInt.of(0));
 
     private Attack underTest;
 
-    private MapCollider mapColliderMock;
-
-    @BeforeEach
-    void setUp() {
-        mapColliderMock = mock(MapCollider.class);
-        when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(false);
-    }
-
     @Test
     void notResolvedWhenNothingHappens() {
-        underTest = new Attack(0, 0, 0, 0, 0, 0, 0, null, 1);
+        underTest = new Attack(VELOCITY_ZERO, coordinateAt(0, 0), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), null, PositiveInt.of(1));
 
         assertFalse(underTest.isResolved());
     }
 
     @Test
     void resolvesOnTravelledTooFar() {
-        int range = 5;
-        int speed = 2 * range;
+        PositiveInt range = PositiveInt.of(5);
+        Velocity speed = Velocity.withSpeed(PositiveInt.of(2 * range.value()));
 
-        underTest = new Attack(speed, 0, 0, 0, 0, 0, range, null, 1);
+        underTest = new Attack(speed, coordinateAt(0, 0), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), range, null, PositiveInt.of(1));
 
         underTest.up();
-        underTest.checkCollisionsAndMove(mapColliderMock);
+        underTest.checkCollisionsAndMove(area -> true);
         assertTrue(underTest.isResolved());
     }
 
     @Test
     void resolvesOnCollision() {
-        when(mapColliderMock.collides(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(true);
+        underTest = new Attack(VELOCITY_ZERO, coordinateAt(0, 0), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), null, PositiveInt.of(1));
 
-        underTest = new Attack(0, 0, 0, 0, 0, 0, 0, null, 1);
-
-        underTest.checkCollisionsAndMove(mapColliderMock);
+        underTest.checkCollisionsAndMove(area -> false);
         assertTrue(underTest.isResolved());
     }
 
     @Test
-    void givenEnemySpriteThatIntersects_thenDamagesAndResolves() {
+    void givenEnemySpriteThatIntersects_thenDamagesAndResolves() throws InvalidInputException {
         int damage = 3;
         int healthPoints = 2;
 
-        underTest = new Attack(0, 0, 0, 5, 5, damage, 0, null, 1);
-        Enemy enemy = new Enemy("test", 0, 3, 3, healthPoints, null, 0, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
+        underTest = new Attack(VELOCITY_ZERO, coordinateAt(0, 0), PositiveInt.of(5), PositiveInt.of(5), PositiveInt.of(damage), PositiveInt.of(0), null, PositiveInt.of(1));
+        Enemy enemy = new Enemy("test", VELOCITY_ZERO, coordinateAt(3, 3), PositiveInt.of(healthPoints), null, 0, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
 
         underTest.checkHit(enemy);
 
@@ -68,12 +60,12 @@ class AttackTest {
     }
 
     @Test
-    void givenEnemySpriteThatNotIntersects_thenDoesNotDamageAndResolve() {
+    void givenEnemySpriteThatNotIntersects_thenDoesNotDamageAndResolve() throws InvalidInputException {
         int damage = 3;
         int healthPoints = 2;
 
-        underTest = new Attack(0, 0, 0, 0, 0, damage, 0, null, 1);
-        Enemy enemy = new Enemy("test", 0, 8, 8, healthPoints, null, 0, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
+        underTest = new Attack(VELOCITY_ZERO, coordinateAt(0, 0), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(damage), PositiveInt.of(0), null, PositiveInt.of(1));
+        Enemy enemy = new Enemy("test", VELOCITY_ZERO, coordinateAt(8, 8), PositiveInt.of(healthPoints), null, 0, (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE));
 
         underTest.checkHit(enemy);
 

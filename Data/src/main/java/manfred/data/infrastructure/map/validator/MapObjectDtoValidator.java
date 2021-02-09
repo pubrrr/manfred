@@ -62,6 +62,6 @@ public abstract class MapObjectDtoValidator<V extends MapObjectDto> {
     }
 
     private Collector<MapObjectDto, ?, Map<String, Point>> toMapOfPositionByTargetName() {
-        return Collectors.toMap(MapObjectDto::getTargetToLoad, objectDto -> new Point(objectDto.getPositionX(), objectDto.getPositionY()));
+        return Collectors.toMap(MapObjectDto::getTargetToLoad, objectDto -> new Point(objectDto.getPositionX().value(), objectDto.getPositionY().value()));
     }
 }

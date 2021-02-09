@@ -2,6 +2,7 @@ package manfred.data.infrastructure.person;
 
 import lombok.Value;
 import manfred.data.infrastructure.person.gelaber.GelaberPrototype;
+import manfred.data.shared.PositiveInt;
 
 import java.awt.image.BufferedImage;
 
@@ -11,7 +12,7 @@ public class PersonPrototypeBuilder {
     GelaberPrototype gelaberPrototype;
     BufferedImage image;
 
-    public PersonPrototype at(int positionX, int positionY) {
+    public PersonPrototype at(PositiveInt positionX, PositiveInt positionY) {
         return new PersonPrototype(
             this.name,
             this.gelaberPrototype,

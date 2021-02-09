@@ -1,17 +1,20 @@
 package manfred.game.interact;
 
+import manfred.data.shared.PositiveInt;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.ManfredController;
+import manfred.game.graphics.PanelCoordinate;
+import manfred.game.map.MapTile;
 
 import java.awt.*;
 
-public class Door implements Interactable {
+public class Door implements MapTile {
     private final String targetName;
-    private final int targetSpawnX;
-    private final int targetSpawnY;
+    private final PositiveInt targetSpawnX;
+    private final PositiveInt targetSpawnY;
 
-    public Door(String targetName, int targetSpawnX, int targetSpawnY) {
+    public Door(String targetName, PositiveInt targetSpawnX, PositiveInt targetSpawnY) {
         this.targetName = targetName;
         this.targetSpawnX = targetSpawnX;
         this.targetSpawnY = targetSpawnY;
@@ -31,7 +34,7 @@ public class Door implements Interactable {
     }
 
     @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
+    public void paint(Graphics g, PanelCoordinate coordinate) {
         // do nothing
     }
 }

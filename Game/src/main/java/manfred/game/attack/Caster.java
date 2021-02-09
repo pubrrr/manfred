@@ -1,8 +1,9 @@
 package manfred.game.attack;
 
 import manfred.game.characters.Direction;
-import manfred.game.characters.Sprite;
+import manfred.game.graphics.PanelCoordinate;
 import manfred.game.graphics.paintable.LocatedPaintable;
+import manfred.game.map.Map;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
@@ -15,8 +16,8 @@ public class Caster implements LocatedPaintable {
         this.castMode = initialCastModeOff;
     }
 
-    public void cast(Sprite sprite, Direction viewDirection) {
-        this.castMode = this.castMode.cast(sprite, viewDirection);
+    public void cast(Map.Coordinate castCoordinate, Direction viewDirection) {
+        this.castMode = this.castMode.cast(castCoordinate, viewDirection);
     }
 
     public void addToCombination(CombinationElement combinationElement) {
@@ -24,8 +25,8 @@ public class Caster implements LocatedPaintable {
     }
 
     @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        castMode.paint(g, offset, x, y);
+    public void paint(Graphics g, PanelCoordinate coordinate) {
+        castMode.paint(g, coordinate.getX(), coordinate.getY());
     }
 
     public void off() {

@@ -37,4 +37,8 @@ public interface TileConversionRule {
     static TileConversionRule createDoor() {
         return new DoorTileFactory();
     }
+
+    static TileConversionRule wrapForGraphicsDebugging(TileConversionRule wrapped, GameConfig gameConfig) {
+        return new DebugWrapperFactory(wrapped, gameConfig);
+    }
 }

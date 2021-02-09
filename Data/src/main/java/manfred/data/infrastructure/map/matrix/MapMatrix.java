@@ -75,7 +75,7 @@ public class MapMatrix<T> {
 
             this.validationMessages.addAll(validateMapIsRectangular(rawMatrix, width));
 
-            List<List<T>> validatedMatrix = transposeMap(rawMatrix, width, height);
+            List<List<T>> validatedMatrix = transposeMapAndInvertY(rawMatrix, width, height);
 
             if (!this.validationMessages.isEmpty()) {
                 throw new InvalidInputException("Validation of map failed:\n" + String.join(",\n", this.validationMessages));
@@ -83,12 +83,12 @@ public class MapMatrix<T> {
             return new MapMatrix<>(validatedMatrix);
         }
 
-        private List<List<T>> transposeMap(List<List<T>> rawMatrix, int width, int height) {
+        private List<List<T>> transposeMapAndInvertY(List<List<T>> rawMatrix, int width, int height) {
             List<List<T>> validatedMatrix = new ArrayList<>(width);
             for (int x = 0; x < width; x++) {
                 List<T> column = new ArrayList<>(height);
-                for (List<T> rawRow : rawMatrix) {
-                    column.add(rawRow.get(x));
+                for (int y = height - 1; y >= 0; y--) {
+                    column.add(rawMatrix.get(y).get(x));
                 }
                 validatedMatrix.add(column);
             }

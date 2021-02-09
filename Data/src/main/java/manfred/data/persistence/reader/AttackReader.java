@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import manfred.data.InvalidInputException;
 import manfred.data.persistence.ObjectReader;
 import manfred.data.persistence.dto.AttackDto;
+import manfred.data.shared.PositiveInt;
 import org.springframework.stereotype.Component;
 
 import java.awt.image.BufferedImage;
@@ -43,9 +44,9 @@ public class AttackReader implements ObjectReader<AttackDto> {
         }
     }
 
-    private List<BufferedImage> loadAttackAnimation(String name, int numberOfAnimationImages) throws InvalidInputException {
-        List<BufferedImage> attackAnimation = new ArrayList<>(numberOfAnimationImages);
-        for (int idx = 0; idx < numberOfAnimationImages; idx++) {
+    private List<BufferedImage> loadAttackAnimation(String name, PositiveInt numberOfAnimationImages) throws InvalidInputException {
+        List<BufferedImage> attackAnimation = new ArrayList<>(numberOfAnimationImages.value());
+        for (int idx = 0; idx < numberOfAnimationImages.value(); idx++) {
             attackAnimation.add(
                 imageLoader.load(getClass().getResource("/attacks/" + name + "_" + idx + ".png"))
             );

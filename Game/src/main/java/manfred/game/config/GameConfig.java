@@ -1,33 +1,38 @@
 package manfred.game.config;
 
+import manfred.data.shared.PositiveInt;
+
 public class GameConfig {
     private final int windowWidth;
     private final int windowHeight;
-    private final int pixelBlockSize;
+    private final PositiveInt.Strict pixelBlockSize;
     private final int textBoxDistanceToBorder;
     private final int textPointSize;
     private final int textDistanceToBox;
     private final int gelaberBoxPositionX;
     private final int gelaberBoxPositionY;
+    private final boolean debugGraphics;
 
     public GameConfig(
-            int windowWidth,
-            int windowHeight,
-            int pixelBlockSize,
-            int textBoxDistanceToBorder,
-            int textPointSize,
-            int textDistanceToBox,
-            int gelaberBoxPositionX,
-            int gelaberBoxPositionY
+        PositiveInt.Strict windowWidth,
+        PositiveInt.Strict windowHeight,
+        PositiveInt.Strict pixelBlockSize,
+        PositiveInt textBoxDistanceToBorder,
+        PositiveInt textPointSize,
+        PositiveInt textDistanceToBox,
+        PositiveInt gelaberBoxPositionX,
+        PositiveInt gelaberBoxPositionY,
+        boolean debugGraphics
     ) {
-        this.windowWidth = windowWidth;
-        this.windowHeight = windowHeight;
+        this.windowWidth = windowWidth.value();
+        this.windowHeight = windowHeight.value();
         this.pixelBlockSize = pixelBlockSize;
-        this.textBoxDistanceToBorder = textBoxDistanceToBorder;
-        this.textPointSize = textPointSize;
-        this.textDistanceToBox = textDistanceToBox;
-        this.gelaberBoxPositionX = gelaberBoxPositionX;
-        this.gelaberBoxPositionY = gelaberBoxPositionY;
+        this.textBoxDistanceToBorder = textBoxDistanceToBorder.value();
+        this.textPointSize = textPointSize.value();
+        this.textDistanceToBox = textDistanceToBox.value();
+        this.gelaberBoxPositionX = gelaberBoxPositionX.value();
+        this.gelaberBoxPositionY = gelaberBoxPositionY.value();
+        this.debugGraphics = debugGraphics;
     }
 
     public int getWindowWidth() {
@@ -38,7 +43,7 @@ public class GameConfig {
         return windowHeight;
     }
 
-    public int getPixelBlockSize() {
+    public PositiveInt.Strict getPixelBlockSize() {
         return pixelBlockSize;
     }
 
@@ -88,5 +93,9 @@ public class GameConfig {
 
     public int getNumberOfTextLines() {
         return (getTextBoxHeight() - 2 * textDistanceToBox) / (textPointSize + getDistanceBetweenLines());
+    }
+
+    public boolean isDebugGraphics() {
+        return debugGraphics;
     }
 }

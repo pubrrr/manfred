@@ -9,3 +9,4 @@ pixelBlockSize: 60
 textBoxDistanceToBorder: 100
 textPointSize: 30
 textDistanceToBox: 50
+debugGraphics: true

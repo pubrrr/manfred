@@ -1,9 +1,14 @@
 package manfred.game.enemy;
 
-import manfred.game.config.GameConfig;
+import manfred.data.shared.PositiveInt;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.MovingObject;
+import manfred.game.characters.Velocity;
+import manfred.game.config.GameConfig;
+import manfred.game.graphics.PanelCoordinate;
 import manfred.game.graphics.paintable.LocatedPaintable;
+import manfred.game.map.Map;
+import manfred.game.geometry.Vector;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -12,45 +17,38 @@ public class Enemy extends MovingObject implements LocatedPaintable {
     private final String name;
     private final GameConfig gameConfig;
     private final BufferedImage image;
-    private final int aggroRadius;
+    private final int aggroRadiusSquared;
 
     private int healthPoints;
 
-    public Enemy(String name, int speed, int x, int y, int healthPoints, BufferedImage image, int aggroRadius, GameConfig gameConfig) {
-        super(speed, x, y, 2 * gameConfig.getPixelBlockSize(), 2 * gameConfig.getPixelBlockSize(), 2 * gameConfig.getPixelBlockSize());
+    public Enemy(String name, Velocity velocity, Map.Coordinate initialBottomLeft, PositiveInt healthPoints, BufferedImage image, int aggroRadius, GameConfig gameConfig) {
+        super(velocity, initialBottomLeft, PositiveInt.of(gameConfig.getPixelBlockSize().times(2)), PositiveInt.of(gameConfig.getPixelBlockSize().times(2)), PositiveInt.of(gameConfig.getPixelBlockSize().times(2)));
         this.name = name;
-        this.healthPoints = healthPoints;
+        this.healthPoints = healthPoints.value(); // TODO
         this.image = image;
-        this.aggroRadius = aggroRadius;
+        this.aggroRadiusSquared = aggroRadius * aggroRadius;
         this.gameConfig = gameConfig;
     }
 
     @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        g.drawImage(this.image, this.sprite.x - offset.x, this.sprite.y - offset.y, this.sprite.width, this.sprite.height, null);
+    public void paint(Graphics g, PanelCoordinate coordinate) {
+        g.drawImage(this.image, coordinate.getX(), coordinate.getY(), this.sprite.getWidth(), this.sprite.getSpriteHeight(), null);
 
-        g.setFont(new Font("Palatino Linotype", Font.BOLD, gameConfig.getPixelBlockSize() / 2));
-
-        g.setColor(Color.BLACK);
-        g.drawString(String.valueOf(this.healthPoints), this.sprite.x + this.sprite.width / 4 - offset.x, this.sprite.getBottom() + (this.sprite.height / 2) - offset.y);
+        g.setFont(new Font("Palatino Linotype", Font.BOLD, gameConfig.getPixelBlockSize().divideBy(2)));
 
         g.setColor(Color.BLACK);
-        g.drawString(this.name, this.sprite.x + this.sprite.width / 4 - offset.x, this.sprite.y - (this.sprite.height / 4) - offset.y);
+        g.drawString(String.valueOf(this.healthPoints), coordinate.getX() + this.sprite.getWidth() / 4, coordinate.getY() + (this.sprite.getSpriteHeight() / 2));
+
+        g.setColor(Color.BLACK);
+        g.drawString(this.name, coordinate.getX() + this.sprite.getWidth() / 4, coordinate.getY() - (this.sprite.getSpriteHeight() / 4));
     }
 
     public Enemy determineSpeed(Manfred manfred) {
-        long distanceX = manfred.getX() - this.sprite.x;
-        long distanceY = manfred.getY() - this.sprite.y;
-        long distanceSquared = distanceX * distanceX + distanceY * distanceY;
-
-        if (distanceSquared <= (long) aggroRadius * aggroRadius) {
-            // this actually makes the top left corner of the enemy move towards the top left corner of Manfred. Change when necessary
-            double distance = Math.sqrt(distanceSquared);
-            currentSpeedX = (int) (speed * ((float) distanceX) / distance);
-            currentSpeedY = (int) (speed * ((float) distanceY) / distance);
+        Vector<Map.Coordinate> enemyToManfred = this.baseObject.getCenter().distanceTo(manfred.getCenter());
+        if (enemyToManfred.lengthSquared().value() <= this.aggroRadiusSquared) {
+            this.velocity = velocity.moveInDirection(enemyToManfred);
         } else {
-            currentSpeedX = 0;
-            currentSpeedY = 0;
+            this.velocity = velocity.stop();
         }
         return this;
     }
@@ -59,8 +57,8 @@ public class Enemy extends MovingObject implements LocatedPaintable {
         return healthPoints;
     }
 
-    public void takeDamage(int damage) {
-        this.healthPoints -= damage;
+    public void takeDamage(PositiveInt damage) {
+        this.healthPoints -= damage.value();
     }
 }
 

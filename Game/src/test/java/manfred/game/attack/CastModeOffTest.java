@@ -1,7 +1,7 @@
 package manfred.game.attack;
 
 import manfred.game.characters.Direction;
-import manfred.game.characters.Sprite;
+import manfred.game.map.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ class CastModeOffTest {
 
     @Test
     void turnsOnCastMode() {
-        CastMode result = underTest.cast(mock(Sprite.class), Direction.RIGHT);
+        CastMode result = underTest.cast(mock(Map.Coordinate.class), Direction.RIGHT);
 
         assertTrue(result instanceof CastModeOn);
     }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import manfred.data.infrastructure.enemy.EnemyPrototype;
+import manfred.data.shared.PositiveInt;
 
 import java.awt.image.BufferedImage;
 
@@ -13,13 +14,13 @@ import java.awt.image.BufferedImage;
 @AllArgsConstructor
 public class EnemyDto {
     private String name;
-    private int healthPoints;
-    private int speed;
+    private PositiveInt healthPoints;
+    private PositiveInt speed;
 
     @JsonIgnore
     private BufferedImage image;
 
-    public EnemyPrototype at(int spawnX, int spawnY) {
+    public EnemyPrototype at(PositiveInt spawnX, PositiveInt spawnY) {
         return new EnemyPrototype(this.name, this.healthPoints, this.speed, this.image, spawnX, spawnY);
     }
 }

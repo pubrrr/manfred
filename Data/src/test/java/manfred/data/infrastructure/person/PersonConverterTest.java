@@ -4,6 +4,7 @@ import manfred.data.InvalidInputException;
 import manfred.data.persistence.dto.GelaberDto;
 import manfred.data.infrastructure.person.gelaber.GelaberValidator;
 import manfred.data.persistence.dto.PersonDto;
+import manfred.data.shared.PositiveInt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,12 +33,12 @@ class PersonConverterTest {
 
         PersonPrototypeBuilder result = underTest.convert(new PersonDto("name", gelaberDtoMock, imageMock));
 
-        PersonPrototype personPrototype = result.at(1, 2);
+        PersonPrototype personPrototype = result.at(PositiveInt.of(1), PositiveInt.of(2));
 
         assertThat(personPrototype.getName(), is("name"));
         assertThat(personPrototype.getImage(), is(imageMock));
-        assertThat(personPrototype.getPositionX(), is(1));
-        assertThat(personPrototype.getPositionY(), is(2));
+        assertThat(personPrototype.getPositionX(), is(PositiveInt.of(1)));
+        assertThat(personPrototype.getPositionY(), is(PositiveInt.of(2)));
         verify(gelaberValidatorMock).validate(gelaberDtoMock);
     }
 }

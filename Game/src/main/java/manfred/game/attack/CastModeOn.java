@@ -1,9 +1,10 @@
 package manfred.game.attack;
 
-import manfred.game.config.GameConfig;
 import manfred.game.characters.Direction;
 import manfred.game.characters.SkillSet;
 import manfred.game.characters.Sprite;
+import manfred.game.config.GameConfig;
+import manfred.game.map.Map;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
@@ -28,9 +29,9 @@ public class CastModeOn implements CastMode {
     }
 
     @Override
-    public CastMode cast(Sprite sprite, Direction viewDirection) {
+    public CastMode cast(Map.Coordinate castCoordinate, Direction viewDirection) {
         this.skillSet.get(attackCombination)
-            .map(attackGenerator -> attackGenerator.generate(sprite.getCenter(), viewDirection))
+            .map(attackGenerator -> attackGenerator.generate(castCoordinate, viewDirection))
             .map(attacksContainer::add);
 
         return off();
@@ -48,13 +49,13 @@ public class CastModeOn implements CastMode {
     }
 
     @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
+    public void paint(Graphics g, Integer x, Integer y) {
         g.drawImage(
             castModeSprite,
-            manfredSprite.x - gameConfig.getPixelBlockSize() / 2 - offset.x,
-            manfredSprite.y - gameConfig.getPixelBlockSize() / 2 - offset.y,
-            manfredSprite.width + gameConfig.getPixelBlockSize(),
-            manfredSprite.height + gameConfig.getPixelBlockSize(),
+            x - gameConfig.getPixelBlockSize().divideBy(2),
+            y - gameConfig.getPixelBlockSize().divideBy(2),
+            manfredSprite.getWidth() + gameConfig.getPixelBlockSize().value(),
+            manfredSprite.getSpriteHeight() + gameConfig.getPixelBlockSize().value(),
             null
         );
     }

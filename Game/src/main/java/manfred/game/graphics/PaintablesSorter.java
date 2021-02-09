@@ -1,38 +1,36 @@
 package manfred.game.graphics;
 
+import manfred.game.graphics.coordinatetransformation.MapCoordinateToPanelCoordinateTransformer;
 import manfred.game.graphics.paintable.LocatedPaintable;
-import manfred.game.graphics.paintable.PaintableContainerElement;
 import manfred.game.graphics.paintable.PaintablesContainer;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class PaintablesSorter {
-    public TreeMap<Integer, TreeMap<Integer, LocatedPaintable>> sortByYAndX(List<PaintablesContainer> paintablesContainers) {
-        TreeMap<Integer, TreeMap<Integer, LocatedPaintable>> paintablesSortedByYAndX = new TreeMap<>();
-        paintablesContainers.forEach(
-            paintableContainer -> paintableContainer.getPaintableContainerElements().forEach(
-                paintableContainerElement -> insertPaintableIntoSortedMap(paintablesSortedByYAndX, paintableContainerElement)
-            )
-        );
-        return paintablesSortedByYAndX;
+
+    public SortedMap<PanelCoordinate, List<LocatedPaintable>> sortByYAndX(List<PaintablesContainer> paintablesContainers, MapCoordinateToPanelCoordinateTransformer coordinateTransformer) {
+        return paintablesContainers.stream()
+            .map(PaintablesContainer::getPaintableContainerElements)
+            .flatMap(Collection::stream)
+            .collect(Collectors.toMap(
+                paintableContainerElement -> coordinateTransformer.toPanelCoordinate(paintableContainerElement.getCoordinate()),
+                paintableContainerElement -> List.of(paintableContainerElement.getLocatedPaintable()),
+                this::mergeLists,
+                TreeMap::new
+            ));
     }
 
-    private void insertPaintableIntoSortedMap(TreeMap<Integer, TreeMap<Integer, LocatedPaintable>> paintablesSortedByYAndX, PaintableContainerElement paintableContainerElement) {
-        TreeMap<Integer, LocatedPaintable> paintablesAtY = paintablesSortedByYAndX.computeIfAbsent(
-            paintableContainerElement.getY(),
-            insertNewTreeMapAtY()
-        );
-        paintablesAtY.put(
-            paintableContainerElement.getX(),
-            paintableContainerElement.getLocatedPaintable()
-        );
-    }
-
-    private Function<Integer, TreeMap<Integer, LocatedPaintable>> insertNewTreeMapAtY() {
-        return y -> new TreeMap<>();
+    private <T> List<T> mergeLists(List<T> list1, List<T> list2) {
+        LinkedList<T> combinedList = new LinkedList<>(list1);
+        combinedList.addAll(list2);
+        return Collections.unmodifiableList(combinedList);
     }
 }

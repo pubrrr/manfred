@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import manfred.data.shared.PositiveInt;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -13,11 +14,11 @@ import java.util.List;
 @AllArgsConstructor
 public class AttackDto {
     private String name;
-    private int speed;
-    private int sizeX;
-    private int sizeY;
-    private int damage;
-    private int range;
-    private int numberOfAnimationImages;
+    private PositiveInt speed;
+    private PositiveInt sizeX;
+    private PositiveInt sizeY;
+    private PositiveInt damage;
+    private PositiveInt range;
+    private PositiveInt numberOfAnimationImages;
     @JsonIgnore private List<BufferedImage> attackAnimation;
 }

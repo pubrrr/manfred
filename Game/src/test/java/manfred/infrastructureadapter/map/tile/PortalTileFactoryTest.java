@@ -1,8 +1,10 @@
 package manfred.infrastructureadapter.map.tile;
 
+import manfred.data.InvalidInputException;
 import manfred.data.persistence.dto.TransporterDto;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
+import manfred.data.shared.PositiveInt;
 import manfred.game.interact.Portal;
 import manfred.game.map.MapTile;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,7 +49,7 @@ class PortalTileFactoryTest {
             "name",
             mock(MapMatrix.class),
             List.of(),
-            List.of(new TransporterDto("target", 0, 0, 99, 99)),
+            List.of(new TransporterDto("target", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(99), PositiveInt.of(99))),
             List.of(),
             List.of()
         );
@@ -59,19 +61,19 @@ class PortalTileFactoryTest {
 
     @Test
     void portalGiven() {
-        int positionX = 5;
-        int positionY = 10;
+        PositiveInt positionX = PositiveInt.of(5);
+        PositiveInt positionY = PositiveInt.of(10);
 
         MapPrototype input = new MapPrototype(
             "name",
             mock(MapMatrix.class),
             List.of(),
-            List.of(new TransporterDto("target", 0, 0, positionX, positionY)),
+            List.of(new TransporterDto("target", PositiveInt.of(0), PositiveInt.of(0), positionX, positionY)),
             List.of(),
             List.of()
         );
 
-        Optional<TileConversionAction> result = underTest.applicableTo(input, positionX, positionY);
+        Optional<TileConversionAction> result = underTest.applicableTo(input, positionX.value(), positionY.value());
 
         assertTrue(result.isPresent());
         MapTile createdTile = result.get().create();

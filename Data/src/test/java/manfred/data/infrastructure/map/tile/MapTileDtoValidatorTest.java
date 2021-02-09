@@ -44,7 +44,7 @@ class MapTileDtoValidatorTest {
 
         ValidatedMapTileDto result = underTest.validate(input);
 
-        assertThat(result.getStructure().get(1, 0), is("1"));
+        assertThat(result.getStructure().get(1, 1), is("1"));
         assertThat(result.getStructure().get(0, 1), is("0"));
     }
 }

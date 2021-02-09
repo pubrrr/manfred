@@ -3,6 +3,7 @@ package manfred.data.infrastructure.person;
 import manfred.data.InvalidInputException;
 import manfred.data.persistence.dto.MapPersonDto;
 import manfred.data.infrastructure.person.gelaber.GelaberPrototype;
+import manfred.data.shared.PositiveInt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -41,8 +42,8 @@ class PersonsLoaderTest {
     void oneValidInput() throws InvalidInputException {
         when(personProviderMock.provide(any())).thenReturn(new PersonPrototypeBuilder("name", mock(GelaberPrototype.class), null));
 
-        int positionX = 5;
-        int positionY = 10;
+        PositiveInt positionX = PositiveInt.of(5);
+        PositiveInt positionY = PositiveInt.of(10);
         List<PersonPrototype> result = underTest.load(List.of(new MapPersonDto("name", positionX, positionY)));
 
         assertThat(result, hasSize(1));
@@ -56,8 +57,8 @@ class PersonsLoaderTest {
         when(personProviderMock.provide(any())).thenReturn(new PersonPrototypeBuilder("name", mock(GelaberPrototype.class), null));
 
         List<PersonPrototype> result = underTest.load(List.of(
-            new MapPersonDto("name", 1, 2),
-            new MapPersonDto("name", 1, 2)
+            new MapPersonDto("name", PositiveInt.of(1), PositiveInt.of(2)),
+            new MapPersonDto("name", PositiveInt.of(1), PositiveInt.of(2))
         ));
 
         assertThat(result, hasSize(2));
@@ -69,8 +70,8 @@ class PersonsLoaderTest {
         when(personProviderMock.provide(same("invalid"))).thenThrow(new InvalidInputException("personProviderEnemyMessage"));
 
         List<MapPersonDto> input = List.of(
-            new MapPersonDto("valid", 1, 2),
-            new MapPersonDto("invalid", 1, 2)
+            new MapPersonDto("valid", PositiveInt.of(1), PositiveInt.of(2)),
+            new MapPersonDto("invalid", PositiveInt.of(1), PositiveInt.of(2))
         );
 
         InvalidInputException exception = assertThrows(InvalidInputException.class, () -> underTest.load(input));
@@ -83,8 +84,8 @@ class PersonsLoaderTest {
         when(personProviderMock.provide(same("invalid2"))).thenThrow(new InvalidInputException("invalid2"));
 
         List<MapPersonDto> input = List.of(
-            new MapPersonDto("invalid1", 1, 2),
-            new MapPersonDto("invalid2", 1, 2)
+            new MapPersonDto("invalid1", PositiveInt.of(1), PositiveInt.of(2)),
+            new MapPersonDto("invalid2", PositiveInt.of(1), PositiveInt.of(2))
         );
 
         InvalidInputException exception = assertThrows(InvalidInputException.class, () -> underTest.load(input));

@@ -20,7 +20,7 @@ public class AttacksContainer extends LinkedList<Attack> implements PaintablesCo
     @Override
     public Stack<PaintableContainerElement> getPaintableContainerElements() {
         Stack<PaintableContainerElement> elements = new Stack<>();
-        forEach(attack -> elements.push(new PaintableContainerElement(attack, attack.getX(), attack.getY())));
+        forEach(attack -> elements.push(new PaintableContainerElement(attack, attack.getTopLeft())));
         return elements;
     }
 }

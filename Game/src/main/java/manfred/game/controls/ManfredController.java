@@ -1,54 +1,37 @@
 package manfred.game.controls;
 
+import lombok.AllArgsConstructor;
 import manfred.data.InvalidInputException;
+import manfred.data.shared.PositiveInt;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.attack.Caster;
 import manfred.game.attack.CombinationElement;
 import manfred.game.characters.Manfred;
-import manfred.game.config.GameConfig;
-import manfred.game.graphics.BackgroundScroller;
+import manfred.game.graphics.scrolling.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
+import manfred.game.graphics.PanelCoordinate;
+import manfred.game.graphics.coordinatetransformation.MapCoordinateToPanelCoordinateTransformer;
 import manfred.game.graphics.paintable.GelaberOverlay;
 import manfred.game.interact.person.gelaber.GelaberFacade;
+import manfred.game.map.ManfredPositionSetter;
+import manfred.game.map.Map;
 import manfred.game.map.MapFacade;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 
 @Component
+@AllArgsConstructor
 public class ManfredController implements ControllerInterface {
     private final Manfred manfred;
     private final Caster attackCaster;
     private final MapFacade mapFacade;
-    private final GameConfig gameConfig;
     private final BackgroundScroller backgroundScroller;
     private final GamePanel gamePanel;
     private final AttacksContainer attacksContainer;
     private final GelaberOverlay gelaberOverlay;
     private final ObjectsMover objectsMover;
-
-    public ManfredController(
-        Manfred manfred,
-        Caster attackCaster,
-        MapFacade mapFacade,
-        GameConfig gameConfig,
-        BackgroundScroller backgroundScroller,
-        GamePanel gamePanel,
-        AttacksContainer attacksContainer,
-        GelaberOverlay gelaberOverlay,
-        ObjectsMover objectsMover
-    ) {
-        this.manfred = manfred;
-        this.attackCaster = attackCaster;
-        this.mapFacade = mapFacade;
-        this.gameConfig = gameConfig;
-        this.backgroundScroller = backgroundScroller;
-        this.gamePanel = gamePanel;
-        this.attacksContainer = attacksContainer;
-        this.gelaberOverlay = gelaberOverlay;
-        this.objectsMover = objectsMover;
-    }
+    private final MapCoordinateToPanelCoordinateTransformer mapCoordinateToPanelCoordinateTransformer;
 
     @Override
     public ControllerInterface keyPressed(KeyEvent event) {
@@ -66,7 +49,7 @@ public class ManfredController implements ControllerInterface {
                 manfred.up();
                 break;
             case KeyEvent.VK_SPACE:
-                attackCaster.cast(manfred.getSprite(), manfred.getDirection());
+                attackCaster.cast(manfred.getCenter(), manfred.getDirection());
                 break;
             default:
                 CombinationElement.fromKeyEvent(event).ifPresent(attackCaster::addToCombination);
@@ -89,9 +72,8 @@ public class ManfredController implements ControllerInterface {
                 manfred.checkForHorizontalViewDirection();
                 break;
             case KeyEvent.VK_ENTER:
-                Point interactionMapTile = manfred.getInteractionMapTile();
-                return mapFacade.getInteractable(interactionMapTile).interact()
-                    .determineNewControllerState(this);
+                Map.TileCoordinate interactionMapTile = manfred.getInteractionMapTile();
+                return mapFacade.interactWithTile(interactionMapTile).determineNewControllerState(this);
         }
         return this;
     }
@@ -108,20 +90,17 @@ public class ManfredController implements ControllerInterface {
         return this.objectsMover.move().determineNewControllerState(this);
     }
 
-    public void loadMap(String name) {
+    public void loadMap(String name, PositiveInt targetSpawnX, PositiveInt targetSpawnY) {
         try {
             attacksContainer.clear();
-            mapFacade.loadMap(name);
+            mapFacade.loadMap(name, new ManfredPositionSetter(this.manfred, targetSpawnX, targetSpawnY));
+
+            PanelCoordinate newManfredCenterCoordinate = mapCoordinateToPanelCoordinateTransformer.toPanelCoordinate(this.manfred.getCenter());
+            this.backgroundScroller.centerTo(newManfredCenterCoordinate);
         } catch (InvalidInputException e) {
             System.out.println("ERROR: Failed to load map " + name + "\n");
             e.printStackTrace();
         }
-    }
-
-    public void resetManfredPositionTo(int x, int y) {
-        this.manfred.setX(this.gameConfig.getPixelBlockSize() * x);
-        this.manfred.setY(this.gameConfig.getPixelBlockSize() * y);
-        this.backgroundScroller.centerTo(this.manfred.getSprite().getCenter());
     }
 
     public GamePanel getGamePanel() {

@@ -1,14 +1,17 @@
 package manfred.game.attack;
 
 import manfred.game.characters.Direction;
-import manfred.game.characters.Sprite;
-import manfred.game.graphics.paintable.LocatedPaintable;
+import manfred.game.map.Map;
 
-public interface CastMode extends LocatedPaintable {
+import java.awt.*;
 
-    CastMode cast(Sprite sprite, Direction viewDirection);
+public interface CastMode {
+
+    CastMode cast(Map.Coordinate castCoordinate, Direction viewDirection);
 
     CastMode off();
 
     void addToCombination(CombinationElement combinationElement);
+
+    void paint(Graphics g, Integer x, Integer y);
 }

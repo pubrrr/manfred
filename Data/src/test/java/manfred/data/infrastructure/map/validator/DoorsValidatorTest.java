@@ -1,10 +1,12 @@
 package manfred.data.infrastructure.map.validator;
 
+import manfred.data.InvalidInputException;
 import manfred.data.persistence.reader.UrlHelper;
 import manfred.data.persistence.dto.RawMapDto;
 import manfred.data.persistence.dto.TransporterDto;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
+import manfred.data.shared.PositiveInt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -46,10 +48,10 @@ class DoorsValidatorTest {
     }
 
     @Test
-    void nonAccessibleMapIsValid() throws MalformedURLException {
+    void nonAccessibleMapIsValid() throws MalformedURLException, InvalidInputException {
         when(urlHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
 
-        RawMapDto input = getRawMapWithDoors(new TransporterDto("target", 0, 0, 0, 0));
+        RawMapDto input = getRawMapWithDoors(new TransporterDto("target", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0)));
 
         MapMatrix<TilePrototype> mapMatrixMock = nonAccessibleMap();
         List<String> result = underTest.validate(input, mapMatrixMock);
@@ -58,10 +60,10 @@ class DoorsValidatorTest {
     }
 
     @Test
-    void accessibleMapIsNotValid() throws MalformedURLException {
+    void accessibleMapIsNotValid() throws MalformedURLException, InvalidInputException {
         when(urlHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
 
-        RawMapDto input = getRawMapWithDoors(new TransporterDto("target", 0, 0, 0, 0));
+        RawMapDto input = getRawMapWithDoors(new TransporterDto("target", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0)));
 
         MapMatrix<TilePrototype> mapMatrixMock = accessibleMap();
         List<String> result = underTest.validate(input, mapMatrixMock);
@@ -71,12 +73,12 @@ class DoorsValidatorTest {
     }
 
     @Test
-    void accessibleAndAccessibleTile() throws MalformedURLException {
+    void accessibleAndAccessibleTile() throws MalformedURLException, InvalidInputException {
         when(urlHelperMock.getResourceForMap(any())).thenReturn(Optional.of(new URL("http://some.url")));
 
         RawMapDto input = getRawMapWithDoors(
-            new TransporterDto("target1", 0, 0, 0, 0),
-            new TransporterDto("target2", 0, 0, 0, 1)
+            new TransporterDto("target1", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0)),
+            new TransporterDto("target2", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(1))
         );
 
         MapMatrix<TilePrototype> mapMatrixMock = mock(MapMatrix.class);
@@ -90,10 +92,10 @@ class DoorsValidatorTest {
     }
 
     @Test
-    void unknownResourceForTargetIsNotValid() {
+    void unknownResourceForTargetIsNotValid() throws InvalidInputException {
         when(urlHelperMock.getResourceForMap(any())).thenReturn(Optional.empty());
 
-        RawMapDto input = getRawMapWithDoors(new TransporterDto("targetName", 0, 0, 0, 0));
+        RawMapDto input = getRawMapWithDoors(new TransporterDto("targetName", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0)));
 
         List<String> result = underTest.validate(input, nonAccessibleMap());
 
@@ -102,10 +104,10 @@ class DoorsValidatorTest {
     }
 
     @Test
-    void unknownResourceAndNonAccessibleMap() {
+    void unknownResourceAndNonAccessibleMap() throws InvalidInputException {
         when(urlHelperMock.getResourceForMap(any())).thenReturn(Optional.empty());
 
-        RawMapDto input = getRawMapWithDoors(new TransporterDto("targetName", 0, 0, 0, 0));
+        RawMapDto input = getRawMapWithDoors(new TransporterDto("targetName", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0)));
 
         List<String> result = underTest.validate(input, accessibleMap());
 

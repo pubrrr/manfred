@@ -1,14 +1,17 @@
 package manfred.game.graphics;
 
-import manfred.game.config.GameConfig;
 import manfred.game.attack.AttacksContainer;
 import manfred.game.attack.Caster;
 import manfred.game.characters.Manfred;
+import manfred.game.config.GameConfig;
 import manfred.game.enemy.EnemiesWrapper;
+import manfred.game.geometry.Vector;
+import manfred.game.graphics.coordinatetransformation.MapCoordinateToPanelCoordinateTransformer;
 import manfred.game.graphics.paintable.GelaberOverlay;
 import manfred.game.graphics.paintable.LocatedPaintable;
 import manfred.game.graphics.paintable.PaintableContainerElement;
 import manfred.game.graphics.paintable.PaintablesContainer;
+import manfred.game.graphics.scrolling.BackgroundScroller;
 import manfred.game.map.MapFacade;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +19,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.SortedMap;
 import java.util.Stack;
-import java.util.TreeMap;
 
 @Component
 public class GamePanel extends JPanel {
@@ -25,9 +28,11 @@ public class GamePanel extends JPanel {
     public static final int FADE_TRANSPARENCY_INTERVAL = 20;
 
     private final BackgroundScroller backgroundScroller;
+    private final Manfred manfred;
     private final GameConfig gameConfig;
     private final PaintablesSorter paintablesSorter;
     private final GelaberOverlay gelaberOverlay;
+    private final MapCoordinateToPanelCoordinateTransformer mapCoordinateToPanelCoordinateTransformer;
 
     private int fadeTransparency = 0;
     private final List<PaintablesContainer> paintablesContainers = new LinkedList<>();
@@ -41,12 +46,15 @@ public class GamePanel extends JPanel {
         BackgroundScroller backgroundScroller,
         GameConfig gameConfig,
         PaintablesSorter paintablesSorter,
-        GelaberOverlay gelaberOverlay
+        GelaberOverlay gelaberOverlay,
+        MapCoordinateToPanelCoordinateTransformer mapCoordinateToPanelCoordinateTransformer
     ) {
         super();
+        this.manfred = manfred;
         this.gameConfig = gameConfig;
         this.paintablesSorter = paintablesSorter;
         this.gelaberOverlay = gelaberOverlay;
+        this.mapCoordinateToPanelCoordinateTransformer = mapCoordinateToPanelCoordinateTransformer;
         setFocusable(true);
         requestFocus();
 
@@ -55,8 +63,8 @@ public class GamePanel extends JPanel {
         registerPaintableContainer(mapFacade);
         registerPaintableContainer(() -> {
             Stack<PaintableContainerElement> elements = new Stack<>();
-            elements.push(new PaintableContainerElement(attackCaster, manfred.getX() - gameConfig.getPixelBlockSize() / 2, manfred.getY()));
-            elements.push(new PaintableContainerElement(manfred, manfred.getX(), manfred.getY()));
+            elements.push(new PaintableContainerElement(attackCaster, manfred.getTopLeft()));
+            elements.push(new PaintableContainerElement(manfred, manfred.getTopLeft()));
             return elements;
         });
         registerPaintableContainer(enemiesWrapper);
@@ -75,12 +83,17 @@ public class GamePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        Point offset = backgroundScroller.getOffset();
+        PanelCoordinate manfredCenterPanelCoordinate = mapCoordinateToPanelCoordinateTransformer.toPanelCoordinate(manfred.getCenter());
+        Vector<PanelCoordinate> offset = backgroundScroller.getOffset(manfredCenterPanelCoordinate);
 
-        TreeMap<Integer, TreeMap<Integer, LocatedPaintable>> paintablesSortedByYAndX = paintablesSorter.sortByYAndX(this.paintablesContainers);
+        SortedMap<PanelCoordinate, List<LocatedPaintable>> paintablesSortedByYAndX = paintablesSorter.sortByYAndX(
+            this.paintablesContainers,
+            mapCoordinateToPanelCoordinateTransformer
+        );
+
         paintablesSortedByYAndX.forEach(
-            (y, paintablesAtY) -> paintablesAtY.forEach(
-                (x, paintable) -> paintable.paint(g, offset, x, y)
+            (coordinate, paintables) -> paintables.forEach(
+                locatedPaintable -> locatedPaintable.paint(g, coordinate.translate(offset))
             )
         );
 

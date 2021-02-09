@@ -1,18 +1,18 @@
 package manfred.game.map;
 
 import manfred.data.InvalidInputException;
+import manfred.data.shared.PositiveInt;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.ManfredController;
 import manfred.game.graphics.paintable.PaintableContainerElement;
 import manfred.game.graphics.paintable.PaintablesContainer;
-import manfred.game.interact.Interactable;
+import manfred.game.geometry.Rectangle;
 import manfred.infrastructureadapter.map.MapProvider;
 
-import java.awt.*;
 import java.util.Stack;
 
-public class MapFacade implements PaintablesContainer {
+public class MapFacade implements PaintablesContainer, CollisionDetector {
     private final MapProvider mapProvider;
 
     private Map map;
@@ -22,8 +22,9 @@ public class MapFacade implements PaintablesContainer {
         this.map = initialMap;
     }
 
-    public void loadMap(String name) throws InvalidInputException {
+    public void loadMap(String name, ManfredPositionSetter manfredPositionSetter) throws InvalidInputException {
         this.map = mapProvider.provide(name);
+        manfredPositionSetter.resetManfredOnMap(this.map);
     }
 
     @Override
@@ -31,12 +32,25 @@ public class MapFacade implements PaintablesContainer {
         return this.map.getPaintableContainerElements();
     }
 
-    public Interactable getInteractable(Point interactionMapTile) {
-        return this.map.getInteractable(interactionMapTile);
+    public ControllerStateMapper<ManfredController, ControllerInterface> interactWithTile(Map.TileCoordinate interactionMapTile) {
+        return this.map.interactWithTile(interactionMapTile);
     }
 
-    public ControllerStateMapper<ManfredController, ControllerInterface> stepOn(Point moveTo) {
+    public ControllerStateMapper<ManfredController, ControllerInterface> stepOn(Map.TileCoordinate moveTo) {
         return this.map.stepOn(moveTo);
+    }
+
+    public boolean isAccessible(int x, int y) {
+        return this.map.isAccessible(x, y);
+    }
+
+    @Override
+    public boolean isAreaAccessible(Rectangle area) {
+        return this.map.isAreaAccessible(area);
+    }
+
+    public Map.TileCoordinate tileAt(PositiveInt tileX, PositiveInt tileY) {
+        return this.map.tileAt(tileX, tileY);
     }
 
     public int getMapSizeX() {
@@ -45,9 +59,5 @@ public class MapFacade implements PaintablesContainer {
 
     public int getMapSizeY() {
         return this.map.sizeY();
-    }
-
-    public boolean isAccessible(int x, int y) {
-        return this.map.isAccessible(x, y);
     }
 }

@@ -4,13 +4,14 @@ import manfred.game.config.GameConfig;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.ManfredController;
-import manfred.game.interact.Interactable;
+import manfred.game.graphics.PanelCoordinate;
 import manfred.game.interact.person.gelaber.GelaberFacade;
+import manfred.game.map.MapTile;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Person implements Interactable {
+public class Person implements MapTile {
     private final String name;
     private final GelaberFacade gelaberFacade;
     private final GameConfig gameConfig;
@@ -38,7 +39,7 @@ public class Person implements Interactable {
     }
 
     @Override
-    public void paint(Graphics g, Point offset, Integer x, Integer y) {
-        g.drawImage(image, x - offset.x, y - offset.y, gameConfig.getPixelBlockSize(), gameConfig.getPixelBlockSize(), null);
+    public void paint(Graphics g, PanelCoordinate coordinate) {
+        g.drawImage(image, coordinate.getX(), coordinate.getY(), gameConfig.getPixelBlockSize().value(), gameConfig.getPixelBlockSize().value(), null);
     }
 }

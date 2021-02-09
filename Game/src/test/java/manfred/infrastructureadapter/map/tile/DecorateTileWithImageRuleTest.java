@@ -1,10 +1,12 @@
 package manfred.infrastructureadapter.map.tile;
 
 import helpers.TestGameConfig;
+import manfred.data.InvalidInputException;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
+import manfred.game.graphics.PanelCoordinate;
 import manfred.game.map.MapTile;
 import manfred.game.map.MapTileWithImageDecorator;
 import manfred.game.map.NotAccessible;
@@ -21,7 +23,10 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.isNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class DecorateTileWithImageRuleTest {
 
@@ -84,7 +89,7 @@ class DecorateTileWithImageRuleTest {
 
     private void assertTilePaintsImage(MapTile resultingTile) {
         Graphics graphicsMock = mock(Graphics.class);
-        resultingTile.paint(graphicsMock, new Point(0, 0), 0, 0);
+        resultingTile.paint(graphicsMock, new PanelCoordinate(0, 0));
         verify(graphicsMock).drawImage(any(), anyInt(), anyInt(), anyInt(), anyInt(), isNull());
     }
 
