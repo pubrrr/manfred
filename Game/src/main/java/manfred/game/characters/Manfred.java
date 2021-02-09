@@ -68,7 +68,6 @@ public class Manfred extends MovingObject implements LocatedPaintable {
 
     @Override
     public void paint(Graphics g, PanelCoordinate coordinate) {
-        System.out.println("buh");
         g.drawImage(
             walkAnimation.get(viewDirection)[animationPosition],
             coordinate.getX(),
@@ -80,7 +79,7 @@ public class Manfred extends MovingObject implements LocatedPaintable {
     }
 
     public Map.TileCoordinate getInteractionMapTile() {
-        Vector.NonZero<Map.Coordinate> toInteractionPoint = this.viewDirection.getVector().scalteToLength(INTERACT_DISTANCE);
+        Vector.NonZero<Map.Coordinate> toInteractionPoint = this.viewDirection.getVector().scaleToLength(INTERACT_DISTANCE);
         Map.Coordinate interactionPoint = this.baseObject.getCenter().translate(toInteractionPoint);
 
         return interactionPoint.getTile();

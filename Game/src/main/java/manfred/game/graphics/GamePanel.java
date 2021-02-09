@@ -86,13 +86,15 @@ public class GamePanel extends JPanel {
         PanelCoordinate manfredCenterPanelCoordinate = mapCoordinateToPanelCoordinateTransformer.toPanelCoordinate(manfred.getCenter());
         Vector<PanelCoordinate> offset = backgroundScroller.getOffset(manfredCenterPanelCoordinate);
 
-        SortedMap<PanelCoordinate, LocatedPaintable> paintablesSortedByYAndX = paintablesSorter.sortByYAndX(
+        SortedMap<PanelCoordinate, List<LocatedPaintable>> paintablesSortedByYAndX = paintablesSorter.sortByYAndX(
             this.paintablesContainers,
             mapCoordinateToPanelCoordinateTransformer
         );
 
         paintablesSortedByYAndX.forEach(
-            (coordinate, paintable) -> paintable.paint(g, coordinate.translate(offset))
+            (coordinate, paintables) -> paintables.forEach(
+                locatedPaintable -> locatedPaintable.paint(g, coordinate.translate(offset))
+            )
         );
 
         gelaberOverlay.paint(g);

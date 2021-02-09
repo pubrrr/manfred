@@ -32,29 +32,33 @@ class PaintablesSorterTest {
         PaintableContainerElement first = getPaintableContainerElementMock(1, 20);
         PaintableContainerElement second = getPaintableContainerElementMock(20, 20);
         PaintableContainerElement third = getPaintableContainerElementMock(1, 1);
-        PaintableContainerElement fourth = getPaintableContainerElementMock(20, 1);
+        PaintableContainerElement fourth = getPaintableContainerElementMock(1, 1);
+        PaintableContainerElement fifth = getPaintableContainerElementMock(20, 1);
 
         LocatedPaintable[] paintablesInExpectedOrder = new LocatedPaintable[]{
             first.getLocatedPaintable(),
             second.getLocatedPaintable(),
             third.getLocatedPaintable(),
-            fourth.getLocatedPaintable()
+            fourth.getLocatedPaintable(),
+            fifth.getLocatedPaintable()
         };
 
-        List<PaintablesContainer> input = setupTwoContainersWithElements(first, second, third, fourth);
+        List<PaintablesContainer> input = setupTwoContainersWithElements(first, second, third, fourth, fifth);
 
-        SortedMap<PanelCoordinate, LocatedPaintable> result = underTest.sortByYAndX(input, new MapCoordinateToPanelCoordinateTransformer(PositiveInt.ofNonZero(60)));
+        SortedMap<PanelCoordinate, List<LocatedPaintable>> result = underTest.sortByYAndX(input, new MapCoordinateToPanelCoordinateTransformer(PositiveInt.ofNonZero(60)));
 
-        LocatedPaintable[] paintablesInActualOrder = new LocatedPaintable[4];
+        LocatedPaintable[] paintablesInActualOrder = new LocatedPaintable[5];
         AtomicInteger i = new AtomicInteger();
         result.forEach(
-            (panelCoordinate, paintable) -> paintablesInActualOrder[i.getAndIncrement()] = paintable
+            (panelCoordinate, paintables) -> paintables.forEach(
+                paintable -> paintablesInActualOrder[i.getAndIncrement()] = paintable
+            )
         );
 
         assertArrayEquals(paintablesInExpectedOrder, paintablesInActualOrder);
     }
 
-    private List<PaintablesContainer> setupTwoContainersWithElements(PaintableContainerElement first, PaintableContainerElement second, PaintableContainerElement third, PaintableContainerElement fourth) {
+    private List<PaintablesContainer> setupTwoContainersWithElements(PaintableContainerElement first, PaintableContainerElement second, PaintableContainerElement third, PaintableContainerElement fourth, PaintableContainerElement fifth) {
         Stack<PaintableContainerElement> stack1 = new Stack<>();
         stack1.push(third);
         stack1.push(first);
@@ -64,6 +68,7 @@ class PaintablesSorterTest {
         when(container1.getPaintableContainerElements()).thenReturn(stack1);
 
         Stack<PaintableContainerElement> stack2 = new Stack<>();
+        stack2.push(fifth);
         stack2.push(second);
 
         PaintablesContainer container2 = mock(PaintablesContainer.class);

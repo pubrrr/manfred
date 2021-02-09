@@ -53,7 +53,7 @@ public interface Vector<COORDINATE> {
             this.wrapped = wrapped;
         }
 
-        public NonZero<COORDINATE> scalteToLength(PositiveInt.Strict requiredLength) {
+        public NonZero<COORDINATE> scaleToLength(PositiveInt.Strict requiredLength) {
             return new NonZero<>(wrapped.scale(requiredLength, this.length()));
         }
 
