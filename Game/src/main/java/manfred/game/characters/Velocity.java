@@ -19,13 +19,17 @@ public class Velocity {
     }
 
     public Velocity accelerate(Direction direction) {
-        if (this.directionVector.scalarProduct(direction.getVector()) > 0) {
-            return this; // means the velocity already points in the desired direction
+        if (this.alreadyPointsInDesiredDirection(direction)) {
+            return this;
         }
         return new Velocity(
             this.speed,
             this.directionVector.add(direction.getVector())
         );
+    }
+
+    private boolean alreadyPointsInDesiredDirection(Direction direction) {
+        return this.directionVector.scalarProduct(direction.getVector()) > 0;
     }
 
     public Velocity moveInDirection(Vector<Map.Coordinate> directionVector) {

@@ -31,7 +31,7 @@ class PersonTileFactoryTest {
     private GelaberConverter gelaberConverterMock;
 
     @BeforeEach
-    void setUp() throws InvalidInputException {
+    void setUp() {
         gelaberConverterMock = mock(GelaberConverter.class);
         underTest = new PersonTileFactory(new TestGameConfig(), gelaberConverterMock);
     }
@@ -53,7 +53,7 @@ class PersonTileFactoryTest {
     }
 
     @Test
-    void personAtWrongPositionGiven() throws InvalidInputException {
+    void personAtWrongPositionGiven() {
         MapPrototype input = new MapPrototype(
             "name",
             mock(MapMatrix.class),
@@ -69,7 +69,7 @@ class PersonTileFactoryTest {
     }
 
     @Test
-    void personGiven() throws InvalidInputException {
+    void personGiven() {
         int positionX = 5;
         int positionY = 10;
 

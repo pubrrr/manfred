@@ -44,7 +44,7 @@ class DoorTileFactoryTest {
     }
 
     @Test
-    void doorAtWrongPositionGiven() throws InvalidInputException {
+    void doorAtWrongPositionGiven() {
         MapPrototype input = new MapPrototype(
             "name",
             mock(MapMatrix.class),
@@ -60,7 +60,7 @@ class DoorTileFactoryTest {
     }
 
     @Test
-    void doorGiven() throws InvalidInputException {
+    void doorGiven() {
         int positionX = 5;
         int positionY = 10;
 

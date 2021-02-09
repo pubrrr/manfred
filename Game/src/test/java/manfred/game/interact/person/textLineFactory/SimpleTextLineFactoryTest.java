@@ -24,7 +24,7 @@ class SimpleTextLineFactoryTest {
     private FactoryRule underTest;
 
     @BeforeEach
-    void setUp() throws InvalidInputException {
+    void setUp() {
         this.underTest = SimpleTextLineFactory.withConfig((new TestGameConfig()).withNumberOfTextLines(2));
     }
 

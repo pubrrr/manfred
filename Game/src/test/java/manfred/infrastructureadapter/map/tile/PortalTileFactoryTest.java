@@ -44,7 +44,7 @@ class PortalTileFactoryTest {
     }
 
     @Test
-    void portalAtWrongPositionGiven() throws InvalidInputException {
+    void portalAtWrongPositionGiven() {
         MapPrototype input = new MapPrototype(
             "name",
             mock(MapMatrix.class),
@@ -60,7 +60,7 @@ class PortalTileFactoryTest {
     }
 
     @Test
-    void portalGiven() throws InvalidInputException {
+    void portalGiven() {
         PositiveInt positionX = PositiveInt.of(5);
         PositiveInt positionY = PositiveInt.of(10);
 
