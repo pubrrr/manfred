@@ -22,6 +22,10 @@ public interface Vector<COORDINATE extends Coordinate<COORDINATE>> {
         return new NonZero<COORDINATE>(Vector.of(x, y));
     }
 
+    static <COORDINATE extends Coordinate<COORDINATE>> Unit<COORDINATE> unitVector(int x, int y) {
+        return new Unit<COORDINATE>(nonZero(x, y));
+    }
+
     static <COORDINATE extends Coordinate<COORDINATE>> Vector<COORDINATE> zero() {
         return VectorImpl.pointingUp(0);
     }
@@ -105,6 +109,19 @@ public interface Vector<COORDINATE extends Coordinate<COORDINATE>> {
         @Override
         public Vector<COORDINATE> projectOnYAxis() {
             return this.wrapped.projectOnYAxis();
+        }
+    }
+
+    class Unit<COORDINATE extends Coordinate<COORDINATE>> {
+
+        private final NonZero<COORDINATE> direction;
+
+        public Unit(NonZero<COORDINATE> direction) {
+            this.direction = direction;
+        }
+
+        public NonZero<COORDINATE> scaleToLength(PositiveInt.Strict requiredLength) {
+            return direction.scaleToLength(requiredLength);
         }
     }
 }

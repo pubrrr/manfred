@@ -24,6 +24,7 @@ import static org.hamcrest.Matchers.lessThanOrEqualTo;
 @ExtendWith(UseDataProviderExtension.class)
 class VelocityTest {
     private final static PositiveInt SPEED = PositiveInt.of(1000);
+    public static final PositiveInt.Strict LENGTH = PositiveInt.ofNonZero(100);
 
     private Velocity underTest;
 
@@ -43,7 +44,7 @@ class VelocityTest {
         Velocity result = underTest.accelerate(direction);
 
         assertThat(result.getVector().length(), is(SPEED));
-        Vector<Map.Coordinate> directionVector = direction.getVector();
+        Vector<Map.Coordinate> directionVector = direction.getUnitVector().scaleToLength(LENGTH);
         Vector<Map.Coordinate> scaledDirectionVector = directionVector.scale(SPEED, PositiveInt.ofNonZero(directionVector.length().value()));
         assertThat(result.getVector(), is(scaledDirectionVector));
     }
@@ -54,7 +55,7 @@ class VelocityTest {
         Velocity result = underTest.accelerate(direction).accelerate(direction);
 
         assertThat(result.getVector().length(), is(SPEED));
-        Vector<Map.Coordinate> directionVector = direction.getVector();
+        Vector<Map.Coordinate> directionVector = direction.getUnitVector().scaleToLength(LENGTH);
         Vector<Map.Coordinate> scaledDirectionVector = directionVector.scale(SPEED, PositiveInt.ofNonZero(directionVector.length().value()));
         assertThat(result.getVector(), is(scaledDirectionVector));
     }
@@ -102,7 +103,7 @@ class VelocityTest {
 
         assertThat(result.getVector().length().value(), greaterThanOrEqualTo(SPEED.value() - 5));
         assertThat(result.getVector().length().value(), lessThanOrEqualTo(SPEED.value() + 5));
-        Vector<Map.Coordinate> directionVector = direction1.getVector().add(direction2.getVector());
+        Vector<Map.Coordinate> directionVector = direction1.getUnitVector().scaleToLength(LENGTH).add(direction2.getUnitVector().scaleToLength(LENGTH));
         Vector<Map.Coordinate> scaledDirectionVector = directionVector.scale(SPEED, PositiveInt.ofNonZero(directionVector.length().value()));
         assertThat(result.getVector(), equalTo(scaledDirectionVector));
     }
@@ -114,7 +115,7 @@ class VelocityTest {
 
         assertThat(result.getVector().length().value(), greaterThanOrEqualTo(SPEED.value() - 5));
         assertThat(result.getVector().length().value(), lessThanOrEqualTo(SPEED.value() + 5));
-        Vector<Map.Coordinate> directionVector = direction1.getVector().add(direction2.getVector());
+        Vector<Map.Coordinate> directionVector = direction1.getUnitVector().scaleToLength(LENGTH).add(direction2.getUnitVector().scaleToLength(LENGTH));
         Vector<Map.Coordinate> scaledDirectionVector = directionVector.scale(SPEED, PositiveInt.ofNonZero(directionVector.length().value()));
         assertThat(result.getVector(), equalTo(scaledDirectionVector));
     }
@@ -126,7 +127,7 @@ class VelocityTest {
 
         assertThat(result.getVector().length().value(), greaterThanOrEqualTo(SPEED.value() - 3));
         assertThat(result.getVector().length().value(), lessThanOrEqualTo(SPEED.value() + 3));
-        Vector<Map.Coordinate> directionVector = direction1.getVector().add(direction2.getVector());
+        Vector<Map.Coordinate> directionVector = direction1.getUnitVector().scaleToLength(LENGTH).add(direction2.getUnitVector().scaleToLength(LENGTH));
         Vector<Map.Coordinate> scaledDirectionVector = directionVector.scale(SPEED, PositiveInt.ofNonZero(directionVector.length().value()));
         assertThat(result.getVector(), equalTo(scaledDirectionVector));
     }
@@ -151,7 +152,7 @@ class VelocityTest {
         Velocity result = underTest.accelerate(direction1).accelerate(anotherDirection).accelerate(oppositeDirection);
 
         assertThat(result.getVector().length(), is(SPEED));
-        Vector<Map.Coordinate> directionVector = direction1.getVector();
+        Vector<Map.Coordinate> directionVector = direction1.getUnitVector().scaleToLength(LENGTH);
         Vector<Map.Coordinate> scaledDirectionVector = directionVector.scale(SPEED, PositiveInt.ofNonZero(directionVector.length().value()));
         assertThat(result.getVector(), is(scaledDirectionVector));
     }

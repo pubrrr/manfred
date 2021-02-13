@@ -44,7 +44,7 @@ public class Manfred extends MovingObject<DirectionalAnimatedSprite> {
     }
 
     public Map.TileCoordinate getInteractionMapTile() {
-        Vector.NonZero<Map.Coordinate> toInteractionPoint = this.viewDirection.getVector().scaleToLength(INTERACT_DISTANCE);
+        Vector.NonZero<Map.Coordinate> toInteractionPoint = this.viewDirection.getUnitVector().scaleToLength(INTERACT_DISTANCE);
         Map.Coordinate interactionPoint = this.baseObject.getCenter().translate(toInteractionPoint);
 
         return interactionPoint.getTile();

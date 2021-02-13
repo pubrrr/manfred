@@ -6,6 +6,8 @@ import manfred.game.map.Map;
 
 public class Velocity {
 
+    private final static PositiveInt.Strict LENGTH_SCALE = PositiveInt.ofNonZero(100);
+
     private final PositiveInt speed;
     private final Vector<Map.Coordinate> directionVector;
 
@@ -24,12 +26,12 @@ public class Velocity {
         }
         return new Velocity(
             this.speed,
-            this.directionVector.add(direction.getVector())
+            this.directionVector.add(direction.getUnitVector().scaleToLength(LENGTH_SCALE))
         );
     }
 
     private boolean alreadyPointsInDesiredDirection(Direction direction) {
-        return this.directionVector.scalarProduct(direction.getVector()) > 0;
+        return this.directionVector.scalarProduct(direction.getUnitVector().scaleToLength(LENGTH_SCALE)) > 0;
     }
 
     public Velocity moveInDirection(Vector<Map.Coordinate> directionVector) {
