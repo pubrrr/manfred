@@ -11,6 +11,7 @@ import manfred.game.characters.Manfred;
 import manfred.game.characters.ManfredFramesLoader;
 import manfred.game.characters.SkillSet;
 import manfred.game.characters.Velocity;
+import manfred.game.characters.sprite.DirectionalAnimatedSprite;
 import manfred.game.config.GameConfig;
 import manfred.game.controls.KeyControls;
 import manfred.game.controls.ManfredController;
@@ -46,20 +47,25 @@ public class GameContext {
 
     @Bean
     public Manfred manfred(GameConfig gameConfig, ManfredFramesLoader manfredFramesLoader, MapFacade mapFacade) throws InvalidInputException {
+        DirectionalAnimatedSprite sprite = new DirectionalAnimatedSprite(
+            gameConfig.getPixelBlockSize(),
+            gameConfig.getPixelBlockSize().times(2),
+            manfredFramesLoader.loadWalkAnimation(),
+            PositiveInt.of(4)
+        );
+
         return new Manfred(
             Velocity.withSpeed(PositiveInt.of(6)),
             mapFacade.tileAt(PositiveInt.of(5), PositiveInt.of(27)).getBottomLeftCoordinate(),
-            gameConfig.getPixelBlockSize(),
-            PositiveInt.of(gameConfig.getPixelBlockSize().times(2)),
             PositiveInt.of(100),
             gameConfig,
-            manfredFramesLoader.loadWalkAnimation()
+            sprite
         );
     }
 
     @Bean
-    public CastModeOn castModeOn(SkillSet skillSet, AttacksContainer attacksContainer, GameConfig gameConfig, Manfred manfred, ManfredFramesLoader manfredFramesLoader) throws InvalidInputException {
-        return new CastModeOn(skillSet, attacksContainer, gameConfig, manfred.getSprite(), manfredFramesLoader.loadCastModeSprite());
+    public CastModeOn castModeOn(SkillSet skillSet, AttacksContainer attacksContainer, GameConfig gameConfig, ManfredFramesLoader manfredFramesLoader) throws InvalidInputException {
+        return new CastModeOn(skillSet, attacksContainer, gameConfig, manfredFramesLoader.loadCastModeSprite());
     }
 
     @Bean

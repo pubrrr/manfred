@@ -3,10 +3,8 @@ package manfred.game.attack;
 import manfred.data.shared.PositiveInt;
 import manfred.game.characters.Direction;
 import manfred.game.characters.Velocity;
+import manfred.game.characters.sprite.AnimatedSpriteCloneFactory;
 import manfred.game.map.Map;
-
-import java.awt.image.BufferedImage;
-import java.util.List;
 
 public class AttackGenerator {
     private final PositiveInt speed;
@@ -14,17 +12,15 @@ public class AttackGenerator {
     private final PositiveInt sizeY;
     private final PositiveInt damage;
     private final PositiveInt range;
-    private final List<BufferedImage> attackAnimation;
-    private final PositiveInt numberOfAnimationImages;
+    private final AnimatedSpriteCloneFactory sprite;
 
-    public AttackGenerator(PositiveInt speed, PositiveInt sizeX, PositiveInt sizeY, PositiveInt damage, PositiveInt range, List<BufferedImage> attackAnimation, PositiveInt numberOfAnimationImages) {
+    public AttackGenerator(PositiveInt speed, PositiveInt sizeX, PositiveInt sizeY, PositiveInt damage, PositiveInt range, AnimatedSpriteCloneFactory sprite) {
         this.speed = speed;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.damage = damage;
         this.range = range;
-        this.attackAnimation = attackAnimation;
-        this.numberOfAnimationImages = numberOfAnimationImages;
+        this.sprite = sprite;
     }
 
     public Attack generate(Map.Coordinate castCoordinate, Direction castDirection) {
@@ -35,8 +31,7 @@ public class AttackGenerator {
             this.sizeY,
             this.damage,
             this.range,
-            this.attackAnimation,
-            this.numberOfAnimationImages
+            this.sprite.buildClone()
         );
     }
 }

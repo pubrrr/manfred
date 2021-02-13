@@ -4,6 +4,8 @@ import manfred.data.InvalidInputException;
 import manfred.data.infrastructure.ObjectConverter;
 import manfred.data.persistence.dto.AttackDto;
 import manfred.game.attack.AttackGenerator;
+import manfred.game.characters.sprite.AnimatedSprite;
+import manfred.game.characters.sprite.AnimatedSpriteCloneFactory;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,8 +18,19 @@ public class AttackGeneratorConverter implements ObjectConverter<AttackDto, Atta
             attackDto.getSizeY(),
             attackDto.getDamage(),
             attackDto.getRange(),
+            buildSpriteFactory(attackDto)
+        );
+    }
+
+    private AnimatedSpriteCloneFactory buildSpriteFactory(AttackDto attackDto) {
+        double distancePerImage = (double) attackDto.getRange().value() / attackDto.getNumberOfAnimationImages().value();
+        int timePerImage = (int) Math.round( distancePerImage / attackDto.getSpeed().value());
+
+        return new AnimatedSprite(
+            attackDto.getSizeX(),
+            attackDto.getSizeY(),
             attackDto.getAttackAnimation(),
-            attackDto.getNumberOfAnimationImages()
+            timePerImage
         );
     }
 }

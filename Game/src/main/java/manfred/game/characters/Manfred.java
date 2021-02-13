@@ -1,6 +1,7 @@
 package manfred.game.characters;
 
 import manfred.data.shared.PositiveInt;
+import manfred.game.characters.sprite.DirectionalAnimatedSprite;
 import manfred.game.config.GameConfig;
 import manfred.game.geometry.Vector;
 import manfred.game.graphics.PanelCoordinate;
@@ -9,34 +10,24 @@ import manfred.game.map.CollisionDetector;
 import manfred.game.map.Map;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.HashMap;
 
-public class Manfred extends MovingObject implements LocatedPaintable {
+public class Manfred extends MovingObject<DirectionalAnimatedSprite> implements LocatedPaintable {
     public static final int ANIMATION_IMAGES_NUMBER = 8;
     private static final PositiveInt.Strict INTERACT_DISTANCE = PositiveInt.ofNonZero(40);
-    private static final int NEXT_ANIMATION_IMAGE_TRIGGER = 4;
 
     private int healthPoints;
     private final GameConfig gameConfig;
-    private final HashMap<Direction, BufferedImage[]> walkAnimation;
-
-    private int framesCounter = 0;
-    private int animationPosition = 0;
 
     public Manfred(
         Velocity velocity,
         Map.Coordinate initialBottomLeft,
-        PositiveInt spriteWidth,
-        PositiveInt spriteHeight,
         PositiveInt healthPoints,
         GameConfig gameConfig,
-        HashMap<Direction, BufferedImage[]> walkAnimation
+        DirectionalAnimatedSprite sprite
     ) {
-        super(velocity, initialBottomLeft, PositiveInt.of(spriteWidth.value() - 2), spriteHeight, PositiveInt.of(gameConfig.getPixelBlockSize().value() - 2));
+        super(velocity, initialBottomLeft, PositiveInt.of(gameConfig.getPixelBlockSize().value() - 2), PositiveInt.of(gameConfig.getPixelBlockSize().value() - 2), sprite);
         this.healthPoints = healthPoints.value();
         this.gameConfig = gameConfig;
-        this.walkAnimation = walkAnimation;
     }
 
     public void setToTile(Map.TileCoordinate tileCoordinate) {
@@ -48,17 +39,9 @@ public class Manfred extends MovingObject implements LocatedPaintable {
         super.checkCollisionsAndMove(collisionDetector);
 
         if (this.velocity.getVector().lengthSquared().value() == 0) {
-            framesCounter = 0;
-            animationPosition = 0;
+            this.sprite.stopAnimation();
         } else {
-            framesCounter++;
-            if (framesCounter >= NEXT_ANIMATION_IMAGE_TRIGGER) {
-                framesCounter = 0;
-                animationPosition++;
-                if (animationPosition >= ANIMATION_IMAGES_NUMBER) {
-                    animationPosition = 0;
-                }
-            }
+            this.sprite.tick(this.viewDirection);
         }
     }
 
@@ -69,11 +52,11 @@ public class Manfred extends MovingObject implements LocatedPaintable {
     @Override
     public void paint(Graphics g, PanelCoordinate coordinate) {
         g.drawImage(
-            walkAnimation.get(viewDirection)[animationPosition],
+            this.sprite.getImage(),
             coordinate.getX(),
             coordinate.getY() - gameConfig.getPixelBlockSize().value(), // TODO!
-            sprite.getWidth(),
-            sprite.getSpriteHeight(),
+            this.sprite.getWidth().value(),
+            this.sprite.getHeight().value(),
             null
         );
     }

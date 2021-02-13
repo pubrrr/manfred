@@ -13,6 +13,7 @@ import manfred.game.attack.CombinationElement;
 import manfred.game.characters.Manfred;
 import manfred.game.characters.SkillSet;
 import manfred.game.characters.Velocity;
+import manfred.game.characters.sprite.DirectionalAnimatedSprite;
 import manfred.game.config.GameConfig;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ControllerStateMapper;
@@ -78,9 +79,9 @@ class ManfredControllerTest extends ControllerTestCase {
         attacksContainer = new AttacksContainer();
         backgroundScrollerMock = mock(BackgroundScroller.class);
 
-        manfred = new Manfred(Velocity.withSpeed(SPEED), coordinateAt(INITIAL_X, INITIAL_Y), PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(PIXEL_BLOCK_SIZE), PositiveInt.of(1), testGameConfig, null);
+        manfred = new Manfred(Velocity.withSpeed(SPEED), coordinateAt(INITIAL_X, INITIAL_Y), PositiveInt.of(1), testGameConfig, mock(DirectionalAnimatedSprite.class));
 
-        CastModeOn castModeOn = new CastModeOn(skillSet, attacksContainer, mock(GameConfig.class), manfred.getSprite(), null);
+        CastModeOn castModeOn = new CastModeOn(skillSet, attacksContainer, mock(GameConfig.class), null);
         Caster attackCaster = new Caster(new CastModeOff(castModeOn));
         EnemiesWrapper enemiesWrapper = new EnemiesWrapper();
 
