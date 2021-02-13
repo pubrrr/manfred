@@ -2,6 +2,7 @@ package manfred.game.attack;
 
 import manfred.game.characters.Direction;
 import manfred.game.graphics.GraphicsAdapter;
+import manfred.game.graphics.PanelCoordinate;
 import manfred.game.map.Map;
 
 public interface CastMode {
@@ -12,5 +13,5 @@ public interface CastMode {
 
     void addToCombination(CombinationElement combinationElement);
 
-    void paint(GraphicsAdapter g, Integer x, Integer y);
+    void paint(GraphicsAdapter g, PanelCoordinate bottomLeftCoordinate);
 }

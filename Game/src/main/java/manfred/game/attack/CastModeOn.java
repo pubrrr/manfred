@@ -4,6 +4,7 @@ import manfred.game.characters.Direction;
 import manfred.game.characters.SkillSet;
 import manfred.game.config.GameConfig;
 import manfred.game.graphics.GraphicsAdapter;
+import manfred.game.graphics.PanelCoordinate;
 import manfred.game.map.Map;
 import org.springframework.stereotype.Component;
 
@@ -46,12 +47,12 @@ public class CastModeOn implements CastMode {
     }
 
     @Override
-    public void paint(GraphicsAdapter g, Integer x, Integer y) {
-        // TODO
+    public void paint(GraphicsAdapter g, PanelCoordinate bottomLeftCoordinate) {
+        // TODO proper sprite
         g.drawImage(
             castModeSprite,
-            x - gameConfig.getPixelBlockSize().divideBy(2),
-            y - gameConfig.getPixelBlockSize().divideBy(2),
+            bottomLeftCoordinate.getX() - gameConfig.getPixelBlockSize().divideBy(2),
+            bottomLeftCoordinate.getY() - gameConfig.getPixelBlockSize().times(5).divideBy(2),
             gameConfig.getPixelBlockSize().times(2).value(),
             gameConfig.getPixelBlockSize().times(3).value()
         );

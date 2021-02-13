@@ -2,6 +2,7 @@ package manfred.game.attack;
 
 import manfred.game.characters.Direction;
 import manfred.game.graphics.GraphicsAdapter;
+import manfred.game.graphics.PanelCoordinate;
 import manfred.game.map.Map;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +29,7 @@ public class CastModeOff implements CastMode {
         //do nothing
     }
 
-    public void paint(GraphicsAdapter g, Integer x, Integer y) {
+    public void paint(GraphicsAdapter g, PanelCoordinate bottomLeftCoordinate) {
         //paint nothing
     }
 }

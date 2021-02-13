@@ -25,7 +25,7 @@ public class Caster implements LocatedPaintable {
 
     @Override
     public void paint(GraphicsAdapter g, PanelCoordinate bottomLeftCoordinate) {
-        castMode.paint(g, bottomLeftCoordinate.getX(), bottomLeftCoordinate.getY());
+        castMode.paint(g, bottomLeftCoordinate);
     }
 
     public void off() {
