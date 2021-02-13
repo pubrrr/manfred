@@ -2,7 +2,6 @@ package manfred.game.characters;
 
 import manfred.data.shared.PositiveInt;
 import manfred.game.characters.sprite.DirectionalAnimatedSprite;
-import manfred.game.config.GameConfig;
 import manfred.game.geometry.Vector;
 import manfred.game.map.CollisionDetector;
 import manfred.game.map.Map;
@@ -12,18 +11,17 @@ public class Manfred extends MovingObject<DirectionalAnimatedSprite> {
     private static final PositiveInt.Strict INTERACT_DISTANCE = PositiveInt.ofNonZero(40);
 
     private int healthPoints;
-    private final GameConfig gameConfig; // TODO
 
     public Manfred(
         Velocity velocity,
         Map.Coordinate initialBottomLeft,
         PositiveInt healthPoints,
-        GameConfig gameConfig,
+        PositiveInt width,
+        PositiveInt depth,
         DirectionalAnimatedSprite sprite
     ) {
-        super(velocity, initialBottomLeft, PositiveInt.of(gameConfig.getPixelBlockSize().value() - 2), PositiveInt.of(gameConfig.getPixelBlockSize().value() - 2), sprite);
+        super(velocity, initialBottomLeft, width, depth, sprite);
         this.healthPoints = healthPoints.value();
-        this.gameConfig = gameConfig;
     }
 
     public void setToTile(Map.TileCoordinate tileCoordinate) {

@@ -1,6 +1,5 @@
 package componentTests.controller;
 
-import helpers.TestGameConfig;
 import manfred.data.InvalidInputException;
 import manfred.data.shared.PositiveInt;
 import manfred.game.attack.Attack;
@@ -23,10 +22,10 @@ import manfred.game.controls.ManfredController;
 import manfred.game.controls.ObjectsMover;
 import manfred.game.controls.SleepingController;
 import manfred.game.enemy.EnemiesWrapper;
-import manfred.game.graphics.scrolling.BackgroundScroller;
 import manfred.game.graphics.GamePanel;
 import manfred.game.graphics.coordinatetransformation.MapCoordinateToPanelCoordinateTransformer;
 import manfred.game.graphics.paintable.GelaberOverlay;
+import manfred.game.graphics.scrolling.BackgroundScroller;
 import manfred.game.interact.Door;
 import manfred.game.interact.Portal;
 import manfred.game.interact.person.Person;
@@ -56,7 +55,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class ManfredControllerTest extends ControllerTestCase {
-    private static final int PIXEL_BLOCK_SIZE = 40;
+    private static final PositiveInt.Strict PIXEL_BLOCK_SIZE = PositiveInt.ofNonZero(40);
     private static final int INITIAL_X = 20;
     public static final int INITIAL_Y = 20;
     public static final PositiveInt SPEED = PositiveInt.of(10);
@@ -71,8 +70,6 @@ class ManfredControllerTest extends ControllerTestCase {
 
     @BeforeEach
     void init() {
-        TestGameConfig testGameConfig = (new TestGameConfig()).withPixelBlockSize(PIXEL_BLOCK_SIZE);
-
         mapFacadeMock = mock(MapFacade.class);
         when(mapFacadeMock.stepOn(any())).thenReturn(null);
 
@@ -80,7 +77,7 @@ class ManfredControllerTest extends ControllerTestCase {
         attacksContainer = new AttacksContainer();
         backgroundScrollerMock = mock(BackgroundScroller.class);
 
-        manfred = new Manfred(Velocity.withSpeed(SPEED), coordinateAt(INITIAL_X, INITIAL_Y), PositiveInt.of(1), testGameConfig, mock(DirectionalAnimatedSprite.class));
+        manfred = new Manfred(Velocity.withSpeed(SPEED), coordinateAt(INITIAL_X, INITIAL_Y), PositiveInt.of(1), PIXEL_BLOCK_SIZE, PIXEL_BLOCK_SIZE, mock(DirectionalAnimatedSprite.class));
 
         CastModeOn castModeOn = new CastModeOn(skillSet, attacksContainer, mock(GameConfig.class), null);
         Caster attackCaster = new Caster(new CastModeOff(castModeOn));
@@ -97,7 +94,7 @@ class ManfredControllerTest extends ControllerTestCase {
             attacksContainer,
             mock(GelaberOverlay.class),
             objectsMover,
-            new MapCoordinateToPanelCoordinateTransformer(PositiveInt.ofNonZero(PIXEL_BLOCK_SIZE))
+            new MapCoordinateToPanelCoordinateTransformer(PIXEL_BLOCK_SIZE)
         );
     }
 
