@@ -12,7 +12,7 @@ import static manfred.infrastructureadapter.map.tile.TileConversionRule.createDo
 import static manfred.infrastructureadapter.map.tile.TileConversionRule.createNonAccessible;
 import static manfred.infrastructureadapter.map.tile.TileConversionRule.createPerson;
 import static manfred.infrastructureadapter.map.tile.TileConversionRule.createPortal;
-import static manfred.infrastructureadapter.map.tile.TileConversionRule.decorateWithImage;
+import static manfred.infrastructureadapter.map.tile.TileConversionRule.decorateWithSprite;
 import static manfred.infrastructureadapter.map.tile.TileConversionRule.wrapForGraphicsDebugging;
 
 @Configuration
@@ -24,7 +24,7 @@ public class InfrastructureAdapterContext {
         TileConversionRule tileConversionRule = createPerson(gameConfig, gelaberConverter)
             .orElse(createPortal())
             .orElse(createDoor())
-            .orElse(decorateWithImage(gameConfig).and(createAccessible().orElse(createNonAccessible())))
+            .orElse(decorateWithSprite(gameConfig).and(createAccessible().orElse(createNonAccessible())))
             .orElse(createAccessible())
             .orElse(createNonAccessible());
         if (gameConfig.isDebugGraphics()) {

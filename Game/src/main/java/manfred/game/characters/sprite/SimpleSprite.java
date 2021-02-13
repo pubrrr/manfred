@@ -4,7 +4,7 @@ import manfred.data.shared.PositiveInt;
 
 import java.awt.image.BufferedImage;
 
-public class SimpleSprite implements Sprite {
+public class SimpleSprite extends Sprite {
     private final PositiveInt width;
     private final PositiveInt height;
     private final BufferedImage image;

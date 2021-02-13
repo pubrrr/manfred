@@ -2,27 +2,27 @@ package manfred.game.geometry;
 
 import manfred.data.shared.PositiveInt;
 
-public interface Vector<COORDINATE> {
-    static <COORDINATE> Vector<COORDINATE> of(int x, int y) {
+public interface Vector<COORDINATE extends Coordinate<COORDINATE>> {
+    static <COORDINATE extends Coordinate<COORDINATE>> Vector<COORDINATE> of(int x, int y) {
         return VectorImpl.of(x, y);
     }
 
-    static <COORDINATE> Vector<COORDINATE> pointingUp(int y) {
+    static <COORDINATE extends Coordinate<COORDINATE>> Vector<COORDINATE> pointingUp(int y) {
         return VectorImpl.pointingUp(y);
     }
 
-    static <COORDINATE> Vector<COORDINATE> pointingRight(int x) {
+    static <COORDINATE extends Coordinate<COORDINATE>> Vector<COORDINATE> pointingRight(int x) {
         return VectorImpl.pointingRight(x);
     }
 
-    static <COORDINATE> NonZero<COORDINATE> nonZero(int x, int y) {
+    static <COORDINATE extends Coordinate<COORDINATE>> NonZero<COORDINATE> nonZero(int x, int y) {
         if (x == 0 && y == 0) {
             throw new IllegalArgumentException("x and y must not both be zero for non zero vector");
         }
-        return new NonZero<>(Vector.of(x, y));
+        return new NonZero<COORDINATE>(Vector.of(x, y));
     }
 
-    static <COORDINATE> Vector<COORDINATE> zero() {
+    static <COORDINATE extends Coordinate<COORDINATE>> Vector<COORDINATE> zero() {
         return VectorImpl.pointingUp(0);
     }
 
@@ -46,7 +46,7 @@ public interface Vector<COORDINATE> {
 
     Vector<COORDINATE> projectOnYAxis();
 
-    class NonZero<COORDINATE> implements Vector<COORDINATE> {
+    class NonZero<COORDINATE extends Coordinate<COORDINATE>> implements Vector<COORDINATE> {
         private final Vector<COORDINATE> wrapped;
 
         private NonZero(Vector<COORDINATE> wrapped) {

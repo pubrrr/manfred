@@ -48,8 +48,8 @@ class MapCoordinateToPanelCoordinateTransformerTest {
             {coordinateProvider.coordinateAt(179, 0), new PanelCoordinate(29, 19)}, // bottom right on map
             {coordinateProvider.coordinateAt(179, 119), new PanelCoordinate(29, 0)}, // top right on map
             {coordinateProvider.coordinateAt(60, 47), new PanelCoordinate(10, 12)}, // somewhere in the middle
-            {coordinateProvider.tileAt(PositiveInt.of(0), PositiveInt.of(0)).getTopLeftCoordinate(), new PanelCoordinate(0, 10)}, // bottom left map tile
-            {coordinateProvider.tileAt(PositiveInt.of(0), PositiveInt.of(1)).getTopLeftCoordinate(), new PanelCoordinate(0, 0)}, // bottom left map tile
+            {coordinateProvider.tileAt(PositiveInt.of(0), PositiveInt.of(0)).getBottomLeftCoordinate(), new PanelCoordinate(0, 19)}, // bottom left map tile
+            {coordinateProvider.tileAt(PositiveInt.of(0), PositiveInt.of(1)).getBottomLeftCoordinate(), new PanelCoordinate(0, 9)}, // bottom left map tile
         };
     }
 }

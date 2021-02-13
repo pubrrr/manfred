@@ -12,4 +12,8 @@ public interface CoordinateScroller {
         BoundedDistance initialScrollDistance = distanceFactory.createOfWithinBounds(windowSize / 2 - coordinateToCenterTo);
         return new DynamicScroller(triggerScrollDistanceToBorder, windowSize, distanceFactory, initialScrollDistance);
     }
+
+    default CoordinateScroller inverted() {
+        return new InvertedScroller(this);
+    }
 }

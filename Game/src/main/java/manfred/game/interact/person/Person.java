@@ -1,27 +1,21 @@
 package manfred.game.interact.person;
 
-import manfred.game.config.GameConfig;
+import manfred.game.characters.sprite.Sprite;
+import manfred.game.characters.sprite.SpritePainter;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.ManfredController;
-import manfred.game.graphics.PanelCoordinate;
 import manfred.game.interact.person.gelaber.GelaberFacade;
 import manfred.game.map.MapTile;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-
-public class Person implements MapTile {
+public class Person extends SpritePainter<Sprite> implements MapTile {
     private final String name;
     private final GelaberFacade gelaberFacade;
-    private final GameConfig gameConfig;
-    private final BufferedImage image;
 
-    public Person(String name, GelaberFacade gelaberFacade, GameConfig gameConfig, BufferedImage image) {
+    public Person(String name, GelaberFacade gelaberFacade, Sprite sprite) {
+        super(sprite);
         this.name = name;
         this.gelaberFacade = gelaberFacade;
-        this.gameConfig = gameConfig;
-        this.image = image;
     }
 
     public String getName() {
@@ -36,10 +30,5 @@ public class Person implements MapTile {
     @Override
     public boolean isAccessible() {
         return false;
-    }
-
-    @Override
-    public void paint(Graphics g, PanelCoordinate coordinate) {
-        g.drawImage(image, coordinate.getX(), coordinate.getY(), gameConfig.getPixelBlockSize().value(), gameConfig.getPixelBlockSize().value(), null);
     }
 }

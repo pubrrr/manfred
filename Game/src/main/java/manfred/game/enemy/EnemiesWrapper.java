@@ -33,7 +33,7 @@ public class EnemiesWrapper implements PaintablesContainer {
     @Override
     public Stack<PaintableContainerElement> getPaintableContainerElements() {
         Stack<PaintableContainerElement> elements = new Stack<>();
-        getEnemies().forEach(enemy -> elements.push(new PaintableContainerElement(enemy, enemy.getTopLeft())));
+        getEnemies().forEach(enemy -> elements.push(new PaintableContainerElement(enemy, enemy.getBottomLeft())));
         return elements;
     }
 }

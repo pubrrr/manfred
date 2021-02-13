@@ -5,7 +5,7 @@ import manfred.data.shared.PositiveInt;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class AnimatedSprite implements Sprite, AnimatedSpriteCloneFactory {
+public class AnimatedSprite extends Sprite implements AnimatedSpriteCloneFactory {
 
     private final PositiveInt width;
     private final PositiveInt height;

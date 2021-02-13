@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface TileConversionRule {
 
-    Optional<TileConversionAction> applicableTo(MapPrototype input, int x, int y);;
+    Optional<TileConversionAction> applicableTo(MapPrototype input, int x, int y);
 
     default TileConversionRule orElse(TileConversionRule next) {
         return new OrRule(this, next);
@@ -26,8 +26,8 @@ public interface TileConversionRule {
         return new NonAccessibleTileFactory();
     }
 
-    static DecorateTileWithImageRule.Builder decorateWithImage(GameConfig gameConfig) {
-        return DecorateTileWithImageRule.build(gameConfig);
+    static DecorateTileWithImageRule.Builder decorateWithSprite(GameConfig gameConfig) {
+        return DecorateTileWithImageRule.builder(gameConfig);
     }
 
     static TileConversionRule createPortal() {

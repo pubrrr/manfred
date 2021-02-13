@@ -6,7 +6,7 @@ import manfred.game.characters.Direction;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
-public class DirectionalAnimatedSprite implements Sprite {
+public class DirectionalAnimatedSprite extends Sprite {
 
     private final PositiveInt.Strict width;
     private final PositiveInt.Strict height;

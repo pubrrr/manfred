@@ -1,12 +1,11 @@
 package manfred.game.attack;
 
 import manfred.game.characters.Direction;
+import manfred.game.graphics.GraphicsAdapter;
 import manfred.game.graphics.PanelCoordinate;
 import manfred.game.graphics.paintable.LocatedPaintable;
 import manfred.game.map.Map;
 import org.springframework.stereotype.Component;
-
-import java.awt.*;
 
 @Component
 public class Caster implements LocatedPaintable {
@@ -25,8 +24,8 @@ public class Caster implements LocatedPaintable {
     }
 
     @Override
-    public void paint(Graphics g, PanelCoordinate coordinate) {
-        castMode.paint(g, coordinate.getX(), coordinate.getY());
+    public void paint(GraphicsAdapter g, PanelCoordinate bottomLeftCoordinate) {
+        castMode.paint(g, bottomLeftCoordinate.getX(), bottomLeftCoordinate.getY());
     }
 
     public void off() {

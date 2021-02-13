@@ -6,5 +6,5 @@ import manfred.game.map.Map;
 @Value
 public class PaintableContainerElement {
     LocatedPaintable locatedPaintable;
-    Map.Coordinate coordinate;
+    Map.Coordinate bottomLeftCoordinate;
 }

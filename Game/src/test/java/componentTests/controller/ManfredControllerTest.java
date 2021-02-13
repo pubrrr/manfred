@@ -14,6 +14,7 @@ import manfred.game.characters.Manfred;
 import manfred.game.characters.SkillSet;
 import manfred.game.characters.Velocity;
 import manfred.game.characters.sprite.DirectionalAnimatedSprite;
+import manfred.game.characters.sprite.SimpleSprite;
 import manfred.game.config.GameConfig;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ControllerStateMapper;
@@ -166,7 +167,7 @@ class ManfredControllerTest extends ControllerTestCase {
 
     @Test
     void talkToPerson() {
-        setupMapWithInteractable(new Person("testOpa", mock(GelaberFacade.class), mock(GameConfig.class), new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB)));
+        setupMapWithInteractable(new Person("testOpa", mock(GelaberFacade.class), new SimpleSprite(PositiveInt.of(1), PositiveInt.of(1), new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB))));
 
         ControllerInterface controllerState = underTest.keyReleased(mockEventWithKey(KeyEvent.VK_ENTER));
 

@@ -63,8 +63,8 @@ public class GamePanel extends JPanel {
         registerPaintableContainer(mapFacade);
         registerPaintableContainer(() -> {
             Stack<PaintableContainerElement> elements = new Stack<>();
-            elements.push(new PaintableContainerElement(attackCaster, manfred.getTopLeft()));
-            elements.push(new PaintableContainerElement(manfred, manfred.getTopLeft()));
+            elements.push(new PaintableContainerElement(attackCaster, manfred.getBottomLeft()));
+            elements.push(new PaintableContainerElement(manfred, manfred.getBottomLeft()));
             return elements;
         });
         registerPaintableContainer(enemiesWrapper);
@@ -91,9 +91,10 @@ public class GamePanel extends JPanel {
             mapCoordinateToPanelCoordinateTransformer
         );
 
+        GraphicsAdapter graphicsAdapter = new GraphicsAdapter(g);
         paintablesSortedByYAndX.forEach(
             (coordinate, paintables) -> paintables.forEach(
-                locatedPaintable -> locatedPaintable.paint(g, coordinate.translate(offset))
+                locatedPaintable -> locatedPaintable.paint(graphicsAdapter, coordinate.translate(offset))
             )
         );
 

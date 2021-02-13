@@ -1,9 +1,8 @@
 package manfred.game.attack;
 
 import manfred.game.characters.Direction;
+import manfred.game.graphics.GraphicsAdapter;
 import manfred.game.map.Map;
-
-import java.awt.*;
 
 public interface CastMode {
 
@@ -13,5 +12,5 @@ public interface CastMode {
 
     void addToCombination(CombinationElement combinationElement);
 
-    void paint(Graphics g, Integer x, Integer y);
+    void paint(GraphicsAdapter g, Integer x, Integer y);
 }

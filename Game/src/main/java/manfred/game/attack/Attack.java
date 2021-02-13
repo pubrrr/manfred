@@ -6,11 +6,10 @@ import manfred.game.characters.Velocity;
 import manfred.game.characters.sprite.AnimatedSprite;
 import manfred.game.enemy.Enemy;
 import manfred.game.geometry.Vector;
-import manfred.game.graphics.paintable.LocatedPaintable;
 import manfred.game.map.CollisionDetector;
 import manfred.game.map.Map;
 
-public class Attack extends MovingObject<AnimatedSprite> implements LocatedPaintable {
+public class Attack extends MovingObject<AnimatedSprite> {
     private final PositiveInt damage;
     private final int rangeSquared;
     private boolean resolved = false;

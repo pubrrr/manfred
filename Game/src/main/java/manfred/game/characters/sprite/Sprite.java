@@ -1,14 +1,19 @@
 package manfred.game.characters.sprite;
 
 import manfred.data.shared.PositiveInt;
+import manfred.game.graphics.PanelCoordinate;
 
 import java.awt.image.BufferedImage;
 
-public interface Sprite {
+public abstract class Sprite {
 
-    PositiveInt getHeight();
+    abstract public PositiveInt getHeight();
 
-    PositiveInt getWidth();
+    abstract public PositiveInt getWidth();
 
-    BufferedImage getImage();
+    abstract protected BufferedImage getImage();
+
+    public final LocatedSprite at(PanelCoordinate bottomLeftCoordinate) {
+        return new LocatedSprite(bottomLeftCoordinate, getWidth(), getHeight(), getImage());
+    }
 }

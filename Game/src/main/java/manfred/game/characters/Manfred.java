@@ -4,19 +4,15 @@ import manfred.data.shared.PositiveInt;
 import manfred.game.characters.sprite.DirectionalAnimatedSprite;
 import manfred.game.config.GameConfig;
 import manfred.game.geometry.Vector;
-import manfred.game.graphics.PanelCoordinate;
-import manfred.game.graphics.paintable.LocatedPaintable;
 import manfred.game.map.CollisionDetector;
 import manfred.game.map.Map;
 
-import java.awt.*;
-
-public class Manfred extends MovingObject<DirectionalAnimatedSprite> implements LocatedPaintable {
+public class Manfred extends MovingObject<DirectionalAnimatedSprite> {
     public static final int ANIMATION_IMAGES_NUMBER = 8;
     private static final PositiveInt.Strict INTERACT_DISTANCE = PositiveInt.ofNonZero(40);
 
     private int healthPoints;
-    private final GameConfig gameConfig;
+    private final GameConfig gameConfig; // TODO
 
     public Manfred(
         Velocity velocity,
@@ -47,18 +43,6 @@ public class Manfred extends MovingObject<DirectionalAnimatedSprite> implements 
 
     public Map.Coordinate getCenter() {
         return this.baseObject.getCenter();
-    }
-
-    @Override
-    public void paint(Graphics g, PanelCoordinate coordinate) {
-        g.drawImage(
-            this.sprite.getImage(),
-            coordinate.getX(),
-            coordinate.getY() - gameConfig.getPixelBlockSize().value(), // TODO!
-            this.sprite.getWidth().value(),
-            this.sprite.getHeight().value(),
-            null
-        );
     }
 
     public Map.TileCoordinate getInteractionMapTile() {

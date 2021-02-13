@@ -3,10 +3,10 @@ package manfred.game.attack;
 import manfred.game.characters.Direction;
 import manfred.game.characters.SkillSet;
 import manfred.game.config.GameConfig;
+import manfred.game.graphics.GraphicsAdapter;
 import manfred.game.map.Map;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Stack;
 
@@ -46,15 +46,14 @@ public class CastModeOn implements CastMode {
     }
 
     @Override
-    public void paint(Graphics g, Integer x, Integer y) {
+    public void paint(GraphicsAdapter g, Integer x, Integer y) {
         // TODO
         g.drawImage(
             castModeSprite,
             x - gameConfig.getPixelBlockSize().divideBy(2),
             y - gameConfig.getPixelBlockSize().divideBy(2),
             gameConfig.getPixelBlockSize().times(2).value(),
-            gameConfig.getPixelBlockSize().times(3).value(),
-            null
+            gameConfig.getPixelBlockSize().times(3).value()
         );
     }
 }

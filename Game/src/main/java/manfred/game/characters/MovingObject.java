@@ -2,17 +2,17 @@ package manfred.game.characters;
 
 import manfred.data.shared.PositiveInt;
 import manfred.game.characters.sprite.Sprite;
+import manfred.game.characters.sprite.SpritePainter;
 import manfred.game.geometry.Rectangle;
+import manfred.game.graphics.GraphicsAdapter;
 import manfred.game.graphics.PanelCoordinate;
 import manfred.game.graphics.paintable.LocatedPaintable;
 import manfred.game.map.CollisionDetector;
 import manfred.game.map.Map;
 
-import java.awt.*;
+abstract public class MovingObject<SPRITE extends Sprite> extends SpritePainter<SPRITE> implements LocatedPaintable {
 
-abstract public class MovingObject<SPRITE extends Sprite> implements LocatedPaintable {
-    protected Rectangle baseObject;
-    protected SPRITE sprite;
+    protected Rectangle<Map.Coordinate> baseObject;
     protected Velocity velocity;
 
     protected boolean movesLeft = false;
@@ -22,9 +22,9 @@ abstract public class MovingObject<SPRITE extends Sprite> implements LocatedPain
     protected Direction viewDirection = Direction.DOWN;
 
     protected MovingObject(Velocity velocity, Map.Coordinate initialBottomLeft, PositiveInt objectWidth, PositiveInt objectDepth, SPRITE sprite) {
+        super(sprite);
         this.velocity = velocity;
-        this.baseObject = new Rectangle(initialBottomLeft, objectWidth, objectDepth);
-        this.sprite = sprite;
+        this.baseObject = new Rectangle<>(initialBottomLeft, objectWidth, objectDepth);
     }
 
     public void left() {
@@ -73,26 +73,19 @@ abstract public class MovingObject<SPRITE extends Sprite> implements LocatedPain
     }
 
     @Override
-    public void paint(Graphics g, PanelCoordinate coordinate) {
-        g.drawImage(
-            sprite.getImage(),
-            coordinate.getX(),
-            coordinate.getY(),
-            sprite.getWidth().value(),
-            sprite.getHeight().value(),
-            null
-        );
+    public void paint(GraphicsAdapter g, PanelCoordinate bottomLeftCoordinate) {
+        g.drawSprite(this.sprite.at(bottomLeftCoordinate));
     }
 
     public void checkCollisionsAndMove(CollisionDetector collisionDetector) {
-        Rectangle verticallyMoved = this.baseObject.translate(this.velocity.getVector().projectOnXAxis());
+        Rectangle<Map.Coordinate> verticallyMoved = this.baseObject.translate(this.velocity.getVector().projectOnXAxis());
         this.baseObject = moveToIfAccessible(verticallyMoved, collisionDetector);
 
-        Rectangle horizontallyMoved = this.baseObject.translate(this.velocity.getVector().projectOnYAxis());
+        Rectangle<Map.Coordinate> horizontallyMoved = this.baseObject.translate(this.velocity.getVector().projectOnYAxis());
         this.baseObject = moveToIfAccessible(horizontallyMoved, collisionDetector);
     }
 
-    protected Rectangle moveToIfAccessible(Rectangle newPosition, CollisionDetector collisionDetector) {
+    protected Rectangle<Map.Coordinate> moveToIfAccessible(Rectangle<Map.Coordinate> newPosition, CollisionDetector collisionDetector) {
         return collisionDetector.isAreaAccessible(newPosition)
             ? newPosition
             : this.baseObject;
@@ -124,10 +117,6 @@ abstract public class MovingObject<SPRITE extends Sprite> implements LocatedPain
 
     public Map.Coordinate getBottomLeft() {
         return this.baseObject.getBottomLeft();
-    }
-
-    public Map.Coordinate getTopLeft() {
-        return this.baseObject.getTopLeft();
     }
 }
 

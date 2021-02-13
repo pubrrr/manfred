@@ -29,10 +29,10 @@ class MapColliderTest {
 
     @TestTemplate
     @UseDataProvider("provideAccessibleCoords")
-    public void collidesNotOnAccessibleField(int x, int y, int size) throws InvalidInputException {
+    public void collidesNotOnAccessibleField(int x, int y, int size) {
         underTest = initMap(new String[][]{{"1", "1"}, {"1", "1"}});
 
-        Rectangle area = new Rectangle(underTest.coordinateAt(x, y), PositiveInt.of(size), PositiveInt.of(size));
+        Rectangle<Map.Coordinate> area = new Rectangle<>(underTest.coordinateAt(x, y), PositiveInt.of(size), PositiveInt.of(size));
 
         assertTrue(underTest.isAreaAccessible(area), "accessible");
     }
@@ -49,14 +49,14 @@ class MapColliderTest {
 
     @TestTemplate
     @UseDataProvider("provideNonAccessibleCoords")
-    public void collidesOnNotAccessibleField(int x, int y, int size) throws InvalidInputException {
+    public void collidesOnNotAccessibleField(int x, int y, int size) {
         underTest = initMap(new String[][]{
                 {"1", "1", "1"},
                 {"1", "0", "1"},
                 {"1", "1", "1"},
         });
 
-        Rectangle area = new Rectangle(underTest.coordinateAt(x, y), PositiveInt.of(size), PositiveInt.of(size));
+        Rectangle<Map.Coordinate> area = new Rectangle<>(underTest.coordinateAt(x, y), PositiveInt.of(size), PositiveInt.of(size));
 
         assertFalse(underTest.isAreaAccessible(area), "accessible");
     }

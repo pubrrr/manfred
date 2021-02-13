@@ -1,19 +1,18 @@
 package manfred.infrastructureadapter.map.tile;
 
 import helpers.TestGameConfig;
-import manfred.data.InvalidInputException;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
+import manfred.game.graphics.GraphicsAdapter;
 import manfred.game.graphics.PanelCoordinate;
 import manfred.game.map.MapTile;
-import manfred.game.map.MapTileWithImageDecorator;
+import manfred.game.map.MapTileWithSprite;
 import manfred.game.map.NotAccessible;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +22,6 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,7 +35,7 @@ class DecorateTileWithImageRuleTest {
     @BeforeEach
     void setUp() {
         wrappedRuleMock = mock(TileConversionRule.class);
-        underTest = DecorateTileWithImageRule.build(new TestGameConfig()).and(wrappedRuleMock);
+        underTest = DecorateTileWithImageRule.builder(new TestGameConfig()).and(wrappedRuleMock);
     }
 
     @Test
@@ -83,14 +81,14 @@ class DecorateTileWithImageRuleTest {
 
         assertTrue(result.isPresent());
         MapTile resultingTile = result.get().create();
-        assertThat(resultingTile, instanceOf(MapTileWithImageDecorator.class));
+        assertThat(resultingTile, instanceOf(MapTileWithSprite.class));
         assertTilePaintsImage(resultingTile);
     }
 
     private void assertTilePaintsImage(MapTile resultingTile) {
-        Graphics graphicsMock = mock(Graphics.class);
+        GraphicsAdapter graphicsMock = mock(GraphicsAdapter.class);
         resultingTile.paint(graphicsMock, new PanelCoordinate(0, 0));
-        verify(graphicsMock).drawImage(any(), anyInt(), anyInt(), anyInt(), anyInt(), isNull());
+        verify(graphicsMock).drawSprite(any());
     }
 
     private MapPrototype prepareMapTileWithObject() {

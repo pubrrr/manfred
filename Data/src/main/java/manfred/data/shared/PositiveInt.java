@@ -45,6 +45,10 @@ public class PositiveInt {
         return new PositiveInt(this.value * factor);
     }
 
+    public PositiveInt divideBy(Strict divisor) {
+        return new PositiveInt(this.value / divisor.value());
+    }
+
     public int divideBy(int divisor) {
         return this.value / divisor;
     }

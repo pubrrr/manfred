@@ -35,7 +35,7 @@ public class BackgroundScroller {
         xScroller = CoordinateScroller.buildFrom(triggerScrollDistanceToBorder, gameConfig.getWindowWidth(), mapSizeX, center.getX());
 
         int mapSizeY = mapFacade.getMapSizeY() * gameConfig.getPixelBlockSize().value();
-        yScroller = CoordinateScroller.buildFrom(triggerScrollDistanceToBorder, gameConfig.getWindowHeight(), mapSizeY, center.getY());
+        yScroller = CoordinateScroller.buildFrom(triggerScrollDistanceToBorder, gameConfig.getWindowHeight(), mapSizeY, center.getY()).inverted();
     }
 
     public static class Factory {
