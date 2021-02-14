@@ -15,8 +15,8 @@ public class Caster implements LocatedPaintable {
         this.castMode = initialCastModeOff;
     }
 
-    public void cast(Map.Coordinate castCoordinate, Direction viewDirection) {
-        this.castMode = this.castMode.cast(castCoordinate, viewDirection);
+    public void cast(Map.Coordinate manfredCenterCoordinate, Direction viewDirection) {
+        this.castMode = this.castMode.cast(manfredCenterCoordinate, viewDirection);
     }
 
     public void addToCombination(CombinationElement combinationElement) {

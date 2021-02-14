@@ -4,9 +4,12 @@ import manfred.data.shared.PositiveInt;
 import manfred.game.characters.Direction;
 import manfred.game.characters.Velocity;
 import manfred.game.characters.sprite.AnimatedSpriteCloneFactory;
+import manfred.game.geometry.Vector;
 import manfred.game.map.Map;
 
 public class AttackGenerator {
+    private final static PositiveInt.Strict castDistance = PositiveInt.ofNonZero(20);
+
     private final PositiveInt speed;
     private final PositiveInt sizeX;
     private final PositiveInt sizeY;
@@ -23,7 +26,11 @@ public class AttackGenerator {
         this.sprite = sprite;
     }
 
-    public Attack generate(Map.Coordinate castCoordinate, Direction castDirection) {
+    public Attack generate(Map.Coordinate manfredCenterCoordinate, Direction castDirection) {
+        Map.Coordinate castCoordinate = manfredCenterCoordinate.translate(castDirection.getUnitVector().scaleToLength(castDistance))
+            .translate(Vector.pointingRight(-this.sizeX.value() / 2))
+            .translate(Vector.pointingUp(-this.sizeY.value() / 2));
+
         return new Attack(
             Velocity.withSpeed(this.speed).accelerate(castDirection),
             castCoordinate,

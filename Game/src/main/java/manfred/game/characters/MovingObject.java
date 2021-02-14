@@ -72,11 +72,6 @@ abstract public class MovingObject<SPRITE extends Sprite> extends SpritePainter<
         this.velocity = velocity.stopY();
     }
 
-    @Override
-    public void paint(GraphicsAdapter g, PanelCoordinate bottomLeftCoordinate) {
-        g.drawSprite(this.sprite.at(bottomLeftCoordinate));
-    }
-
     public void checkCollisionsAndMove(CollisionDetector collisionDetector) {
         Rectangle<Map.Coordinate> verticallyMoved = this.baseObject.translate(this.velocity.getVector().projectOnXAxis());
         this.baseObject = moveToIfAccessible(verticallyMoved, collisionDetector);

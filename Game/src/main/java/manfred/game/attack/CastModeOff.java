@@ -15,7 +15,7 @@ public class CastModeOff implements CastMode {
     }
 
     @Override
-    public CastMode cast(Map.Coordinate castCoordinate, Direction viewDirection) {
+    public CastMode cast(Map.Coordinate manfredCenterCoordinate, Direction viewDirection) {
         return this.castModeOn;
     }
 

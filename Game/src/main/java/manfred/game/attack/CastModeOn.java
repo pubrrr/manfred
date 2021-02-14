@@ -27,9 +27,9 @@ public class CastModeOn implements CastMode {
     }
 
     @Override
-    public CastMode cast(Map.Coordinate castCoordinate, Direction viewDirection) {
+    public CastMode cast(Map.Coordinate manfredCenterCoordinate, Direction viewDirection) {
         this.skillSet.get(attackCombination)
-            .map(attackGenerator -> attackGenerator.generate(castCoordinate, viewDirection))
+            .map(attackGenerator -> attackGenerator.generate(manfredCenterCoordinate, viewDirection))
             .map(attacksContainer::add);
 
         return off();

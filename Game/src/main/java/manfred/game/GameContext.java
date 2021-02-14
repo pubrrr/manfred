@@ -57,9 +57,9 @@ public class GameContext {
         return new Manfred(
             Velocity.withSpeed(PositiveInt.of(6)),
             mapFacade.tileAt(PositiveInt.of(5), PositiveInt.of(27)).getBottomLeftCoordinate(),
-            PositiveInt.of(gameConfig.getPixelBlockSize().value() - 2),
-            PositiveInt.of(gameConfig.getPixelBlockSize().value() - 2),
             PositiveInt.of(100),
+            PositiveInt.of(gameConfig.getPixelBlockSize().value() - 2),
+            PositiveInt.of(gameConfig.getPixelBlockSize().value() - 2),
             sprite
         );
     }

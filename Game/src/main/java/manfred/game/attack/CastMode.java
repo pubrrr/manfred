@@ -7,7 +7,7 @@ import manfred.game.map.Map;
 
 public interface CastMode {
 
-    CastMode cast(Map.Coordinate castCoordinate, Direction viewDirection);
+    CastMode cast(Map.Coordinate manfredCenterCoordinate, Direction viewDirection);
 
     CastMode off();
 
