@@ -2,7 +2,7 @@ package manfred.game.attack;
 
 import manfred.game.characters.Direction;
 import manfred.game.characters.SkillSet;
-import manfred.game.characters.Sprite;
+import manfred.game.characters.sprite.SimpleSprite;
 import manfred.game.config.GameConfig;
 import manfred.game.map.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ class CastModeOnTest {
         this.attacksContainerMock = mock(AttacksContainer.class);
         this.skillSetMock = mock(SkillSet.class);
 
-        underTest = new CastModeOn(skillSetMock, attacksContainerMock, mock(GameConfig.class), mock(Sprite.class), null);
+        underTest = new CastModeOn(skillSetMock, attacksContainerMock, mock(GameConfig.class), null);
     }
 
     @Test

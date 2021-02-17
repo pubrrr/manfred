@@ -4,10 +4,9 @@ import manfred.data.shared.PositiveInt;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.ManfredController;
+import manfred.game.graphics.GraphicsAdapter;
 import manfred.game.graphics.PanelCoordinate;
 import manfred.game.map.MapTile;
-
-import java.awt.*;
 
 public class Door implements MapTile {
     private final String targetName;
@@ -34,7 +33,7 @@ public class Door implements MapTile {
     }
 
     @Override
-    public void paint(Graphics g, PanelCoordinate coordinate) {
+    public void paint(GraphicsAdapter g, PanelCoordinate bottomLeftCoordinate) {
         // do nothing
     }
 }

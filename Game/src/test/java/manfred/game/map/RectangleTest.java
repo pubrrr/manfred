@@ -30,7 +30,7 @@ class RectangleTest {
 
     @Test
     void corners() {
-        Rectangle underTest = rectangle(10, 10, 20, 30);
+        Rectangle<Map.Coordinate> underTest = rectangle(10, 10, 20, 30);
 
         assertThat(underTest.getBottomLeft(), is(coordinateProvider.coordinateAt(10, 10)));
         assertThat(underTest.getBottomRight(), is(coordinateProvider.coordinateAt(29, 10)));
@@ -42,7 +42,7 @@ class RectangleTest {
     @TestTemplate
     @UseDataProvider("provideInsideCoordinates")
     void contains(Map.Coordinate coordinate) {
-        Rectangle underTest = rectangle(10, 10, 20, 30);
+        Rectangle<Map.Coordinate> underTest = rectangle(10, 10, 20, 30);
 
         assertTrue(underTest.contains(coordinate));
     }
@@ -63,7 +63,7 @@ class RectangleTest {
     @TestTemplate
     @UseDataProvider("provideOutsideCoordinates")
     void containsNot(Map.Coordinate coordinate) {
-        Rectangle underTest = rectangle(10, 10, 20, 30);
+        Rectangle<Map.Coordinate> underTest = rectangle(10, 10, 20, 30);
 
         assertFalse(underTest.contains(coordinate));
     }
@@ -84,8 +84,8 @@ class RectangleTest {
 
     @TestTemplate
     @UseDataProvider("provideIntersectingRectangles")
-    void intersects(Rectangle other) {
-        Rectangle underTest = rectangle(10, 10, 20, 30);
+    void intersects(Rectangle<Map.Coordinate> other) {
+        Rectangle<Map.Coordinate> underTest = rectangle(10, 10, 20, 30);
 
         assertTrue(underTest.intersects(other));
     }
@@ -109,16 +109,16 @@ class RectangleTest {
 
     @Test
     void intersectionOfExtremelyStretchedRectangles() {
-        Rectangle horizontal = rectangle(0, 5, 100, 5);
-        Rectangle vertical = rectangle(5, 0, 5, 100);
+        Rectangle<Map.Coordinate> horizontal = rectangle(0, 5, 100, 5);
+        Rectangle<Map.Coordinate> vertical = rectangle(5, 0, 5, 100);
 
         assertTrue(horizontal.intersects(vertical));
     }
 
     @TestTemplate
     @UseDataProvider("provideNonIntersectingRectangles")
-    void intersectsNot(Rectangle other) {
-        Rectangle underTest = rectangle(10, 10, 20, 30);
+    void intersectsNot(Rectangle<Map.Coordinate> other) {
+        Rectangle<Map.Coordinate> underTest = rectangle(10, 10, 20, 30);
 
         assertFalse(underTest.intersects(other));
     }
@@ -135,7 +135,7 @@ class RectangleTest {
         };
     }
 
-    private static Rectangle rectangle(int x, int y, int width, int height) {
-        return new Rectangle(coordinateProvider.coordinateAt(x, y), PositiveInt.of(width), PositiveInt.of(height));
+    private static Rectangle<Map.Coordinate> rectangle(int x, int y, int width, int height) {
+        return new Rectangle<>(coordinateProvider.coordinateAt(x, y), PositiveInt.of(width), PositiveInt.of(height));
     }
 }

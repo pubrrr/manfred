@@ -39,7 +39,7 @@ class BackgroundScrollerTest {
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(1, 1));
 
         assertEquals(3 * PIXEL_BLOCK_SIZE / 2, result.x());
-        assertEquals(PIXEL_BLOCK_SIZE, result.y());
+        assertEquals(-PIXEL_BLOCK_SIZE, result.y());
     }
 
     @Test
@@ -78,7 +78,7 @@ class BackgroundScrollerTest {
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(2 * PIXEL_BLOCK_SIZE, 2 * PIXEL_BLOCK_SIZE + 2));
 
         assertEquals(0, result.x());
-        assertEquals(-2, result.y());
+        assertEquals(2, result.y());
     }
 
     @Test
@@ -91,7 +91,7 @@ class BackgroundScrollerTest {
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(3 * PIXEL_BLOCK_SIZE - 1, 3 * PIXEL_BLOCK_SIZE - 1));
 
         assertEquals(-(PIXEL_BLOCK_SIZE - 1), result.x());
-        assertEquals(-(PIXEL_BLOCK_SIZE - 1), result.y());
+        assertEquals(PIXEL_BLOCK_SIZE - 1, result.y());
     }
 
     @Test
@@ -148,12 +148,12 @@ class BackgroundScrollerTest {
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(0, 3 * PIXEL_BLOCK_SIZE));
 
         assertEquals(0, result.x());
-        assertEquals(-TRIGGER_SCROLL_DISTANCE_TO_BORDER, result.y());
+        assertEquals(TRIGGER_SCROLL_DISTANCE_TO_BORDER, result.y());
 
         Vector<PanelCoordinate> result2 = underTest.getOffset(manfredAt(0, PIXEL_BLOCK_SIZE * 3 / 2));
 
         assertEquals(0, result2.x());
-        assertEquals(-TRIGGER_SCROLL_DISTANCE_TO_BORDER / 2, result2.y());
+        assertEquals(TRIGGER_SCROLL_DISTANCE_TO_BORDER / 2, result2.y());
     }
 
     @Test
@@ -169,7 +169,7 @@ class BackgroundScrollerTest {
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(initialPosition, initialPosition));
 
         assertEquals(-(initialPosition - screenSize / 2), result.x());
-        assertEquals(-(initialPosition - screenSize / 2), result.y());
+        assertEquals(initialPosition - screenSize / 2, result.y());
     }
 
     @Test
@@ -185,7 +185,7 @@ class BackgroundScrollerTest {
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(0, initialPosition));
 
         assertEquals(0, result.x());
-        assertEquals(-initialPosition + screenSize / 2, result.y());
+        assertEquals(initialPosition - screenSize / 2, result.y());
     }
 
     @Test
@@ -201,7 +201,7 @@ class BackgroundScrollerTest {
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(8 * PIXEL_BLOCK_SIZE - 1, initialPosition));
 
         assertEquals(-(8 * PIXEL_BLOCK_SIZE - screenSize), result.x());
-        assertEquals(-(initialPosition - screenSize / 2), result.y());
+        assertEquals(initialPosition - screenSize / 2, result.y());
     }
 
     @Test
@@ -233,7 +233,7 @@ class BackgroundScrollerTest {
         Vector<PanelCoordinate> result = underTest.getOffset(manfredAt(initialPosition, 8 * PIXEL_BLOCK_SIZE - 1));
 
         assertEquals(-(initialPosition - screenSize / 2), result.x());
-        assertEquals(-(8 * PIXEL_BLOCK_SIZE - screenSize), result.y());
+        assertEquals(8 * PIXEL_BLOCK_SIZE - screenSize, result.y());
     }
 
     private PanelCoordinate manfredAt(int x, int y) {

@@ -5,8 +5,10 @@ import manfred.data.shared.PositiveInt;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ControllerStateMapper;
 import manfred.game.controls.ManfredController;
+import manfred.game.graphics.GraphicsAdapter;
 import manfred.game.graphics.PanelCoordinate;
 import manfred.game.interact.Door;
+import manfred.game.interact.Portal;
 import manfred.game.interact.person.Person;
 
 import java.awt.*;
@@ -14,24 +16,27 @@ import java.awt.*;
 @AllArgsConstructor
 public class DebugTileWrapper implements MapTile {
 
+    private static final Color TRANSPARENT_RED = new Color(255, 0, 0, 150);
     private final MapTile wrapped;
     private final PositiveInt.Strict pixelBlockSize;
 
     @Override
-    public void paint(Graphics g, PanelCoordinate coordinate) {
+    public void paint(GraphicsAdapter g, PanelCoordinate bottomLeftCoordinate) {
         g.setColor(Color.BLACK);
-        g.drawRect(coordinate.getX(), coordinate.getY(), pixelBlockSize.value(), pixelBlockSize.value());
+        g.drawRectangle(bottomLeftCoordinate.getX(), bottomLeftCoordinate.getY() - pixelBlockSize.value(), pixelBlockSize.value(), pixelBlockSize.value());
 
         if (!wrapped.isAccessible()) {
             if (wrapped instanceof Person || wrapped instanceof Door) {
                 g.setColor(Color.YELLOW);
+            } else if (wrapped instanceof Portal){
+                g.setColor(Color.BLUE);
             } else {
-                g.setColor(Color.RED);
+                g.setColor(TRANSPARENT_RED);
             }
-            g.fillRect(coordinate.getX(), coordinate.getY(), pixelBlockSize.value(), pixelBlockSize.value());
+            g.fillRectangle(bottomLeftCoordinate.getX(), bottomLeftCoordinate.getY() - pixelBlockSize.value(), pixelBlockSize.value(), pixelBlockSize.value());
         }
 
-        wrapped.paint(g, coordinate);
+        wrapped.paint(g, bottomLeftCoordinate);
     }
 
     @Override

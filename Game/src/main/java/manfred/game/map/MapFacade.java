@@ -45,7 +45,7 @@ public class MapFacade implements PaintablesContainer, CollisionDetector {
     }
 
     @Override
-    public boolean isAreaAccessible(Rectangle area) {
+    public boolean isAreaAccessible(Rectangle<Map.Coordinate> area) {
         return this.map.isAreaAccessible(area);
     }
 

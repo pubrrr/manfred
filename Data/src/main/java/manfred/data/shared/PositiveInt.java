@@ -41,8 +41,12 @@ public class PositiveInt {
             : Optional.of(ofNonZero(this.value));
     }
 
-    public int times(int factor) {
-        return this.value * factor;
+    public PositiveInt times(int factor) {
+        return new PositiveInt(this.value * factor);
+    }
+
+    public PositiveInt divideBy(Strict divisor) {
+        return new PositiveInt(this.value / divisor.value());
     }
 
     public int divideBy(int divisor) {
@@ -52,6 +56,11 @@ public class PositiveInt {
     public static class Strict extends PositiveInt{
         protected Strict(int value) {
             super(value);
+        }
+
+        @Override
+        public Strict times(int factor) {
+            return new Strict(this.value() * factor);
         }
     }
 }

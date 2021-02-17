@@ -3,27 +3,17 @@ package manfred.game.attack;
 import manfred.data.shared.PositiveInt;
 import manfred.game.characters.MovingObject;
 import manfred.game.characters.Velocity;
+import manfred.game.characters.sprite.AnimatedSprite;
 import manfred.game.enemy.Enemy;
-import manfred.game.graphics.PanelCoordinate;
-import manfred.game.graphics.paintable.LocatedPaintable;
+import manfred.game.geometry.Vector;
 import manfred.game.map.CollisionDetector;
 import manfred.game.map.Map;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.List;
-
-public class Attack extends MovingObject implements LocatedPaintable {
+public class Attack extends MovingObject<AnimatedSprite> {
     private final PositiveInt damage;
     private final int rangeSquared;
     private boolean resolved = false;
-    private final List<BufferedImage> attackAnimation;
-    private final PositiveInt numberOfAnimationImages;
-    private final long nextAnimationImageTrigger;
-
     private final Map.Coordinate castPosition;
-    private int animationIdx = 0;
-    private int framesCounter = 0;
 
     public Attack(
         Velocity velocity,
@@ -32,16 +22,12 @@ public class Attack extends MovingObject implements LocatedPaintable {
         PositiveInt height,
         PositiveInt damage,
         PositiveInt range,
-        List<BufferedImage> attackAnimation,
-        PositiveInt numberOfAnimationImages
+        AnimatedSprite sprite
     ) {
-        super(velocity, initialBottomLeft, width, height, height);
+        super(velocity, initialBottomLeft, width, height, sprite);
         this.castPosition = this.baseObject.getCenter();
         this.damage = damage;
         this.rangeSquared = range.value() * range.value();
-        this.attackAnimation = attackAnimation;
-        this.numberOfAnimationImages = numberOfAnimationImages;
-        this.nextAnimationImageTrigger = Math.round((double) range.value() / velocity.getMaxSpeed().value() / numberOfAnimationImages.value());
     }
 
     @Override
@@ -52,30 +38,13 @@ public class Attack extends MovingObject implements LocatedPaintable {
         }
         this.baseObject = this.baseObject.translate(velocity.getVector());
 
-        if (castPosition.distanceTo(this.baseObject.getCenter()).lengthSquared().value() >= rangeSquared) {
+        Vector<Map.Coordinate> travelledDistance = castPosition.distanceTo(this.baseObject.getCenter());
+        if (travelledDistance.lengthSquared().value() >= rangeSquared) {
             this.resolve();
             return;
         }
 
-        framesCounter++;
-        if (framesCounter >= nextAnimationImageTrigger) {
-            framesCounter = 0;
-            if (animationIdx + 1 < numberOfAnimationImages.value()) {
-                animationIdx++;
-            }
-        }
-    }
-
-    @Override
-    public void paint(Graphics g, PanelCoordinate coordinate) {
-        g.drawImage(
-            attackAnimation.get(animationIdx),
-            coordinate.getX(),
-            coordinate.getY(),
-            sprite.getWidth(),
-            sprite.getSpriteHeight(),
-            null
-        );
+        sprite.tick();
     }
 
     public void checkHit(Enemy enemy) {

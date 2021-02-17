@@ -4,18 +4,18 @@ import manfred.game.geometry.Vector;
 import manfred.game.map.Map;
 
 public enum Direction {
-    RIGHT(Vector.nonZero(100, 0)),
-    LEFT(Vector.nonZero(-100, 0)),
-    UP(Vector.nonZero(0, 100)),
-    DOWN(Vector.nonZero(0, -100));
+    RIGHT(Vector.unitVector(100, 0)),
+    LEFT(Vector.unitVector(-100, 0)),
+    UP(Vector.unitVector(0, 100)),
+    DOWN(Vector.unitVector(0, -100));
 
-    private final Vector.NonZero<Map.Coordinate> vector;
+    private final Vector.Unit<Map.Coordinate> vector;
 
-    Direction(Vector.NonZero<Map.Coordinate> vector) {
+    Direction(Vector.Unit<Map.Coordinate> vector) {
         this.vector = vector;
     }
 
-    public Vector.NonZero<Map.Coordinate> getVector() {
+    public Vector.Unit<Map.Coordinate> getUnitVector() {
         return this.vector;
     }
 }

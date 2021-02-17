@@ -38,7 +38,7 @@ public class Map {
         return !isAccessible(tileCoordinate.tileX, tileCoordinate.tileY);
     }
 
-    public boolean isAreaAccessible(Rectangle area) {
+    public boolean isAreaAccessible(Rectangle<Coordinate> area) {
         TileCoordinate bottomLeftTile = area.getBottomLeft().getTile();
         TileCoordinate topRightTile = area.getTopRight().getTile();
 
@@ -70,7 +70,7 @@ public class Map {
             for (int y = 0; y < sizeY(); y++) {
                 elements.push(new PaintableContainerElement(
                     mapTiles.get(x).get(y),
-                    tileAt(PositiveInt.of(x), PositiveInt.of(y)).getTopLeftCoordinate()
+                    tileAt(PositiveInt.of(x), PositiveInt.of(y)).getBottomLeftCoordinate()
                 ));
             }
         }
@@ -109,7 +109,7 @@ public class Map {
 
     @ToString
     @EqualsAndHashCode
-    public class Coordinate {
+    public class Coordinate implements manfred.game.geometry.Coordinate<Coordinate> {
         private static final int TILE_SIZE = 60;
 
         private final int x;
@@ -132,10 +132,12 @@ public class Map {
             this.y = y;
         }
 
+        @Override
         public Coordinate translate(Vector<Map.Coordinate> tranlsation) {
             return new Coordinate(this.x + tranlsation.x(), this.y + tranlsation.y());
         }
 
+        @Override
         public Vector<Map.Coordinate> distanceTo(Coordinate other) {
             return Vector.of(other.x - this.x, other.y - this.y);
         }
@@ -167,10 +169,6 @@ public class Map {
 
         public Coordinate getBottomLeftCoordinate() {
             return new Coordinate(tileX * Coordinate.TILE_SIZE, tileY * Coordinate.TILE_SIZE);
-        }
-
-        public Coordinate getTopLeftCoordinate() {
-            return new Coordinate(tileX * Coordinate.TILE_SIZE, tileY * Coordinate.TILE_SIZE + (Coordinate.TILE_SIZE - 1));
         }
     }
 }

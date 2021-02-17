@@ -2,14 +2,15 @@ package manfred.game.attack;
 
 import manfred.data.shared.PositiveInt;
 import manfred.game.characters.Direction;
+import manfred.game.characters.sprite.AnimatedSprite;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static helpers.TestMapFactory.coordinateAt;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class AttackGeneratorTest {
     private final static int SPEED = 3;
@@ -21,7 +22,9 @@ class AttackGeneratorTest {
 
     @BeforeEach
     void init() {
-        underTest = new AttackGenerator(PositiveInt.of(SPEED), PositiveInt.of(SIZE), PositiveInt.of(SIZE), PositiveInt.of(3), PositiveInt.of(4), List.of(), PositiveInt.of(1));
+        AnimatedSprite spriteMock = mock(AnimatedSprite.class);
+        when(spriteMock.buildClone()).thenReturn(spriteMock);
+        underTest = new AttackGenerator(PositiveInt.of(SPEED), PositiveInt.of(SIZE), PositiveInt.of(SIZE), PositiveInt.of(3), PositiveInt.of(4), spriteMock);
     }
 
     @Test

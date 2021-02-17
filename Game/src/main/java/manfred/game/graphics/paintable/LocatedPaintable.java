@@ -1,9 +1,8 @@
 package manfred.game.graphics.paintable;
 
+import manfred.game.graphics.GraphicsAdapter;
 import manfred.game.graphics.PanelCoordinate;
 
-import java.awt.*;
-
 public interface LocatedPaintable {
-    void paint(Graphics g, PanelCoordinate coordinate);
+    void paint(GraphicsAdapter g, PanelCoordinate bottomLeftCoordinate);
 }

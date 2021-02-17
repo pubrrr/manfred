@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 import manfred.data.shared.PositiveInt;
 
 @EqualsAndHashCode
-class VectorImpl<COORDINATE> implements Vector<COORDINATE> {
+class VectorImpl<COORDINATE extends Coordinate<COORDINATE>> implements Vector<COORDINATE> {
     private final int x;
     private final int y;
 
@@ -13,7 +13,7 @@ class VectorImpl<COORDINATE> implements Vector<COORDINATE> {
         this.y = y;
     }
 
-    static <COORDINATE> Vector<COORDINATE> of(int x, int y) {
+    static <COORDINATE extends Coordinate<COORDINATE>> Vector<COORDINATE> of(int x, int y) {
         if (x == 0) {
             return VectorImpl.pointingUp(y);
         }
@@ -23,11 +23,11 @@ class VectorImpl<COORDINATE> implements Vector<COORDINATE> {
         return new VectorImpl<>(x, y);
     }
 
-    static <COORDINATE> Vector<COORDINATE> pointingUp(int y) {
+    static <COORDINATE extends Coordinate<COORDINATE>> Vector<COORDINATE> pointingUp(int y) {
         return new VectorImpl.VerticalVector<>(y);
     }
 
-    static <COORDINATE> Vector<COORDINATE> pointingRight(int x) {
+    static <COORDINATE extends Coordinate<COORDINATE>> Vector<COORDINATE> pointingRight(int x) {
         return new VectorImpl.HorizontalVector<>(x);
     }
 
@@ -81,7 +81,12 @@ class VectorImpl<COORDINATE> implements Vector<COORDINATE> {
         return VectorImpl.pointingUp(this.y);
     }
 
-    protected static class VerticalVector<COORDINATE> extends VectorImpl<COORDINATE> {
+    @Override
+    public String toString() {
+        return "Vector(" + x + "," + y + ')';
+    }
+
+    protected static class VerticalVector<COORDINATE extends Coordinate<COORDINATE>> extends VectorImpl<COORDINATE> {
         private VerticalVector(int y) {
             super(0, y);
         }
@@ -92,7 +97,7 @@ class VectorImpl<COORDINATE> implements Vector<COORDINATE> {
         }
     }
 
-    protected static class HorizontalVector<COORDINATE> extends VectorImpl<COORDINATE> {
+    protected static class HorizontalVector<COORDINATE extends Coordinate<COORDINATE>> extends VectorImpl<COORDINATE> {
         private HorizontalVector(int x) {
             super(x, 0);
         }

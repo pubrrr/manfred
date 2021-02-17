@@ -3,6 +3,7 @@ package manfred.infrastructureadapter.map.tile;
 import lombok.AllArgsConstructor;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.person.PersonPrototype;
+import manfred.game.characters.sprite.SimpleSprite;
 import manfred.game.config.GameConfig;
 import manfred.game.interact.person.Person;
 import manfred.infrastructureadapter.person.gelaber.GelaberConverter;
@@ -31,8 +32,7 @@ public class PersonTileFactory implements TileConversionRule {
         return personPrototype -> new Person(
             personPrototype.getName(),
             gelaberConverter.convert(personPrototype.getGelaber()),
-            gameConfig,
-            personPrototype.getImage()
+            new SimpleSprite(gameConfig.getPixelBlockSize(), gameConfig.getPixelBlockSize(), personPrototype.getImage())
         );
     }
 }

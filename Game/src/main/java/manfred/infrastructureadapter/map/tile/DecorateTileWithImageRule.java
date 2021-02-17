@@ -3,9 +3,11 @@ package manfred.infrastructureadapter.map.tile;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
+import manfred.data.shared.PositiveInt;
+import manfred.game.characters.sprite.SimpleSprite;
 import manfred.game.config.GameConfig;
 import manfred.game.map.MapTile;
-import manfred.game.map.MapTileWithImageDecorator;
+import manfred.game.map.MapTileWithSprite;
 
 import java.awt.image.BufferedImage;
 import java.util.Optional;
@@ -41,16 +43,16 @@ public class DecorateTileWithImageRule implements TileConversionRule {
             BufferedImage image = validatedMapTileDto.getImage();
             MapMatrix<String> tileStructure = validatedMapTileDto.getStructure();
 
-            int imageWidth = this.gameConfig.getPixelBlockSize().times(tileStructure.sizeX());
-            int imageHeight = image.getHeight() * imageWidth / image.getWidth();
+            PositiveInt.Strict imageWidth = this.gameConfig.getPixelBlockSize().times(tileStructure.sizeX());
+            PositiveInt imageHeight = imageWidth.times(image.getHeight()).divideBy(PositiveInt.ofNonZero(image.getWidth()));
 
             MapTile wrappedTile = tileConversionAction.create();
 
-            return new MapTileWithImageDecorator(wrappedTile, image, imageWidth, imageHeight, this.gameConfig);
+            return new MapTileWithSprite(wrappedTile, new SimpleSprite(imageWidth, imageHeight, image));
         };
     }
 
-    public static Builder build(GameConfig gameConfig) {
+    public static Builder builder(GameConfig gameConfig) {
         return new Builder(gameConfig);
     }
 

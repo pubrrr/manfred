@@ -21,7 +21,7 @@ public class PaintablesSorter {
             .map(PaintablesContainer::getPaintableContainerElements)
             .flatMap(Collection::stream)
             .collect(Collectors.toMap(
-                paintableContainerElement -> coordinateTransformer.toPanelCoordinate(paintableContainerElement.getCoordinate()),
+                paintableContainerElement -> coordinateTransformer.toPanelCoordinate(paintableContainerElement.getBottomLeftCoordinate()),
                 paintableContainerElement -> List.of(paintableContainerElement.getLocatedPaintable()),
                 this::mergeLists,
                 TreeMap::new
