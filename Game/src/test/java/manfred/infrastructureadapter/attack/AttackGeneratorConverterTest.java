@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static helpers.TestMapFactory.coordinateAt;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -32,6 +33,7 @@ class AttackGeneratorConverterTest {
         AttackGenerator result = underTest.convert(input);
 
         Attack attack = result.generate(coordinateAt(0, 0), Direction.RIGHT);
+        assertThat(attack.getBottomLeft(), is(coordinateAt(20, 0)));
         assertMoves(attack);
     }
 
@@ -41,7 +43,7 @@ class AttackGeneratorConverterTest {
 
     private void assertMoves(Attack attack) {
         attack.checkCollisionsAndMove(area -> true);
-        MatcherAssert.assertThat(attack.getBottomLeft(), is(coordinateAt(1, 0)));
+        assertThat(attack.getBottomLeft(), is(coordinateAt(21, 0)));
     }
 
     @Test

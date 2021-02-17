@@ -8,7 +8,7 @@ import manfred.game.geometry.Vector;
 import manfred.game.map.Map;
 
 public class AttackGenerator {
-    private final static PositiveInt.Strict castDistance = PositiveInt.ofNonZero(20);
+    private final static PositiveInt.Strict CAST_DISTANCE = PositiveInt.ofNonZero(20);
 
     private final PositiveInt speed;
     private final PositiveInt sizeX;
@@ -27,7 +27,7 @@ public class AttackGenerator {
     }
 
     public Attack generate(Map.Coordinate manfredCenterCoordinate, Direction castDirection) {
-        Map.Coordinate castCoordinate = manfredCenterCoordinate.translate(castDirection.getUnitVector().scaleToLength(castDistance))
+        Map.Coordinate castCoordinate = manfredCenterCoordinate.translate(castDirection.getUnitVector().scaleToLength(CAST_DISTANCE))
             .translate(Vector.pointingRight(-this.sizeX.value() / 2))
             .translate(Vector.pointingUp(-this.sizeY.value() / 2));
 

@@ -14,9 +14,10 @@ import static org.mockito.Mockito.when;
 
 class AttackGeneratorTest {
     private final static int SPEED = 3;
-    public static final int SIZE = 8;
-    public static final int INITIAL_Y = 20;
-    public static final int INITIAL_X = 30;
+    private static final int SIZE = 0;
+    private static final int INITIAL_Y = 20;
+    private static final int INITIAL_X = 30;
+    private static final int CAST_DISTANCE = 20;
 
     AttackGenerator underTest;
 
@@ -32,7 +33,7 @@ class AttackGeneratorTest {
         Attack result = underTest.generate(coordinateAt(INITIAL_X, INITIAL_Y), Direction.LEFT);
 
         result.checkCollisionsAndMove(area -> true);
-        assertThat(result.getBottomLeft(), is(coordinateAt(INITIAL_X - SPEED, INITIAL_Y)));
+        assertThat(result.getBottomLeft(), is(coordinateAt(INITIAL_X - SPEED - CAST_DISTANCE, INITIAL_Y)));
     }
 
     @Test
@@ -40,7 +41,7 @@ class AttackGeneratorTest {
         Attack result = underTest.generate(coordinateAt(INITIAL_X, INITIAL_Y), Direction.RIGHT);
 
         result.checkCollisionsAndMove(area -> true);
-        assertThat(result.getBottomLeft(), is(coordinateAt(INITIAL_X + SPEED, INITIAL_Y)));
+        assertThat(result.getBottomLeft(), is(coordinateAt(INITIAL_X + SPEED + CAST_DISTANCE, INITIAL_Y)));
     }
 
     @Test
@@ -48,7 +49,7 @@ class AttackGeneratorTest {
         Attack result = underTest.generate(coordinateAt(INITIAL_X, INITIAL_Y), Direction.UP);
 
         result.checkCollisionsAndMove(area -> true);
-        assertThat(result.getBottomLeft(), is(coordinateAt(INITIAL_X, INITIAL_Y + SPEED)));
+        assertThat(result.getBottomLeft(), is(coordinateAt(INITIAL_X, INITIAL_Y + SPEED + CAST_DISTANCE)));
     }
 
     @Test
@@ -56,6 +57,6 @@ class AttackGeneratorTest {
         Attack result = underTest.generate(coordinateAt(INITIAL_X, INITIAL_Y), Direction.DOWN);
 
         result.checkCollisionsAndMove(area -> true);
-        assertThat(result.getBottomLeft(), is(coordinateAt(INITIAL_X, INITIAL_Y - SPEED)));
+        assertThat(result.getBottomLeft(), is(coordinateAt(INITIAL_X, INITIAL_Y - SPEED - CAST_DISTANCE)));
     }
 }
