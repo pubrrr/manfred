@@ -1,6 +1,5 @@
 package manfred.manfreditor;
 
-import javafx.application.Platform;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -15,6 +14,5 @@ public class ManfreditorApplication {
 
     public void stop() {
         this.applicationContext.close();
-        Platform.exit();
     }
 }
