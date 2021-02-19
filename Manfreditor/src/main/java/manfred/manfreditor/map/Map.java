@@ -9,7 +9,6 @@ public class Map {
         this.mapTiles = mapTiles;
     }
 
-    // TODO necessary?
     public String getName() {
         return name;
     }
@@ -23,7 +22,6 @@ public class Map {
     }
 
     private boolean isInBounds(int x, int y) {
-        return x >= 0 && x < sizeX()
-                && y >= 0 && y < sizeY();
+        return true;
     }
 }
