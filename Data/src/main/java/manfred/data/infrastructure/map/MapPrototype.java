@@ -1,7 +1,6 @@
 package manfred.data.infrastructure.map;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -77,10 +76,14 @@ public class MapPrototype {
 
     @EqualsAndHashCode
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-    @AllArgsConstructor
     @Getter
     public static class Coordinate {
         PositiveInt x;
         PositiveInt y;
+
+        protected Coordinate(PositiveInt x, PositiveInt y) {
+            this.x = x;
+            this.y = y;
+        }
     }
 }
