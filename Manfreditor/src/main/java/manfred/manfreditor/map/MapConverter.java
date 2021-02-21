@@ -3,7 +3,7 @@ package manfred.manfreditor.map;
 import manfred.data.infrastructure.ObjectConverter;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.TileConversionRule;
-import manfred.manfreditor.map.object.MapObject;
+import manfred.manfreditor.mapobject.MapObject;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;

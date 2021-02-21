@@ -3,8 +3,8 @@ package manfred.manfreditor.map;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.TileConversionRule;
 import manfred.data.shared.PositiveInt;
-import manfred.manfreditor.map.object.MapObject;
-import manfred.manfreditor.map.object.None;
+import manfred.manfreditor.mapobject.MapObject;
+import manfred.manfreditor.mapobject.None;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.shared.PositiveInt;
-import manfred.manfreditor.map.object.MapObject;
+import manfred.manfreditor.mapobject.MapObject;
 
 import java.util.Set;
 import java.util.function.Function;

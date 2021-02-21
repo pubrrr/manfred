@@ -6,6 +6,8 @@ import manfred.data.infrastructure.map.MapReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,7 +31,7 @@ class MapProviderTest {
     @Test
     void provide() throws InvalidInputException {
         Map mapMock = mock(Map.class);
-        when(mapReaderMock.load(any())).thenReturn(new MapPrototype("", null, null, null, null, null));
+        when(mapReaderMock.load(any())).thenReturn(new MapPrototype("", null, List.of(), List.of(), List.of(), null));
         when(mapConverterMock.convert(any())).thenReturn(mapMock);
 
         Map result = underTest.provide("name");

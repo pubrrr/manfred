@@ -1,12 +1,13 @@
-package manfred.manfreditor.map.object.factory;
+package manfred.manfreditor.map.objectfactory;
 
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.TileConversionAction;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
-import manfred.manfreditor.map.object.ConcreteMapObject;
-import manfred.manfreditor.map.object.MapObject;
+import manfred.manfreditor.mapobject.ConcreteMapObject;
+import manfred.manfreditor.mapobject.MapObject;
+import manfred.manfreditor.mapobject.MapObjectRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,7 @@ import java.awt.image.BufferedImage;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -23,10 +24,12 @@ import static org.mockito.Mockito.when;
 class ConcreteMapObjectFactoryTest {
 
     private ConcreteMapObjectFactory underTest;
+    private MapObjectRepository mapObjectRepositoryMock;
 
     @BeforeEach
     void setUp() {
-        underTest = new ConcreteMapObjectFactory();
+        mapObjectRepositoryMock = mock(MapObjectRepository.class);
+        underTest = new ConcreteMapObjectFactory(mapObjectRepositoryMock);
     }
 
     @Test
@@ -48,11 +51,14 @@ class ConcreteMapObjectFactoryTest {
         MapPrototype input = mock(MapPrototype.class);
         when(input.getFromMap(any())).thenReturn(tilePrototypeMock);
 
+        ConcreteMapObject mapObjectMock = mock(ConcreteMapObject.class);
+        when(mapObjectRepositoryMock.getOrCreate(any())).thenReturn(mapObjectMock);
+
         Optional<TileConversionAction<MapObject>> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isPresent());
         MapObject resultingObject = result.get().create();
-        assertThat(resultingObject, instanceOf(ConcreteMapObject.class));
+        assertThat(resultingObject, is(mapObjectMock));
     }
 
     private TilePrototype tilePrototypeWithObject() {
