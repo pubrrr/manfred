@@ -1,28 +1,21 @@
 package manfred.infrastructureadapter.map.tile;
 
-import manfred.data.infrastructure.map.MapPrototype;
+import manfred.data.infrastructure.map.TileConversionRule;
 import manfred.game.config.GameConfig;
+import manfred.game.map.MapTile;
 import manfred.infrastructureadapter.person.gelaber.GelaberConverter;
 
-import java.util.Optional;
-
-public interface TileConversionRule {
-
-    Optional<TileConversionAction> applicableTo(MapPrototype input, MapPrototype.Coordinate coordinate);
-
-    default TileConversionRule orElse(TileConversionRule next) {
-        return new OrRule(this, next);
-    }
+public interface GameTileFactoryRules {
 
     static PersonTileFactory createPerson(GameConfig gameConfig, GelaberConverter gelaberConverter) {
         return new PersonTileFactory(gameConfig, gelaberConverter);
     }
 
-    static TileConversionRule createAccessible() {
+    static TileConversionRule<MapTile> createAccessible() {
         return new AccessibleTileFactory();
     }
 
-    static TileConversionRule createNonAccessible() {
+    static TileConversionRule<MapTile> createNonAccessible() {
         return new NonAccessibleTileFactory();
     }
 
@@ -30,15 +23,15 @@ public interface TileConversionRule {
         return DecorateTileWithImageRule.builder(gameConfig);
     }
 
-    static TileConversionRule createPortal() {
+    static TileConversionRule<MapTile> createPortal() {
         return new PortalTileFactory();
     }
 
-    static TileConversionRule createDoor() {
+    static TileConversionRule<MapTile> createDoor() {
         return new DoorTileFactory();
     }
 
-    static TileConversionRule wrapForGraphicsDebugging(TileConversionRule wrapped, GameConfig gameConfig) {
+    static TileConversionRule<MapTile> wrapForGraphicsDebugging(TileConversionRule<MapTile> wrapped, GameConfig gameConfig) {
         return new DebugWrapperFactory(wrapped, gameConfig);
     }
 }

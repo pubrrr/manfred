@@ -1,19 +1,19 @@
 package manfred.infrastructureadapter;
 
 import manfred.game.config.GameConfig;
-import manfred.infrastructureadapter.map.tile.TileConversionRule;
+import manfred.data.infrastructure.map.TileConversionRule;
 import manfred.infrastructureadapter.person.gelaber.GelaberConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import static manfred.infrastructureadapter.map.tile.TileConversionRule.createAccessible;
-import static manfred.infrastructureadapter.map.tile.TileConversionRule.createDoor;
-import static manfred.infrastructureadapter.map.tile.TileConversionRule.createNonAccessible;
-import static manfred.infrastructureadapter.map.tile.TileConversionRule.createPerson;
-import static manfred.infrastructureadapter.map.tile.TileConversionRule.createPortal;
-import static manfred.infrastructureadapter.map.tile.TileConversionRule.decorateWithSprite;
-import static manfred.infrastructureadapter.map.tile.TileConversionRule.wrapForGraphicsDebugging;
+import static manfred.infrastructureadapter.map.tile.GameTileFactoryRules.createAccessible;
+import static manfred.infrastructureadapter.map.tile.GameTileFactoryRules.createDoor;
+import static manfred.infrastructureadapter.map.tile.GameTileFactoryRules.createNonAccessible;
+import static manfred.infrastructureadapter.map.tile.GameTileFactoryRules.createPerson;
+import static manfred.infrastructureadapter.map.tile.GameTileFactoryRules.createPortal;
+import static manfred.infrastructureadapter.map.tile.GameTileFactoryRules.decorateWithSprite;
+import static manfred.infrastructureadapter.map.tile.GameTileFactoryRules.wrapForGraphicsDebugging;
 
 @Configuration
 @ComponentScan(basePackages = "manfred.infrastructureadapter")

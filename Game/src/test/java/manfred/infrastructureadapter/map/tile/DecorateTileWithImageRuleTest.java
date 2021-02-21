@@ -2,6 +2,8 @@ package manfred.infrastructureadapter.map.tile;
 
 import helpers.TestGameConfig;
 import manfred.data.infrastructure.map.MapPrototype;
+import manfred.data.infrastructure.map.TileConversionAction;
+import manfred.data.infrastructure.map.TileConversionRule;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
@@ -14,14 +16,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.image.BufferedImage;
-import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -30,8 +30,9 @@ class DecorateTileWithImageRuleTest {
 
     private DecorateTileWithImageRule underTest;
 
-    private TileConversionRule wrappedRuleMock;
+    private TileConversionRule<MapTile> wrappedRuleMock;
 
+    @SuppressWarnings("unchecked")
     @BeforeEach
     void setUp() {
         wrappedRuleMock = mock(TileConversionRule.class);
@@ -44,7 +45,7 @@ class DecorateTileWithImageRuleTest {
 
         MapPrototype input = prepareMapTileWithoutObject();
 
-        Optional<TileConversionAction> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
+        Optional<TileConversionAction<MapTile>> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isEmpty());
     }
@@ -55,7 +56,7 @@ class DecorateTileWithImageRuleTest {
 
         when(wrappedRuleMock.applicableTo(any(), any())).thenReturn(Optional.empty());
 
-        Optional<TileConversionAction> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
+        Optional<TileConversionAction<MapTile>> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isEmpty());
     }
@@ -66,7 +67,7 @@ class DecorateTileWithImageRuleTest {
 
         MapPrototype input = prepareMapTileWithoutObject();
 
-        Optional<TileConversionAction> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
+        Optional<TileConversionAction<MapTile>> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isEmpty());
     }
@@ -77,7 +78,7 @@ class DecorateTileWithImageRuleTest {
 
         MapPrototype input = prepareMapTileWithObject();
 
-        Optional<TileConversionAction> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
+        Optional<TileConversionAction<MapTile>> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isPresent());
         MapTile resultingTile = result.get().create();
@@ -91,8 +92,8 @@ class DecorateTileWithImageRuleTest {
         verify(graphicsMock).drawSprite(any());
     }
 
+    @SuppressWarnings("unchecked")
     private MapPrototype prepareMapTileWithObject() {
-
         ValidatedMapTileDto mapTileDto = new ValidatedMapTileDto("tileName", mock(MapMatrix.class), new BufferedImage(1, 2, 1));
 
         TilePrototype tilePrototypeMock = mock(TilePrototype.class);

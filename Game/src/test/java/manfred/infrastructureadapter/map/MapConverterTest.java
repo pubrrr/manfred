@@ -8,10 +8,11 @@ import manfred.data.shared.PositiveInt;
 import manfred.game.enemy.EnemiesWrapper;
 import manfred.game.enemy.Enemy;
 import manfred.game.map.Map;
+import manfred.game.map.MapTile;
 import manfred.game.map.NotAccessible;
 import manfred.infrastructureadapter.enemy.EnemyConverter;
 import manfred.infrastructureadapter.enemy.EnemyFactory;
-import manfred.infrastructureadapter.map.tile.TileConversionRule;
+import manfred.data.infrastructure.map.TileConversionRule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,17 +26,18 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("unchecked")
 public class MapConverterTest {
     private MapConverter underTest;
     private EnemyConverter enemyConverterMock;
     private EnemiesWrapper enemiesWrapper;
-    private TileConversionRule tileConverionRuleMock;
+    private TileConversionRule<MapTile> tileConverionRuleMock;
 
     @BeforeEach
     void init() {
+        tileConverionRuleMock = mock(TileConversionRule.class);
         enemyConverterMock = mock(EnemyConverter.class);
         enemiesWrapper = new EnemiesWrapper();
-        tileConverionRuleMock = mock(TileConversionRule.class);
 
         underTest = new MapConverter(enemyConverterMock, enemiesWrapper, tileConverionRuleMock);
     }

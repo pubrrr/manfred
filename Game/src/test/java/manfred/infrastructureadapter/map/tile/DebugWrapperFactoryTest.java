@@ -2,14 +2,14 @@ package manfred.infrastructureadapter.map.tile;
 
 import helpers.TestGameConfig;
 import manfred.data.infrastructure.map.MapPrototype;
-import manfred.data.infrastructure.map.matrix.MapMatrix;
+import manfred.data.infrastructure.map.TileConversionAction;
+import manfred.data.infrastructure.map.TileConversionRule;
 import manfred.game.map.DebugTileWrapper;
 import manfred.game.map.MapTile;
 import manfred.game.map.NotAccessible;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,16 +17,16 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class DebugWrapperFactoryTest {
 
     private DebugWrapperFactory underTest;
-    private TileConversionRule wrappedMock;
+    private TileConversionRule<MapTile> wrappedMock;
 
     @BeforeEach
+    @SuppressWarnings("unchecked")
     void setUp() {
         wrappedMock = mock(TileConversionRule.class);
         underTest = new DebugWrapperFactory(wrappedMock, new TestGameConfig());
@@ -38,7 +38,7 @@ class DebugWrapperFactoryTest {
 
         MapPrototype input = mock(MapPrototype.class);
 
-        Optional<TileConversionAction> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
+        Optional<TileConversionAction<MapTile>> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isPresent());
 
@@ -53,7 +53,7 @@ class DebugWrapperFactoryTest {
 
         MapPrototype input = mock(MapPrototype.class);
 
-        Optional<TileConversionAction> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
+        Optional<TileConversionAction<MapTile>> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isEmpty());
     }

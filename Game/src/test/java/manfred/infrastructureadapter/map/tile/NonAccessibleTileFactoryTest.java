@@ -1,14 +1,13 @@
 package manfred.infrastructureadapter.map.tile;
 
 import manfred.data.infrastructure.map.MapPrototype;
-import manfred.data.infrastructure.map.matrix.MapMatrix;
+import manfred.data.infrastructure.map.TileConversionAction;
 import manfred.data.infrastructure.map.tile.AccessiblePrototype;
 import manfred.data.infrastructure.map.tile.NonAccessiblePrototype;
 import manfred.game.map.MapTile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -31,7 +30,7 @@ class NonAccessibleTileFactoryTest {
         MapPrototype input = mock(MapPrototype.class);
         when(input.getFromMap(any())).thenReturn(new NonAccessiblePrototype());
 
-        Optional<TileConversionAction> tileConversionAction = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
+        Optional<TileConversionAction<MapTile>> tileConversionAction = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertThat(tileConversionAction.isPresent(), is(true));
 
@@ -44,7 +43,7 @@ class NonAccessibleTileFactoryTest {
         MapPrototype input = mock(MapPrototype.class);
         when(input.getFromMap(any())).thenReturn(new AccessiblePrototype());
 
-        Optional<TileConversionAction> tileConversionAction = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
+        Optional<TileConversionAction<MapTile>> tileConversionAction = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertThat(tileConversionAction.isPresent(), is(false));
     }

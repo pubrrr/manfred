@@ -1,6 +1,7 @@
 package manfred.infrastructureadapter.map.tile;
 
 import manfred.data.infrastructure.map.MapPrototype;
+import manfred.data.infrastructure.map.TileConversionAction;
 import manfred.data.infrastructure.map.tile.AccessiblePrototype;
 import manfred.data.infrastructure.map.tile.NonAccessiblePrototype;
 import manfred.game.map.MapTile;
@@ -29,7 +30,7 @@ class AccessibleTileFactoryTest {
         MapPrototype input = mock(MapPrototype.class);
         when(input.getFromMap(any())).thenReturn(new AccessiblePrototype());
 
-        Optional<TileConversionAction> tileConversionAction = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
+        Optional<TileConversionAction<MapTile>> tileConversionAction = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertThat(tileConversionAction.isPresent(), is(true));
 
@@ -42,7 +43,7 @@ class AccessibleTileFactoryTest {
         MapPrototype input = mock(MapPrototype.class);
         when(input.getFromMap(any())).thenReturn(new NonAccessiblePrototype());
 
-        Optional<TileConversionAction> tileConversionAction = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
+        Optional<TileConversionAction<MapTile>> tileConversionAction = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertThat(tileConversionAction.isPresent(), is(false));
     }
