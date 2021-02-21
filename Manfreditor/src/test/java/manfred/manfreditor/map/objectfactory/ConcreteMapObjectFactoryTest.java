@@ -69,7 +69,7 @@ class ConcreteMapObjectFactoryTest {
     }
 
     @SuppressWarnings("unchecked")
-    private MapMatrix<String> mockTileStructure() {
+    private MapMatrix<TilePrototype> mockTileStructure() {
         return mock(MapMatrix.class);
     }
 

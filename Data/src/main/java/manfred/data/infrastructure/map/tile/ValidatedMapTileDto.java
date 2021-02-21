@@ -8,6 +8,6 @@ import java.awt.image.BufferedImage;
 @Value
 public class ValidatedMapTileDto {
     String name;
-    MapMatrix<String> structure;
+    MapMatrix<TilePrototype> structure;
     BufferedImage image;
 }

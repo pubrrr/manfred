@@ -3,7 +3,7 @@ package manfred.data.infrastructure.map;
 import manfred.data.InvalidInputException;
 import manfred.data.infrastructure.enemy.EnemiesLoader;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
-import manfred.data.infrastructure.map.tile.TileConverter;
+import manfred.data.infrastructure.map.tile.ObjectTileConverter;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.data.infrastructure.map.validator.Validator;
 import manfred.data.infrastructure.person.PersonsLoader;
@@ -21,11 +21,11 @@ import static manfred.data.infrastructure.StringSplitter.splitAtCommas;
 public class MapValidator {
 
     private final List<Validator> validators;
-    private final TileConverter tileConverter;
+    private final ObjectTileConverter tileConverter;
     private final EnemiesLoader enemiesLoader;
     private final PersonsLoader personsLoader;
 
-    public MapValidator(@Qualifier("mapValidators") List<Validator> validators, TileConverter tileConverter, EnemiesLoader enemiesLoader, PersonsLoader personsLoader) {
+    public MapValidator(@Qualifier("mapValidators") List<Validator> validators, ObjectTileConverter tileConverter, EnemiesLoader enemiesLoader, PersonsLoader personsLoader) {
         this.validators = validators;
         this.tileConverter = tileConverter;
         this.enemiesLoader = enemiesLoader;

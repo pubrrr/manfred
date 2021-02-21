@@ -4,6 +4,7 @@ import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.TileConversionAction;
 import manfred.data.infrastructure.map.TileConversionRule;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
+import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
 import manfred.data.shared.PositiveInt;
 import manfred.game.characters.sprite.SimpleSprite;
@@ -43,7 +44,7 @@ public class DecorateTileWithImageRule implements TileConversionRule<MapTile> {
     private Function<ValidatedMapTileDto, MapTile> tileWithImageFactory(TileConversionAction<MapTile> tileConversionAction) {
         return validatedMapTileDto -> {
             BufferedImage image = validatedMapTileDto.getImage();
-            MapMatrix<String> tileStructure = validatedMapTileDto.getStructure();
+            MapMatrix<TilePrototype> tileStructure = validatedMapTileDto.getStructure();
 
             PositiveInt.Strict imageWidth = this.gameConfig.getPixelBlockSize().times(tileStructure.sizeX());
             PositiveInt imageHeight = imageWidth.times(image.getHeight()).divideBy(PositiveInt.ofNonZero(image.getWidth()));

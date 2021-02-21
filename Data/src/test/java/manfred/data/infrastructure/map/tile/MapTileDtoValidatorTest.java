@@ -9,8 +9,9 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MapTileDtoValidatorTest {
 
@@ -18,7 +19,7 @@ class MapTileDtoValidatorTest {
 
     @BeforeEach
     void setUp() {
-        underTest = new MapTileDtoValidator();
+        underTest = new MapTileDtoValidator(new AccessibilityTileConverter());
     }
 
     @Test
@@ -44,7 +45,7 @@ class MapTileDtoValidatorTest {
 
         ValidatedMapTileDto result = underTest.validate(input);
 
-        assertThat(result.getStructure().get(1, 1), is("1"));
-        assertThat(result.getStructure().get(0, 1), is("0"));
+        assertTrue(result.getStructure().get(1, 1).isAccessible());
+        assertFalse(result.getStructure().get(0, 1).isAccessible());
     }
 }

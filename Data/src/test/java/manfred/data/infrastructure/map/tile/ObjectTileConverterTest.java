@@ -12,16 +12,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class TileConverterTest {
+class ObjectTileConverterTest {
 
-    private TileConverter underTest;
+    private ObjectTileConverter underTest;
 
     private MapTileReader mapTileReaderMock;
 
     @BeforeEach
     void setUp() {
         mapTileReaderMock = mock(MapTileReader.class);
-        underTest = new TileConverter(mapTileReaderMock);
+        underTest = new ObjectTileConverter(mapTileReaderMock);
     }
 
     @Test
@@ -50,8 +50,8 @@ class TileConverterTest {
 
     @Test
     void accessibleObject() throws InvalidInputException {
-        MapMatrix<String> matrixMock = mock(MapMatrix.class);
-        when(matrixMock.bottomLeft()).thenReturn("1");
+        MapMatrix<TilePrototype> matrixMock = mockMapMatrix();
+        when(matrixMock.bottomLeft()).thenReturn(TilePrototype.accessible());
         ValidatedMapTileDto mapTileDto = new ValidatedMapTileDto("tile", matrixMock, null);
 
         when(mapTileReaderMock.load("tileValue")).thenReturn(mapTileDto);
@@ -65,8 +65,8 @@ class TileConverterTest {
 
     @Test
     void notAccessibleObject() throws InvalidInputException {
-        MapMatrix<String> matrixMock = mock(MapMatrix.class);
-        when(matrixMock.bottomLeft()).thenReturn("0");
+        MapMatrix<TilePrototype> matrixMock = mockMapMatrix();
+        when(matrixMock.bottomLeft()).thenReturn(TilePrototype.notAccessible());
         ValidatedMapTileDto mapTileDto = new ValidatedMapTileDto("tile", matrixMock, null);
 
         when(mapTileReaderMock.load("tileValue")).thenReturn(mapTileDto);
@@ -76,5 +76,10 @@ class TileConverterTest {
         assertFalse(tilePrototype.isAccessible());
         assertTrue(tilePrototype.getTileObject().isPresent());
         assertThat(tilePrototype.getTileObject().get(), is(mapTileDto));
+    }
+
+    @SuppressWarnings("unchecked")
+    private MapMatrix<TilePrototype> mockMapMatrix() {
+        return mock(MapMatrix.class);
     }
 }

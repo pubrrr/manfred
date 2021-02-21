@@ -3,10 +3,8 @@ package manfred.data.infrastructure.map;
 import manfred.data.InvalidInputException;
 import manfred.data.infrastructure.enemy.EnemiesLoader;
 import manfred.data.infrastructure.enemy.EnemyPrototype;
-import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.MapTileReader;
-import manfred.data.infrastructure.map.tile.TileConverter;
-import manfred.data.infrastructure.map.tile.TilePrototype;
+import manfred.data.infrastructure.map.tile.ObjectTileConverter;
 import manfred.data.infrastructure.map.validator.Validator;
 import manfred.data.infrastructure.person.PersonPrototype;
 import manfred.data.infrastructure.person.PersonsLoader;
@@ -48,7 +46,7 @@ class MapValidatorTest {
         enemiesLoaderMock = mock(EnemiesLoader.class);
         personsLoaderMock = mock(PersonsLoader.class);
 
-        underTest = new MapValidator(List.of(validatorMock1, validatorMock2), new TileConverter(mock(MapTileReader.class)), enemiesLoaderMock, personsLoaderMock);
+        underTest = new MapValidator(List.of(validatorMock1, validatorMock2), new ObjectTileConverter(mock(MapTileReader.class)), enemiesLoaderMock, personsLoaderMock);
     }
 
     @Test

@@ -1,6 +1,7 @@
 package manfred.manfreditor.mapobject;
 
 import manfred.data.infrastructure.map.matrix.MapMatrix;
+import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ class MapObjectRepositoryTest {
     }
 
     @SuppressWarnings("unchecked")
-    private MapMatrix<String> mockMapMatrix() {
+    private MapMatrix<TilePrototype> mockMapMatrix() {
         return mock(MapMatrix.class);
     }
 }
