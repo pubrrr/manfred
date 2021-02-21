@@ -1,23 +1,50 @@
 package manfred.manfreditor.map;
 
 import manfred.data.infrastructure.map.MapPrototype;
+import manfred.data.infrastructure.map.TileConversionRule;
 import manfred.data.shared.PositiveInt;
+import manfred.manfreditor.map.object.MapObject;
+import manfred.manfreditor.map.object.None;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
+import static manfred.manfreditor.helper.CoordinateHelper.coordinatePrototype;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class MapConverterTest {
 
     private MapConverter underTest;
+    private TileConversionRule<MapObject> tileConversionRuleMock;
 
-    @org.junit.jupiter.api.BeforeEach
+    @SuppressWarnings("unchecked")
+    @BeforeEach
     void setUp() {
-        underTest = new MapConverter();
+        tileConversionRuleMock = mock(TileConversionRule.class);
+        underTest = new MapConverter(tileConversionRuleMock);
+    }
+
+    @Test
+    void convertWhenNoRuleApplies() {
+        MapPrototype input = mock(MapPrototype.class);
+        when(input.getCoordinateSet()).thenReturn(List.of(coordinate(0, 0)));
+        when(input.getName()).thenReturn("name");
+
+        when(tileConversionRuleMock.applicableTo(any(), any())).thenReturn(Optional.empty());
+
+        Map result = underTest.convert(input);
+
+        assertThat(result.getName(), is("name"));
+        assertThat(result.getSizeX(), is(1));
+        assertThat(result.getSizeY(), is(1));
+        assertThat(result.getObjectAt(result.tileCoordinate(PositiveInt.of(0), PositiveInt.of(0))), instanceOf(None.class));
     }
 
     @Test
@@ -26,11 +53,15 @@ class MapConverterTest {
         when(input.getCoordinateSet()).thenReturn(List.of(coordinate(0, 0)));
         when(input.getName()).thenReturn("name");
 
+        MapObject mapObjectMock = mock(MapObject.class);
+        when(tileConversionRuleMock.applicableTo(any(), any())).thenReturn(Optional.of(() -> mapObjectMock));
+
         Map result = underTest.convert(input);
 
         assertThat(result.getName(), is("name"));
         assertThat(result.getSizeX(), is(1));
         assertThat(result.getSizeY(), is(1));
+        assertThat(result.getObjectAt(result.tileCoordinate(PositiveInt.of(0), PositiveInt.of(0))), is(mapObjectMock));
     }
 
     @Test
@@ -46,6 +77,8 @@ class MapConverterTest {
         ));
         when(input.getName()).thenReturn("name");
 
+        when(tileConversionRuleMock.applicableTo(any(), any())).thenReturn(Optional.of(() -> mock(MapObject.class)));
+
         Map result = underTest.convert(input);
 
         assertThat(result.getName(), is("name"));
@@ -54,12 +87,7 @@ class MapConverterTest {
     }
 
     private MapPrototype.Coordinate coordinate(int x, int y) {
-        return new CoordinateDouble(x, y);
+        return coordinatePrototype(x, y);
     }
 
-    private static class CoordinateDouble extends MapPrototype.Coordinate {
-        public CoordinateDouble(int x, int y) {
-            super(PositiveInt.of(x), PositiveInt.of(y));
-        }
-    }
 }

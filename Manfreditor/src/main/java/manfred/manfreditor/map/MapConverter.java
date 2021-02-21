@@ -2,11 +2,20 @@ package manfred.manfreditor.map;
 
 import manfred.data.infrastructure.ObjectConverter;
 import manfred.data.infrastructure.map.MapPrototype;
+import manfred.data.infrastructure.map.TileConversionRule;
 import manfred.manfreditor.map.object.MapObject;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+@Component
 public class MapConverter implements ObjectConverter<MapPrototype, Map> {
+
+    private final TileConversionRule<MapObject> tileConversionRule;
+
+    public MapConverter(TileConversionRule<MapObject> tileConversionRule) {
+        this.tileConversionRule = tileConversionRule;
+    }
 
     @Override
     public Map convert(MapPrototype mapPrototype) {
@@ -20,6 +29,8 @@ public class MapConverter implements ObjectConverter<MapPrototype, Map> {
     }
 
     private MapObject createMapObject(MapPrototype mapPrototype, MapPrototype.Coordinate coordinate) {
-        return MapObject.none();
+        return tileConversionRule.applicableTo(mapPrototype, coordinate)
+            .orElse(MapObject::none)
+            .create();
     }
 }

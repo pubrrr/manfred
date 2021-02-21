@@ -55,6 +55,15 @@ public class Map {
         return name;
     }
 
+    public TileCoordinate tileCoordinate(PositiveInt x, PositiveInt y) {
+        return new TileCoordinate(x, y);
+    }
+
+    public MapObject getObjectAt(TileCoordinate tileCoordinate) {
+        // TODO null case!
+        return this.mapMatrix.get(tileCoordinate);
+    }
+
     @EqualsAndHashCode
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @Getter
