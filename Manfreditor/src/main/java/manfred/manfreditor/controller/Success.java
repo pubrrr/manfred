@@ -1,5 +1,7 @@
 package manfred.manfreditor.controller;
 
+import manfred.manfreditor.controller.command.CommandResult;
+
 import java.util.function.Consumer;
 
 public class Success implements CommandResult {

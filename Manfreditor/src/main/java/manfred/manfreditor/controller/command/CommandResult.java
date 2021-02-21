@@ -1,4 +1,7 @@
-package manfred.manfreditor.controller;
+package manfred.manfreditor.controller.command;
+
+import manfred.manfreditor.controller.Failure;
+import manfred.manfreditor.controller.Success;
 
 import java.util.function.Consumer;
 

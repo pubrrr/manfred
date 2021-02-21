@@ -48,6 +48,10 @@ public class MapObjectRepository {
         return this.objectsStorage.get(objectKey);
     }
 
+    public void populateWith(ValidatedMapTileDto newTileDto) {
+        // TODO
+    }
+
     @ToString
     @EqualsAndHashCode
     public static class ObjectKey {

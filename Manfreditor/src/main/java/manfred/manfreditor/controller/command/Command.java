@@ -1,4 +1,4 @@
-package manfred.manfreditor.controller;
+package manfred.manfreditor.controller.command;
 
 public interface Command {
     CommandResult execute();

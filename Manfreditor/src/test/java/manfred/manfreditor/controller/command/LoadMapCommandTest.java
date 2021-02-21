@@ -1,4 +1,4 @@
-package manfred.manfreditor.controller;
+package manfred.manfreditor.controller.command;
 
 import manfred.data.InvalidInputException;
 import manfred.manfreditor.map.Map;
@@ -8,16 +8,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class LoadMapCommandTest {
+class LoadMapCommandTest extends CommandTestCase {
 
-    private CommandFactory commandFactory;
+    private LoadMapCommand.Factory commandFactory;
     private MapModel mapModelMock;
     private MapProvider mapProviderMock;
 
@@ -25,28 +23,28 @@ class LoadMapCommandTest {
     void setUp() {
         mapProviderMock = mock(MapProvider.class);
         mapModelMock = mock(MapModel.class);
-        commandFactory = new CommandFactory(mapProviderMock, mapModelMock);
+        commandFactory = new LoadMapCommand.Factory(mapProviderMock, mapModelMock);
     }
 
     @Test
     void execute() throws InvalidInputException {
         Map resultingMap = mock(Map.class);
-        Command loadMapCommand = commandFactory.createLoadMapCommand("name");
+        Command loadMapCommand = commandFactory.create("name");
         when(mapProviderMock.provide("name")).thenReturn(resultingMap);
 
         CommandResult result = loadMapCommand.execute();
 
-        result.onFailure(s -> {throw new AssertionFailedError("command was not successful: " + s);});
+        result.onFailure(s -> { throw new AssertionFailedError("command was not successful: " + s); });
         verify(mapModelMock).setMap(resultingMap);
     }
 
     @Test
     void executeFails() throws InvalidInputException {
-        Command loadMapCommand = commandFactory.createLoadMapCommand("name");
+        Command loadMapCommand = commandFactory.create("name");
         when(mapProviderMock.provide(any())).thenThrow(new InvalidInputException("errorMessage"));
 
         CommandResult result = loadMapCommand.execute();
 
-        result.onFailure(errorMessage -> assertThat(errorMessage, is("errorMessage")));
+        assertCommandFailed(result, "errorMessage");
     }
 }
