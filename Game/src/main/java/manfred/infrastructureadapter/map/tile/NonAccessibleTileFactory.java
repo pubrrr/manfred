@@ -9,8 +9,8 @@ import java.util.Optional;
 public class NonAccessibleTileFactory implements TileConversionRule {
 
     @Override
-    public Optional<TileConversionAction> applicableTo(MapPrototype input, int x, int y) {
-        TilePrototype tilePrototype = input.getMap().get(x, y);
+    public Optional<TileConversionAction> applicableTo(MapPrototype input, MapPrototype.Coordinate coordinate) {
+        TilePrototype tilePrototype = input.getFromMap(coordinate);
         return !tilePrototype.isAccessible()
             ? Optional.of(NotAccessible::new)
             : Optional.empty();

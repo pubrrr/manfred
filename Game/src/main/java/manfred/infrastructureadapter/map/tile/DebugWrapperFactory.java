@@ -15,8 +15,8 @@ public class DebugWrapperFactory implements TileConversionRule {
     private final GameConfig gameConfig;
 
     @Override
-    public Optional<TileConversionAction> applicableTo(MapPrototype input, int x, int y) {
-        return wrapped.applicableTo(input, x, y)
+    public Optional<TileConversionAction> applicableTo(MapPrototype input, MapPrototype.Coordinate coordinate) {
+        return wrapped.applicableTo(input, coordinate)
             .map(tileConversionAction -> (() -> wrapInDebugTile(tileConversionAction.create())));
     }
 

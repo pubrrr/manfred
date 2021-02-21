@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -27,18 +28,10 @@ class NonAccessibleTileFactoryTest {
 
     @Test
     void create() {
-        MapMatrix mapMatrixMock = mock(MapMatrix.class);
-        when(mapMatrixMock.get(0, 0)).thenReturn(new NonAccessiblePrototype());
-        MapPrototype input = new MapPrototype(
-            "name",
-            mapMatrixMock,
-            List.of(),
-            List.of(),
-            List.of(),
-            List.of()
-        );
+        MapPrototype input = mock(MapPrototype.class);
+        when(input.getFromMap(any())).thenReturn(new NonAccessiblePrototype());
 
-        Optional<TileConversionAction> tileConversionAction = underTest.applicableTo(input, 0, 0);
+        Optional<TileConversionAction> tileConversionAction = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertThat(tileConversionAction.isPresent(), is(true));
 
@@ -48,18 +41,10 @@ class NonAccessibleTileFactoryTest {
 
     @Test
     void doesNotCreateForNonAccessibleTile() {
-        MapMatrix mapMatrixMock = mock(MapMatrix.class);
-        when(mapMatrixMock.get(0, 0)).thenReturn(new AccessiblePrototype());
-        MapPrototype input = new MapPrototype(
-            "name",
-            mapMatrixMock,
-            List.of(),
-            List.of(),
-            List.of(),
-            List.of()
-        );
+        MapPrototype input = mock(MapPrototype.class);
+        when(input.getFromMap(any())).thenReturn(new AccessiblePrototype());
 
-        Optional<TileConversionAction> tileConversionAction = underTest.applicableTo(input, 0, 0);
+        Optional<TileConversionAction> tileConversionAction = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertThat(tileConversionAction.isPresent(), is(false));
     }

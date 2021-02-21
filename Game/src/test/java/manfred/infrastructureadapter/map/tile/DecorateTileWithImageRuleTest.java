@@ -40,11 +40,11 @@ class DecorateTileWithImageRuleTest {
 
     @Test
     void wrappedRuleNotApplicable_noObjectGiven() {
-        when(wrappedRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.empty());
+        when(wrappedRuleMock.applicableTo(any(), any())).thenReturn(Optional.empty());
 
         MapPrototype input = prepareMapTileWithoutObject();
 
-        Optional<TileConversionAction> result = underTest.applicableTo(input, 0, 0);
+        Optional<TileConversionAction> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isEmpty());
     }
@@ -53,31 +53,31 @@ class DecorateTileWithImageRuleTest {
     void wrappedRuleNotApplicable_objectGiven() {
         MapPrototype input = prepareMapTileWithObject();
 
-        when(wrappedRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.empty());
+        when(wrappedRuleMock.applicableTo(any(), any())).thenReturn(Optional.empty());
 
-        Optional<TileConversionAction> result = underTest.applicableTo(input, 0, 0);
+        Optional<TileConversionAction> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isEmpty());
     }
 
     @Test
     void wrappedruleApplicable_noObjectOnTileGiven() {
-        when(wrappedRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.of(NotAccessible::new));
+        when(wrappedRuleMock.applicableTo(any(), any())).thenReturn(Optional.of(NotAccessible::new));
 
         MapPrototype input = prepareMapTileWithoutObject();
 
-        Optional<TileConversionAction> result = underTest.applicableTo(input, 0, 0);
+        Optional<TileConversionAction> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isEmpty());
     }
 
     @Test
     void wrappedRuleIsApplicable_objectGiven() {
-        when(wrappedRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.of(NotAccessible::new));
+        when(wrappedRuleMock.applicableTo(any(), any())).thenReturn(Optional.of(NotAccessible::new));
 
         MapPrototype input = prepareMapTileWithObject();
 
-        Optional<TileConversionAction> result = underTest.applicableTo(input, 0, 0);
+        Optional<TileConversionAction> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isPresent());
         MapTile resultingTile = result.get().create();
@@ -98,23 +98,19 @@ class DecorateTileWithImageRuleTest {
         TilePrototype tilePrototypeMock = mock(TilePrototype.class);
         when(tilePrototypeMock.getTileObject()).thenReturn(Optional.of(mapTileDto));
 
-        MapMatrix<TilePrototype> mapMatrixMock = mock(MapMatrix.class);
-        when(mapMatrixMock.get(anyInt(), anyInt())).thenReturn(tilePrototypeMock);
+        MapPrototype mapPrototype = mock(MapPrototype.class);
+        when(mapPrototype.getFromMap(any())).thenReturn(tilePrototypeMock);
 
-        return validatedMapDto(mapMatrixMock);
+        return mapPrototype;
     }
 
     private MapPrototype prepareMapTileWithoutObject() {
         TilePrototype tilePrototypeMock = mock(TilePrototype.class);
         when(tilePrototypeMock.getTileObject()).thenReturn(Optional.empty());
 
-        MapMatrix<TilePrototype> mapMatrixMock = mock(MapMatrix.class);
-        when(mapMatrixMock.get(anyInt(), anyInt())).thenReturn(tilePrototypeMock);
+        MapPrototype mapPrototype = mock(MapPrototype.class);
+        when(mapPrototype.getFromMap(any())).thenReturn(tilePrototypeMock);
 
-        return validatedMapDto(mapMatrixMock);
-    }
-
-    private MapPrototype validatedMapDto(MapMatrix<TilePrototype> mapMatrix) {
-        return new MapPrototype("name", mapMatrix, List.of(), List.of(), List.of(), List.of());
+        return mapPrototype;
     }
 }

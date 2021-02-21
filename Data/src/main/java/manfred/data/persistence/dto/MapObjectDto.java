@@ -1,10 +1,8 @@
 package manfred.data.persistence.dto;
 
-import manfred.data.shared.PositiveInt;
+import manfred.data.infrastructure.map.MapObject;
 
-public interface MapObjectDto {
+public interface MapObjectDto extends MapObject {
 
-    PositiveInt getPositionX();
-    PositiveInt getPositionY();
     String getTargetToLoad();
 }

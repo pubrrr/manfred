@@ -21,7 +21,6 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -43,7 +42,7 @@ public class MapConverterTest {
 
     @Test
     void convert() {
-        when(tileConverionRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.of(NotAccessible::new));
+        when(tileConverionRuleMock.applicableTo(any(), any())).thenReturn(Optional.of(NotAccessible::new));
 
         MapPrototype input = new MapPrototype(
             "name",
@@ -62,7 +61,7 @@ public class MapConverterTest {
 
     @Test
     void convert3x2() {
-        when(tileConverionRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.of(NotAccessible::new));
+        when(tileConverionRuleMock.applicableTo(any(), any())).thenReturn(Optional.of(NotAccessible::new));
 
         MapPrototype input = new MapPrototype(
             "name",
@@ -85,7 +84,7 @@ public class MapConverterTest {
         when(enemyFactoryMock.createOnMap(any())).thenReturn(mock(Enemy.class));
 
         when(enemyConverterMock.convert(any())).thenReturn(enemyFactoryMock);
-        when(tileConverionRuleMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.of(NotAccessible::new));
+        when(tileConverionRuleMock.applicableTo(any(), any())).thenReturn(Optional.of(NotAccessible::new));
 
         MapPrototype input = new MapPrototype(
             "name",

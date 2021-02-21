@@ -21,10 +21,8 @@ public class PersonTileFactory implements TileConversionRule {
     private final GelaberConverter gelaberConverter;
 
     @Override
-    public Optional<TileConversionAction> applicableTo(MapPrototype input, int x, int y) {
-        return input.getPersons().stream()
-            .filter(personPrototype -> personPrototype.getPositionX().value() == x && personPrototype.getPositionY().value() == y)
-            .findFirst()
+    public Optional<TileConversionAction> applicableTo(MapPrototype input, MapPrototype.Coordinate coordinate) {
+        return input.getPerson(coordinate)
             .map(personPrototype -> new TileFromDtoAction<>(personPrototype, personFactory()));
     }
 

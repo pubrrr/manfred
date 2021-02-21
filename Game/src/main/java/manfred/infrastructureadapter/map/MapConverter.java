@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Component
 public class MapConverter implements ObjectConverter<MapPrototype, Map> {
@@ -34,38 +35,26 @@ public class MapConverter implements ObjectConverter<MapPrototype, Map> {
     }
 
     public Map convert(MapPrototype input) {
-        MapMatrix<TilePrototype> inputMap = input.getMap();
-        int width = inputMap.sizeX();
-        int height = inputMap.sizeY();
+        java.util.Map<MapPrototype.Coordinate, MapTile> mapTilesByCoordinate = input.getCoordinateSet().stream()
+            .collect(toMap(
+                coordinate -> coordinate,
+                coordinate -> createMapTile(input, coordinate)
+            ));
 
-        List<List<MapTile>> resultingMapMatrix = createResultingMap(input, width, height);
-
-        Map map = new Map(resultingMapMatrix);
+        Map map = new Map(mapTilesByCoordinate);
         this.enemiesWrapper.setEnemies(convertEnemies(input.getEnemies(), map));
         return map;
     }
 
-    private List<List<MapTile>> createResultingMap(MapPrototype input, int width, int height) {
-        List<List<MapTile>> resultingMap = new ArrayList<>(width);
-        for (int x = 0; x < width; x++) {
-            List<MapTile> column = new ArrayList<>(height);
-            for (int y = 0; y < height; y++) {
-                column.add(createMapTile(input, x, y));
-            }
-            resultingMap.add(column);
-        }
-        return resultingMap;
-    }
-
-    private MapTile createMapTile(MapPrototype input, int x, int y) {
+    private MapTile createMapTile(MapPrototype input, MapPrototype.Coordinate coordinate) {
         return this.tileFactories
-            .applicableTo(input, x, y)
-            .orElseThrow(runtimeException(input, x, y))
+            .applicableTo(input, coordinate)
+            .orElseThrow(runtimeException(input, coordinate))
             .create();
     }
 
-    private Supplier<RuntimeException> runtimeException(MapPrototype input, int x, int y) {
-        return () -> new RuntimeException("No applicable conversion rule for tile " + x + ", " + y + " in " + input.toString() + " found.");
+    private Supplier<RuntimeException> runtimeException(MapPrototype input, MapPrototype.Coordinate coordinate) {
+        return () -> new RuntimeException("No applicable conversion rule for tile " + coordinate.getX() + ", " + coordinate.getY() + " in " + input.toString() + " found.");
     }
 
     private List<Enemy> convertEnemies(List<EnemyPrototype> enemies, Map map) {

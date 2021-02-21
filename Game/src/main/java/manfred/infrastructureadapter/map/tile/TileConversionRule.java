@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface TileConversionRule {
 
-    Optional<TileConversionAction> applicableTo(MapPrototype input, int x, int y);
+    Optional<TileConversionAction> applicableTo(MapPrototype input, MapPrototype.Coordinate coordinate);
 
     default TileConversionRule orElse(TileConversionRule next) {
         return new OrRule(this, next);

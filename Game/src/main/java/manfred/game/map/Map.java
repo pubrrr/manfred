@@ -2,6 +2,7 @@ package manfred.game.map;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.shared.PositiveInt;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.ControllerStateMapper;
@@ -11,31 +12,36 @@ import manfred.game.geometry.Vector;
 import manfred.game.graphics.PanelCoordinate;
 import manfred.game.graphics.paintable.PaintableContainerElement;
 
-import java.util.List;
-import java.util.Stack;
+import java.util.Collection;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Map {
-    private final List<List<MapTile>> mapTiles;
+    private final java.util.Map<TileCoordinate, MapTile> mapTiles;
+    private final int sizeX;
+    private final int sizeY;
 
-    public Map(List<List<MapTile>> mapTiles) {
-        this.mapTiles = mapTiles;
+    public Map(java.util.Map<MapPrototype.Coordinate, MapTile> mapTiles) {
+        this.mapTiles = mapTiles.entrySet()
+            .stream()
+            .collect(Collectors.toMap(
+                mapTileByCoordinate -> new TileCoordinate(mapTileByCoordinate.getKey()),
+                java.util.Map.Entry::getValue
+            ));
+        this.sizeX = this.mapTiles.keySet().stream().map(TileCoordinate::getTileX).reduce(0, Math::max) + 1;
+        this.sizeY = this.mapTiles.keySet().stream().map(TileCoordinate::getTileY).reduce(0, Math::max) + 1;
     }
 
     public int sizeX() {
-        return mapTiles.size();
+        return this.sizeX;
     }
 
     public int sizeY() {
-        return mapTiles.get(0).size();
-    }
-
-    public boolean isAccessible(int x, int y) {
-        return isInBounds(x, y) && mapTiles.get(x).get(y).isAccessible();
+        return this.sizeY;
     }
 
     private boolean isNotAccessible(TileCoordinate tileCoordinate) {
-        return !isAccessible(tileCoordinate.tileX, tileCoordinate.tileY);
+        return !mapTiles.get(tileCoordinate).isAccessible();
     }
 
     public boolean isAreaAccessible(Rectangle<Coordinate> area) {
@@ -50,32 +56,21 @@ public class Map {
             .isEmpty();
     }
 
-    private boolean isInBounds(int x, int y) {
-        return x >= 0 && x < sizeX()
-            && y >= 0 && y < sizeY();
-    }
-
     public ControllerStateMapper<ManfredController, ControllerInterface> interactWithTile(TileCoordinate mapTile) {
-        return mapTiles.get(mapTile.tileX).get(mapTile.tileY).interact();
+        return mapTiles.get(mapTile).interact();
     }
 
     public ControllerStateMapper<ManfredController, ControllerInterface> stepOn(TileCoordinate mapTile) {
-        return mapTiles.get(mapTile.tileX).get(mapTile.tileY).onStep();
+        return mapTiles.get(mapTile).onStep();
     }
 
-    public Stack<PaintableContainerElement> getPaintableContainerElements() {
-        Stack<PaintableContainerElement> elements = new Stack<>();
-
-        for (int x = 0; x < sizeX(); x++) {
-            for (int y = 0; y < sizeY(); y++) {
-                elements.push(new PaintableContainerElement(
-                    mapTiles.get(x).get(y),
-                    tileAt(PositiveInt.of(x), PositiveInt.of(y)).getBottomLeftCoordinate()
-                ));
-            }
-        }
-
-        return elements;
+    public Collection<PaintableContainerElement> getPaintableContainerElements() {
+        return this.mapTiles.entrySet().stream()
+            .map(tileByCoordinate -> new PaintableContainerElement(
+                tileByCoordinate.getValue(),
+                tileByCoordinate.getKey().getBottomLeftCoordinate()
+            ))
+            .collect(Collectors.toList());
     }
 
     public Coordinate coordinateAt(int x, int y) {
@@ -165,6 +160,18 @@ public class Map {
         private TileCoordinate(int tileX, int tileY) {
             this.tileX = tileX;
             this.tileY = tileY;
+        }
+
+        private TileCoordinate(MapPrototype.Coordinate tileCoordinatePrototype) {
+            this(tileCoordinatePrototype.getX().value(), tileCoordinatePrototype.getY().value());
+        }
+
+        private int getTileX() {
+            return tileX;
+        }
+
+        private int getTileY() {
+            return tileY;
         }
 
         public Coordinate getBottomLeftCoordinate() {

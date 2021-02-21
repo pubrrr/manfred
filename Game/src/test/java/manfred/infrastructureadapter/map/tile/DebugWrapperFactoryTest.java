@@ -34,18 +34,11 @@ class DebugWrapperFactoryTest {
 
     @Test
     void wrappedApplicable() {
-        when(wrappedMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.of(NotAccessible::new));
+        when(wrappedMock.applicableTo(any(), any())).thenReturn(Optional.of(NotAccessible::new));
 
-        MapPrototype input = new MapPrototype(
-            "name",
-            mock(MapMatrix.class),
-            List.of(),
-            List.of(),
-            List.of(),
-            List.of()
-        );
+        MapPrototype input = mock(MapPrototype.class);
 
-        Optional<TileConversionAction> result = underTest.applicableTo(input, 0, 0);
+        Optional<TileConversionAction> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isPresent());
 
@@ -56,18 +49,11 @@ class DebugWrapperFactoryTest {
 
     @Test
     void wrappedNotApplicable() {
-        when(wrappedMock.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.empty());
+        when(wrappedMock.applicableTo(any(), any())).thenReturn(Optional.empty());
 
-        MapPrototype input = new MapPrototype(
-            "name",
-            mock(MapMatrix.class),
-            List.of(),
-            List.of(),
-            List.of(),
-            List.of()
-        );
+        MapPrototype input = mock(MapPrototype.class);
 
-        Optional<TileConversionAction> result = underTest.applicableTo(input, 0, 0);
+        Optional<TileConversionAction> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isEmpty());
     }

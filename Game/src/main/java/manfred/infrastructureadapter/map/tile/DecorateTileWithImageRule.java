@@ -24,13 +24,13 @@ public class DecorateTileWithImageRule implements TileConversionRule {
     }
 
     @Override
-    public Optional<TileConversionAction> applicableTo(MapPrototype input, int x, int y) {
-        Optional<ValidatedMapTileDto> tileObject = input.getMap().get(x, y).getTileObject();
+    public Optional<TileConversionAction> applicableTo(MapPrototype input, MapPrototype.Coordinate coordinate) {
+        Optional<ValidatedMapTileDto> tileObject = input.getFromMap(coordinate).getTileObject();
         if (tileObject.isEmpty()) {
             return Optional.empty();
         }
 
-        return wrappedRule.applicableTo(input, x, y)
+        return wrappedRule.applicableTo(input, coordinate)
             .map(wrappedTileFactory -> tileWithImageAction(tileObject.get(), wrappedTileFactory));
     }
 

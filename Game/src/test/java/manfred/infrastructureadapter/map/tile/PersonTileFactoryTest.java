@@ -38,53 +38,22 @@ class PersonTileFactoryTest {
 
     @Test
     void noPersonsGiven() {
-        MapPrototype input = new MapPrototype(
-            "name",
-            mock(MapMatrix.class),
-            List.of(),
-            List.of(),
-            List.of(),
-            List.of()
-        );
+        MapPrototype input = mock(MapPrototype.class);
+        when(input.getPerson(any())).thenReturn(Optional.empty());
 
-        Optional<TileConversionAction> result = underTest.applicableTo(input, 0, 0);
-
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
-    void personAtWrongPositionGiven() {
-        MapPrototype input = new MapPrototype(
-            "name",
-            mock(MapMatrix.class),
-            List.of(),
-            List.of(new TransporterDto("target", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(99), PositiveInt.of(99))),
-            List.of(),
-            List.of()
-        );
-
-        Optional<TileConversionAction> result = underTest.applicableTo(input, 0, 0);
+        Optional<TileConversionAction> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isEmpty());
     }
 
     @Test
     void personGiven() {
-        int positionX = 5;
-        int positionY = 10;
+        MapPrototype input = mock(MapPrototype.class);
+        when(input.getPerson(any())).thenReturn(Optional.of(new PersonPrototype("name", mock(GelaberPrototype.class), null, PositiveInt.of(0), PositiveInt.of(0))));
 
         when(gelaberConverterMock.convert(any())).thenReturn(mock(GelaberFacade.class));
 
-        MapPrototype input = new MapPrototype(
-            "name",
-            mock(MapMatrix.class),
-            List.of(new PersonPrototype("name", mock(GelaberPrototype.class), null, PositiveInt.of(positionX), PositiveInt.of(positionY))),
-            List.of(),
-            List.of(),
-            List.of()
-        );
-
-        Optional<TileConversionAction> result = underTest.applicableTo(input, positionX, positionY);
+        Optional<TileConversionAction> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isPresent());
         MapTile createdTile = result.get().create();

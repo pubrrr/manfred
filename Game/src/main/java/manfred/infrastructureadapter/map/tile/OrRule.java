@@ -14,8 +14,8 @@ public class OrRule implements TileConversionRule {
     }
 
     @Override
-    public Optional<TileConversionAction> applicableTo(MapPrototype input, int x, int y) {
-        return wrapped.applicableTo(input, x, y)
-            .or(() -> or.applicableTo(input, x, y));
+    public Optional<TileConversionAction> applicableTo(MapPrototype input, MapPrototype.Coordinate coordinate) {
+        return wrapped.applicableTo(input, coordinate)
+            .or(() -> or.applicableTo(input, coordinate));
     }
 }

@@ -16,7 +16,9 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class DoorTileFactoryTest {
 
@@ -29,51 +31,20 @@ class DoorTileFactoryTest {
 
     @Test
     void noDoorsGiven() {
-        MapPrototype input = new MapPrototype(
-            "name",
-            mock(MapMatrix.class),
-            List.of(),
-            List.of(),
-            List.of(),
-            List.of()
-        );
+        MapPrototype input = mock(MapPrototype.class);
+        when(input.getDoor(any())).thenReturn(Optional.empty());
 
-        Optional<TileConversionAction> result = underTest.applicableTo(input, 0, 0);
-
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
-    void doorAtWrongPositionGiven() {
-        MapPrototype input = new MapPrototype(
-            "name",
-            mock(MapMatrix.class),
-            List.of(),
-            List.of(),
-            List.of(new TransporterDto("target", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(99), PositiveInt.of(99))),
-            List.of()
-        );
-
-        Optional<TileConversionAction> result = underTest.applicableTo(input, 0, 0);
+        Optional<TileConversionAction> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isEmpty());
     }
 
     @Test
     void doorGiven() {
-        int positionX = 5;
-        int positionY = 10;
+        MapPrototype input = mock(MapPrototype.class);
+        when(input.getDoor(any())).thenReturn(Optional.of(new TransporterDto("target", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(99), PositiveInt.of(99))));
 
-        MapPrototype input = new MapPrototype(
-            "name",
-            mock(MapMatrix.class),
-            List.of(),
-            List.of(),
-            List.of(new TransporterDto("target", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(positionX), PositiveInt.of(positionY))),
-            List.of()
-        );
-
-        Optional<TileConversionAction> result = underTest.applicableTo(input, positionX, positionY);
+        Optional<TileConversionAction> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isPresent());
         MapTile createdTile = result.get().create();

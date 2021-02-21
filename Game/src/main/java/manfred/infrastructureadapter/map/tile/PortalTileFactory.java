@@ -8,11 +8,11 @@ import manfred.game.map.MapTile;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class PortalTileFactory extends SpecialTileFactory<TransporterDto> implements TileConversionRule {
+public class PortalTileFactory implements TileConversionRule {
 
     @Override
-    public Optional<TileConversionAction> applicableTo(MapPrototype input, int x, int y) {
-        return findDtoAt(input.getPortals(), x, y)
+    public Optional<TileConversionAction> applicableTo(MapPrototype input, MapPrototype.Coordinate coordinate) {
+        return input.getPortal(coordinate)
             .map(portalDto -> new TileFromDtoAction<>(portalDto, portalFactory()));
     }
 
