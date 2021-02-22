@@ -6,9 +6,9 @@ import manfred.manfreditor.map.MapModel;
 import manfred.manfreditor.map.MapProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
 
 import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessage;
+import static manfred.manfreditor.helper.SuccessfulCommandMatcher.wasSuccessful;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -36,7 +36,7 @@ class LoadMapCommandTest {
 
         CommandResult result = loadMapCommand.execute();
 
-        result.onFailure(s -> { throw new AssertionFailedError("command was not successful: " + s); });
+        assertThat(result, wasSuccessful());
         verify(mapModelMock).setMap(resultingMap);
     }
 

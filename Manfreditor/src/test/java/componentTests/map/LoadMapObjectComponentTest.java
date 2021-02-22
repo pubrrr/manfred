@@ -5,7 +5,6 @@ import manfred.manfreditor.controller.command.CommandResult;
 import manfred.manfreditor.controller.command.LoadMapObjectCommand;
 import manfred.manfreditor.mapobject.MapObjectRepository;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -13,6 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import java.util.List;
 
 import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessage;
+import static manfred.manfreditor.helper.SuccessfulCommandMatcher.wasSuccessful;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
@@ -34,7 +34,7 @@ public class LoadMapObjectComponentTest {
         String objectName = "tree2";
         CommandResult result = commandFactory.create(objectName).execute();
 
-        result.onFailure(s -> { throw new AssertionFailedError("Loading map object for " + objectName + " failed: " + s); });
+        assertThat(result, wasSuccessful());
 
         List<MapObjectRepository.ObjectKey> keys = mapObjectRepository.getKeys();
         assertThat(keys, hasSize(1));

@@ -5,11 +5,11 @@ import manfred.manfreditor.controller.command.CommandResult;
 import manfred.manfreditor.controller.command.LoadMapCommand;
 import manfred.manfreditor.map.MapModel;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessage;
+import static manfred.manfreditor.helper.SuccessfulCommandMatcher.wasSuccessful;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @SpringJUnitConfig(TestManfreditorContext.class)
@@ -25,7 +25,7 @@ public class LoadMapComponentTest {
     void loadMap() {
         CommandResult commandResult = commandFactory.create("wald").execute();
 
-        commandResult.onFailure(s -> { throw new AssertionFailedError("Loading map 'wald' failed: " + s); });
+        assertThat(commandResult, wasSuccessful());
     }
 
     @Test

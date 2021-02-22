@@ -8,9 +8,9 @@ import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
 import manfred.manfreditor.mapobject.MapObjectRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
 
 import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessage;
+import static manfred.manfreditor.helper.SuccessfulCommandMatcher.wasSuccessful;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -40,7 +40,7 @@ class LoadMapObjectCommandTest {
 
         CommandResult result = loadMapTileCommand.execute();
 
-        result.onFailure(s -> {throw new AssertionFailedError("command was not successful: " + s);});
+        assertThat(result, wasSuccessful());
         verify(mapObjectRepositoryMock).populateWith(eq(validatedMapTileDto));
     }
 
