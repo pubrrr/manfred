@@ -6,13 +6,13 @@ import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
 import manfred.manfreditor.mapobject.MapObjectRepository;
 import org.springframework.stereotype.Component;
 
-public class LoadMapTileCommand implements Command {
+public class LoadMapObjectCommand implements Command {
 
     private final MapTileReader mapTileReader;
     private final MapObjectRepository mapObjectRepository;
     private final String tileName;
 
-    public LoadMapTileCommand(MapTileReader mapTileReader, MapObjectRepository mapObjectRepository, String tileName) {
+    public LoadMapObjectCommand(MapTileReader mapTileReader, MapObjectRepository mapObjectRepository, String tileName) {
         this.mapTileReader = mapTileReader;
         this.mapObjectRepository = mapObjectRepository;
         this.tileName = tileName;
@@ -41,7 +41,7 @@ public class LoadMapTileCommand implements Command {
         }
 
         public Command create(String tileName) {
-            return new LoadMapTileCommand(mapTileReader, mapObjectRepository, tileName);
+            return new LoadMapObjectCommand(mapTileReader, mapObjectRepository, tileName);
         }
     }
 }

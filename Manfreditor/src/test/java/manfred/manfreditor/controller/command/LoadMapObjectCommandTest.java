@@ -16,9 +16,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class LoadMapTileCommandTest extends CommandTestCase {
+class LoadMapObjectCommandTest extends CommandTestCase {
 
-    private LoadMapTileCommand.Factory commandFactory;
+    private LoadMapObjectCommand.Factory commandFactory;
     private MapTileReader mapTileReaderMock;
     private MapObjectRepository mapObjectRepositoryMock;
 
@@ -26,7 +26,7 @@ class LoadMapTileCommandTest extends CommandTestCase {
     void setUp() {
         mapTileReaderMock = mock(MapTileReader.class);
         mapObjectRepositoryMock = mock(MapObjectRepository.class);
-        commandFactory = new LoadMapTileCommand.Factory(mapTileReaderMock, mapObjectRepositoryMock);
+        commandFactory = new LoadMapObjectCommand.Factory(mapTileReaderMock, mapObjectRepositoryMock);
     }
 
     @Test

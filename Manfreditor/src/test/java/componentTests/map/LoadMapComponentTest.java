@@ -9,6 +9,8 @@ import org.opentest4j.AssertionFailedError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
+import static manfred.manfreditor.controller.command.CommandTestCase.assertCommandFailed;
+
 @SpringJUnitConfig(TestManfreditorContext.class)
 public class LoadMapComponentTest {
 
@@ -23,5 +25,12 @@ public class LoadMapComponentTest {
         CommandResult commandResult = commandFactory.create("wald").execute();
 
         commandResult.onFailure(s -> { throw new AssertionFailedError("Loading map 'wald' failed: " + s); });
+    }
+
+    @Test
+    void loadMapFails() {
+        CommandResult commandResult = commandFactory.create("unknown map").execute();
+
+        assertCommandFailed(commandResult, "Did not find resource for map unknown map");
     }
 }

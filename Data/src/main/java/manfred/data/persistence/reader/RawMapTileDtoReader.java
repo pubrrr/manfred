@@ -24,12 +24,12 @@ public class RawMapTileDtoReader implements ObjectReader<RawMapTileDto> {
     public RawMapTileDto load(String name) throws InvalidInputException {
         URL yamlURL = getClass().getResource("/maps/tiles/" + name + ".yaml");
         if (yamlURL == null) {
-            throw new InvalidInputException("Did not find resource for enemy " + name);
+            throw new InvalidInputException("Did not find resource for map object " + name);
         }
 
         URL imageURL = getClass().getResource("/maps/tiles/" + name + ".png");
         if (imageURL == null) {
-            throw new InvalidInputException("Did not find image resource for enemy " + name);
+            throw new InvalidInputException("Did not find image resource for map object " + name);
         }
 
         return load(yamlURL, imageURL);

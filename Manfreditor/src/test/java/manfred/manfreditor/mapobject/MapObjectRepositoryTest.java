@@ -76,6 +76,17 @@ class MapObjectRepositoryTest {
         assertThat(underTest.get(keys.get(0)), is(result2));
     }
 
+    @Test
+    void populate() {
+        ValidatedMapTileDto validatedMapTileDto = validatedMapTileDto();
+
+        underTest.populateWith(validatedMapTileDto);
+
+        List<MapObjectRepository.ObjectKey> keys = underTest.getKeys();
+        assertThat(keys, hasSize(1));
+        assertThat(underTest.get(keys.get(0)).getName(), is(validatedMapTileDto.getName()));
+    }
+
     private ValidatedMapTileDto validatedMapTileDto() {
         return validatedMapTileDto("tileName");
     }

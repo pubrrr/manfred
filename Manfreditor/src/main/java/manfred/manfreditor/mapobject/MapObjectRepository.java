@@ -49,7 +49,10 @@ public class MapObjectRepository {
     }
 
     public void populateWith(ValidatedMapTileDto newTileDto) {
-        // TODO
+        objectsStorage.put(
+            new ObjectKey(newTileDto.getName()),
+            createNewObject(newTileDto)
+        );
     }
 
     @ToString
