@@ -1,9 +1,11 @@
 package manfred.manfreditor.controller;
 
+import lombok.ToString;
 import manfred.manfreditor.controller.command.CommandResult;
 
 import java.util.function.Consumer;
 
+@ToString
 public class Failure implements CommandResult {
 
     private final String errorMessage;

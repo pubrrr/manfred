@@ -9,7 +9,8 @@ import org.opentest4j.AssertionFailedError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-import static manfred.manfreditor.controller.command.CommandTestCase.assertCommandFailed;
+import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessage;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @SpringJUnitConfig(TestManfreditorContext.class)
 public class LoadMapComponentTest {
@@ -31,6 +32,6 @@ public class LoadMapComponentTest {
     void loadMapFails() {
         CommandResult commandResult = commandFactory.create("unknown map").execute();
 
-        assertCommandFailed(commandResult, "Did not find resource for map unknown map");
+        assertThat(commandResult, failedWithMessage("Did not find resource for map unknown map"));
     }
 }

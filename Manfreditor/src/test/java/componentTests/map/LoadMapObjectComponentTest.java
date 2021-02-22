@@ -12,7 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.List;
 
-import static manfred.manfreditor.controller.command.CommandTestCase.assertCommandFailed;
+import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
@@ -45,7 +45,7 @@ public class LoadMapObjectComponentTest {
     void loadUnknownObject() {
         CommandResult result = commandFactory.create("unknown object").execute();
 
-        assertCommandFailed(result, "Did not find resource for map object unknown object");
+        assertThat(result, failedWithMessage("Did not find resource for map object unknown object"));
     }
 
     @Configuration

@@ -8,12 +8,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 
+import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessage;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class LoadMapCommandTest extends CommandTestCase {
+class LoadMapCommandTest {
 
     private LoadMapCommand.Factory commandFactory;
     private MapModel mapModelMock;
@@ -45,6 +47,6 @@ class LoadMapCommandTest extends CommandTestCase {
 
         CommandResult result = loadMapCommand.execute();
 
-        assertCommandFailed(result, "errorMessage");
+        assertThat(result, failedWithMessage("errorMessage"));
     }
 }
