@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
+import java.io.File;
+import java.net.MalformedURLException;
+
 import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessage;
 import static manfred.manfreditor.helper.SuccessfulCommandMatcher.wasSuccessful;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,15 +26,19 @@ public class LoadMapComponentTest {
 
     @Test
     void loadMap() {
-        CommandResult commandResult = commandFactory.create("wald").execute();
+        String file = getClass().getResource("/wald.yaml").getFile();
+
+        CommandResult commandResult = commandFactory.create(file).execute();
 
         assertThat(commandResult, wasSuccessful());
     }
 
     @Test
-    void loadMapFails() {
-        CommandResult commandResult = commandFactory.create("unknown map").execute();
+    void loadMapFails() throws MalformedURLException {
+        String nonExistent = new File("nonExistent").toURI().toURL().getFile();
 
-        assertThat(commandResult, failedWithMessage("Did not find resource for map unknown map"));
+        CommandResult commandResult = commandFactory.create(nonExistent).execute();
+
+        assertThat(commandResult, failedWithMessage("Could not read map from file:" + nonExistent));
     }
 }

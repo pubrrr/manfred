@@ -15,16 +15,16 @@ public class Sprite implements SpriteInterface {
 
     @Override
     public PositiveInt getHeight() {
-        return null;
+        return this.height;
     }
 
     @Override
     public PositiveInt getWidth() {
-        return null;
+        return this.width;
     }
 
     @Override
     public BufferedImage getImage() {
-        return null;
+        return this.image;
     }
 }

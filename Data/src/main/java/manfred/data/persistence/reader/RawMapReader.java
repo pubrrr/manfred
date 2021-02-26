@@ -23,6 +23,10 @@ public class RawMapReader {
         return load(yamlURL);
     }
 
+    public RawMapDto load(MapSource source) throws InvalidInputException {
+        return load(source.getMapUrl());
+    }
+
     RawMapDto load(URL yamlURL) throws InvalidInputException {
         try {
             return objectMapper.readValue(yamlURL, RawMapDto.class);

@@ -17,7 +17,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -43,7 +43,7 @@ class EnemiesLoaderTest {
 
     @Test
     void oneValidInput() throws InvalidInputException {
-        when(enemyReaderMock.load(any())).thenReturn(new EnemyDto("name", PositiveInt.of(0), PositiveInt.of(0), null));
+        when(enemyReaderMock.load(anyString())).thenReturn(new EnemyDto("name", PositiveInt.of(0), PositiveInt.of(0), null));
 
         PositiveInt positionX = PositiveInt.of(5);
         PositiveInt positionY = PositiveInt.of(10);
@@ -57,7 +57,7 @@ class EnemiesLoaderTest {
 
     @Test
     void twoValidInputs() throws InvalidInputException {
-        when(enemyReaderMock.load(any())).thenReturn(new EnemyDto("name", PositiveInt.of(0), PositiveInt.of(0), null));
+        when(enemyReaderMock.load(anyString())).thenReturn(new EnemyDto("name", PositiveInt.of(0), PositiveInt.of(0), null));
 
         List<EnemyPrototype> result = underTest.load(List.of(
             new MapEnemyDto("test", PositiveInt.of(1), PositiveInt.of(2)),

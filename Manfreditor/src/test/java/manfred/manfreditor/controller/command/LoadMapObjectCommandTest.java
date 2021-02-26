@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessage;
 import static manfred.manfreditor.helper.SuccessfulCommandMatcher.wasSuccessful;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -34,7 +34,7 @@ class LoadMapObjectCommandTest {
     @Test
     void execute() throws InvalidInputException {
         ValidatedMapTileDto validatedMapTileDto = new ValidatedMapTileDto("name", mapMatrixMock(), null);
-        when(mapTileReaderMock.load(any())).thenReturn(validatedMapTileDto);
+        when(mapTileReaderMock.load(anyString())).thenReturn(validatedMapTileDto);
 
         Command loadMapTileCommand = commandFactory.create("name");
 
@@ -47,7 +47,7 @@ class LoadMapObjectCommandTest {
     @Test
     void executeFails() throws InvalidInputException {
         Command loadMapTileCommand = commandFactory.create("name");
-        when(mapTileReaderMock.load(any())).thenThrow(new InvalidInputException("errorMessage"));
+        when(mapTileReaderMock.load(anyString())).thenThrow(new InvalidInputException("errorMessage"));
 
         CommandResult result = loadMapTileCommand.execute();
 

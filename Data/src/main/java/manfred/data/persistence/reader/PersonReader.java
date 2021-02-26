@@ -11,7 +11,7 @@ import java.net.URL;
 import java.util.function.Supplier;
 
 @Component
-public class PersonReader implements ObjectReader<PersonDto> {
+public class PersonReader implements ObjectReader<PersonSource, PersonDto> {
     private final ImageLoader imageLoader;
     private final ObjectMapper objectMapper;
     private final UrlHelper urlHelper;
@@ -28,6 +28,11 @@ public class PersonReader implements ObjectReader<PersonDto> {
             urlHelper.getResourceForPerson(name).orElseThrow(invalidInputException("Resource for person " + name + " not found")),
             urlHelper.getImageResourceForPerson(name).orElseThrow(invalidInputException("Image resource for person " + name + " not found"))
         );
+    }
+
+    @Override
+    public PersonDto load(PersonSource personSource) throws InvalidInputException {
+        return load(personSource.getPersonSource(), personSource.getImageSource());
     }
 
     private Supplier<InvalidInputException> invalidInputException(String message) {

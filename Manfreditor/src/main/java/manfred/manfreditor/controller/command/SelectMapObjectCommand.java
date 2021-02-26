@@ -2,6 +2,7 @@ package manfred.manfreditor.controller.command;
 
 import manfred.manfreditor.mapobject.MapObjectRepository;
 import manfred.manfreditor.mapobject.SelectedObject;
+import org.springframework.stereotype.Component;
 
 public class SelectMapObjectCommand implements Command {
 
@@ -27,6 +28,7 @@ public class SelectMapObjectCommand implements Command {
         return CommandResult.success();
     }
 
+    @Component
     public static class Factory {
 
         private final MapObjectRepository mapObjectRepositoryMock;

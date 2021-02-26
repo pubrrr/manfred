@@ -3,6 +3,7 @@ package manfred.manfreditor.map;
 import manfred.data.InvalidInputException;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.MapReader;
+import manfred.data.persistence.reader.MapSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +32,7 @@ class MapProviderTest {
     @Test
     void provide() throws InvalidInputException {
         Map mapMock = mock(Map.class);
-        when(mapReaderMock.load(any())).thenReturn(new MapPrototype("", null, List.of(), List.of(), List.of(), null));
+        when(mapReaderMock.load(any(MapSource.class))).thenReturn(new MapPrototype("", null, List.of(), List.of(), List.of(), null));
         when(mapConverterMock.convert(any())).thenReturn(mapMock);
 
         Map result = underTest.provide("name");

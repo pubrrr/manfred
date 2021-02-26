@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static helpers.TestMapFactory.tileAt;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -33,7 +34,7 @@ class MapFacadeTest {
 
         Map resultingMapMock = mock(Map.class);
         when(resultingMapMock.tileAt(eq(spawnX), eq(spawnY))).thenReturn(tileAt(spawnX, spawnY));
-        when(mapProviderMock.provide(any())).thenReturn(resultingMapMock);
+        when(mapProviderMock.provide(anyString())).thenReturn(resultingMapMock);
 
         underTest.loadMap("testName", new ManfredPositionSetter(manfredMock, spawnX, spawnY));
 
