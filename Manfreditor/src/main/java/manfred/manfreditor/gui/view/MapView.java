@@ -5,6 +5,7 @@ import manfred.manfreditor.map.Map;
 import manfred.manfreditor.map.MapModel;
 import manfred.manfreditor.mapobject.MapObject;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.springframework.stereotype.Component;
 
@@ -31,4 +32,10 @@ public class MapView {
             ));
     }
 
+    public Point getMapViewSize() {
+        return new Point(
+            mapModel.getSizeX().times(TileViewSize.TILE_SIZE).value(),
+            mapModel.getSizeY().times(TileViewSize.TILE_SIZE).value()
+        );
+    }
 }

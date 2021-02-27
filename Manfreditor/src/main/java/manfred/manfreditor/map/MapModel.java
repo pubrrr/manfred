@@ -23,4 +23,8 @@ public class MapModel {
     public PositiveInt getSizeY() {
         return this.map.getSizeY();
     }
+
+    public PositiveInt getSizeX() {
+        return this.map.getSizeX();
+    }
 }

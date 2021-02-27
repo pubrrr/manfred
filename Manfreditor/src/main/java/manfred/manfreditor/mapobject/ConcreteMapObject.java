@@ -24,6 +24,7 @@ public class ConcreteMapObject implements MapObject {
     public void drawAt(MapViewCoordinate bottomLeft, GC gc, Display display) {
         Image image = new Image(display, this.imageData);
         gc.drawImage(image, bottomLeft.getX(), bottomLeft.getY() - imageData.height);
+        image.dispose();
     }
 
     public String getName() {

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import manfred.manfreditor.controller.GuiController;
 import manfred.manfreditor.gui.view.MapView;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -19,12 +20,18 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Consumer;
+
 @Component
 @AllArgsConstructor
 public class GuiBuilder {
 
     private final GuiController guiController;
     private final MapView mapView;
+
+    private final List<Consumer<String>> loadMapListeners = new LinkedList<>();
 
     public Gui build() {
         Display mainDisplay = new Display();
@@ -33,6 +40,13 @@ public class GuiBuilder {
         mainShell.setMinimumSize(mainShell.getSize());
         mainShell.setLayout(new RowLayout(SWT.VERTICAL));
 
+        addControlButtons(mainShell);
+        addMapCanvas(mainShell);
+
+        return new Gui(mainShell, mainDisplay);
+    }
+
+    private void addControlButtons(Shell mainShell) {
         Composite composite = new Composite(mainShell, SWT.BORDER);
         composite.setLayout(new RowLayout(SWT.HORIZONTAL));
 
@@ -40,24 +54,13 @@ public class GuiBuilder {
         label.setText("Map debug");
         label.setLayoutData(new RowData(500, 30));
         label.addPaintListener(System.out::println);
+        loadMapListeners.add(selectedFile -> {
+            label.setText(selectedFile);
+            label.redraw();
+        });
 
         Button button = new Button(composite, SWT.CENTER);
         button.setText("Map laden");
-
-        Composite composite1 = new Composite(mainShell, SWT.BORDER);
-        composite1.setLayoutData(new RowData(1000, 1000));
-
-        composite1.setLayout(new FillLayout());
-
-//        Label label2 = new Label(composite, SWT.FILL);
-//        label2.setText("blablub");
-
-        Canvas canvas = new Canvas(composite1, SWT.BORDER);
-        canvas.setSize(500, 100);
-        canvas.addPaintListener(event -> {
-            mapView.draw(event.gc, mainShell.getDisplay());
-        });
-
         button.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -70,14 +73,24 @@ public class GuiBuilder {
                             messageBox.setMessage(message);
                             messageBox.open();
                         });
-                    label.setText(selectedFile);
-                    label.redraw();
-                    canvas.redraw();
+                    loadMapListeners.forEach(stringConsumer -> stringConsumer.accept(selectedFile));
                 }
             }
         });
+    }
 
-        return new Gui(mainShell, mainDisplay);
+    private void addMapCanvas(Shell mainShell) {
+        ScrolledComposite canvasContainer = new ScrolledComposite(mainShell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+        canvasContainer.setLayoutData(new RowData(500, 500));
+        canvasContainer.setLayout(new FillLayout());
+
+        Canvas canvas = new Canvas(canvasContainer, SWT.BORDER);
+        canvas.addPaintListener(event -> mapView.draw(event.gc, mainShell.getDisplay()));
+        canvasContainer.setContent(canvas);
+        loadMapListeners.add(selectedFile -> {
+            canvas.setSize(mapView.getMapViewSize());
+            canvas.redraw();
+        });
     }
 
 }
