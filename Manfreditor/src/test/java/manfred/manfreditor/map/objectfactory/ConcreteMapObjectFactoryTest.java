@@ -8,6 +8,8 @@ import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
 import manfred.manfreditor.mapobject.ConcreteMapObject;
 import manfred.manfreditor.mapobject.MapObject;
 import manfred.manfreditor.mapobject.MapObjectRepository;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.PaletteData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -62,7 +64,7 @@ class ConcreteMapObjectFactoryTest {
     }
 
     private TilePrototype tilePrototypeWithObject() {
-        ValidatedMapTileDto tileDto = new ValidatedMapTileDto("tileName", mockTileStructure(), someImage());
+        ValidatedMapTileDto tileDto = new ValidatedMapTileDto("tileName", mockTileStructure(), someImage(), someImageData());
         TilePrototype tilePrototypeMock = mock(TilePrototype.class);
         when(tilePrototypeMock.getTileObject()).thenReturn(Optional.of(tileDto));
         return tilePrototypeMock;
@@ -75,5 +77,9 @@ class ConcreteMapObjectFactoryTest {
 
     private BufferedImage someImage() {
         return new BufferedImage(1, 2, 1);
+    }
+
+    private ImageData someImageData() {
+        return new ImageData(1, 1, 1, new PaletteData(1, 1, 1));
     }
 }

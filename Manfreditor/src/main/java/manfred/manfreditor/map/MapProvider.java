@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MapProvider extends ObjectProvider<MapSource, MapPrototype, Map> {
 
-    public MapProvider(MapReader mapReader, MapConverter objectConverter) {
-        super(mapReader, objectConverter);
+    public MapProvider(MapReader mapReader, MapConverter mapConverter) {
+        super(mapReader, mapConverter);
     }
 }

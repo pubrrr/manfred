@@ -26,7 +26,8 @@ public class MapTileDtoValidator {
             return new ValidatedMapTileDto(
                 rawMapTile.getName(),
                 structure,
-                rawMapTile.getImage()
+                rawMapTile.getImage(),
+                rawMapTile.getImageData()
             );
         } catch (InvalidInputException e) {
             throw new InvalidInputException("Validation of map tile " + rawMapTile.getName() + " failed", e);

@@ -3,6 +3,8 @@ package manfred.manfreditor.mapobject;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.PaletteData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -95,8 +97,13 @@ class MapObjectRepositoryTest {
         return new ValidatedMapTileDto(
             name,
             mockMapMatrix(),
-            new BufferedImage(1, 1, 2)
+            new BufferedImage(1, 1, 2),
+            someImageData()
         );
+    }
+
+    private ImageData someImageData() {
+        return new ImageData(1, 1, 1, new PaletteData(1, 1, 1));
     }
 
     @SuppressWarnings("unchecked")

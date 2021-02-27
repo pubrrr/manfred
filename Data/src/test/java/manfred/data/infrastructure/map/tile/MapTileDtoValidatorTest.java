@@ -24,7 +24,7 @@ class MapTileDtoValidatorTest {
 
     @Test
     void emptyInput() {
-        RawMapTileDto input = new RawMapTileDto("tileName", List.of(), null);
+        RawMapTileDto input = new RawMapTileDto("tileName", List.of(), null, null);
 
         InvalidInputException exception = assertThrows(InvalidInputException.class, () -> underTest.validate(input));
         assertThat(exception.getMessage(), containsString("Validation of map tile tileName failed"));
@@ -33,7 +33,7 @@ class MapTileDtoValidatorTest {
 
     @Test
     void invalidInput() {
-        RawMapTileDto input = new RawMapTileDto("tileName", List.of("0", "1,1"), null);
+        RawMapTileDto input = new RawMapTileDto("tileName", List.of("0", "1,1"), null, null);
 
         InvalidInputException exception = assertThrows(InvalidInputException.class, () -> underTest.validate(input));
         assertThat(exception.getMessage(), containsString("Validation of map tile tileName failed"));
@@ -41,7 +41,7 @@ class MapTileDtoValidatorTest {
 
     @Test
     void validInput() throws InvalidInputException {
-        RawMapTileDto input = new RawMapTileDto("tileName", List.of("0,1", "0,0"), null);
+        RawMapTileDto input = new RawMapTileDto("tileName", List.of("0,1", "0,0"), null, null);
 
         ValidatedMapTileDto result = underTest.validate(input);
 

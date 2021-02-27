@@ -9,6 +9,8 @@ import manfred.data.shared.PositiveInt;
 import manfred.manfreditor.mapobject.MapObject;
 
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -44,9 +46,9 @@ public class Map {
         return sizeY;
     }
 
-    private Integer findMaxValue(Set<MapPrototype.Coordinate> coordinates, Function<MapPrototype.Coordinate, PositiveInt> coordinateMapper) {
+    private Integer findMaxValue(Set<MapPrototype.Coordinate> coordinates, Function<MapPrototype.Coordinate, PositiveInt> coordinateSelector) {
         return coordinates.stream()
-            .map(coordinateMapper)
+            .map(coordinateSelector)
             .map(PositiveInt::value)
             .reduce(0, Math::max);
     }
@@ -64,10 +66,14 @@ public class Map {
         return this.mapMatrix.get(tileCoordinate);
     }
 
+    public SortedMap<TileCoordinate, MapObject> getObjects() {
+        return new TreeMap<>(mapMatrix);
+    }
+
     @EqualsAndHashCode
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @Getter
-    public static class TileCoordinate {
+    public static class TileCoordinate implements Comparable<TileCoordinate> {
         PositiveInt x;
         PositiveInt y;
 
@@ -79,6 +85,15 @@ public class Map {
         private TileCoordinate(MapPrototype.Coordinate coordinatePrototype) {
             this.x = coordinatePrototype.getX();
             this.y = coordinatePrototype.getY();
+        }
+
+        @Override
+        public int compareTo(TileCoordinate other) {
+            int result = Integer.compare(this.y.value(), other.y.value());
+            if (result == 0) {
+                result = Integer.compare(this.x.value(), other.x.value());
+            }
+            return result;
         }
     }
 }

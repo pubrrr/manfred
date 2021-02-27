@@ -33,7 +33,7 @@ class LoadMapObjectCommandTest {
 
     @Test
     void execute() throws InvalidInputException {
-        ValidatedMapTileDto validatedMapTileDto = new ValidatedMapTileDto("name", mapMatrixMock(), null);
+        ValidatedMapTileDto validatedMapTileDto = new ValidatedMapTileDto("name", mapMatrixMock(), null, null);
         when(mapTileReaderMock.load(anyString())).thenReturn(validatedMapTileDto);
 
         Command loadMapTileCommand = commandFactory.create("name");

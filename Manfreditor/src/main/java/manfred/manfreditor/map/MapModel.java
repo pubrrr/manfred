@@ -1,5 +1,9 @@
 package manfred.manfreditor.map;
 
+import manfred.manfreditor.mapobject.MapObject;
+
+import java.util.SortedMap;
+
 public class MapModel {
     private Map map;
 
@@ -9,5 +13,9 @@ public class MapModel {
 
     public void setMap(Map resultingMap) {
         this.map = resultingMap;
+    }
+
+    public SortedMap<Map.TileCoordinate, MapObject> getObjects() {
+        return this.map.getObjects();
     }
 }
