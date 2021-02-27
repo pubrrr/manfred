@@ -2,6 +2,7 @@ package manfred.manfreditor.mapobject;
 
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
+import manfred.manfreditor.gui.view.MapViewCoordinate;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -20,9 +21,9 @@ public class ConcreteMapObject implements MapObject {
     }
 
     @Override
-    public void draw(GC gc, Display display) {
+    public void drawAt(MapViewCoordinate bottomLeft, GC gc, Display display) {
         Image image = new Image(display, this.imageData);
-        gc.drawImage(image, 50, 50);
+        gc.drawImage(image, bottomLeft.getX(), bottomLeft.getY() - imageData.height);
     }
 
     public String getName() {

@@ -1,5 +1,6 @@
 package manfred.manfreditor.map;
 
+import manfred.data.shared.PositiveInt;
 import manfred.manfreditor.mapobject.MapObject;
 
 import java.util.SortedMap;
@@ -17,5 +18,9 @@ public class MapModel {
 
     public SortedMap<Map.TileCoordinate, MapObject> getObjects() {
         return this.map.getObjects();
+    }
+
+    public PositiveInt getSizeY() {
+        return this.map.getSizeY();
     }
 }

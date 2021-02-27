@@ -53,6 +53,10 @@ public class PositiveInt {
         return this.value / divisor;
     }
 
+    public PositiveInt add(int number) {
+        return new PositiveInt(this.value + number);
+    }
+
     public static class Strict extends PositiveInt{
         protected Strict(int value) {
             super(value);

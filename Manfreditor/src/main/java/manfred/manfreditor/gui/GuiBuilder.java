@@ -2,7 +2,7 @@ package manfred.manfreditor.gui;
 
 import lombok.AllArgsConstructor;
 import manfred.manfreditor.controller.GuiController;
-import manfred.manfreditor.map.MapView;
+import manfred.manfreditor.gui.view.MapView;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -45,7 +45,7 @@ public class GuiBuilder {
         button.setText("Map laden");
 
         Composite composite1 = new Composite(mainShell, SWT.BORDER);
-        composite1.setLayoutData(new RowData(500, 500));
+        composite1.setLayoutData(new RowData(1000, 1000));
 
         composite1.setLayout(new FillLayout());
 

@@ -18,8 +18,8 @@ public class Map {
 
     private final String name;
     private final java.util.Map<TileCoordinate, MapObject> mapMatrix;
-    private final int sizeX;
-    private final int sizeY;
+    private final PositiveInt sizeX;
+    private final PositiveInt sizeY;
 
     public Map(String name, java.util.Map<MapPrototype.Coordinate, MapObject> mapMatrix) {
         this.name = name;
@@ -30,27 +30,27 @@ public class Map {
             ));
 
         if (mapMatrix.isEmpty()) {
-            this.sizeX = 0;
-            this.sizeY = 0;
+            this.sizeX = PositiveInt.of(0);
+            this.sizeY = PositiveInt.of(0);
         } else {
-            this.sizeX = findMaxValue(mapMatrix.keySet(), MapPrototype.Coordinate::getX) + 1;
-            this.sizeY = findMaxValue(mapMatrix.keySet(), MapPrototype.Coordinate::getY) + 1;
+            this.sizeX = findMaxValue(mapMatrix.keySet(), MapPrototype.Coordinate::getX).add(1);
+            this.sizeY = findMaxValue(mapMatrix.keySet(), MapPrototype.Coordinate::getY).add(1);
         }
     }
 
-    public int getSizeX() {
+    public PositiveInt getSizeX() {
         return sizeX;
     }
 
-    public int getSizeY() {
+    public PositiveInt getSizeY() {
         return sizeY;
     }
 
-    private Integer findMaxValue(Set<MapPrototype.Coordinate> coordinates, Function<MapPrototype.Coordinate, PositiveInt> coordinateSelector) {
-        return coordinates.stream()
+    private PositiveInt findMaxValue(Set<MapPrototype.Coordinate> coordinates, Function<MapPrototype.Coordinate, PositiveInt> coordinateSelector) {
+        return PositiveInt.of(coordinates.stream()
             .map(coordinateSelector)
             .map(PositiveInt::value)
-            .reduce(0, Math::max);
+            .reduce(0, Math::max));
     }
 
     public String getName() {
@@ -89,7 +89,8 @@ public class Map {
 
         @Override
         public int compareTo(TileCoordinate other) {
-            int result = Integer.compare(this.y.value(), other.y.value());
+            // lower y means further down, i.e. should be painted later to cover the further up object
+            int result = Integer.compare(other.y.value(), this.y.value());
             if (result == 0) {
                 result = Integer.compare(this.x.value(), other.x.value());
             }

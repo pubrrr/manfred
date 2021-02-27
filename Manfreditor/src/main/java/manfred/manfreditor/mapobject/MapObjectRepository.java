@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
 import manfred.data.shared.PositiveInt;
+import manfred.manfreditor.gui.view.TileViewSize;
 import org.eclipse.swt.graphics.ImageData;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +30,7 @@ public class MapObjectRepository {
     private ConcreteMapObject createNewObject(ValidatedMapTileDto validatedMapTileDto) {
         int structureWidth = validatedMapTileDto.getStructure().sizeX();
 
-        PositiveInt pixelBlockSize = PositiveInt.of(40); // TODO...
+        PositiveInt pixelBlockSize = PositiveInt.of(TileViewSize.TILE_SIZE);
 
         BufferedImage image = validatedMapTileDto.getImage();
         PositiveInt imageWidth = pixelBlockSize.times(structureWidth);
