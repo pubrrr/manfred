@@ -9,8 +9,6 @@ import manfred.data.shared.PositiveInt;
 import manfred.manfreditor.mapobject.MapObject;
 
 import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -66,35 +64,29 @@ public class Map {
         return this.mapMatrix.get(tileCoordinate);
     }
 
-    public SortedMap<TileCoordinate, MapObject> getObjects() {
-        return new TreeMap<>(mapMatrix);
+    public java.util.Map<TileCoordinate, MapObject> getObjects() {
+        return mapMatrix;
     }
 
     @EqualsAndHashCode
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @Getter
-    public static class TileCoordinate implements Comparable<TileCoordinate> {
+    public static class TileCoordinate {
         PositiveInt x;
         PositiveInt y;
 
-        private TileCoordinate(PositiveInt x, PositiveInt y) {
+        protected TileCoordinate(PositiveInt x, PositiveInt y) {
             this.x = x;
             this.y = y;
+        }
+
+        public TileCoordinate translateBy(MapPrototype.Coordinate coordinatePrototype) {
+            return new TileCoordinate(this.x.add(coordinatePrototype.getX()), this.y.add(coordinatePrototype.getY()));
         }
 
         private TileCoordinate(MapPrototype.Coordinate coordinatePrototype) {
             this.x = coordinatePrototype.getX();
             this.y = coordinatePrototype.getY();
-        }
-
-        @Override
-        public int compareTo(TileCoordinate other) {
-            // lower y means further down, i.e. should be painted later to cover the further up object
-            int result = Integer.compare(other.y.value(), this.y.value());
-            if (result == 0) {
-                result = Integer.compare(this.x.value(), other.x.value());
-            }
-            return result;
         }
     }
 }

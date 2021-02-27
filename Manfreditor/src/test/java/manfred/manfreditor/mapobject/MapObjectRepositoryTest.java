@@ -1,8 +1,8 @@
 package manfred.manfreditor.mapobject;
 
-import manfred.data.infrastructure.map.matrix.MapMatrix;
-import manfred.data.infrastructure.map.tile.TilePrototype;
+import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
+import manfred.data.shared.PositiveInt;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +16,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class MapObjectRepositoryTest {
 
@@ -106,8 +107,9 @@ class MapObjectRepositoryTest {
         return new ImageData(1, 1, 1, new PaletteData(1, 1, 1));
     }
 
-    @SuppressWarnings("unchecked")
-    private MapMatrix<TilePrototype> mockMapMatrix() {
-        return mock(MapMatrix.class);
+    private MapPrototype mockMapMatrix() {
+        MapPrototype mock = mock(MapPrototype.class);
+        when(mock.getSizeX()).thenReturn(PositiveInt.ofNonZero(1));
+        return mock;
     }
 }

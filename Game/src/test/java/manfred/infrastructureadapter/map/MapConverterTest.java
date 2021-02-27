@@ -104,8 +104,8 @@ public class MapConverterTest {
 
     private MapMatrix<TilePrototype> mockMapMatrix(int sizeX, int sizeY) {
         MapMatrix<TilePrototype> mapMatrixMock = mock(MapMatrix.class);
-        when(mapMatrixMock.sizeX()).thenReturn(sizeX);
-        when(mapMatrixMock.sizeY()).thenReturn(sizeY);
+        when(mapMatrixMock.sizeX()).thenReturn(PositiveInt.ofNonZero(sizeX));
+        when(mapMatrixMock.sizeY()).thenReturn(PositiveInt.ofNonZero(sizeY));
         return mapMatrixMock;
     }
 }

@@ -81,7 +81,7 @@ public class GuiBuilder {
 
     private void addMapCanvas(Shell mainShell) {
         ScrolledComposite canvasContainer = new ScrolledComposite(mainShell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-        canvasContainer.setLayoutData(new RowData(500, 500));
+        canvasContainer.setLayoutData(new RowData(800, 800));
         canvasContainer.setLayout(new FillLayout());
 
         Canvas canvas = new Canvas(canvasContainer, SWT.BORDER);

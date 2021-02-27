@@ -47,10 +47,14 @@ public class MapPrototype {
         return name;
     }
 
+    public PositiveInt.Strict getSizeX() {
+        return this.map.sizeX();
+    }
+
     public List<Coordinate> getCoordinateSet() {
-        return IntStream.rangeClosed(0, map.sizeX() - 1)
+        return IntStream.rangeClosed(0, map.sizeX().value() - 1)
             .boxed()
-            .flatMap(x -> IntStream.rangeClosed(0, map.sizeY() - 1).boxed().map(y -> new Coordinate(PositiveInt.of(x), PositiveInt.of(y))))
+            .flatMap(x -> IntStream.rangeClosed(0, map.sizeY().value() - 1).boxed().map(y -> new Coordinate(PositiveInt.of(x), PositiveInt.of(y))))
             .collect(Collectors.toList());
     }
 
@@ -72,6 +76,10 @@ public class MapPrototype {
 
     public TilePrototype getFromMap(Coordinate coordinate) {
         return this.map.get(coordinate.x.value(), coordinate.y.value());
+    }
+
+    public TilePrototype bottomLeft() {
+        return getFromMap(new Coordinate(PositiveInt.of(0), PositiveInt.of(0)));
     }
 
     @EqualsAndHashCode

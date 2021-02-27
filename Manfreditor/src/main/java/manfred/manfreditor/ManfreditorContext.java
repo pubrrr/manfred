@@ -2,6 +2,7 @@ package manfred.manfreditor;
 
 import manfred.data.DataContext;
 import manfred.data.infrastructure.map.TileConversionRule;
+import manfred.manfreditor.map.AccessibilityMerger;
 import manfred.manfreditor.map.Map;
 import manfred.manfreditor.map.MapModel;
 import manfred.manfreditor.mapobject.MapObject;
@@ -19,8 +20,8 @@ import java.util.HashMap;
 public class ManfreditorContext {
 
     @Bean
-    public MapModel mapModel() {
-        return new MapModel(new Map("uninitialized", new HashMap<>()));
+    public MapModel mapModel(AccessibilityMerger accessibilityMerger) {
+        return new MapModel(new Map("uninitialized", new HashMap<>()), accessibilityMerger);
     }
 
     @Bean

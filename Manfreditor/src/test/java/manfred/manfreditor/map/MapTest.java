@@ -1,5 +1,6 @@
 package manfred.manfreditor.map;
 
+import manfred.data.shared.PositiveInt;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -15,7 +16,7 @@ class MapTest {
     void emptyMapSize() {
         Map underTest = new Map("name", new HashMap<>());
 
-        assertThat(underTest.getSizeX(), is(0));
-        assertThat(underTest.getSizeY(), is(0));
+        assertThat(underTest.getSizeX(), is(PositiveInt.of(0)));
+        assertThat(underTest.getSizeY(), is(PositiveInt.of(0)));
     }
 }

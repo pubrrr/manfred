@@ -4,7 +4,6 @@ import helpers.TestGameConfig;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.TileConversionAction;
 import manfred.data.infrastructure.map.TileConversionRule;
-import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
 import manfred.game.graphics.GraphicsAdapter;
@@ -92,9 +91,8 @@ class DecorateTileWithImageRuleTest {
         verify(graphicsMock).drawSprite(any());
     }
 
-    @SuppressWarnings("unchecked")
     private MapPrototype prepareMapTileWithObject() {
-        ValidatedMapTileDto mapTileDto = new ValidatedMapTileDto("tileName", mock(MapMatrix.class), new BufferedImage(1, 2, 1));
+        ValidatedMapTileDto mapTileDto = new ValidatedMapTileDto("tileName", mock(MapPrototype.class), new BufferedImage(1, 2, 1), null);
 
         TilePrototype tilePrototypeMock = mock(TilePrototype.class);
         when(tilePrototypeMock.getTileObject()).thenReturn(Optional.of(mapTileDto));

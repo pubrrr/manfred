@@ -35,14 +35,14 @@ class ViewCoordinateMapperTest {
 
     @Test
     void givenSize3_inputTopRight() {
-        MapViewCoordinate result = underTest.mapToBottomLeft(mockCoordinate(2, 0), PositiveInt.ofNonZero(3));
+        MapViewCoordinate result = underTest.mapToBottomLeft(mockCoordinate(2, 2), PositiveInt.ofNonZero(3));
 
         assertThat(result, equalTo(new MapViewCoordinate(2 * TileViewSize.TILE_SIZE, TileViewSize.TILE_SIZE - 1)));
     }
 
     @Test
     void givenSize3_inputBottomRight() {
-        MapViewCoordinate result = underTest.mapToBottomLeft(mockCoordinate(2, 2), PositiveInt.ofNonZero(3));
+        MapViewCoordinate result = underTest.mapToBottomLeft(mockCoordinate(2, 0), PositiveInt.ofNonZero(3));
 
         assertThat(result, equalTo(new MapViewCoordinate(2 * TileViewSize.TILE_SIZE, 3 * TileViewSize.TILE_SIZE - 1)));
     }

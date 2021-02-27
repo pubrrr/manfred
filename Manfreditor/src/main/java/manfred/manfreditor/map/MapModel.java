@@ -3,21 +3,25 @@ package manfred.manfreditor.map;
 import manfred.data.shared.PositiveInt;
 import manfred.manfreditor.mapobject.MapObject;
 
-import java.util.SortedMap;
-
 public class MapModel {
     private Map map;
+    private final AccessibilityMerger accessibilityMerger;
 
-    public MapModel(Map initialMap) {
+    public MapModel(Map initialMap, AccessibilityMerger accessibilityMerger) {
         this.map = initialMap;
+        this.accessibilityMerger = accessibilityMerger;
     }
 
     public void setMap(Map resultingMap) {
         this.map = resultingMap;
     }
 
-    public SortedMap<Map.TileCoordinate, MapObject> getObjects() {
+    public java.util.Map<Map.TileCoordinate, MapObject> getObjects() {
         return this.map.getObjects();
+    }
+
+    public java.util.Map<Map.TileCoordinate, AccessibilityIndicator> getMergedAccessibility() {
+        return this.accessibilityMerger.merge(this.map.getObjects());
     }
 
     public PositiveInt getSizeY() {

@@ -1,14 +1,17 @@
 package manfred.data.infrastructure.map.tile;
 
 import manfred.data.InvalidInputException;
+import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.persistence.dto.RawMapTileDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
 
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -45,7 +48,21 @@ class MapTileDtoValidatorTest {
 
         ValidatedMapTileDto result = underTest.validate(input);
 
-        assertTrue(result.getStructure().get(1, 1).isAccessible());
-        assertFalse(result.getStructure().get(0, 1).isAccessible());
+        MapPrototype structure = result.getStructure();
+        List<MapPrototype.Coordinate> coordinateSet = structure.getCoordinateSet();
+        assertThat(coordinateSet, hasSize(4));
+
+        MapPrototype.Coordinate coordinate_1_1 = coordinateSet.stream()
+            .filter(coordinate -> coordinate.getX().value() == 1 && coordinate.getY().value() == 1)
+            .findAny()
+            .orElseThrow(() -> new AssertionFailedError("Coordinate not found"));
+
+        MapPrototype.Coordinate coordinate_0_1 = coordinateSet.stream()
+            .filter(coordinate -> coordinate.getX().value() == 0 && coordinate.getY().value() == 1)
+            .findAny()
+            .orElseThrow(() -> new AssertionFailedError("Coordinate not found"));
+
+        assertTrue(structure.getFromMap(coordinate_1_1).isAccessible());
+        assertFalse(structure.getFromMap(coordinate_0_1).isAccessible());
     }
 }

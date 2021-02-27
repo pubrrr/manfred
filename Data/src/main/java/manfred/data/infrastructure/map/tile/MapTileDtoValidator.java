@@ -2,6 +2,7 @@ package manfred.data.infrastructure.map.tile;
 
 import lombok.AllArgsConstructor;
 import manfred.data.InvalidInputException;
+import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.persistence.dto.RawMapTileDto;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ public class MapTileDtoValidator {
 
             return new ValidatedMapTileDto(
                 rawMapTile.getName(),
-                structure,
+                new MapPrototype("forTile " + rawMapTile.getName(), structure, List.of(), List.of(), List.of(), List.of()),
                 rawMapTile.getImage(),
                 rawMapTile.getImageData()
             );

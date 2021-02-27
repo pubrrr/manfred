@@ -28,7 +28,7 @@ public class MapObjectRepository {
     }
 
     private ConcreteMapObject createNewObject(ValidatedMapTileDto validatedMapTileDto) {
-        int structureWidth = validatedMapTileDto.getStructure().sizeX();
+        PositiveInt structureWidth = validatedMapTileDto.getStructure().getSizeX();
 
         PositiveInt pixelBlockSize = PositiveInt.of(TileViewSize.TILE_SIZE);
 

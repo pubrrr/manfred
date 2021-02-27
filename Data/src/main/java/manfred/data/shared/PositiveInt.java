@@ -45,6 +45,10 @@ public class PositiveInt {
         return new PositiveInt(this.value * factor);
     }
 
+    public PositiveInt times(PositiveInt factor) {
+        return new PositiveInt(this.value * factor.value);
+    }
+
     public PositiveInt divideBy(Strict divisor) {
         return new PositiveInt(this.value / divisor.value());
     }
@@ -57,6 +61,10 @@ public class PositiveInt {
         return new PositiveInt(this.value + number);
     }
 
+    public PositiveInt add(PositiveInt number) {
+        return new PositiveInt(this.value + number.value);
+    }
+
     public static class Strict extends PositiveInt{
         protected Strict(int value) {
             super(value);
@@ -65,6 +73,10 @@ public class PositiveInt {
         @Override
         public Strict times(int factor) {
             return new Strict(this.value() * factor);
+        }
+
+        public Strict times(Strict factor) {
+            return new Strict(this.value() * factor.value());
         }
     }
 }

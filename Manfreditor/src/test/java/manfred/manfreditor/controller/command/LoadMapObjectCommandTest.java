@@ -1,9 +1,8 @@
 package manfred.manfreditor.controller.command;
 
 import manfred.data.InvalidInputException;
-import manfred.data.infrastructure.map.matrix.MapMatrix;
+import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.tile.MapTileReader;
-import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
 import manfred.manfreditor.mapobject.MapObjectRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,8 +53,7 @@ class LoadMapObjectCommandTest {
         assertThat(result, failedWithMessage("errorMessage"));
     }
 
-    @SuppressWarnings("unchecked")
-    private MapMatrix<TilePrototype> mapMatrixMock() {
-        return mock(MapMatrix.class);
+    private MapPrototype mapMatrixMock() {
+        return mock(MapPrototype.class);
     }
 }

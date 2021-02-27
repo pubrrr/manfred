@@ -42,8 +42,8 @@ class MapConverterTest {
         Map result = underTest.convert(input);
 
         assertThat(result.getName(), is("name"));
-        assertThat(result.getSizeX(), is(1));
-        assertThat(result.getSizeY(), is(1));
+        assertThat(result.getSizeX(), is(PositiveInt.of(1)));
+        assertThat(result.getSizeY(), is(PositiveInt.of(1)));
         assertThat(result.getObjectAt(result.tileCoordinate(PositiveInt.of(0), PositiveInt.of(0))), instanceOf(None.class));
     }
 
@@ -59,8 +59,8 @@ class MapConverterTest {
         Map result = underTest.convert(input);
 
         assertThat(result.getName(), is("name"));
-        assertThat(result.getSizeX(), is(1));
-        assertThat(result.getSizeY(), is(1));
+        assertThat(result.getSizeX(), is(PositiveInt.of(1)));
+        assertThat(result.getSizeY(), is(PositiveInt.of(1)));
         assertThat(result.getObjectAt(result.tileCoordinate(PositiveInt.of(0), PositiveInt.of(0))), is(mapObjectMock));
     }
 
@@ -82,8 +82,8 @@ class MapConverterTest {
         Map result = underTest.convert(input);
 
         assertThat(result.getName(), is("name"));
-        assertThat(result.getSizeX(), is(3));
-        assertThat(result.getSizeY(), is(2));
+        assertThat(result.getSizeX(), is(PositiveInt.of(3)));
+        assertThat(result.getSizeY(), is(PositiveInt.of(2)));
     }
 
     private MapPrototype.Coordinate coordinate(int x, int y) {

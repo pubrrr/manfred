@@ -1,7 +1,7 @@
 package manfred.data.infrastructure.map.tile;
 
 import manfred.data.InvalidInputException;
-import manfred.data.infrastructure.map.matrix.MapMatrix;
+import manfred.data.infrastructure.map.MapPrototype;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -50,7 +50,7 @@ class ObjectTileConverterTest {
 
     @Test
     void accessibleObject() throws InvalidInputException {
-        MapMatrix<TilePrototype> matrixMock = mockMapMatrix();
+        MapPrototype matrixMock = mockMapMatrix();
         when(matrixMock.bottomLeft()).thenReturn(TilePrototype.accessible());
         ValidatedMapTileDto mapTileDto = new ValidatedMapTileDto("tile", matrixMock, null, null);
 
@@ -65,7 +65,7 @@ class ObjectTileConverterTest {
 
     @Test
     void notAccessibleObject() throws InvalidInputException {
-        MapMatrix<TilePrototype> matrixMock = mockMapMatrix();
+        MapPrototype matrixMock = mockMapMatrix();
         when(matrixMock.bottomLeft()).thenReturn(TilePrototype.notAccessible());
         ValidatedMapTileDto mapTileDto = new ValidatedMapTileDto("tile", matrixMock, null, null);
 
@@ -78,8 +78,7 @@ class ObjectTileConverterTest {
         assertThat(tilePrototype.getTileObject().get(), is(mapTileDto));
     }
 
-    @SuppressWarnings("unchecked")
-    private MapMatrix<TilePrototype> mockMapMatrix() {
-        return mock(MapMatrix.class);
+    private MapPrototype mockMapMatrix() {
+        return mock(MapPrototype.class);
     }
 }
