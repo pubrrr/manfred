@@ -30,7 +30,7 @@ public class ConcreteMapObject implements MapObject {
     }
 
     @Override
-    public void drawAt(MapViewCoordinate bottomLeft, GC gc, Display display) {
+    public void drawOnMapAt(MapViewCoordinate bottomLeft, GC gc, Display display) {
         Image image = new Image(display, this.imageData);
         gc.drawImage(image, bottomLeft.getX(), bottomLeft.getY() - imageData.height);
         image.dispose();
@@ -54,5 +54,9 @@ public class ConcreteMapObject implements MapObject {
 
     public String getName() {
         return this.name;
+    }
+
+    public ImageData getImageData() {
+        return imageData;
     }
 }

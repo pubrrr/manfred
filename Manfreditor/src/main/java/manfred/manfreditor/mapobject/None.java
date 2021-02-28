@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Display;
 public class None implements MapObject {
 
     @Override
-    public void drawAt(MapViewCoordinate bottomLeft, GC gc, Display display) {
+    public void drawOnMapAt(MapViewCoordinate bottomLeft, GC gc, Display display) {
     }
 
     @Override

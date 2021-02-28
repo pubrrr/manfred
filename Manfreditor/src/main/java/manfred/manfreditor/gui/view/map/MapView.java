@@ -66,7 +66,7 @@ public class MapView {
 
     private void drawObjects(SortedMap<MapViewCoordinate, MapObject> mapObjects, GC gc, Display display) {
         mapObjects.forEach(
-            (bottomLeft, mapObject) -> mapObject.drawAt(bottomLeft, gc, display)
+            (bottomLeft, mapObject) -> mapObject.drawOnMapAt(bottomLeft, gc, display)
         );
     }
 

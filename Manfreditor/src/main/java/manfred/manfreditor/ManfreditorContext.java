@@ -2,11 +2,13 @@ package manfred.manfreditor;
 
 import manfred.data.DataContext;
 import manfred.data.infrastructure.map.TileConversionRule;
+import manfred.manfreditor.gui.view.mapobject.MapObjectsView;
+import manfred.manfreditor.gui.view.mapobject.ObjectsViewCoordinateFactory;
 import manfred.manfreditor.map.AccessibilityMerger;
 import manfred.manfreditor.map.Map;
 import manfred.manfreditor.map.MapModel;
-import manfred.manfreditor.mapobject.MapObject;
 import manfred.manfreditor.map.objectfactory.ConcreteMapObjectFactory;
+import manfred.manfreditor.mapobject.MapObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -27,5 +29,10 @@ public class ManfreditorContext {
     @Bean
     public TileConversionRule<MapObject> tileConversionRule(ConcreteMapObjectFactory concreteMapObjectFactory) {
         return concreteMapObjectFactory;
+    }
+
+    @Bean
+    public ObjectsViewCoordinateFactory objectsViewCoordinateFactory() {
+        return new ObjectsViewCoordinateFactory(MapObjectsView.NUMBER_OF_COLUMNS);
     }
 }

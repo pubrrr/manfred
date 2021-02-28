@@ -109,8 +109,10 @@ public class GuiBuilder {
 
     private void addMapObjectsCanvas(Composite mapAndMapObjectsContainer, Shell mainShell) {
         Canvas mapObjectsCanvas = new Canvas(mapAndMapObjectsContainer, SWT.BORDER);
-        mapObjectsCanvas.setSize(200, 700);
-        mapObjectsCanvas.setLayoutData(new GridData(SWT.END, SWT.TOP, false, true));
+        GridData layoutData = new GridData(SWT.END, SWT.TOP, true, true);
+        layoutData.widthHint = MapObjectsView.NUMBER_OF_COLUMNS.value() * MapObjectsView.OBJECT_TILE_SIZE;
+        layoutData.heightHint = 700;
+        mapObjectsCanvas.setLayoutData(layoutData);
         mapObjectsCanvas.addPaintListener(event -> mapObjectsView.draw(event.gc, mainShell.getDisplay()));
         loadMapListeners.add(selectedFile -> mapObjectsCanvas.redraw());
     }

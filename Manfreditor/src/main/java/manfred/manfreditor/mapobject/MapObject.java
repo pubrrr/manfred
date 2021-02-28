@@ -8,7 +8,7 @@ import org.eclipse.swt.widgets.Display;
 
 public interface MapObject {
 
-    void drawAt(MapViewCoordinate bottomLeft, GC gc, Display display);
+    void drawOnMapAt(MapViewCoordinate bottomLeft, GC gc, Display display);
 
     static MapObject none() {
         return new None();
