@@ -6,6 +6,7 @@ import manfred.data.infrastructure.map.TileConversionAction;
 import manfred.data.infrastructure.map.TileConversionRule;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
+import manfred.data.shared.PositiveInt;
 import manfred.game.graphics.GraphicsAdapter;
 import manfred.game.graphics.PanelCoordinate;
 import manfred.game.map.MapTile;
@@ -92,7 +93,9 @@ class DecorateTileWithImageRuleTest {
     }
 
     private MapPrototype prepareMapTileWithObject() {
-        ValidatedMapTileDto mapTileDto = new ValidatedMapTileDto("tileName", mock(MapPrototype.class), new BufferedImage(1, 2, 1), null);
+        MapPrototype structureMock = mock(MapPrototype.class);
+        when(structureMock.getSizeX()).thenReturn(PositiveInt.ofNonZero(1));
+        ValidatedMapTileDto mapTileDto = new ValidatedMapTileDto("tileName", structureMock, new BufferedImage(1, 2, 1), null);
 
         TilePrototype tilePrototypeMock = mock(TilePrototype.class);
         when(tilePrototypeMock.getTileObject()).thenReturn(Optional.of(mapTileDto));
