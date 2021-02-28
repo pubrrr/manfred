@@ -1,6 +1,9 @@
 package manfred.manfreditor.gui.view;
 
 import manfred.data.shared.PositiveInt;
+import manfred.manfreditor.gui.view.map.MapViewCoordinate;
+import manfred.manfreditor.gui.view.map.TileViewSize;
+import manfred.manfreditor.gui.view.map.ViewCoordinateMapper;
 import manfred.manfreditor.map.Map.TileCoordinate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -2,7 +2,7 @@ package manfred.manfreditor.mapobject;
 
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.tile.TilePrototype;
-import manfred.manfreditor.gui.view.MapViewCoordinate;
+import manfred.manfreditor.gui.view.map.MapViewCoordinate;
 import manfred.manfreditor.map.AccessibilityIndicator;
 import manfred.manfreditor.map.ColoredAccessibilityIndicator;
 import manfred.manfreditor.map.Map;

@@ -1,4 +1,4 @@
-package manfred.manfreditor.gui.view;
+package manfred.manfreditor.gui.view.map;
 
 import manfred.data.shared.PositiveInt;
 import manfred.manfreditor.map.Map;

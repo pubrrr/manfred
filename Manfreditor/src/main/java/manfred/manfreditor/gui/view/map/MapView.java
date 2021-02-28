@@ -1,4 +1,4 @@
-package manfred.manfreditor.gui.view;
+package manfred.manfreditor.gui.view.map;
 
 import lombok.AllArgsConstructor;
 import manfred.data.shared.PositiveInt;
