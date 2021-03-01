@@ -1,7 +1,10 @@
 package manfred.manfreditor.map;
 
 import manfred.data.shared.PositiveInt;
+import manfred.manfreditor.mapobject.ConcreteMapObject;
 import manfred.manfreditor.mapobject.MapObject;
+
+import java.util.List;
 
 public class MapModel {
     private Map map;
@@ -30,5 +33,9 @@ public class MapModel {
 
     public PositiveInt getSizeX() {
         return this.map.getSizeX();
+    }
+
+    public List<String> insertObjectAt(ConcreteMapObject mapObject, Map.TileCoordinate tileCoordinate) {
+        return null;
     }
 }

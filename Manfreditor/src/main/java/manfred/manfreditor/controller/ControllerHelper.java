@@ -12,7 +12,7 @@ public class ControllerHelper {
             return command.execute();
         } catch (Throwable throwable) {
             throwable.printStackTrace();
-            return CommandResult.failure(throwable.toString());
+            return CommandResult.failure("Da isch ebbes schief glaufa: " + throwable.toString());
         }
     }
 }

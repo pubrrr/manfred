@@ -77,6 +77,7 @@ public class GuiBuilder {
         Canvas mapCanvas = new Canvas(mapScrollContainer, SWT.BORDER);
         mapScrollContainer.setContent(mapCanvas); // to make scrolling work
         mapCanvas.setSize(700, 700);
+        mapCanvas.addMouseListener(mapController);
         mapCanvas.addPaintListener(event -> mapView.draw(event.gc, mainShell.getDisplay()));
         mapController.addPostAction(selectedFile -> {
             mapCanvas.setSize(mapView.getMapViewSize());
