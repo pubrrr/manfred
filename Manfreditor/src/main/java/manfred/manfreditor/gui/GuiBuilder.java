@@ -2,6 +2,7 @@ package manfred.manfreditor.gui;
 
 import lombok.AllArgsConstructor;
 import manfred.manfreditor.controller.GuiController;
+import manfred.manfreditor.controller.MapObjectsController;
 import manfred.manfreditor.gui.view.map.MapView;
 import manfred.manfreditor.gui.view.mapobject.MapObjectsView;
 import org.eclipse.swt.SWT;
@@ -31,6 +32,7 @@ import java.util.function.Consumer;
 @AllArgsConstructor
 public class GuiBuilder {
 
+    private final MapObjectsController mapObjectsController;
     private final GuiController guiController;
     private final MapView mapView;
     private final MapObjectsView mapObjectsView;
@@ -114,6 +116,7 @@ public class GuiBuilder {
         layoutData.heightHint = 700;
         mapObjectsCanvas.setLayoutData(layoutData);
         mapObjectsCanvas.addPaintListener(event -> mapObjectsView.draw(event.gc, mainShell.getDisplay()));
+        mapObjectsCanvas.addMouseListener(mapObjectsController);
         loadMapListeners.add(selectedFile -> mapObjectsCanvas.redraw());
     }
 }

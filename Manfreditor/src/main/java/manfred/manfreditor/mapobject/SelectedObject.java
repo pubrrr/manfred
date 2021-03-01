@@ -6,5 +6,6 @@ import org.springframework.stereotype.Component;
 public class SelectedObject {
     public void select(MapObjectRepository.ObjectKey objectKey) {
         // TODO
+        System.out.println(objectKey);
     }
 }
