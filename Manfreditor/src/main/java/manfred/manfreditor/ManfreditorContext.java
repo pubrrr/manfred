@@ -9,6 +9,8 @@ import manfred.manfreditor.map.Map;
 import manfred.manfreditor.map.MapModel;
 import manfred.manfreditor.map.objectfactory.ConcreteMapObjectFactory;
 import manfred.manfreditor.mapobject.MapObject;
+import manfred.manfreditor.mapobject.SelectedObject;
+import manfred.manfreditor.mapobject.SelectionState;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -34,5 +36,10 @@ public class ManfreditorContext {
     @Bean
     public ObjectsViewCoordinateFactory objectsViewCoordinateFactory() {
         return new ObjectsViewCoordinateFactory(MapObjectsView.NUMBER_OF_COLUMNS);
+    }
+
+    @Bean
+    public SelectedObject selectedObject() {
+        return new SelectedObject(SelectionState.empty());
     }
 }

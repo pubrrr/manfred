@@ -1,11 +1,20 @@
 package manfred.manfreditor.mapobject;
 
-import org.springframework.stereotype.Component;
+import java.util.Optional;
 
-@Component
 public class SelectedObject {
+
+    private SelectionState selectionState;
+
+    public SelectedObject(SelectionState initialSelection) {
+        this.selectionState = initialSelection;
+    }
+
     public void select(MapObjectRepository.ObjectKey objectKey) {
-        // TODO
-        System.out.println(objectKey);
+        this.selectionState = selectionState.select(objectKey);
+    }
+
+    public Optional<MapObjectRepository.ObjectKey> getSelection() {
+        return selectionState.getSelection();
     }
 }

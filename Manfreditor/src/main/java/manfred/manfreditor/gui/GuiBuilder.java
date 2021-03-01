@@ -1,7 +1,7 @@
 package manfred.manfreditor.gui;
 
 import lombok.AllArgsConstructor;
-import manfred.manfreditor.controller.GuiController;
+import manfred.manfreditor.controller.MapController;
 import manfred.manfreditor.controller.MapObjectsController;
 import manfred.manfreditor.gui.view.map.MapView;
 import manfred.manfreditor.gui.view.mapobject.MapObjectsView;
@@ -33,7 +33,7 @@ import java.util.function.Consumer;
 public class GuiBuilder {
 
     private final MapObjectsController mapObjectsController;
-    private final GuiController guiController;
+    private final MapController mapController;
     private final MapView mapView;
     private final MapObjectsView mapObjectsView;
 
@@ -73,7 +73,7 @@ public class GuiBuilder {
                 FileDialog fileDialog = new FileDialog(mainShell);
                 String selectedFile = fileDialog.open();
                 if (selectedFile != null) {
-                    guiController.loadMap(selectedFile)
+                    mapController.loadMap(selectedFile)
                         .onFailure(message -> {
                             MessageBox messageBox = new MessageBox(mainShell);
                             messageBox.setMessage(message);

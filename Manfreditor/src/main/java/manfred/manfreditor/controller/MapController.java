@@ -10,10 +10,9 @@ import static manfred.manfreditor.controller.ControllerHelper.execute;
 
 @Component
 @AllArgsConstructor
-public class GuiController {
+public class MapController {
 
     private final LoadMapCommand.Factory loadMapCommandFactory;
-    private final LoadMapObjectCommand.Factory loadMapObjectCommandFactory;
 
     public CommandResult loadMap(String selectedFile) {
         return execute(loadMapCommandFactory.create(selectedFile));
