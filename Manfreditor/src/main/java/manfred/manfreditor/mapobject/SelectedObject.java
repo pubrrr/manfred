@@ -17,4 +17,10 @@ public class SelectedObject {
     public Optional<MapObjectRepository.ObjectKey> getSelection() {
         return selectionState.getSelection();
     }
+
+    public boolean isSelected(MapObjectRepository.ObjectKey objectKey) {
+        return selectionState.getSelection()
+            .map(selectedKey -> selectedKey.equals(objectKey))
+            .orElse(false);
+    }
 }

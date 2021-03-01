@@ -1,6 +1,7 @@
 package manfred.manfreditor.gui.view.mapobject;
 
 import manfred.manfreditor.mapobject.MapObjectRepository;
+import manfred.manfreditor.mapobject.SelectedObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +25,7 @@ class MapObjectsViewTest {
     void setUp() {
         mapObjectRepositoryMock = mock(MapObjectRepository.class);
         objectsViewCoordinateFactoryMock = mock(ObjectsViewCoordinateFactory.class);
-        underTest = new MapObjectsView(mapObjectRepositoryMock, objectsViewCoordinateFactoryMock);
+        underTest = new MapObjectsView(mapObjectRepositoryMock, objectsViewCoordinateFactoryMock, mock(SelectedObject.class));
     }
 
     @Test

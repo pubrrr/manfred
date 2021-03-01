@@ -3,9 +3,12 @@ package manfred.manfreditor.gui.view.mapobject;
 import lombok.AllArgsConstructor;
 import manfred.data.shared.PositiveInt;
 import manfred.manfreditor.mapobject.MapObjectRepository;
+import manfred.manfreditor.mapobject.SelectedObject;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.RGBA;
 import org.eclipse.swt.widgets.Display;
 import org.springframework.stereotype.Component;
 
@@ -22,9 +25,11 @@ public class MapObjectsView {
 
     public final static int OBJECT_TILE_SIZE = 150;
     public final static PositiveInt.Strict NUMBER_OF_COLUMNS = PositiveInt.ofNonZero(2);
+    public final static RGBA CYAN_BACKGROUND = new RGBA(0, 200, 200, 125);
 
     private final MapObjectRepository mapObjectRepository;
     private final ObjectsViewCoordinateFactory objectsViewCoordinateFactory;
+    private final SelectedObject selectedObject;
 
     public Optional<MapObjectRepository.ObjectKey> getClickedObjectKey(int x, int y) {
         Map<ObjectsViewCoordinate, MapObjectRepository.ObjectKey> objectKeysByGridCoordinate = getObjectKeysByGridCoordinate();
@@ -35,11 +40,13 @@ public class MapObjectsView {
     }
 
     private Predicate<Map.Entry<ObjectsViewCoordinate, MapObjectRepository.ObjectKey>> forClickedGrid(int x, int y) {
-        return objectKeyByGridCoordinate ->
-            objectKeyByGridCoordinate.getKey().getX() >= x / OBJECT_TILE_SIZE
-                && objectKeyByGridCoordinate.getKey().getX() < x / OBJECT_TILE_SIZE + 1
-                && objectKeyByGridCoordinate.getKey().getY() >= y / OBJECT_TILE_SIZE
-                && objectKeyByGridCoordinate.getKey().getY() < y / OBJECT_TILE_SIZE + 1;
+        return objectKeyByGridCoordinate -> {
+            ObjectsViewCoordinate objectsViewCoordinate = objectKeyByGridCoordinate.getKey();
+            return objectsViewCoordinate.getX() >= x / OBJECT_TILE_SIZE
+                && objectsViewCoordinate.getX() < x / OBJECT_TILE_SIZE + 1
+                && objectsViewCoordinate.getY() >= y / OBJECT_TILE_SIZE
+                && objectsViewCoordinate.getY() < y / OBJECT_TILE_SIZE + 1;
+        };
     }
 
     public void draw(GC gc, Display display) {
@@ -65,6 +72,13 @@ public class MapObjectsView {
         return (objectsViewCoordinate, objectKey) -> {
             int xOnCanvas = OBJECT_TILE_SIZE * objectsViewCoordinate.getX();
             int yOnCanvas = OBJECT_TILE_SIZE * objectsViewCoordinate.getY();
+
+            if (selectedObject.isSelected(objectKey)) {
+                Color color = new Color(display, CYAN_BACKGROUND);
+                gc.setBackground(color);
+                gc.fillRectangle(xOnCanvas, yOnCanvas, OBJECT_TILE_SIZE, OBJECT_TILE_SIZE);
+                color.dispose();
+            }
 
             gc.drawRectangle(xOnCanvas, yOnCanvas, OBJECT_TILE_SIZE, OBJECT_TILE_SIZE);
 
