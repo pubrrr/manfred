@@ -1,29 +1,92 @@
 package manfred.manfreditor.map;
 
-public class Map {
-    private final String name;
-    private final boolean[][] mapTiles;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
+import manfred.data.infrastructure.map.MapPrototype;
+import manfred.data.shared.PositiveInt;
+import manfred.manfreditor.mapobject.MapObject;
 
-    public Map(String name, boolean[][] mapTiles) {
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class Map {
+
+    private final String name;
+    private final java.util.Map<TileCoordinate, MapObject> mapMatrix;
+    private final PositiveInt sizeX;
+    private final PositiveInt sizeY;
+
+    public Map(String name, java.util.Map<MapPrototype.Coordinate, MapObject> mapMatrix) {
         this.name = name;
-        this.mapTiles = mapTiles;
+        this.mapMatrix = mapMatrix.entrySet().stream()
+            .collect(Collectors.toMap(
+                mapObjectByCoordinatePrototype -> new TileCoordinate(mapObjectByCoordinatePrototype.getKey()),
+                java.util.Map.Entry::getValue
+            ));
+
+        if (mapMatrix.isEmpty()) {
+            this.sizeX = PositiveInt.of(0);
+            this.sizeY = PositiveInt.of(0);
+        } else {
+            this.sizeX = findMaxValue(mapMatrix.keySet(), MapPrototype.Coordinate::getX).add(1);
+            this.sizeY = findMaxValue(mapMatrix.keySet(), MapPrototype.Coordinate::getY).add(1);
+        }
     }
 
-    // TODO necessary?
+    public PositiveInt getSizeX() {
+        return sizeX;
+    }
+
+    public PositiveInt getSizeY() {
+        return sizeY;
+    }
+
+    private PositiveInt findMaxValue(Set<MapPrototype.Coordinate> coordinates, Function<MapPrototype.Coordinate, PositiveInt> coordinateSelector) {
+        return PositiveInt.of(coordinates.stream()
+            .map(coordinateSelector)
+            .map(PositiveInt::value)
+            .reduce(0, Math::max));
+    }
+
     public String getName() {
         return name;
     }
 
-    public boolean[][] getArray() {
-        return mapTiles;
+    public TileCoordinate tileCoordinate(PositiveInt x, PositiveInt y) {
+        return new TileCoordinate(x, y);
     }
 
-    public boolean isAccessible(int x, int y) {
-        return isInBounds(x, y) && mapTiles[x][y];
+    public MapObject getObjectAt(TileCoordinate tileCoordinate) {
+        // TODO null case!
+        return this.mapMatrix.get(tileCoordinate);
     }
 
-    private boolean isInBounds(int x, int y) {
-        return x >= 0 && x < sizeX()
-                && y >= 0 && y < sizeY();
+    public java.util.Map<TileCoordinate, MapObject> getObjects() {
+        return mapMatrix;
+    }
+
+    @EqualsAndHashCode
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @Getter
+    public static class TileCoordinate {
+        PositiveInt x;
+        PositiveInt y;
+
+        protected TileCoordinate(PositiveInt x, PositiveInt y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        public TileCoordinate translateBy(MapPrototype.Coordinate coordinatePrototype) {
+            return new TileCoordinate(this.x.add(coordinatePrototype.getX()), this.y.add(coordinatePrototype.getY()));
+        }
+
+        private TileCoordinate(MapPrototype.Coordinate coordinatePrototype) {
+            this.x = coordinatePrototype.getX();
+            this.y = coordinatePrototype.getY();
+        }
     }
 }

@@ -2,6 +2,8 @@ package manfred.infrastructureadapter.map.tile;
 
 import lombok.AllArgsConstructor;
 import manfred.data.infrastructure.map.MapPrototype;
+import manfred.data.infrastructure.map.TileConversionAction;
+import manfred.data.infrastructure.map.TileConversionRule;
 import manfred.data.infrastructure.person.PersonPrototype;
 import manfred.game.characters.sprite.SimpleSprite;
 import manfred.game.config.GameConfig;
@@ -13,7 +15,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 @AllArgsConstructor
-public class PersonTileFactory implements TileConversionRule {
+public class PersonTileFactory implements TileConversionRule<MapTile> {
 
     // TODO this should not need to be here
     private final GameConfig gameConfig;
@@ -21,10 +23,8 @@ public class PersonTileFactory implements TileConversionRule {
     private final GelaberConverter gelaberConverter;
 
     @Override
-    public Optional<TileConversionAction> applicableTo(MapPrototype input, int x, int y) {
-        return input.getPersons().stream()
-            .filter(personPrototype -> personPrototype.getPositionX().value() == x && personPrototype.getPositionY().value() == y)
-            .findFirst()
+    public Optional<TileConversionAction<MapTile>> applicableTo(MapPrototype input, MapPrototype.Coordinate coordinate) {
+        return input.getPerson(coordinate)
             .map(personPrototype -> new TileFromDtoAction<>(personPrototype, personFactory()));
     }
 

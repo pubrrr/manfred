@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.eclipse.swt.graphics.ImageData;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -16,4 +17,6 @@ public class RawMapTileDto {
     private List<String> structure;
     @JsonIgnore
     private BufferedImage image;
+    @JsonIgnore
+    private ImageData imageData;
 }

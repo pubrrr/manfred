@@ -9,6 +9,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.mock;
@@ -22,8 +26,9 @@ class AttackReaderTest {
     }
 
     @Test
-    void convert() throws InvalidInputException {
-        AttackDto result = underTest.load("test", getClass().getResource("/attack/testThunder.yaml"));
+    void convert() throws InvalidInputException, MalformedURLException {
+        URL resource = getClass().getResource("/attack/testThunder.yaml");
+        AttackDto result = underTest.load(resource, new File(resource.getFile()).toURI().toURL());
 
         assertThat(result.getName(), equalTo("thunder"));
         assertThat(result.getSpeed(), equalTo(PositiveInt.of(5)));

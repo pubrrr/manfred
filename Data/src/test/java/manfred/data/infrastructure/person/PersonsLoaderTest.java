@@ -1,8 +1,8 @@
 package manfred.data.infrastructure.person;
 
 import manfred.data.InvalidInputException;
-import manfred.data.persistence.dto.MapPersonDto;
 import manfred.data.infrastructure.person.gelaber.GelaberPrototype;
+import manfred.data.persistence.dto.MapPersonDto;
 import manfred.data.shared.PositiveInt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -40,7 +40,7 @@ class PersonsLoaderTest {
 
     @Test
     void oneValidInput() throws InvalidInputException {
-        when(personProviderMock.provide(any())).thenReturn(new PersonPrototypeBuilder("name", mock(GelaberPrototype.class), null));
+        when(personProviderMock.provide(anyString())).thenReturn(new PersonPrototypeBuilder("name", mock(GelaberPrototype.class), null));
 
         PositiveInt positionX = PositiveInt.of(5);
         PositiveInt positionY = PositiveInt.of(10);
@@ -54,7 +54,7 @@ class PersonsLoaderTest {
 
     @Test
     void twoValidInputs() throws InvalidInputException {
-        when(personProviderMock.provide(any())).thenReturn(new PersonPrototypeBuilder("name", mock(GelaberPrototype.class), null));
+        when(personProviderMock.provide(anyString())).thenReturn(new PersonPrototypeBuilder("name", mock(GelaberPrototype.class), null));
 
         List<PersonPrototype> result = underTest.load(List.of(
             new MapPersonDto("name", PositiveInt.of(1), PositiveInt.of(2)),

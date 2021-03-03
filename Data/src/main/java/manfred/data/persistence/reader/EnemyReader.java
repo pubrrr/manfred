@@ -11,7 +11,7 @@ import java.net.URL;
 import java.util.function.Supplier;
 
 @Component
-public class EnemyReader implements ObjectReader<EnemyDto> {
+public class EnemyReader implements ObjectReader<EnemySource, EnemyDto> {
 
     private final ImageLoader imageLoader;
     private final ObjectMapper objectMapper;
@@ -29,6 +29,11 @@ public class EnemyReader implements ObjectReader<EnemyDto> {
             urlHelper.getResourceForEnemy(name).orElseThrow(invalidInputException("Resource for enemy " + name + " not found")),
             urlHelper.getImageResourceForEnemy(name).orElseThrow(invalidInputException("Image resource for enemy " + name + " not found"))
         );
+    }
+
+    @Override
+    public EnemyDto load(EnemySource enemySource) throws InvalidInputException {
+        return load(enemySource.getEnemyUrl(), enemySource.getImageUrl());
     }
 
     private Supplier<InvalidInputException> invalidInputException(String message) {

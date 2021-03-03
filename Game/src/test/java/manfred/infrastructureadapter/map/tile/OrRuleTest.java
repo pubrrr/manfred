@@ -1,6 +1,10 @@
 package manfred.infrastructureadapter.map.tile;
 
 import manfred.data.infrastructure.map.MapPrototype;
+import manfred.data.infrastructure.map.OrRule;
+import manfred.data.infrastructure.map.TileConversionAction;
+import manfred.data.infrastructure.map.TileConversionRule;
+import manfred.game.map.MapTile;
 import manfred.game.map.NotAccessible;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +13,6 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -17,16 +20,16 @@ class OrRuleTest {
 
     @Test
     void firstApplies() {
-        TileConversionAction action = NotAccessible::new;
+        TileConversionAction<MapTile> action = NotAccessible::new;
 
-        TileConversionRule first = mock(TileConversionRule.class);
-        when(first.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.of(action));
-        TileConversionRule second = mock(TileConversionRule.class);
-        when(second.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.empty());
+        TileConversionRule<MapTile> first = mockTileConversionRule();
+        when(first.applicableTo(any(), any())).thenReturn(Optional.of(action));
+        TileConversionRule<MapTile> second = mockTileConversionRule();
+        when(second.applicableTo(any(), any())).thenReturn(Optional.empty());
 
-        OrRule underTest = new OrRule(first, second);
+        OrRule<MapTile> underTest = new OrRule<>(first, second);
 
-        Optional<TileConversionAction> tileConversionAction = underTest.applicableTo(validatedMapDto(), 0, 0);
+        Optional<TileConversionAction<MapTile>> tileConversionAction = underTest.applicableTo(validatedMapDto(), mock(MapPrototype.Coordinate.class));
 
         assertThat(tileConversionAction.isPresent(), is(true));
         assertThat(tileConversionAction.get(), is(action));
@@ -34,16 +37,16 @@ class OrRuleTest {
 
     @Test
     void secondApplies() {
-        TileConversionAction action = NotAccessible::new;
+        TileConversionAction<MapTile> action = NotAccessible::new;
 
-        TileConversionRule first = mock(TileConversionRule.class);
-        when(first.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.empty());
-        TileConversionRule second = mock(TileConversionRule.class);
-        when(second.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.of(action));
+        TileConversionRule<MapTile> first = mockTileConversionRule();
+        when(first.applicableTo(any(), any())).thenReturn(Optional.empty());
+        TileConversionRule<MapTile> second = mockTileConversionRule();
+        when(second.applicableTo(any(), any())).thenReturn(Optional.of(action));
 
-        OrRule underTest = new OrRule(first, second);
+        OrRule<MapTile> underTest = new OrRule<>(first, second);
 
-        Optional<TileConversionAction> tileConversionAction = underTest.applicableTo(validatedMapDto(), 0, 0);
+        Optional<TileConversionAction<MapTile>> tileConversionAction = underTest.applicableTo(validatedMapDto(), mock(MapPrototype.Coordinate.class));
 
         assertThat(tileConversionAction.isPresent(), is(true));
         assertThat(tileConversionAction.get(), is(action));
@@ -51,19 +54,24 @@ class OrRuleTest {
 
     @Test
     void noneApplies() {
-        TileConversionRule first = mock(TileConversionRule.class);
-        when(first.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.empty());
-        TileConversionRule second = mock(TileConversionRule.class);
-        when(second.applicableTo(any(), anyInt(), anyInt())).thenReturn(Optional.empty());
+        TileConversionRule<MapTile> first = mockTileConversionRule();
+        when(first.applicableTo(any(), any())).thenReturn(Optional.empty());
+        TileConversionRule<MapTile> second = mockTileConversionRule();
+        when(second.applicableTo(any(), any())).thenReturn(Optional.empty());
 
-        OrRule underTest = new OrRule(first, second);
+        OrRule<MapTile> underTest = new OrRule<>(first, second);
 
-        Optional<TileConversionAction> tileConversionAction = underTest.applicableTo(validatedMapDto(), 0, 0);
+        Optional<TileConversionAction<MapTile>> tileConversionAction = underTest.applicableTo(validatedMapDto(), mock(MapPrototype.Coordinate.class));
 
         assertThat(tileConversionAction.isPresent(), is(false));
     }
 
     private MapPrototype validatedMapDto() {
-        return new MapPrototype(null, null, null, null, null, null);
+        return mock(MapPrototype.class);
+    }
+
+    @SuppressWarnings("unchecked")
+    private TileConversionRule<MapTile> mockTileConversionRule() {
+        return mock(TileConversionRule.class);
     }
 }

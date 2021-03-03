@@ -1,6 +1,7 @@
 package manfred.data.infrastructure.map.matrix;
 
 import manfred.data.InvalidInputException;
+import manfred.data.shared.PositiveInt;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -48,12 +49,12 @@ public class MapMatrix<T> {
         return matrix.get(x).get(y);
     }
 
-    public int sizeX() {
-        return this.matrix.size();
+    public PositiveInt.Strict sizeX() {
+        return PositiveInt.ofNonZero(this.matrix.size());
     }
 
-    public int sizeY() {
-        return this.matrix.get(0).size();
+    public PositiveInt.Strict sizeY() {
+        return PositiveInt.ofNonZero(this.matrix.get(0).size());
     }
 
     public static class Builder<T> {

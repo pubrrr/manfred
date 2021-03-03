@@ -1,5 +1,7 @@
 package manfred.infrastructureadapter.map.tile;
 
+import manfred.data.infrastructure.map.TileConversionAction;
+import manfred.data.infrastructure.map.TileConversionRule;
 import manfred.data.persistence.dto.TransporterDto;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.game.interact.Door;
@@ -8,11 +10,11 @@ import manfred.game.map.MapTile;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class DoorTileFactory extends SpecialTileFactory<TransporterDto> implements TileConversionRule {
+public class DoorTileFactory implements TileConversionRule<MapTile> {
 
     @Override
-    public Optional<TileConversionAction> applicableTo(MapPrototype input, int x, int y) {
-        return findDtoAt(input.getDoors(), x, y)
+    public Optional<TileConversionAction<MapTile>> applicableTo(MapPrototype input, MapPrototype.Coordinate coordinate) {
+        return input.getDoor(coordinate)
             .map(doorDto -> new TileFromDtoAction<>(doorDto, doorFactory()));
     }
 

@@ -58,7 +58,10 @@ public abstract class MapObjectDtoValidator<V extends MapObjectDto> {
     protected abstract Function<Map.Entry<String, Boolean>, String> accessibilityErrorMessage();
 
     private Function<Map.Entry<String, Point>, Map.Entry<String, Boolean>> positionToAccessibilityOnMap(MapMatrix<TilePrototype> mapMatrix) {
-        return positionByTargetName -> Map.entry(positionByTargetName.getKey(), mapMatrix.get(positionByTargetName.getValue().x, positionByTargetName.getValue().y).isAccessible());
+        return positionByTargetName -> Map.entry(
+            positionByTargetName.getKey(),
+            mapMatrix.get(positionByTargetName.getValue().x, positionByTargetName.getValue().y).isAccessible()
+        );
     }
 
     private Collector<MapObjectDto, ?, Map<String, Point>> toMapOfPositionByTargetName() {

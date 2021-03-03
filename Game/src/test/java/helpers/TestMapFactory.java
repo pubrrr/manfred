@@ -1,5 +1,6 @@
 package helpers;
 
+import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.shared.PositiveInt;
 import manfred.game.map.Accessible;
 import manfred.game.map.Map;
@@ -22,14 +23,17 @@ public class TestMapFactory {
     public static Map create(String[][] mapTilesAsStrings, HashMap<String, MapTile> interactables) {
         String[][] transposed = transpose(mapTilesAsStrings);
 
-        List<List<MapTile>> mapTiles = new ArrayList<>(transposed.length);
-        for (String[] rowsAsStrings : transposed) {
-            List<MapTile> column = new ArrayList<>(transposed[0].length);
-            for (String tileValue : rowsAsStrings) {
+        int sizeX = transposed.length;
+        int sizeY = transposed[0].length;
+        java.util.Map<MapPrototype.Coordinate, MapTile> mapTiles = new HashMap<>();
+        for (int x = 0; x < sizeX; x++) {
+            String[] rowsAsStrings = transposed[x];
+            for (int y = 0; y < sizeY; y++) {
+                String tileValue = rowsAsStrings[y];
                 MapTile tile;
                 switch (tileValue) {
                     case ACCESSIBLE:
-                        tile = Accessible.getInstance();
+                        tile = new Accessible();
                         break;
                     case NOT_ACCESSIBLE:
                         tile = new NotAccessible();
@@ -38,9 +42,8 @@ public class TestMapFactory {
                         tile = interactables.get(tileValue);
                         break;
                 }
-                column.add(tile);
+                mapTiles.put(new CoordinateDouble(PositiveInt.of(x), PositiveInt.of(y)), tile);
             }
-            mapTiles.add(column);
         }
         return new Map(mapTiles);
     }
@@ -73,5 +76,16 @@ public class TestMapFactory {
 
     public static Map.TileCoordinate tileAt(PositiveInt x, PositiveInt y) {
         return defaultCoordinateProvider().tileAt(x, y);
+    }
+
+    public static class CoordinateDouble extends MapPrototype.Coordinate {
+
+        public CoordinateDouble(int x, int y) {
+            this(PositiveInt.of(x), PositiveInt.of(y));
+        }
+
+        public CoordinateDouble(PositiveInt x, PositiveInt y) {
+            super(x, y);
+        }
     }
 }

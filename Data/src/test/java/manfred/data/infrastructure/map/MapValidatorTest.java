@@ -3,10 +3,8 @@ package manfred.data.infrastructure.map;
 import manfred.data.InvalidInputException;
 import manfred.data.infrastructure.enemy.EnemiesLoader;
 import manfred.data.infrastructure.enemy.EnemyPrototype;
-import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.MapTileReader;
-import manfred.data.infrastructure.map.tile.TileConverter;
-import manfred.data.infrastructure.map.tile.TilePrototype;
+import manfred.data.infrastructure.map.tile.ObjectTileConverter;
 import manfred.data.infrastructure.map.validator.Validator;
 import manfred.data.infrastructure.person.PersonPrototype;
 import manfred.data.infrastructure.person.PersonsLoader;
@@ -19,11 +17,15 @@ import manfred.data.shared.PositiveInt;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -44,7 +46,7 @@ class MapValidatorTest {
         enemiesLoaderMock = mock(EnemiesLoader.class);
         personsLoaderMock = mock(PersonsLoader.class);
 
-        underTest = new MapValidator(List.of(validatorMock1, validatorMock2), new TileConverter(mock(MapTileReader.class)), enemiesLoaderMock, personsLoaderMock);
+        underTest = new MapValidator(List.of(validatorMock1, validatorMock2), new ObjectTileConverter(mock(MapTileReader.class)), enemiesLoaderMock, personsLoaderMock);
     }
 
     @Test
@@ -53,9 +55,11 @@ class MapValidatorTest {
 
         MapPrototype result = underTest.validate(input);
 
-        assertThat(result.getPersons(), empty());
-        assertThat(result.getPortals(), empty());
-        assertThat(result.getDoors(), empty());
+        MapPrototype.Coordinate coordinate = result.getCoordinateSet().get(0);
+
+        assertTrue(result.getPerson(coordinate).isEmpty());
+        assertTrue(result.getPortal(coordinate).isEmpty());
+        assertTrue(result.getDoor(coordinate).isEmpty());
         assertThat(result.getEnemies(), empty());
     }
 
@@ -66,18 +70,27 @@ class MapValidatorTest {
 
         RawMapDto input = new RawMapDto(
             "test",
-            List.of("1"),
+            List.of("1,1"),
             List.of(new MapPersonDto()),
-            List.of(new TransporterDto()),
-            List.of(new TransporterDto(), new TransporterDto()),
+            List.of(new TransporterDto("", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0))),
+            List.of(
+                new TransporterDto("", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0)),
+                new TransporterDto("", PositiveInt.of(1), PositiveInt.of(0), PositiveInt.of(1), PositiveInt.of(0))
+            ),
             List.of(new MapEnemyDto())
         );
 
         MapPrototype result = underTest.validate(input);
 
-        assertThat(result.getPersons(), hasSize(1));
-        assertThat(result.getPortals(), hasSize(1));
-        assertThat(result.getDoors(), hasSize(2));
+        List<MapPrototype.Coordinate> coordinates = result.getCoordinateSet();
+
+        List<PersonPrototype> persons = coordinates.stream().map(result::getPerson).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
+        List<TransporterDto> portal = coordinates.stream().map(result::getPortal).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
+        List<TransporterDto> doors = coordinates.stream().map(result::getDoor).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
+
+        assertThat(persons, hasSize(1));
+        assertThat(portal, hasSize(1));
+        assertThat(doors, hasSize(2));
         assertThat(result.getEnemies(), hasSize(1));
     }
 
@@ -135,9 +148,10 @@ class MapValidatorTest {
 
         MapPrototype result = underTest.validate(input);
 
-        MapMatrix<TilePrototype> matrix = result.getMap();
-        assertThat(matrix.sizeX(), is(1));
-        assertThat(matrix.sizeY(), is(2));
+        List<MapPrototype.Coordinate> coordinateSet = result.getCoordinateSet();
+        assertThat(coordinateSet, hasSize(2));
+        assertThat(coordinateSet.get(1).getX().value(), is(0));
+        assertThat(coordinateSet.get(1).getY().value(), is(1));
     }
 
     @Test
@@ -155,9 +169,10 @@ class MapValidatorTest {
 
         MapPrototype result = underTest.validate(input);
 
-        MapMatrix<TilePrototype> matrix = result.getMap();
-        assertThat(matrix.sizeX(), is(2));
-        assertThat(matrix.sizeY(), is(1));
+        List<MapPrototype.Coordinate> coordinateSet = result.getCoordinateSet();
+        assertThat(coordinateSet, hasSize(2));
+        assertThat(coordinateSet.get(1).getX().value(), is(1));
+        assertThat(coordinateSet.get(1).getY().value(), is(0));
     }
 
     @Test
@@ -176,11 +191,12 @@ class MapValidatorTest {
 
         MapPrototype result = underTest.validate(input);
 
-        MapMatrix<TilePrototype> matrix = result.getMap();
-        assertThat(matrix.sizeX(), is(2));
-        assertThat(matrix.sizeY(), is(2));
-        assertThat(matrix.get(0, 1).isAccessible(), is(false));
-        assertThat(matrix.get(1, 0).isAccessible(), is(true));
+        List<MapPrototype.Coordinate> coordinateSet = result.getCoordinateSet();
+        assertThat(coordinateSet, hasSize(4));
+        assertThat(coordinateSet.get(3).getX().value(), is(1));
+        assertThat(coordinateSet.get(3).getY().value(), is(1));
+        assertThat(result.getFromMap(getCoordinate(coordinateSet, 0, 1)).isAccessible(), is(false));
+        assertThat(result.getFromMap(getCoordinate(coordinateSet, 1, 0)).isAccessible(), is(true));
     }
 
     @Test
@@ -199,11 +215,12 @@ class MapValidatorTest {
 
         MapPrototype result = underTest.validate(input);
 
-        MapMatrix<TilePrototype> matrix = result.getMap();
-        assertThat(matrix.sizeX(), is(2));
-        assertThat(matrix.sizeY(), is(2));
-        assertThat(matrix.get(0, 1).isAccessible(), is(false));
-        assertThat(matrix.get(1, 0).isAccessible(), is(true));
+        List<MapPrototype.Coordinate> coordinateSet = result.getCoordinateSet();
+        assertThat(coordinateSet, hasSize(4));
+        assertThat(coordinateSet.get(3).getX().value(), is(1));
+        assertThat(coordinateSet.get(3).getY().value(), is(1));
+        assertThat(result.getFromMap(getCoordinate(coordinateSet, 0, 1)).isAccessible(), is(false));
+        assertThat(result.getFromMap(getCoordinate(coordinateSet, 1, 0)).isAccessible(), is(true));
     }
 
     @Test
@@ -222,12 +239,11 @@ class MapValidatorTest {
 
         MapPrototype result = underTest.validate(input);
 
-        MapMatrix<TilePrototype> matrix = result.getMap();
-        assertThat(matrix.sizeX(), is(3));
-        assertThat(matrix.sizeY(), is(2));
-        assertThat(matrix.get(0, 1).isAccessible(), is(false));
-        assertThat(matrix.get(1, 1).isAccessible(), is(true));
-        assertThat(matrix.get(2, 1).isAccessible(), is(false));
+        List<MapPrototype.Coordinate> coordinateSet = result.getCoordinateSet();
+        assertThat(coordinateSet, hasSize(6));
+        assertThat(result.getFromMap(getCoordinate(coordinateSet, 0, 1)).isAccessible(), is(false));
+        assertThat(result.getFromMap(getCoordinate(coordinateSet, 1, 1)).isAccessible(), is(true));
+        assertThat(result.getFromMap(getCoordinate(coordinateSet, 2, 1)).isAccessible(), is(false));
     }
 
     @Test
@@ -295,5 +311,12 @@ class MapValidatorTest {
         InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.validate(input));
         assertThat(exception.getMessage(), containsString("validator1_message1,\nvalidator1_message2"));
         assertThat(exception.getMessage(), containsString("validator2_message1,\nvalidator2_message2"));
+    }
+
+    private MapPrototype.Coordinate getCoordinate(List<MapPrototype.Coordinate> coordinateSet, int x, int y) {
+        return coordinateSet.stream()
+            .filter(coordinate -> coordinate.getX().value() == x && coordinate.getY().value() == y)
+            .findAny()
+            .orElseThrow(() -> new AssertionFailedError("Coordinate (" + x + "," + y + ") not found"));
     }
 }

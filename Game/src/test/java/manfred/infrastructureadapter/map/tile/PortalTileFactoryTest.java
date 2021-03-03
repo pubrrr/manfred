@@ -1,22 +1,22 @@
 package manfred.infrastructureadapter.map.tile;
 
-import manfred.data.InvalidInputException;
+import manfred.data.infrastructure.map.TileConversionAction;
 import manfred.data.persistence.dto.TransporterDto;
 import manfred.data.infrastructure.map.MapPrototype;
-import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.shared.PositiveInt;
 import manfred.game.interact.Portal;
 import manfred.game.map.MapTile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class PortalTileFactoryTest {
 
@@ -29,51 +29,20 @@ class PortalTileFactoryTest {
 
     @Test
     void noPortalsGiven() {
-        MapPrototype input = new MapPrototype(
-            "name",
-            mock(MapMatrix.class),
-            List.of(),
-            List.of(),
-            List.of(),
-            List.of()
-        );
+        MapPrototype input = mock(MapPrototype.class);
+        when(input.getPortal(any())).thenReturn(Optional.empty());
 
-        Optional<TileConversionAction> result = underTest.applicableTo(input, 0, 0);
-
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
-    void portalAtWrongPositionGiven() {
-        MapPrototype input = new MapPrototype(
-            "name",
-            mock(MapMatrix.class),
-            List.of(),
-            List.of(new TransporterDto("target", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(99), PositiveInt.of(99))),
-            List.of(),
-            List.of()
-        );
-
-        Optional<TileConversionAction> result = underTest.applicableTo(input, 0, 0);
+        Optional<TileConversionAction<MapTile>> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isEmpty());
     }
 
     @Test
     void portalGiven() {
-        PositiveInt positionX = PositiveInt.of(5);
-        PositiveInt positionY = PositiveInt.of(10);
+        MapPrototype input = mock(MapPrototype.class);
+        when(input.getPortal(any())).thenReturn(Optional.of(new TransporterDto("target", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0))));
 
-        MapPrototype input = new MapPrototype(
-            "name",
-            mock(MapMatrix.class),
-            List.of(),
-            List.of(new TransporterDto("target", PositiveInt.of(0), PositiveInt.of(0), positionX, positionY)),
-            List.of(),
-            List.of()
-        );
-
-        Optional<TileConversionAction> result = underTest.applicableTo(input, positionX.value(), positionY.value());
+        Optional<TileConversionAction<MapTile>> result = underTest.applicableTo(input, mock(MapPrototype.Coordinate.class));
 
         assertTrue(result.isPresent());
         MapTile createdTile = result.get().create();

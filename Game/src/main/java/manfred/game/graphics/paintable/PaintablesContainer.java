@@ -1,7 +1,7 @@
 package manfred.game.graphics.paintable;
 
-import java.util.Stack;
+import java.util.Collection;
 
 public interface PaintablesContainer {
-    Stack<PaintableContainerElement> getPaintableContainerElements();
+    Collection<PaintableContainerElement> getPaintableContainerElements();
 }

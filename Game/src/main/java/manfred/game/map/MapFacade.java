@@ -10,6 +10,7 @@ import manfred.game.graphics.paintable.PaintablesContainer;
 import manfred.game.geometry.Rectangle;
 import manfred.infrastructureadapter.map.MapProvider;
 
+import java.util.Collection;
 import java.util.Stack;
 
 public class MapFacade implements PaintablesContainer, CollisionDetector {
@@ -28,7 +29,7 @@ public class MapFacade implements PaintablesContainer, CollisionDetector {
     }
 
     @Override
-    public Stack<PaintableContainerElement> getPaintableContainerElements() {
+    public Collection<PaintableContainerElement> getPaintableContainerElements() {
         return this.map.getPaintableContainerElements();
     }
 
@@ -38,10 +39,6 @@ public class MapFacade implements PaintablesContainer, CollisionDetector {
 
     public ControllerStateMapper<ManfredController, ControllerInterface> stepOn(Map.TileCoordinate moveTo) {
         return this.map.stepOn(moveTo);
-    }
-
-    public boolean isAccessible(int x, int y) {
-        return this.map.isAccessible(x, y);
     }
 
     @Override
