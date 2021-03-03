@@ -2,6 +2,7 @@ package manfred.manfreditor.gui.view.mapobject;
 
 import lombok.AllArgsConstructor;
 import manfred.data.shared.PositiveInt;
+import manfred.manfreditor.gui.view.GridFilter;
 import manfred.manfreditor.mapobject.MapObjectRepository;
 import manfred.manfreditor.mapobject.SelectedObject;
 import org.eclipse.swt.graphics.Color;
@@ -17,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.Predicate;
 
 @Component
 @AllArgsConstructor
@@ -32,33 +32,23 @@ public class MapObjectsView {
     private final SelectedObject selectedObject;
 
     public Optional<MapObjectRepository.ObjectKey> getClickedObjectKey(int x, int y) {
-        Map<ObjectsViewCoordinate, MapObjectRepository.ObjectKey> objectKeysByGridCoordinate = getObjectKeysByGridCoordinate();
+        Map<ObjectsGridCoordinate, MapObjectRepository.ObjectKey> objectKeysByGridCoordinate = getObjectKeysByGridCoordinate();
         return objectKeysByGridCoordinate.entrySet().stream()
-            .filter(forClickedGrid(x, y))
+            .filter(GridFilter.tileWithSizeContains(OBJECT_TILE_SIZE, x, y))
             .findAny()
             .map(Map.Entry::getValue);
     }
 
-    private Predicate<Map.Entry<ObjectsViewCoordinate, MapObjectRepository.ObjectKey>> forClickedGrid(int x, int y) {
-        return objectKeyByGridCoordinate -> {
-            ObjectsViewCoordinate objectsViewCoordinate = objectKeyByGridCoordinate.getKey();
-            return objectsViewCoordinate.getX() >= x / OBJECT_TILE_SIZE
-                && objectsViewCoordinate.getX() < x / OBJECT_TILE_SIZE + 1
-                && objectsViewCoordinate.getY() >= y / OBJECT_TILE_SIZE
-                && objectsViewCoordinate.getY() < y / OBJECT_TILE_SIZE + 1;
-        };
-    }
-
     public void draw(GC gc, Display display) {
-        Map<ObjectsViewCoordinate, MapObjectRepository.ObjectKey> objectKeysByCoordinate = getObjectKeysByGridCoordinate();
+        Map<ObjectsGridCoordinate, MapObjectRepository.ObjectKey> objectKeysByCoordinate = getObjectKeysByGridCoordinate();
         objectKeysByCoordinate.forEach(drawObjectCenterdOnGrid(gc, display));
     }
 
-    private Map<ObjectsViewCoordinate, MapObjectRepository.ObjectKey> getObjectKeysByGridCoordinate() {
+    private Map<ObjectsGridCoordinate, MapObjectRepository.ObjectKey> getObjectKeysByGridCoordinate() {
         List<MapObjectRepository.ObjectKey> objectKeys = mapObjectRepository.getKeys();
-        List<ObjectsViewCoordinate> coordinates = objectsViewCoordinateFactory.getCoordinates(PositiveInt.of(objectKeys.size()));
+        List<ObjectsGridCoordinate> coordinates = objectsViewCoordinateFactory.getCoordinates(PositiveInt.of(objectKeys.size()));
 
-        Map<ObjectsViewCoordinate, MapObjectRepository.ObjectKey> objectKeysByCoordinate = new HashMap<>();
+        Map<ObjectsGridCoordinate, MapObjectRepository.ObjectKey> objectKeysByCoordinate = new HashMap<>();
         for (int i = 0; i < objectKeys.size(); i++) {
             objectKeysByCoordinate.put(
                 coordinates.get(i),
@@ -68,10 +58,10 @@ public class MapObjectsView {
         return objectKeysByCoordinate;
     }
 
-    private BiConsumer<ObjectsViewCoordinate, MapObjectRepository.ObjectKey> drawObjectCenterdOnGrid(GC gc, Display display) {
-        return (objectsViewCoordinate, objectKey) -> {
-            int xOnCanvas = OBJECT_TILE_SIZE * objectsViewCoordinate.getX();
-            int yOnCanvas = OBJECT_TILE_SIZE * objectsViewCoordinate.getY();
+    private BiConsumer<ObjectsGridCoordinate, MapObjectRepository.ObjectKey> drawObjectCenterdOnGrid(GC gc, Display display) {
+        return (objectsGridCoordinate, objectKey) -> {
+            int xOnCanvas = OBJECT_TILE_SIZE * objectsGridCoordinate.getX().value();
+            int yOnCanvas = OBJECT_TILE_SIZE * objectsGridCoordinate.getY().value();
 
             if (selectedObject.isSelected(objectKey)) {
                 Color color = new Color(display, CYAN_BACKGROUND);

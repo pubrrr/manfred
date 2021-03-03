@@ -2,11 +2,15 @@ package componentTests.controller;
 
 import com.google.common.collect.ImmutableBiMap;
 import componentTests.TestGameContext;
-import helpers.TestGameConfig;
 import manfred.game.controls.ControllerInterface;
 import manfred.game.controls.GelaberController;
 import manfred.game.graphics.paintable.GelaberOverlay;
-import manfred.game.interact.person.gelaber.*;
+import manfred.game.interact.person.gelaber.GelaberEdge;
+import manfred.game.interact.person.gelaber.GelaberFacade;
+import manfred.game.interact.person.gelaber.GelaberFacadeBuilder;
+import manfred.game.interact.person.gelaber.GelaberGraphMatrix;
+import manfred.game.interact.person.gelaber.GelaberNode;
+import manfred.game.interact.person.gelaber.GelaberNodeIdentifier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -44,9 +44,9 @@ public class ConcreteMapObject implements MapObject {
 
     private Consumer<MapPrototype.Coordinate> overrideNonAccessibleTiles(Map.TileCoordinate tileCoordinate, java.util.Map<Map.TileCoordinate, AccessibilityIndicator> mergedAccessibility) {
         return coordinate -> {
-            Map.TileCoordinate targetTile = tileCoordinate.translateBy(coordinate);
             TilePrototype tilePrototype = structure.getFromMap(coordinate);
             if (!tilePrototype.isAccessible()) {
+                Map.TileCoordinate targetTile = tileCoordinate.translateBy(coordinate);
                 mergedAccessibility.put(targetTile, new ColoredAccessibilityIndicator(red));
             }
         };

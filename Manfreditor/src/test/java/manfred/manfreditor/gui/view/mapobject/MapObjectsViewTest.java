@@ -1,5 +1,6 @@
 package manfred.manfreditor.gui.view.mapobject;
 
+import manfred.data.shared.PositiveInt;
 import manfred.manfreditor.mapobject.MapObjectRepository;
 import manfred.manfreditor.mapobject.SelectedObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +45,7 @@ class MapObjectsViewTest {
 
     @Test
     void pointInFirstTile() {
-        when(objectsViewCoordinateFactoryMock.getCoordinates(any())).thenReturn(List.of(new ObjectsViewCoordinate(0, 0)));
+        when(objectsViewCoordinateFactoryMock.getCoordinates(any())).thenReturn(List.of(objectsGridCoordinate(0, 0)));
         when(mapObjectRepositoryMock.getKeys()).thenReturn(List.of(mock(MapObjectRepository.ObjectKey.class)));
 
         Optional<MapObjectRepository.ObjectKey> result = underTest.getClickedObjectKey(
@@ -57,7 +58,7 @@ class MapObjectsViewTest {
 
     @Test
     void givenOneObject_secondTileSelected_thenResultIsEmpty() {
-        when(objectsViewCoordinateFactoryMock.getCoordinates(any())).thenReturn(List.of(new ObjectsViewCoordinate(0, 0)));
+        when(objectsViewCoordinateFactoryMock.getCoordinates(any())).thenReturn(List.of(objectsGridCoordinate(0, 0)));
         when(mapObjectRepositoryMock.getKeys()).thenReturn(List.of(mock(MapObjectRepository.ObjectKey.class)));
 
         Optional<MapObjectRepository.ObjectKey> result = underTest.getClickedObjectKey(
@@ -71,8 +72,8 @@ class MapObjectsViewTest {
     @Test
     void givenTwoObjects_firstTileSelected_thenResultIsFirstKey() {
         when(objectsViewCoordinateFactoryMock.getCoordinates(any())).thenReturn(List.of(
-            new ObjectsViewCoordinate(0, 0),
-            new ObjectsViewCoordinate(1, 0)
+            objectsGridCoordinate(0, 0),
+            objectsGridCoordinate(1, 0)
         ));
         MapObjectRepository.ObjectKey expectedSelection = mock(MapObjectRepository.ObjectKey.class);
         when(mapObjectRepositoryMock.getKeys()).thenReturn(List.of(
@@ -92,8 +93,8 @@ class MapObjectsViewTest {
     @Test
     void givenTwoObjects_secondTileSelected_thenResultIsSecondKey() {
         when(objectsViewCoordinateFactoryMock.getCoordinates(any())).thenReturn(List.of(
-            new ObjectsViewCoordinate(0, 0),
-            new ObjectsViewCoordinate(1, 0)
+            objectsGridCoordinate(0, 0),
+            objectsGridCoordinate(1, 0)
         ));
         MapObjectRepository.ObjectKey expectedSelection = mock(MapObjectRepository.ObjectKey.class);
         when(mapObjectRepositoryMock.getKeys()).thenReturn(List.of(
@@ -113,8 +114,8 @@ class MapObjectsViewTest {
     @Test
     void givenTwoObjects_thirdTileSelected_thenResultIsEmpty() {
         when(objectsViewCoordinateFactoryMock.getCoordinates(any())).thenReturn(List.of(
-            new ObjectsViewCoordinate(0, 0),
-            new ObjectsViewCoordinate(1, 0)
+            objectsGridCoordinate(0, 0),
+            objectsGridCoordinate(1, 0)
         ));
         when(mapObjectRepositoryMock.getKeys()).thenReturn(List.of(
             mock(MapObjectRepository.ObjectKey.class),
@@ -132,9 +133,9 @@ class MapObjectsViewTest {
     @Test
     void givenThreeObjects_thirdTileSelected_thenResultIsThirdKey() {
         when(objectsViewCoordinateFactoryMock.getCoordinates(any())).thenReturn(List.of(
-            new ObjectsViewCoordinate(0, 0),
-            new ObjectsViewCoordinate(1, 0),
-            new ObjectsViewCoordinate(0, 1)
+            objectsGridCoordinate(0, 0),
+            objectsGridCoordinate(1, 0),
+            objectsGridCoordinate(0, 1)
         ));
         MapObjectRepository.ObjectKey expectedSelection = mock(MapObjectRepository.ObjectKey.class);
         when(mapObjectRepositoryMock.getKeys()).thenReturn(List.of(
@@ -155,9 +156,9 @@ class MapObjectsViewTest {
     @Test
     void givenThreeObjects_fourthTileSelected_thenResultIsEmpty() {
         when(objectsViewCoordinateFactoryMock.getCoordinates(any())).thenReturn(List.of(
-            new ObjectsViewCoordinate(0, 0),
-            new ObjectsViewCoordinate(1, 0),
-            new ObjectsViewCoordinate(0, 1)
+            objectsGridCoordinate(0, 0),
+            objectsGridCoordinate(1, 0),
+            objectsGridCoordinate(0, 1)
         ));
         when(mapObjectRepositoryMock.getKeys()).thenReturn(List.of(
             mock(MapObjectRepository.ObjectKey.class),
@@ -171,5 +172,9 @@ class MapObjectsViewTest {
         );
 
         assertTrue(result.isEmpty());
+    }
+
+    private ObjectsGridCoordinate objectsGridCoordinate(int x, int y) {
+        return new ObjectsGridCoordinate(PositiveInt.of(x), PositiveInt.of(y));
     }
 }

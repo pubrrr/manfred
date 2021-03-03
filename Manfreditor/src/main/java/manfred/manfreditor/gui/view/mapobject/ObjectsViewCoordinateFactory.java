@@ -13,11 +13,11 @@ public class ObjectsViewCoordinateFactory {
         this.numberOfColumns = numberOfColumns.value();
     }
 
-    public List<ObjectsViewCoordinate> getCoordinates(PositiveInt numberOfObjects) {
-        List<ObjectsViewCoordinate> coordinates = new ArrayList<>(numberOfObjects.value());
+    public List<ObjectsGridCoordinate> getCoordinates(PositiveInt numberOfObjects) {
+        List<ObjectsGridCoordinate> coordinates = new ArrayList<>(numberOfObjects.value());
 
         for (int i = 0; i < numberOfObjects.value(); i++) {
-            coordinates.add(new ObjectsViewCoordinate(i % numberOfColumns, i / numberOfColumns));
+            coordinates.add(new ObjectsGridCoordinate(PositiveInt.of(i % numberOfColumns), PositiveInt.of(i / numberOfColumns)));
         }
         return coordinates;
     }

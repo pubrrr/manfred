@@ -10,13 +10,13 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
-class ObjectsViewCoordinateFactoryTest {
+class ObjectsGridCoordinateFactoryTest {
 
     @Test
     void emptyInput() {
         ObjectsViewCoordinateFactory underTest = new ObjectsViewCoordinateFactory(PositiveInt.ofNonZero(1));
 
-        List<ObjectsViewCoordinate> result = underTest.getCoordinates(PositiveInt.of(0));
+        List<ObjectsGridCoordinate> result = underTest.getCoordinates(PositiveInt.of(0));
 
         assertThat(result, hasSize(0));
     }
@@ -25,34 +25,34 @@ class ObjectsViewCoordinateFactoryTest {
     void oneColumn_oneCoordinate() {
         ObjectsViewCoordinateFactory underTest = new ObjectsViewCoordinateFactory(PositiveInt.ofNonZero(1));
 
-        List<ObjectsViewCoordinate> result = underTest.getCoordinates(PositiveInt.of(1));
+        List<ObjectsGridCoordinate> result = underTest.getCoordinates(PositiveInt.of(1));
 
         assertThat(result, hasSize(1));
-        assertThat(result.get(0), is(new ObjectsViewCoordinate(0, 0)));
+        assertThat(result.get(0), is(objectsGridCoordinate(0, 0)));
     }
 
     @Test
     void oneColumn_twoCoordinates() {
         ObjectsViewCoordinateFactory underTest = new ObjectsViewCoordinateFactory(PositiveInt.ofNonZero(1));
 
-        List<ObjectsViewCoordinate> result = underTest.getCoordinates(PositiveInt.of(2));
+        List<ObjectsGridCoordinate> result = underTest.getCoordinates(PositiveInt.of(2));
 
         assertThat(result, hasSize(2));
-        assertThat(result.get(0), is(new ObjectsViewCoordinate(0, 0)));
-        assertThat(result.get(1), is(new ObjectsViewCoordinate(0, 1)));
+        assertThat(result.get(0), is(objectsGridCoordinate(0, 0)));
+        assertThat(result.get(1), is(objectsGridCoordinate(0, 1)));
     }
 
     @Test
     void oneColumn_threeCoordinates() {
         ObjectsViewCoordinateFactory underTest = new ObjectsViewCoordinateFactory(PositiveInt.ofNonZero(1));
 
-        List<ObjectsViewCoordinate> result = underTest.getCoordinates(PositiveInt.of(3));
+        List<ObjectsGridCoordinate> result = underTest.getCoordinates(PositiveInt.of(3));
 
         assertThat(result, hasSize(3));
         assertThat(result, containsInAnyOrder(
-            new ObjectsViewCoordinate(0, 0),
-            new ObjectsViewCoordinate(0, 1),
-            new ObjectsViewCoordinate(0, 2)
+            objectsGridCoordinate(0, 0),
+            objectsGridCoordinate(0, 1),
+            objectsGridCoordinate(0, 2)
         ));
     }
 
@@ -60,24 +60,24 @@ class ObjectsViewCoordinateFactoryTest {
     void twoColumns_twoCoordinates() {
         ObjectsViewCoordinateFactory underTest = new ObjectsViewCoordinateFactory(PositiveInt.ofNonZero(2));
 
-        List<ObjectsViewCoordinate> result = underTest.getCoordinates(PositiveInt.of(2));
+        List<ObjectsGridCoordinate> result = underTest.getCoordinates(PositiveInt.of(2));
 
         assertThat(result, hasSize(2));
-        assertThat(result.get(0), is(new ObjectsViewCoordinate(0, 0)));
-        assertThat(result.get(1), is(new ObjectsViewCoordinate(1, 0)));
+        assertThat(result.get(0), is(objectsGridCoordinate(0, 0)));
+        assertThat(result.get(1), is(objectsGridCoordinate(1, 0)));
     }
 
     @Test
     void twoColumns_threeCoordinates() {
         ObjectsViewCoordinateFactory underTest = new ObjectsViewCoordinateFactory(PositiveInt.ofNonZero(2));
 
-        List<ObjectsViewCoordinate> result = underTest.getCoordinates(PositiveInt.of(3));
+        List<ObjectsGridCoordinate> result = underTest.getCoordinates(PositiveInt.of(3));
 
         assertThat(result, hasSize(3));
         assertThat(result, containsInAnyOrder(
-            new ObjectsViewCoordinate(0, 0),
-            new ObjectsViewCoordinate(1, 0),
-            new ObjectsViewCoordinate(0, 1)
+            objectsGridCoordinate(0, 0),
+            objectsGridCoordinate(1, 0),
+            objectsGridCoordinate(0, 1)
         ));
     }
 
@@ -85,15 +85,15 @@ class ObjectsViewCoordinateFactoryTest {
     void twoColumns_fiveCoordinates() {
         ObjectsViewCoordinateFactory underTest = new ObjectsViewCoordinateFactory(PositiveInt.ofNonZero(2));
 
-        List<ObjectsViewCoordinate> result = underTest.getCoordinates(PositiveInt.of(5));
+        List<ObjectsGridCoordinate> result = underTest.getCoordinates(PositiveInt.of(5));
 
         assertThat(result, hasSize(5));
         assertThat(result, containsInAnyOrder(
-            new ObjectsViewCoordinate(0, 0),
-            new ObjectsViewCoordinate(1, 0),
-            new ObjectsViewCoordinate(0, 1),
-            new ObjectsViewCoordinate(1, 1),
-            new ObjectsViewCoordinate(0, 2)
+            objectsGridCoordinate(0, 0),
+            objectsGridCoordinate(1, 0),
+            objectsGridCoordinate(0, 1),
+            objectsGridCoordinate(1, 1),
+            objectsGridCoordinate(0, 2)
         ));
     }
 
@@ -101,13 +101,13 @@ class ObjectsViewCoordinateFactoryTest {
     void threeColumns_threeCoordinates() {
         ObjectsViewCoordinateFactory underTest = new ObjectsViewCoordinateFactory(PositiveInt.ofNonZero(3));
 
-        List<ObjectsViewCoordinate> result = underTest.getCoordinates(PositiveInt.of(3));
+        List<ObjectsGridCoordinate> result = underTest.getCoordinates(PositiveInt.of(3));
 
         assertThat(result, hasSize(3));
         assertThat(result, containsInAnyOrder(
-            new ObjectsViewCoordinate(0, 0),
-            new ObjectsViewCoordinate(1, 0),
-            new ObjectsViewCoordinate(2, 0)
+            objectsGridCoordinate(0, 0),
+            objectsGridCoordinate(1, 0),
+            objectsGridCoordinate(2, 0)
         ));
     }
 
@@ -115,14 +115,18 @@ class ObjectsViewCoordinateFactoryTest {
     void threeColumns_fourCoordinates() {
         ObjectsViewCoordinateFactory underTest = new ObjectsViewCoordinateFactory(PositiveInt.ofNonZero(3));
 
-        List<ObjectsViewCoordinate> result = underTest.getCoordinates(PositiveInt.of(4));
+        List<ObjectsGridCoordinate> result = underTest.getCoordinates(PositiveInt.of(4));
 
         assertThat(result, hasSize(4));
         assertThat(result, containsInAnyOrder(
-            new ObjectsViewCoordinate(0, 0),
-            new ObjectsViewCoordinate(1, 0),
-            new ObjectsViewCoordinate(2, 0),
-            new ObjectsViewCoordinate(0, 1)
+            objectsGridCoordinate(0, 0),
+            objectsGridCoordinate(1, 0),
+            objectsGridCoordinate(2, 0),
+            objectsGridCoordinate(0, 1)
         ));
+    }
+
+    private ObjectsGridCoordinate objectsGridCoordinate(int x, int y) {
+        return new ObjectsGridCoordinate(PositiveInt.of(x), PositiveInt.of(y));
     }
 }

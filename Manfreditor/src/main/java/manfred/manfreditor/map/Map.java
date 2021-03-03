@@ -3,9 +3,11 @@ package manfred.manfreditor.map;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.shared.PositiveInt;
+import manfred.manfreditor.gui.view.GridCoordinate;
 import manfred.manfreditor.mapobject.MapObject;
 
 import java.util.Set;
@@ -55,12 +57,7 @@ public class Map {
         return name;
     }
 
-    public TileCoordinate tileCoordinate(PositiveInt x, PositiveInt y) {
-        return new TileCoordinate(x, y);
-    }
-
     public MapObject getObjectAt(TileCoordinate tileCoordinate) {
-        // TODO null case!
         return this.mapMatrix.get(tileCoordinate);
     }
 
@@ -71,7 +68,8 @@ public class Map {
     @EqualsAndHashCode
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @Getter
-    public static class TileCoordinate {
+    @ToString
+    public class TileCoordinate {
         PositiveInt x;
         PositiveInt y;
 
@@ -87,6 +85,24 @@ public class Map {
         private TileCoordinate(MapPrototype.Coordinate coordinatePrototype) {
             this.x = coordinatePrototype.getX();
             this.y = coordinatePrototype.getY();
+        }
+
+        public TileCoordinateWithInvertedY invertY() {
+            return new TileCoordinateWithInvertedY(this.x, PositiveInt.of(getSizeY().value() - this.y.value() - 1));
+        }
+    }
+
+    @EqualsAndHashCode
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @Getter
+    @ToString
+    public static class TileCoordinateWithInvertedY implements GridCoordinate {
+        PositiveInt x;
+        PositiveInt y;
+
+        protected TileCoordinateWithInvertedY(PositiveInt x, PositiveInt y) {
+            this.x = x;
+            this.y = y;
         }
     }
 }
