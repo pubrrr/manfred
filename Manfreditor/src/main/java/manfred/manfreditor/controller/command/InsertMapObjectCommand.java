@@ -28,10 +28,7 @@ public class InsertMapObjectCommand implements Command {
 
     private CommandResult insertCorrespondingObject(ConcreteMapObject concreteMapObject) {
         return mapView.getClickedTile(this.x, this.y)
-            .map(tileCoordinate -> {
-                System.out.println(tileCoordinate);
-                return mapModel.insertObjectAt(concreteMapObject, tileCoordinate);
-            })
+            .map(tileCoordinate -> mapModel.insertObjectAt(concreteMapObject, tileCoordinate))
             .map(validationMessages -> validationMessages.isEmpty()
                 ? CommandResult.success()
                 : CommandResult.failure(String.join(", ", validationMessages))

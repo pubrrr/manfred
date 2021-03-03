@@ -26,13 +26,14 @@ public class MapController implements MouseListener {
 
     private final LoadMapCommand.Factory loadMapCommandFactory;
     private final InsertMapObjectCommand.Factory insertMapObjectCommandFactory;
-    private final List<Consumer<String>> postActions;
+    private final List<Consumer<String>> loadMapPostActions;
+    private final List<Runnable> insertPostActions;
 
     public CommandResult loadMap(String selectedFile) {
         return execute(loadMapCommandFactory.create(selectedFile));
     }
 
-    public SelectionListener withShell(Shell mainShell) {
+    public SelectionListener loadMap(Shell mainShell) {
         return new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -40,18 +41,22 @@ public class MapController implements MouseListener {
                 String selectedFile = fileDialog.open();
                 if (selectedFile != null) {
                     loadMap(selectedFile).onFailure(message -> {
-                            MessageBox messageBox = new MessageBox(mainShell);
-                            messageBox.setMessage(message);
-                            messageBox.open();
-                        });
-                    postActions.forEach(stringConsumer -> stringConsumer.accept(selectedFile));
+                        MessageBox messageBox = new MessageBox(mainShell);
+                        messageBox.setMessage(message);
+                        messageBox.open();
+                    });
+                    loadMapPostActions.forEach(stringConsumer -> stringConsumer.accept(selectedFile));
                 }
             }
         };
     }
 
-    public void addPostAction(Consumer<String> selectedFileConsumer) {
-        this.postActions.add(selectedFileConsumer);
+    public void addLoadMapPostAction(Consumer<String> selectedFileConsumer) {
+        this.loadMapPostActions.add(selectedFileConsumer);
+    }
+
+    public void addInsertPostAction(Runnable postAction) {
+        this.insertPostActions.add(postAction);
     }
 
     @Override
@@ -66,6 +71,7 @@ public class MapController implements MouseListener {
     public void mouseUp(MouseEvent event) {
         if (event.button == LEFT_MOUSE_BUTTON) {
             execute(insertMapObjectCommandFactory.create(event.x, event.y)).onFailure(System.out::println);
+            insertPostActions.forEach(Runnable::run);
         }
     }
 }

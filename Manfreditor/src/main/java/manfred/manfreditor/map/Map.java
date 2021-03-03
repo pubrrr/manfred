@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.shared.PositiveInt;
 import manfred.manfreditor.gui.view.GridCoordinate;
+import manfred.manfreditor.mapobject.ConcreteMapObject;
 import manfred.manfreditor.mapobject.MapObject;
 
 import java.util.Set;
@@ -63,6 +64,10 @@ public class Map {
 
     public java.util.Map<TileCoordinate, MapObject> getObjects() {
         return mapMatrix;
+    }
+
+    public void insertObjectAt(ConcreteMapObject mapObject, TileCoordinate tileCoordinate) {
+        this.mapMatrix.put(tileCoordinate, mapObject);
     }
 
     @EqualsAndHashCode

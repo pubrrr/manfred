@@ -50,14 +50,14 @@ public class GuiBuilder {
         Label label = new Label(composite, SWT.FILL);
         label.setText("Map debug");
         label.setLayoutData(new RowData(500, 30));
-        mapController.addPostAction(selectedFile -> {
+        mapController.addLoadMapPostAction(selectedFile -> {
             label.setText(selectedFile);
             label.redraw();
         });
 
         Button button = new Button(composite, SWT.CENTER);
         button.setText("Map laden");
-        button.addSelectionListener(mapController.withShell(mainShell));
+        button.addSelectionListener(mapController.loadMap(mainShell));
     }
 
     private void addMapAndMapObjects(Shell mainShell) {
@@ -79,10 +79,11 @@ public class GuiBuilder {
         mapCanvas.setSize(700, 700);
         mapCanvas.addMouseListener(mapController);
         mapCanvas.addPaintListener(event -> mapView.draw(event.gc, mainShell.getDisplay()));
-        mapController.addPostAction(selectedFile -> {
+        mapController.addLoadMapPostAction(selectedFile -> {
             mapCanvas.setSize(mapView.getMapViewSize());
             mapCanvas.redraw();
         });
+        mapController.addInsertPostAction(mapCanvas::redraw);
     }
 
     private void addMapObjectsCanvas(Composite mapAndMapObjectsContainer, Shell mainShell) {
@@ -94,6 +95,6 @@ public class GuiBuilder {
         mapObjectsCanvas.addPaintListener(event -> mapObjectsView.draw(event.gc, mainShell.getDisplay()));
         mapObjectsCanvas.addMouseListener(mapObjectsController);
         mapObjectsController.addPostAction(mapObjectsCanvas::redraw);
-        mapController.addPostAction(selectedFile -> mapObjectsCanvas.redraw());
+        mapController.addLoadMapPostAction(selectedFile -> mapObjectsCanvas.redraw());
     }
 }

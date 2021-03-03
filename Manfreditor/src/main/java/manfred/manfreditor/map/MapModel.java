@@ -36,6 +36,7 @@ public class MapModel {
     }
 
     public List<String> insertObjectAt(ConcreteMapObject mapObject, Map.TileCoordinate tileCoordinate) {
-        return null;
+        this.map.insertObjectAt(mapObject, tileCoordinate);
+        return List.of();
     }
 }
