@@ -1,4 +1,4 @@
-package manfred.manfreditor.map;
+package manfred.manfreditor.map.accessibility;
 
 import lombok.AllArgsConstructor;
 import manfred.manfreditor.gui.view.map.MapViewCoordinate;
@@ -19,5 +19,10 @@ public class ColoredAccessibilityIndicator implements AccessibilityIndicator {
         gc.setBackground(color);
         gc.fillRectangle(bottomLeft.getX(), bottomLeft.getY() - TileViewSize.TILE_SIZE, TileViewSize.TILE_SIZE, TileViewSize.TILE_SIZE);
         color.dispose();
+    }
+
+    @Override
+    public boolean isAccessible() {
+        return false;
     }
 }

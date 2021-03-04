@@ -3,8 +3,8 @@ package manfred.manfreditor.mapobject;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.manfreditor.gui.view.map.MapViewCoordinate;
-import manfred.manfreditor.map.AccessibilityIndicator;
-import manfred.manfreditor.map.ColoredAccessibilityIndicator;
+import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
+import manfred.manfreditor.map.accessibility.ColoredAccessibilityIndicator;
 import manfred.manfreditor.map.Map;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -58,5 +58,9 @@ public class ConcreteMapObject implements MapObject {
 
     public ImageData getImageData() {
         return imageData;
+    }
+
+    public MapPrototype getStructure() {
+        return structure;
     }
 }

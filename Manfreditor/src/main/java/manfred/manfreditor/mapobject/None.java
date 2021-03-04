@@ -1,7 +1,7 @@
 package manfred.manfreditor.mapobject;
 
 import manfred.manfreditor.gui.view.map.MapViewCoordinate;
-import manfred.manfreditor.map.AccessibilityIndicator;
+import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
 import manfred.manfreditor.map.Map;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Display;

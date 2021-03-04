@@ -1,7 +1,8 @@
-package manfred.manfreditor.map;
+package manfred.manfreditor.map.accessibility;
 
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.tile.TilePrototype;
+import manfred.manfreditor.map.Map;
 import manfred.manfreditor.mapobject.ConcreteMapObject;
 import manfred.manfreditor.mapobject.MapObject;
 import org.junit.jupiter.api.BeforeEach;

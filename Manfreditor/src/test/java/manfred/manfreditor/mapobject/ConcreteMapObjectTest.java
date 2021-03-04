@@ -2,9 +2,9 @@ package manfred.manfreditor.mapobject;
 
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.tile.TilePrototype;
-import manfred.manfreditor.map.AccessibilityIndicator;
-import manfred.manfreditor.map.ColoredAccessibilityIndicator;
-import manfred.manfreditor.map.EmptyAccessibilityIndicator;
+import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
+import manfred.manfreditor.map.accessibility.ColoredAccessibilityIndicator;
+import manfred.manfreditor.map.accessibility.EmptyAccessibilityIndicator;
 import manfred.manfreditor.map.Map;
 import org.junit.jupiter.api.Test;
 

@@ -4,9 +4,10 @@ import manfred.data.DataContext;
 import manfred.data.infrastructure.map.TileConversionRule;
 import manfred.manfreditor.gui.view.mapobject.MapObjectsView;
 import manfred.manfreditor.gui.view.mapobject.ObjectsViewCoordinateFactory;
-import manfred.manfreditor.map.AccessibilityMerger;
+import manfred.manfreditor.map.accessibility.AccessibilityMerger;
 import manfred.manfreditor.map.Map;
 import manfred.manfreditor.map.MapModel;
+import manfred.manfreditor.map.ObjectInsertionValidator;
 import manfred.manfreditor.map.objectfactory.ConcreteMapObjectFactory;
 import manfred.manfreditor.mapobject.MapObject;
 import manfred.manfreditor.mapobject.SelectedObject;
@@ -24,8 +25,8 @@ import java.util.HashMap;
 public class ManfreditorContext {
 
     @Bean
-    public MapModel mapModel(AccessibilityMerger accessibilityMerger) {
-        return new MapModel(new Map("uninitialized", new HashMap<>()), accessibilityMerger);
+    public MapModel mapModel(AccessibilityMerger accessibilityMerger, ObjectInsertionValidator objectInsertionValidator) {
+        return new MapModel(new Map("uninitialized", new HashMap<>()), accessibilityMerger, objectInsertionValidator);
     }
 
     @Bean
