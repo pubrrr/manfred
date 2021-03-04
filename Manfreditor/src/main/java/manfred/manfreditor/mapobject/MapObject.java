@@ -1,6 +1,6 @@
 package manfred.manfreditor.mapobject;
 
-import manfred.manfreditor.gui.view.MapViewCoordinate;
+import manfred.manfreditor.gui.view.map.MapViewCoordinate;
 import manfred.manfreditor.map.AccessibilityIndicator;
 import manfred.manfreditor.map.Map;
 import org.eclipse.swt.graphics.GC;
@@ -8,7 +8,7 @@ import org.eclipse.swt.widgets.Display;
 
 public interface MapObject {
 
-    void drawAt(MapViewCoordinate bottomLeft, GC gc, Display display);
+    void drawOnMapAt(MapViewCoordinate bottomLeft, GC gc, Display display);
 
     static MapObject none() {
         return new None();

@@ -2,7 +2,7 @@ package manfred.manfreditor.mapobject;
 
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.tile.TilePrototype;
-import manfred.manfreditor.gui.view.MapViewCoordinate;
+import manfred.manfreditor.gui.view.map.MapViewCoordinate;
 import manfred.manfreditor.map.AccessibilityIndicator;
 import manfred.manfreditor.map.ColoredAccessibilityIndicator;
 import manfred.manfreditor.map.Map;
@@ -30,7 +30,7 @@ public class ConcreteMapObject implements MapObject {
     }
 
     @Override
-    public void drawAt(MapViewCoordinate bottomLeft, GC gc, Display display) {
+    public void drawOnMapAt(MapViewCoordinate bottomLeft, GC gc, Display display) {
         Image image = new Image(display, this.imageData);
         gc.drawImage(image, bottomLeft.getX(), bottomLeft.getY() - imageData.height);
         image.dispose();
@@ -44,9 +44,9 @@ public class ConcreteMapObject implements MapObject {
 
     private Consumer<MapPrototype.Coordinate> overrideNonAccessibleTiles(Map.TileCoordinate tileCoordinate, java.util.Map<Map.TileCoordinate, AccessibilityIndicator> mergedAccessibility) {
         return coordinate -> {
-            Map.TileCoordinate targetTile = tileCoordinate.translateBy(coordinate);
             TilePrototype tilePrototype = structure.getFromMap(coordinate);
             if (!tilePrototype.isAccessible()) {
+                Map.TileCoordinate targetTile = tileCoordinate.translateBy(coordinate);
                 mergedAccessibility.put(targetTile, new ColoredAccessibilityIndicator(red));
             }
         };
@@ -54,5 +54,9 @@ public class ConcreteMapObject implements MapObject {
 
     public String getName() {
         return this.name;
+    }
+
+    public ImageData getImageData() {
+        return imageData;
     }
 }

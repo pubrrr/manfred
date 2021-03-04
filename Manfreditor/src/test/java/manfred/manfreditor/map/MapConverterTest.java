@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static manfred.manfreditor.helper.CoordinateHelper.coordinatePrototype;
+import static manfred.manfreditor.helper.CoordinateHelper.tileCoordinate;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -44,7 +45,7 @@ class MapConverterTest {
         assertThat(result.getName(), is("name"));
         assertThat(result.getSizeX(), is(PositiveInt.of(1)));
         assertThat(result.getSizeY(), is(PositiveInt.of(1)));
-        assertThat(result.getObjectAt(result.tileCoordinate(PositiveInt.of(0), PositiveInt.of(0))), instanceOf(None.class));
+        assertThat(result.getObjectAt(tileCoordinate(0, 0)), instanceOf(None.class));
     }
 
     @Test
@@ -61,7 +62,7 @@ class MapConverterTest {
         assertThat(result.getName(), is("name"));
         assertThat(result.getSizeX(), is(PositiveInt.of(1)));
         assertThat(result.getSizeY(), is(PositiveInt.of(1)));
-        assertThat(result.getObjectAt(result.tileCoordinate(PositiveInt.of(0), PositiveInt.of(0))), is(mapObjectMock));
+        assertThat(result.getObjectAt(tileCoordinate(0, 0)), is(mapObjectMock));
     }
 
     @Test

@@ -1,8 +1,8 @@
 package manfred.manfreditor.map;
 
 import lombok.AllArgsConstructor;
-import manfred.manfreditor.gui.view.MapViewCoordinate;
-import manfred.manfreditor.gui.view.TileViewSize;
+import manfred.manfreditor.gui.view.map.MapViewCoordinate;
+import manfred.manfreditor.gui.view.map.TileViewSize;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;

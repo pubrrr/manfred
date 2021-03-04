@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
 import manfred.data.shared.PositiveInt;
-import manfred.manfreditor.gui.view.TileViewSize;
+import manfred.manfreditor.gui.view.map.TileViewSize;
 import org.eclipse.swt.graphics.ImageData;
 import org.springframework.stereotype.Component;
 

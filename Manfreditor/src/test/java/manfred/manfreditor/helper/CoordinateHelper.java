@@ -6,6 +6,7 @@ import manfred.data.shared.PositiveInt;
 import manfred.manfreditor.map.Map;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -28,7 +29,13 @@ public class CoordinateHelper {
     }
 
     public static Map.TileCoordinate tileCoordinate(int x, int y) {
-        return new TileCoordinateDouble(x, y);
+        return new TileCoordinateDouble(x, y, new Map("test", new HashMap<>()));
+    }
+
+    public static Map.TileCoordinate tileCoordinate(int x, int y, int mapSizeY) {
+        Map mapMock = mock(Map.class);
+        when(mapMock.getSizeY()).thenReturn(PositiveInt.of(mapSizeY));
+        return new TileCoordinateDouble(x, y, mapMock);
     }
 
     public static class CoordinateDouble extends MapPrototype.Coordinate {
@@ -38,8 +45,8 @@ public class CoordinateHelper {
     }
 
     public static class TileCoordinateDouble extends Map.TileCoordinate {
-        protected TileCoordinateDouble(int x, int y) {
-            super(PositiveInt.of(x), PositiveInt.of(y));
+        protected TileCoordinateDouble(int x, int y, Map map) {
+            map.super(PositiveInt.of(x), PositiveInt.of(y));
         }
     }
 }

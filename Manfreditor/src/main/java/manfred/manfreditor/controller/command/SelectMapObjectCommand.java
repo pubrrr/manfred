@@ -1,46 +1,49 @@
 package manfred.manfreditor.controller.command;
 
+import manfred.manfreditor.gui.view.mapobject.MapObjectsView;
 import manfred.manfreditor.mapobject.MapObjectRepository;
 import manfred.manfreditor.mapobject.SelectedObject;
 import org.springframework.stereotype.Component;
 
 public class SelectMapObjectCommand implements Command {
 
-    private final MapObjectRepository mapObjectRepositoryMock;
-    private final SelectedObject selectedObjectMock;
-    private final String key;
+    private final MapObjectsView mapObjectsView;
+    private final SelectedObject selectedObject;
+    private final int x;
+    private final int y;
 
-    public SelectMapObjectCommand(MapObjectRepository mapObjectRepositoryMock, SelectedObject selectedObjectMock, String key) {
-        this.mapObjectRepositoryMock = mapObjectRepositoryMock;
-        this.selectedObjectMock = selectedObjectMock;
-        this.key = key;
+    public SelectMapObjectCommand(MapObjectsView mapObjectsView, SelectedObject selectedObject, int x, int y) {
+        this.mapObjectsView = mapObjectsView;
+        this.selectedObject = selectedObject;
+        this.x = x;
+        this.y = y;
     }
 
     @Override
     public CommandResult execute() {
-        return this.mapObjectRepositoryMock.getKey(key)
+        return mapObjectsView.getClickedObjectKey(this.x, this.y)
             .map(this::selectKey)
-            .orElse(CommandResult.failure("No map object found in repository with key '" + this.key + "'"));
+            .orElse(CommandResult.failure("No map object found at click position (" + this.x + "," + this.y + ")"));
     }
 
     private CommandResult selectKey(MapObjectRepository.ObjectKey objectKey) {
-        selectedObjectMock.select(objectKey);
+        selectedObject.select(objectKey);
         return CommandResult.success();
     }
 
     @Component
     public static class Factory {
 
-        private final MapObjectRepository mapObjectRepositoryMock;
-        private final SelectedObject selectedObjectMock;
+        private final MapObjectsView mapObjectsView;
+        private final SelectedObject selectedObject;
 
-        public Factory(MapObjectRepository mapObjectRepositoryMock, SelectedObject selectedObjectMock) {
-            this.mapObjectRepositoryMock = mapObjectRepositoryMock;
-            this.selectedObjectMock = selectedObjectMock;
+        public Factory(MapObjectsView mapObjectsView, SelectedObject selectedObject) {
+            this.mapObjectsView = mapObjectsView;
+            this.selectedObject = selectedObject;
         }
 
-        public SelectMapObjectCommand create(String key) {
-            return new SelectMapObjectCommand(mapObjectRepositoryMock, selectedObjectMock, key);
+        public Command create(int x, int y) {
+            return new SelectMapObjectCommand(mapObjectsView, selectedObject, x, y);
         }
     }
 }
