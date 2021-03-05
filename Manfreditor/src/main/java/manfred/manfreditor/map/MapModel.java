@@ -41,7 +41,7 @@ public class MapModel {
         return this.map.getSizeX();
     }
 
-    public List<String> insertObjectAt(ConcreteMapObject mapObject, Map.TileCoordinate tileCoordinate) {
+    public List<String> tryInsertObjectAt(ConcreteMapObject mapObject, Map.TileCoordinate tileCoordinate) {
         java.util.Map<Map.TileCoordinate, AccessibilityIndicator> mergedAccessibility = getMergedAccessibility();
 
         Result result = objectInsertionValidator.mayObjectBeInserted(mapObject, tileCoordinate, mergedAccessibility);

@@ -6,6 +6,7 @@ import manfred.manfreditor.gui.view.map.MapViewCoordinate;
 import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
 import manfred.manfreditor.map.accessibility.ColoredAccessibilityIndicator;
 import manfred.manfreditor.map.Map;
+import manfred.manfreditor.map.accessibility.Source;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -47,7 +48,12 @@ public class ConcreteMapObject implements MapObject {
             TilePrototype tilePrototype = structure.getFromMap(coordinate);
             if (!tilePrototype.isAccessible()) {
                 Map.TileCoordinate targetTile = tileCoordinate.translateBy(coordinate);
-                mergedAccessibility.put(targetTile, new ColoredAccessibilityIndicator(red));
+                ColoredAccessibilityIndicator accessibilityIndicator = new ColoredAccessibilityIndicator(
+                    red,
+                    new Source(this.name, tileCoordinate)
+                );
+
+                mergedAccessibility.put(targetTile, accessibilityIndicator);
             }
         };
     }

@@ -8,10 +8,13 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
+import java.util.Optional;
+
 @AllArgsConstructor
 public class ColoredAccessibilityIndicator implements AccessibilityIndicator {
 
     private final RGB rgb;
+    private final Source source;
 
     @Override
     public void indicateAccessibilityAt(MapViewCoordinate bottomLeft, GC gc, Display display) {
@@ -24,5 +27,10 @@ public class ColoredAccessibilityIndicator implements AccessibilityIndicator {
     @Override
     public boolean isAccessible() {
         return false;
+    }
+
+    @Override
+    public Optional<Source> getSource() {
+        return Optional.of(this.source);
     }
 }

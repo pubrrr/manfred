@@ -73,10 +73,10 @@ class InsertMapObjectCommandTest {
         when(selectedObjectMock.getSelection()).thenReturn(Optional.of(mock(MapObjectRepository.ObjectKey.class)));
         when(mapViewMock.getClickedTile(anyInt(), anyInt())).thenReturn(Optional.of(mock(Map.TileCoordinate.class)));
         when(mapObjectRepositoryMock.get(any())).thenReturn(mock(ConcreteMapObject.class));
-        when(mapModelMock.insertObjectAt(any(), any())).thenReturn(List.of("message1", "message2"));
+        when(mapModelMock.tryInsertObjectAt(any(), any())).thenReturn(List.of("message1", "message2"));
 
         CommandResult result = commandFactory.create(0, 0).execute();
 
-        assertThat(result, failedWithMessage("message1, message2"));
+        assertThat(result, failedWithMessage("message1,\nmessage2"));
     }
 }

@@ -8,12 +8,16 @@ import manfred.manfreditor.mapobject.MapObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static manfred.manfreditor.helper.CoordinateHelper.coordinatePrototype;
 import static manfred.manfreditor.helper.CoordinateHelper.mockMapPrototype;
 import static manfred.manfreditor.helper.CoordinateHelper.tileCoordinate;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.aMapWithSize;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 
 class AccessibilityMergerTest {
 
@@ -62,5 +66,10 @@ class AccessibilityMergerTest {
         assertThat(result.get(tileCoordinate(0, 2)), instanceOf(EmptyAccessibilityIndicator.class));
         assertThat(result.get(tileCoordinate(1, 2)), instanceOf(EmptyAccessibilityIndicator.class));
         assertThat(result.get(tileCoordinate(2, 2)), instanceOf(ColoredAccessibilityIndicator.class));
+
+        assertThat(result.get(tileCoordinate(0, 0)).getSource().isEmpty(), is(true));
+        assertThat(result.get(tileCoordinate(1, 1)).getSource(), equalTo(Optional.of(new Source("name", tileCoordinate(1, 1)))));
+        assertThat(result.get(tileCoordinate(2, 1)).getSource(), equalTo(Optional.of(new Source("name", tileCoordinate(1, 1)))));
+        assertThat(result.get(tileCoordinate(2, 2)).getSource(), equalTo(Optional.of(new Source("name", tileCoordinate(1, 1)))));
     }
 }

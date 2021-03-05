@@ -59,7 +59,10 @@ public class InsertMapObjectComponentTest {
 
         CommandResult result = underTestCommandFactory.create(0, 0).execute();
 
-        assertThat(result, failedWithMessage("Tile (0,0) is not accessible, Tile (1,0) is not accessible"));
+        assertThat(result, failedWithMessage(
+            "Tile (0,0) is not accessible, blocked by object tree2 at (0,0),\n" +
+            "Tile (1,0) is not accessible, blocked by object tree2 at (0,0)"
+        ));
     }
 
     private void loadEmptyMap() {

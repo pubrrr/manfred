@@ -40,7 +40,7 @@ class MapModelTest {
 
         ConcreteMapObject objectToInsert = mock(ConcreteMapObject.class);
         Map.TileCoordinate coordinateToInsertAt = mock(Map.TileCoordinate.class);
-        List<String> result = underTest.insertObjectAt(objectToInsert, coordinateToInsertAt);
+        List<String> result = underTest.tryInsertObjectAt(objectToInsert, coordinateToInsertAt);
 
         verify(mapMock).insertObjectAt(eq(objectToInsert), eq(coordinateToInsertAt));
         assertThat(result, empty());
@@ -54,7 +54,7 @@ class MapModelTest {
             ObjectInsertionValidator.Result.failedWithMessages(validationMessages)
         );
 
-        List<String> result = underTest.insertObjectAt(mock(ConcreteMapObject.class), mock(Map.TileCoordinate.class));
+        List<String> result = underTest.tryInsertObjectAt(mock(ConcreteMapObject.class), mock(Map.TileCoordinate.class));
 
         verify(mapMock, never()).insertObjectAt(any(), any());
         assertThat(result, is(validationMessages));

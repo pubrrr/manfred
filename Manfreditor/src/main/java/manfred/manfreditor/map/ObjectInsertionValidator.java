@@ -8,6 +8,7 @@ import manfred.manfreditor.mapobject.ConcreteMapObject;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
@@ -21,12 +22,23 @@ public class ObjectInsertionValidator {
             .filter(coordinate -> !objectStructure.getFromMap(coordinate).isAccessible())
             .map(tileCoordinate::translateBy)
             .filter(tileCoordinateOnStructure -> !mergedAccessibility.get(tileCoordinateOnStructure).isAccessible())
-            .map(tileCoordinateOnStructure -> "Tile (" + tileCoordinateOnStructure.getX() + "," + tileCoordinate.getY() + ") is not accessible")
+            .map(toErrorMessage(mergedAccessibility))
             .collect(toList());
 
         return validationMessages.isEmpty()
             ? Result.success()
             : Result.failedWithMessages(validationMessages);
+    }
+
+    private Function<TileCoordinate, String> toErrorMessage(java.util.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility) {
+        return tileCoordinateOnStructure -> "Tile (" + tileCoordinateOnStructure.getX() + "," + tileCoordinateOnStructure.getY() + ") " +
+            "is not accessible, blocked by " + getBlockingObject(mergedAccessibility, tileCoordinateOnStructure);
+    }
+
+    private String getBlockingObject(java.util.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility, TileCoordinate tileCoordinateOnStructure) {
+        return mergedAccessibility.get(tileCoordinateOnStructure).getSource()
+            .map(source -> "object " + source.getTileName() + " at (" + source.getTileCoordinate().getX() + "," + source.getTileCoordinate().getY() + ")")
+            .orElse("no object");
     }
 
     public interface Result {
