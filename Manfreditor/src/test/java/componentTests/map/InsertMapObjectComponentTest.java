@@ -22,13 +22,10 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 @SpringJUnitConfig(InsertMapObjectComponentTest.TestContextClone.class)
-public class InsertMapObjectComponentTest {
+public class InsertMapObjectComponentTest extends ComponentTestCase {
 
     @Autowired
     private InsertMapObjectCommand.Factory underTestCommandFactory;
-
-    @Autowired
-    private LoadMapCommand.Factory loadMapCommandFactory;
 
     @Autowired
     private MapObjectRepository mapObjectRepository;
@@ -41,7 +38,7 @@ public class InsertMapObjectComponentTest {
 
     @Test
     void insertSomethingInEmptyMap() {
-        loadEmptyMap();
+        loadMap("emptyMap");
         selectSomeObject();
 
         CommandResult result = underTestCommandFactory.create(0, 0).execute();
@@ -54,7 +51,7 @@ public class InsertMapObjectComponentTest {
 
     @Test
     void insertSomethingInNonEmptyMapFails() {
-        loadNonEmptyMap();
+        loadMap("nonEmptyMap");
         selectSomeObject();
 
         CommandResult result = underTestCommandFactory.create(0, 0).execute();
@@ -63,18 +60,6 @@ public class InsertMapObjectComponentTest {
             "Tile (0,0) is not accessible, blocked by object tree2 at (0,0),\n" +
             "Tile (1,0) is not accessible, blocked by object tree2 at (0,0)"
         ));
-    }
-
-    private void loadEmptyMap() {
-        String file = getClass().getResource("/map/emptyMap.yaml").getFile();
-        CommandResult loadMapResult = loadMapCommandFactory.create(file).execute();
-        assertThat(loadMapResult, wasSuccessful());
-    }
-
-    private void loadNonEmptyMap() {
-        String file = getClass().getResource("/map/nonEmptyMap.yaml").getFile();
-        CommandResult loadMapResult = loadMapCommandFactory.create(file).execute();
-        assertThat(loadMapResult, wasSuccessful());
     }
 
     private void selectSomeObject() {
