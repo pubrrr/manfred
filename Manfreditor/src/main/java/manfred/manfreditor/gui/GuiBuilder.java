@@ -84,6 +84,7 @@ public class GuiBuilder {
             mapCanvas.redraw();
         });
         mapController.addInsertPostAction(mapCanvas::redraw);
+        mapController.addDeletePostAction(mapCanvas::redraw);
     }
 
     private void addMapObjectsCanvas(Composite mapAndMapObjectsContainer, Shell mainShell) {

@@ -16,10 +16,10 @@ public class DeleteMapObjectCommand implements Command {
     @Override
     public CommandResult execute() {
         return mapView.getClickedTile(this.x, this.y)
-            .map(tileCoordinate -> mapModel.deleteObjectAt(tileCoordinate)
-                ? CommandResult.success()
-                : CommandResult.failure("No object found to delete at tile coordinate (" + tileCoordinate.getX() + "," +  tileCoordinate.getY() + ")")
-            )
+            .map(tileCoordinate -> {
+                mapModel.deleteObjectAt(tileCoordinate);
+                return CommandResult.success();
+            })
             .orElse(CommandResult.failure("No map tile at clicked coordinates (" + this.x + "," + this.y + ") was found"));
     }
 

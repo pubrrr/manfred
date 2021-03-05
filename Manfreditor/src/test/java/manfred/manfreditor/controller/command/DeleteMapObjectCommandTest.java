@@ -14,6 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class DeleteMapObjectCommandTest {
@@ -39,22 +40,12 @@ class DeleteMapObjectCommandTest {
     }
 
     @Test
-    void failsWhenNoObjectToDelete() {
-        when(mapViewMock.getClickedTile(anyInt(), anyInt())).thenReturn(Optional.of(tileCoordinate(1, 2)));
-        when(mapModelMock.deleteObjectAt(any())).thenReturn(false);
-
-        CommandResult result = commandFactory.create(0, 0).execute();
-
-        assertThat(result, failedWithMessage("No object found to delete at tile coordinate (1,2)"));
-    }
-
-    @Test
     void success() {
         when(mapViewMock.getClickedTile(anyInt(), anyInt())).thenReturn(Optional.of(tileCoordinate(1, 2)));
-        when(mapModelMock.deleteObjectAt(any())).thenReturn(true);
 
         CommandResult result = commandFactory.create(0, 0).execute();
 
         assertThat(result, wasSuccessful());
+        verify(mapModelMock).deleteObjectAt(any());
     }
 }

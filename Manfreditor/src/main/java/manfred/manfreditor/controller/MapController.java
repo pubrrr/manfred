@@ -31,6 +31,7 @@ public class MapController implements MouseListener {
     private final DeleteMapObjectCommand.Factory deleteMapObjectCommandFactory;
     private final List<Consumer<String>> loadMapPostActions;
     private final List<Runnable> insertPostActions;
+    private final List<Runnable> deletePostActions;
 
     public CommandResult loadMap(String selectedFile) {
         return execute(loadMapCommandFactory.create(selectedFile));
@@ -62,6 +63,10 @@ public class MapController implements MouseListener {
         this.insertPostActions.add(postAction);
     }
 
+    public void addDeletePostAction(Runnable postAction) {
+        this.deletePostActions.add(postAction);
+    }
+
     @Override
     public void mouseDoubleClick(MouseEvent e) {
     }
@@ -77,6 +82,7 @@ public class MapController implements MouseListener {
             insertPostActions.forEach(Runnable::run);
         } else if (event.button == RIGHT_MOUSE_BUTTON) {
             execute(deleteMapObjectCommandFactory.create(event.x, event.y)).onFailure(System.out::println);
+            deletePostActions.forEach(Runnable::run);
         }
     }
 }

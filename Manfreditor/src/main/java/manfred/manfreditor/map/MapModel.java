@@ -52,7 +52,10 @@ public class MapModel {
         return result.getValidationMessages();
     }
 
-    public boolean deleteObjectAt(Map.TileCoordinate tileCoordinate) {
-        return false;
+    public void deleteObjectAt(Map.TileCoordinate tileCoordinate) {
+        getMergedAccessibility()
+            .get(tileCoordinate)
+            .getSource()
+            .ifPresent(source -> this.map.insertObjectAt(MapObject.none(), source.getTileCoordinate()));
     }
 }

@@ -66,7 +66,7 @@ public class Map {
         return mapMatrix;
     }
 
-    public void insertObjectAt(ConcreteMapObject mapObject, TileCoordinate tileCoordinate) {
+    public void insertObjectAt(MapObject mapObject, TileCoordinate tileCoordinate) {
         this.mapMatrix.put(tileCoordinate, mapObject);
     }
 

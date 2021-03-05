@@ -1,13 +1,18 @@
 package manfred.manfreditor.map;
 
 import manfred.manfreditor.map.accessibility.AccessibilityMerger;
+import manfred.manfreditor.map.accessibility.ColoredAccessibilityIndicator;
+import manfred.manfreditor.map.accessibility.EmptyAccessibilityIndicator;
+import manfred.manfreditor.map.accessibility.Source;
 import manfred.manfreditor.mapobject.ConcreteMapObject;
+import manfred.manfreditor.mapobject.MapObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.List;
 
+import static manfred.manfreditor.helper.CoordinateHelper.tileCoordinate;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
@@ -58,5 +63,27 @@ class MapModelTest {
 
         verify(mapMock, never()).insertObjectAt(any(), any());
         assertThat(result, is(validationMessages));
+    }
+
+    @Test
+    void deleteEmptyObject_doesNothing() {
+        when(accessibilityMergerMock.merge(any())).thenReturn(java.util.Map.of(
+            tileCoordinate(0, 0), new EmptyAccessibilityIndicator()
+        ));
+
+        underTest.deleteObjectAt(tileCoordinate(0, 0));
+
+        verify(mapMock, never()).insertObjectAt(any(), any());
+    }
+
+    @Test
+    void deleteNonEmptyObject_thenEmptyObjectIsInsertedInMap() {
+        var sourceTileCoordinate = tileCoordinate(1, 2);
+        var nonEmptyObject = new ColoredAccessibilityIndicator(null, new Source("name", sourceTileCoordinate));
+        when(accessibilityMergerMock.merge(any())).thenReturn(java.util.Map.of(tileCoordinate(0, 0), nonEmptyObject));
+
+        underTest.deleteObjectAt(tileCoordinate(0, 0));
+
+        verify(mapMock, never()).insertObjectAt(eq(MapObject.none()), eq(sourceTileCoordinate));
     }
 }
