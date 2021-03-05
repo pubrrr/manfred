@@ -6,6 +6,7 @@ import manfred.manfreditor.controller.command.CommandResult;
 public class ControllerHelper {
 
     public static final int LEFT_MOUSE_BUTTON = 1;
+    public static final int RIGHT_MOUSE_BUTTON = 3;
 
     public static CommandResult execute(Command command) {
         try {

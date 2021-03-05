@@ -51,4 +51,8 @@ public class MapModel {
         }
         return result.getValidationMessages();
     }
+
+    public boolean deleteObjectAt(Map.TileCoordinate tileCoordinate) {
+        return false;
+    }
 }
