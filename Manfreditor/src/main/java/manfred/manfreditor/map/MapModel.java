@@ -51,13 +51,13 @@ public class MapModel implements Memento<MapModel> {
         Result result = objectInsertionValidator.mayObjectBeInserted(mapObject, tileCoordinate, mergedAccessibility);
 
         if (result.wasSuccessful()) {
-            this.map.insertObjectAt(mapObject, tileCoordinate);
+            this.map = this.map.insertObjectAt(mapObject, tileCoordinate);
         }
         return result.getValidationMessages();
     }
 
     public void forceInsertObjectAt(LocatedMapObject locatedMapObject) {
-        this.map.insertObjectAt(locatedMapObject.getMapObject(), locatedMapObject.getLocation());
+        this.map = this.map.insertObjectAt(locatedMapObject.getMapObject(), locatedMapObject.getLocation());
     }
 
     public Optional<LocatedMapObject> deleteObjectAt(Map.TileCoordinate tileCoordinate) {
@@ -68,7 +68,7 @@ public class MapModel implements Memento<MapModel> {
             .orElse(tileCoordinate);
 
         MapObject deletedMapObject = this.map.getObjectAt(tileCoordinateToDeleteObjectAt);
-        this.map.insertObjectAt(MapObject.none(), tileCoordinateToDeleteObjectAt);
+        this.map = this.map.insertObjectAt(MapObject.none(), tileCoordinateToDeleteObjectAt);
 
         return deletedMapObject instanceof None
             ? Optional.empty()

@@ -43,7 +43,7 @@ class CommandHistoryTest {
     }
 
     @Test
-    void popEmptyStack() {
+    void popEmptyStackDoesNotThrowException() {
         underTest.undoLast();
     }
 }
