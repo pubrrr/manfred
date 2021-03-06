@@ -4,6 +4,7 @@ import manfred.data.shared.PositiveInt;
 import manfred.manfreditor.map.ObjectInsertionValidator.Result;
 import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
 import manfred.manfreditor.map.accessibility.AccessibilityMerger;
+import manfred.manfreditor.map.accessibility.Source;
 import manfred.manfreditor.mapobject.ConcreteMapObject;
 import manfred.manfreditor.mapobject.MapObject;
 
@@ -53,9 +54,11 @@ public class MapModel {
     }
 
     public void deleteObjectAt(Map.TileCoordinate tileCoordinate) {
-        getMergedAccessibility()
+        Map.TileCoordinate tileCoordinateToDeleteObjectAt = getMergedAccessibility()
             .get(tileCoordinate)
             .getSource()
-            .ifPresent(source -> this.map.insertObjectAt(MapObject.none(), source.getTileCoordinate()));
+            .map(Source::getTileCoordinate)
+            .orElse(tileCoordinate);
+        this.map.insertObjectAt(MapObject.none(), tileCoordinateToDeleteObjectAt);
     }
 }

@@ -13,7 +13,7 @@ import java.util.List;
 public class RollbackController implements SelectionListener {
 
     private final CommandHistory commandHistory;
-    private List<Runnable> postActions;
+    private final List<Runnable> postActions;
 
     @Override
     public void widgetSelected(SelectionEvent selectionEvent) {

@@ -18,6 +18,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class InsertMapObjectCommandTest {
@@ -27,9 +28,11 @@ class InsertMapObjectCommandTest {
     private MapModel mapModelMock;
     private SelectedObject selectedObjectMock;
     private MapObjectRepository mapObjectRepositoryMock;
+    private CommandHistory commandHistory;
 
     @BeforeEach
     void setUp() {
+        commandHistory = new CommandHistory();
         mapViewMock = mock(MapView.class);
         mapModelMock = mock(MapModel.class);
         selectedObjectMock = mock(SelectedObject.class);
@@ -39,13 +42,17 @@ class InsertMapObjectCommandTest {
 
     @Test
     void success() {
+        Map.TileCoordinate tileToInsertAt = mock(Map.TileCoordinate.class);
         when(selectedObjectMock.getSelection()).thenReturn(Optional.of(mock(MapObjectRepository.ObjectKey.class)));
         when(mapObjectRepositoryMock.get(any())).thenReturn(mock(ConcreteMapObject.class));
-        when(mapViewMock.getClickedTile(anyInt(), anyInt())).thenReturn(Optional.of(mock(Map.TileCoordinate.class)));
+        when(mapViewMock.getClickedTile(anyInt(), anyInt())).thenReturn(Optional.of(tileToInsertAt));
 
         CommandResult result = commandFactory.create(0, 0).execute();
 
         assertThat(result, wasSuccessful());
+        result.registerRollbackOperation(commandHistory);
+        commandHistory.undoLast();
+        verify(mapModelMock).deleteObjectAt(tileToInsertAt);
     }
 
     @Test

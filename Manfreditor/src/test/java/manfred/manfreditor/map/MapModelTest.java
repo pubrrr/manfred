@@ -66,14 +66,15 @@ class MapModelTest {
     }
 
     @Test
-    void deleteEmptyObject_doesNothing() {
+    void deleteEmptyObject_insertsNewEmptyObject() {
         when(accessibilityMergerMock.merge(any())).thenReturn(java.util.Map.of(
             tileCoordinate(0, 0), new EmptyAccessibilityIndicator()
         ));
 
-        underTest.deleteObjectAt(tileCoordinate(0, 0));
+        Map.TileCoordinate tileToDelete = tileCoordinate(0, 0);
+        underTest.deleteObjectAt(tileToDelete);
 
-        verify(mapMock, never()).insertObjectAt(any(), any());
+        verify(mapMock).insertObjectAt(eq(MapObject.none()), eq(tileToDelete));
     }
 
     @Test
@@ -84,6 +85,6 @@ class MapModelTest {
 
         underTest.deleteObjectAt(tileCoordinate(0, 0));
 
-        verify(mapMock, never()).insertObjectAt(eq(MapObject.none()), eq(sourceTileCoordinate));
+        verify(mapMock).insertObjectAt(eq(MapObject.none()), eq(sourceTileCoordinate));
     }
 }

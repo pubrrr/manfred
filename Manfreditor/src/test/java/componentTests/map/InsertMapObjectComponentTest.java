@@ -1,13 +1,14 @@
 package componentTests.map;
 
 import componentTests.TestManfreditorContext;
+import manfred.manfreditor.controller.command.CommandHistory;
 import manfred.manfreditor.controller.command.CommandResult;
 import manfred.manfreditor.controller.command.InsertMapObjectCommand;
-import manfred.manfreditor.controller.command.LoadMapCommand;
 import manfred.manfreditor.map.MapModel;
 import manfred.manfreditor.mapobject.ConcreteMapObject;
 import manfred.manfreditor.mapobject.MapObject;
 import manfred.manfreditor.mapobject.MapObjectRepository;
+import manfred.manfreditor.mapobject.None;
 import manfred.manfreditor.mapobject.SelectedObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,17 +37,12 @@ public class InsertMapObjectComponentTest extends ComponentTestCase {
     @Autowired
     private MapModel mapModel;
 
+    @Autowired
+    private CommandHistory commandHistory;
+
     @Test
-    void insertSomethingInEmptyMap() {
-        loadMap("emptyMap");
-        selectSomeObject();
-
-        CommandResult result = underTestCommandFactory.create(0, 0).execute();
-
-        assertThat(result, wasSuccessful());
-        MapObject mapObject = mapModel.getObjects().get(tileCoordinate(0, 2));
-        assertThat(mapObject, instanceOf(ConcreteMapObject.class));
-        assertThat(((ConcreteMapObject) mapObject).getName(), is("tree2"));
+    void insertSomethingInEmptyMapIsSuccessful() {
+        insertSomethingInEmptyMap();
     }
 
     @Test
@@ -60,6 +56,29 @@ public class InsertMapObjectComponentTest extends ComponentTestCase {
             "Tile (0,0) is not accessible, blocked by object tree2 at (0,0),\n" +
             "Tile (1,0) is not accessible, blocked by object tree2 at (0,0)"
         ));
+    }
+
+    @Test
+    void rollback() {
+        CommandResult result = insertSomethingInEmptyMap();
+
+        result.registerRollbackOperation(commandHistory);
+        commandHistory.undoLast();
+        MapObject mapObject = mapModel.getObjects().get(tileCoordinate(0, 2));
+        assertThat(mapObject, instanceOf(None.class));
+    }
+
+    private CommandResult insertSomethingInEmptyMap() {
+        loadMap("emptyMap");
+        selectSomeObject();
+
+        CommandResult result = underTestCommandFactory.create(0, 0).execute();
+
+        assertThat(result, wasSuccessful());
+        MapObject mapObject = mapModel.getObjects().get(tileCoordinate(0, 2));
+        assertThat(mapObject, instanceOf(ConcreteMapObject.class));
+        assertThat(((ConcreteMapObject) mapObject).getName(), is("tree2"));
+        return result;
     }
 
     private void selectSomeObject() {
