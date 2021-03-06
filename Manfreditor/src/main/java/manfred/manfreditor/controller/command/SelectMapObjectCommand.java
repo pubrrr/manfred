@@ -27,8 +27,9 @@ public class SelectMapObjectCommand implements Command {
     }
 
     private CommandResult selectKey(MapObjectRepository.ObjectKey objectKey) {
+        var previousSelection = selectedObject.getSelection();
         selectedObject.select(objectKey);
-        return CommandResult.success();
+        return CommandResult.success(() -> selectedObject.select(previousSelection.orElse(objectKey)));
     }
 
     @Component
