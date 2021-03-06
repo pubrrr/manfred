@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import static manfred.manfreditor.helper.CoordinateHelper.tileCoordinate;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -66,25 +67,31 @@ class MapModelTest {
     }
 
     @Test
-    void deleteEmptyObject_insertsNewEmptyObject() {
+    void deleteEmptyObject_insertsNewEmptyObjectAndNoDeletedObjectIsReturned() {
+        when(this.mapMock.getObjectAt(any())).thenReturn(MapObject.none());
         when(accessibilityMergerMock.merge(any())).thenReturn(java.util.Map.of(
             tileCoordinate(0, 0), new EmptyAccessibilityIndicator()
         ));
 
         Map.TileCoordinate tileToDelete = tileCoordinate(0, 0);
-        underTest.deleteObjectAt(tileToDelete);
+        Optional<LocatedMapObject> result = underTest.deleteObjectAt(tileToDelete);
 
+        assertThat(result, is(Optional.empty()));
         verify(mapMock).insertObjectAt(eq(MapObject.none()), eq(tileToDelete));
     }
 
     @Test
     void deleteNonEmptyObject_thenEmptyObjectIsInsertedInMap() {
+        ConcreteMapObject deletedObject = mock(ConcreteMapObject.class);
+        when(this.mapMock.getObjectAt(any())).thenReturn(deletedObject);
+
         var sourceTileCoordinate = tileCoordinate(1, 2);
         var nonEmptyObject = new ColoredAccessibilityIndicator(null, new Source("name", sourceTileCoordinate));
         when(accessibilityMergerMock.merge(any())).thenReturn(java.util.Map.of(tileCoordinate(0, 0), nonEmptyObject));
 
-        underTest.deleteObjectAt(tileCoordinate(0, 0));
+        Optional<LocatedMapObject> result = underTest.deleteObjectAt(tileCoordinate(0, 0));
 
+        assertThat(result, is(Optional.of(new LocatedMapObject(deletedObject, sourceTileCoordinate))));
         verify(mapMock).insertObjectAt(eq(MapObject.none()), eq(sourceTileCoordinate));
     }
 }

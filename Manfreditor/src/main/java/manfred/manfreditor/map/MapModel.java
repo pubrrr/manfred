@@ -7,8 +7,10 @@ import manfred.manfreditor.map.accessibility.AccessibilityMerger;
 import manfred.manfreditor.map.accessibility.Source;
 import manfred.manfreditor.mapobject.ConcreteMapObject;
 import manfred.manfreditor.mapobject.MapObject;
+import manfred.manfreditor.mapobject.None;
 
 import java.util.List;
+import java.util.Optional;
 
 public class MapModel {
 
@@ -53,12 +55,22 @@ public class MapModel {
         return result.getValidationMessages();
     }
 
-    public void deleteObjectAt(Map.TileCoordinate tileCoordinate) {
+    public void forceInsertObjectAt(LocatedMapObject locatedMapObject) {
+        this.map.insertObjectAt(locatedMapObject.getMapObject(), locatedMapObject.getLocation());
+    }
+
+    public Optional<LocatedMapObject> deleteObjectAt(Map.TileCoordinate tileCoordinate) {
         Map.TileCoordinate tileCoordinateToDeleteObjectAt = getMergedAccessibility()
             .get(tileCoordinate)
             .getSource()
             .map(Source::getTileCoordinate)
             .orElse(tileCoordinate);
+
+        MapObject deletedMapObject = this.map.getObjectAt(tileCoordinateToDeleteObjectAt);
         this.map.insertObjectAt(MapObject.none(), tileCoordinateToDeleteObjectAt);
+
+        return deletedMapObject instanceof None
+            ? Optional.empty()
+            : Optional.of(new LocatedMapObject(deletedMapObject, tileCoordinateToDeleteObjectAt));
     }
 }
