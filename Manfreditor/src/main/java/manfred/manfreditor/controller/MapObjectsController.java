@@ -10,12 +10,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static manfred.manfreditor.controller.ControllerHelper.LEFT_MOUSE_BUTTON;
-import static manfred.manfreditor.controller.ControllerHelper.execute;
 
 @Component
 @AllArgsConstructor
 public class MapObjectsController implements MouseListener {
 
+    private final ControllerHelper controllerHelper;
     private final SelectMapObjectCommand.Factory selectMapObjectCommandFactory;
     private final List<Runnable> postActions = new LinkedList<>();
 
@@ -30,7 +30,7 @@ public class MapObjectsController implements MouseListener {
     @Override
     public void mouseUp(MouseEvent event) {
         if (event.button == LEFT_MOUSE_BUTTON) {
-            execute(selectMapObjectCommandFactory.create(event.x, event.y));
+            controllerHelper.execute(selectMapObjectCommandFactory.create(event.x, event.y));
             postActions.forEach(Runnable::run);
         }
     }
