@@ -1,4 +1,4 @@
-package manfred.manfreditor.map;
+package manfred.manfreditor.map.accessibility;
 
 import lombok.AllArgsConstructor;
 import manfred.manfreditor.gui.view.map.MapViewCoordinate;
@@ -8,10 +8,13 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
+import java.util.Optional;
+
 @AllArgsConstructor
 public class ColoredAccessibilityIndicator implements AccessibilityIndicator {
 
     private final RGB rgb;
+    private final Source source;
 
     @Override
     public void indicateAccessibilityAt(MapViewCoordinate bottomLeft, GC gc, Display display) {
@@ -19,5 +22,15 @@ public class ColoredAccessibilityIndicator implements AccessibilityIndicator {
         gc.setBackground(color);
         gc.fillRectangle(bottomLeft.getX(), bottomLeft.getY() - TileViewSize.TILE_SIZE, TileViewSize.TILE_SIZE, TileViewSize.TILE_SIZE);
         color.dispose();
+    }
+
+    @Override
+    public boolean isAccessible() {
+        return false;
+    }
+
+    @Override
+    public Optional<Source> getSource() {
+        return Optional.of(this.source);
     }
 }

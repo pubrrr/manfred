@@ -1,5 +1,6 @@
-package manfred.manfreditor.map;
+package manfred.manfreditor.map.accessibility;
 
+import manfred.manfreditor.map.Map;
 import manfred.manfreditor.mapobject.MapObject;
 import org.springframework.stereotype.Component;
 

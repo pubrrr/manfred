@@ -26,7 +26,7 @@ public class LoadMapComponentTest {
 
     @Test
     void loadMap() {
-        String file = getClass().getResource("/wald.yaml").getFile();
+        String file = getClass().getResource("/map/wald.yaml").getFile();
 
         CommandResult commandResult = commandFactory.create(file).execute();
 

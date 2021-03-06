@@ -1,6 +1,6 @@
 package manfred.manfreditor.mapobject;
 
-import manfred.manfreditor.map.AccessibilityIndicator;
+import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
 import manfred.manfreditor.map.Map;
 import org.junit.jupiter.api.Test;
 
