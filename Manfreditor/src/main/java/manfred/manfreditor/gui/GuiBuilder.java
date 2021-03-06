@@ -92,6 +92,7 @@ public class GuiBuilder {
         mapController.addInsertPostAction(mapCanvas::redraw);
         mapController.addDeletePostAction(mapCanvas::redraw);
         rollbackController.addPostAction(mapCanvas::redraw);
+        rollbackController.addPostAction(() -> mapCanvas.setSize(mapView.getMapViewSize()));
     }
 
     private void addMapObjectsCanvas(Composite mapAndMapObjectsContainer, Shell mainShell) {

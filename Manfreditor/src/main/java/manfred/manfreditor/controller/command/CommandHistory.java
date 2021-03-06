@@ -18,7 +18,7 @@ public class CommandHistory {
         try {
             history.pop().rollback();
         } catch (EmptyStackException e) {
-            // ignore
+            // mir doch wurscht
         }
     }
 }

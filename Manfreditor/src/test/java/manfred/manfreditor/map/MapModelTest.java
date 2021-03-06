@@ -1,5 +1,6 @@
 package manfred.manfreditor.map;
 
+import manfred.manfreditor.common.Memento;
 import manfred.manfreditor.map.accessibility.AccessibilityMerger;
 import manfred.manfreditor.map.accessibility.ColoredAccessibilityIndicator;
 import manfred.manfreditor.map.accessibility.EmptyAccessibilityIndicator;
@@ -93,5 +94,20 @@ class MapModelTest {
 
         assertThat(result, is(Optional.of(new LocatedMapObject(deletedObject, sourceTileCoordinate))));
         verify(mapMock).insertObjectAt(eq(MapObject.none()), eq(sourceTileCoordinate));
+    }
+
+    @Test
+    void takeBackupAndRestoreIt_thenMapIsOriginalMapAgain() {
+        Memento<MapModel> backup = underTest.backup();
+
+        Map newMapMock = mock(Map.class);
+        underTest.setMap(newMapMock);
+        underTest.getObjects();
+        verify(this.mapMock, never()).getObjects();
+        verify(newMapMock).getObjects();
+
+        backup.restoreStateOf(this.underTest);
+        underTest.getObjects();
+        verify(this.mapMock).getObjects();
     }
 }

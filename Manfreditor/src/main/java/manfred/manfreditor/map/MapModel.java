@@ -1,6 +1,7 @@
 package manfred.manfreditor.map;
 
 import manfred.data.shared.PositiveInt;
+import manfred.manfreditor.common.Memento;
 import manfred.manfreditor.map.ObjectInsertionValidator.Result;
 import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
 import manfred.manfreditor.map.accessibility.AccessibilityMerger;
@@ -12,7 +13,7 @@ import manfred.manfreditor.mapobject.None;
 import java.util.List;
 import java.util.Optional;
 
-public class MapModel {
+public class MapModel implements Memento<MapModel> {
 
     private Map map;
     private final AccessibilityMerger accessibilityMerger;
@@ -72,5 +73,15 @@ public class MapModel {
         return deletedMapObject instanceof None
             ? Optional.empty()
             : Optional.of(new LocatedMapObject(deletedMapObject, tileCoordinateToDeleteObjectAt));
+    }
+
+    @Override
+    public Memento<MapModel> backup() {
+        return new MapModel(this.map, this.accessibilityMerger, this.objectInsertionValidator);
+    }
+
+    @Override
+    public void restoreStateOf(MapModel backup) {
+        backup.map = this.map;
     }
 }

@@ -11,11 +11,6 @@ public interface CommandResult {
 
     void onFailure(Consumer<String> errorConsumer);
 
-    // TODO remove this
-    static CommandResult success() {
-        return new Success(() -> {});
-    }
-
     static CommandResult success(RollbackOperation rollbackOperation) {
         return new Success(rollbackOperation);
     }
