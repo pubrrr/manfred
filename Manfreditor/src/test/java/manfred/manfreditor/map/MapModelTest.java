@@ -1,5 +1,6 @@
 package manfred.manfreditor.map;
 
+import io.vavr.control.Validation;
 import manfred.manfreditor.common.Memento;
 import manfred.manfreditor.map.accessibility.AccessibilityMerger;
 import manfred.manfreditor.map.accessibility.ColoredAccessibilityIndicator;
@@ -43,14 +44,14 @@ class MapModelTest {
     @Test
     void givenInsertionValidationIsSuccessful_thenObjectIsInserted() {
         when(accessibilityMergerMock.merge(any())).thenReturn(new HashMap<>());
-        when(objectInsertionValidator.mayObjectBeInserted(any(), any(), any())).thenReturn(ObjectInsertionValidator.Result.success());
+        when(objectInsertionValidator.mayObjectBeInserted(any(), any(), any())).thenReturn(Validation.valid(null));
 
         ConcreteMapObject objectToInsert = mock(ConcreteMapObject.class);
         Map.TileCoordinate coordinateToInsertAt = mock(Map.TileCoordinate.class);
-        List<String> result = underTest.tryInsertObjectAt(objectToInsert, coordinateToInsertAt);
+        Validation<List<String>, ConcreteMapObject> result = underTest.tryInsertObjectAt(objectToInsert, coordinateToInsertAt);
 
         verify(mapMock).insertObjectAt(eq(objectToInsert), eq(coordinateToInsertAt));
-        assertThat(result, empty());
+        assertThat(result.isValid(), is(true));
     }
 
     @Test
@@ -58,13 +59,13 @@ class MapModelTest {
         List<String> validationMessages = List.of("message1", "message2");
         when(accessibilityMergerMock.merge(any())).thenReturn(new HashMap<>());
         when(objectInsertionValidator.mayObjectBeInserted(any(), any(), any())).thenReturn(
-            ObjectInsertionValidator.Result.failedWithMessages(validationMessages)
+            Validation.invalid(validationMessages)
         );
 
-        List<String> result = underTest.tryInsertObjectAt(mock(ConcreteMapObject.class), mock(Map.TileCoordinate.class));
+        Validation<List<String>, ConcreteMapObject> result = underTest.tryInsertObjectAt(mock(ConcreteMapObject.class), mock(Map.TileCoordinate.class));
 
         verify(mapMock, never()).insertObjectAt(any(), any());
-        assertThat(result, is(validationMessages));
+        assertThat(result.getError(), is(validationMessages));
     }
 
     @Test

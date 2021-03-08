@@ -112,6 +112,10 @@ public class Map {
         public TileCoordinateWithInvertedY invertY() {
             return new TileCoordinateWithInvertedY(this.x, PositiveInt.of(getSizeY().value() - this.y.value() - 1));
         }
+
+        public String shortRepresentation() {
+            return "(" + x.value() + "," + y.value() + ")";
+        }
     }
 
     @EqualsAndHashCode

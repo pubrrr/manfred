@@ -13,6 +13,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
+import io.vavr.control.Either;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -68,12 +69,19 @@ public class ConcreteMapObject implements MapObject {
         return imageData;
     }
 
-    public java.util.Map<Map.TileCoordinate, TilePrototype> getStructureAt(Map.TileCoordinate objectLocation) {
-        return structure.getCoordinateSet()
-            .stream()
-            .collect(toMap(
-                coordinate -> objectLocation.translateBy(coordinate).offsetBy(this.originCoordinate),
-                this.structure::getFromMap
-            ));
+    public Either<String, java.util.Map<Map.TileCoordinate, TilePrototype>> getStructureAt(Map.TileCoordinate objectLocation) {
+        if (objectLocation.getY().value() < this.originCoordinate.getY().value()) {
+            return Either.left("Object location must not result in negative coordinates, given: " + objectLocation.shortRepresentation()
+                + ", origin is " + this.originCoordinate.shortRepresentation());
+        }
+
+        return Either.right(
+            structure.getCoordinateSet()
+                .stream()
+                .collect(toMap(
+                    coordinate -> objectLocation.translateBy(coordinate).offsetBy(this.originCoordinate),
+                    this.structure::getFromMap
+                ))
+        );
     }
 }

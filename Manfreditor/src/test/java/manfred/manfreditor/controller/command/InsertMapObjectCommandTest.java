@@ -1,5 +1,6 @@
 package manfred.manfreditor.controller.command;
 
+import io.vavr.control.Validation;
 import manfred.manfreditor.gui.view.map.MapView;
 import manfred.manfreditor.map.Map;
 import manfred.manfreditor.map.MapModel;
@@ -46,6 +47,7 @@ class InsertMapObjectCommandTest {
         when(selectedObjectMock.getSelection()).thenReturn(Optional.of(mock(MapObjectRepository.ObjectKey.class)));
         when(mapObjectRepositoryMock.get(any())).thenReturn(mock(ConcreteMapObject.class));
         when(mapViewMock.getClickedTile(anyInt(), anyInt())).thenReturn(Optional.of(tileToInsertAt));
+        when(mapModelMock.tryInsertObjectAt(any(), any())).thenReturn(Validation.valid(null));
 
         CommandResult result = commandFactory.create(0, 0).execute();
 
@@ -80,7 +82,7 @@ class InsertMapObjectCommandTest {
         when(selectedObjectMock.getSelection()).thenReturn(Optional.of(mock(MapObjectRepository.ObjectKey.class)));
         when(mapViewMock.getClickedTile(anyInt(), anyInt())).thenReturn(Optional.of(mock(Map.TileCoordinate.class)));
         when(mapObjectRepositoryMock.get(any())).thenReturn(mock(ConcreteMapObject.class));
-        when(mapModelMock.tryInsertObjectAt(any(), any())).thenReturn(List.of("message1", "message2"));
+        when(mapModelMock.tryInsertObjectAt(any(), any())).thenReturn(Validation.invalid(List.of("message1", "message2")));
 
         CommandResult result = commandFactory.create(0, 0).execute();
 

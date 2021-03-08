@@ -1,11 +1,11 @@
 package manfred.manfreditor.map;
 
-import lombok.AllArgsConstructor;
-import manfred.data.infrastructure.map.tile.TilePrototype;
+import io.vavr.control.Validation;
 import manfred.manfreditor.map.Map.TileCoordinate;
 import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
 import manfred.manfreditor.mapobject.ConcreteMapObject;
 import org.springframework.stereotype.Component;
+import manfred.data.infrastructure.map.tile.TilePrototype;
 
 import java.util.List;
 import java.util.function.Function;
@@ -15,19 +15,31 @@ import static java.util.stream.Collectors.toList;
 @Component
 public class ObjectInsertionValidator {
 
-    public Result mayObjectBeInserted(ConcreteMapObject mapObject, TileCoordinate tileCoordinate, java.util.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility) {
-        java.util.Map<TileCoordinate, TilePrototype> objectStructure = mapObject.getStructureAt(tileCoordinate);
+    public Validation<List<String>, ConcreteMapObject> mayObjectBeInserted(
+        ConcreteMapObject mapObject,
+        TileCoordinate tileCoordinate,
+        java.util.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility
+    ) {
+        return mapObject.getStructureAt(tileCoordinate)
+            .toValidation()
+            .mapError(List::of)
+            .flatMap(tileCoordinateTilePrototypeMap -> {
+                List<String> collect = getInvalidTileMessages(mergedAccessibility, tileCoordinateTilePrototypeMap);
+                return collect.isEmpty()
+                    ? Validation.valid(mapObject)
+                    : Validation.invalid(collect);
+            });
+    }
 
-        List<String> validationMessages = objectStructure.entrySet().stream()
+    private List<String> getInvalidTileMessages(java.util.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility, java.util.Map<TileCoordinate, TilePrototype> tileCoordinateTilePrototypeMap) {
+        return tileCoordinateTilePrototypeMap
+            .entrySet()
+            .stream()
             .filter(tilePrototypeByCoordinate -> !tilePrototypeByCoordinate.getValue().isAccessible())
             .filter(tilePrototypeByCoordinate -> !mergedAccessibility.get(tilePrototypeByCoordinate.getKey()).isAccessible())
             .map(java.util.Map.Entry::getKey)
             .map(toErrorMessage(mergedAccessibility))
             .collect(toList());
-
-        return validationMessages.isEmpty()
-            ? Result.success()
-            : Result.failedWithMessages(validationMessages);
     }
 
     private Function<TileCoordinate, String> toErrorMessage(java.util.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility) {
@@ -39,49 +51,5 @@ public class ObjectInsertionValidator {
         return mergedAccessibility.get(tileCoordinateOnStructure).getSource()
             .map(source -> "object " + source.getTileName() + " at (" + source.getTileCoordinate().getX() + "," + source.getTileCoordinate().getY() + ")")
             .orElse("no object");
-    }
-
-    public interface Result {
-
-        boolean wasSuccessful();
-
-        List<String> getValidationMessages();
-
-        static Result success() {
-            return new Success();
-        }
-
-        static Result failedWithMessages(List<String> validationMessages) {
-            return new Failure(validationMessages);
-        }
-    }
-
-    private static class Success implements Result {
-
-        @Override
-        public boolean wasSuccessful() {
-            return true;
-        }
-
-        @Override
-        public List<String> getValidationMessages() {
-            return List.of();
-        }
-    }
-
-    @AllArgsConstructor
-    private static class Failure implements Result {
-
-        private final List<String> validationMessages;
-
-        @Override
-        public boolean wasSuccessful() {
-            return false;
-        }
-
-        @Override
-        public List<String> getValidationMessages() {
-            return this.validationMessages;
-        }
     }
 }

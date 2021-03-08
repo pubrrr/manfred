@@ -93,5 +93,9 @@ public class MapPrototype {
             this.x = x;
             this.y = y;
         }
+
+        public String shortRepresentation() {
+            return "(" + x.value() + "," + y.value() + ")";
+        }
     }
 }

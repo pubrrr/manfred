@@ -1,8 +1,8 @@
 package manfred.manfreditor.map;
 
+import io.vavr.control.Validation;
 import manfred.data.shared.PositiveInt;
 import manfred.manfreditor.common.Memento;
-import manfred.manfreditor.map.ObjectInsertionValidator.Result;
 import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
 import manfred.manfreditor.map.accessibility.AccessibilityMerger;
 import manfred.manfreditor.map.accessibility.Source;
@@ -45,15 +45,15 @@ public class MapModel implements Memento<MapModel> {
         return this.map.getSizeX();
     }
 
-    public List<String> tryInsertObjectAt(ConcreteMapObject mapObject, Map.TileCoordinate tileCoordinate) {
+    public Validation<List<String>, ConcreteMapObject> tryInsertObjectAt(ConcreteMapObject mapObject, Map.TileCoordinate tileCoordinate) {
         java.util.Map<Map.TileCoordinate, AccessibilityIndicator> mergedAccessibility = getMergedAccessibility();
 
-        Result result = objectInsertionValidator.mayObjectBeInserted(mapObject, tileCoordinate, mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = objectInsertionValidator.mayObjectBeInserted(mapObject, tileCoordinate, mergedAccessibility);
 
-        if (result.wasSuccessful()) {
+        if (result.isValid()) {
             this.map = this.map.insertObjectAt(mapObject, tileCoordinate);
         }
-        return result.getValidationMessages();
+        return result;
     }
 
     public void forceInsertObjectAt(LocatedMapObject locatedMapObject) {

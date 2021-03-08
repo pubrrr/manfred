@@ -1,5 +1,6 @@
 package manfred.manfreditor.mapobject;
 
+import io.vavr.control.Either;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
@@ -147,11 +148,20 @@ public class ConcreteMapObjectTest {
         ));
 
         var underTest = new ConcreteMapObject("name", mapPrototypeMock, coordinatePrototype(0, 1), null);
-        java.util.Map<Map.TileCoordinate, TilePrototype> structure = underTest.getStructureAt(tileCoordinate(1, 1));
+        Either<String, java.util.Map<Map.TileCoordinate, TilePrototype>> structure = underTest.getStructureAt(tileCoordinate(1, 1));
 
-        assertThat(structure.get(tileCoordinate(1, 0)), is(tileMock_0_0));
-        assertThat(structure.get(tileCoordinate(1, 1)), is(tileMock_0_1));
-        assertThat(structure.get(tileCoordinate(2, 0)), is(tileMock_1_0));
-        assertThat(structure.get(tileCoordinate(2, 1)), is(tileMock_1_1));
+        assertThat(structure.get().get(tileCoordinate(1, 0)), is(tileMock_0_0));
+        assertThat(structure.get().get(tileCoordinate(1, 1)), is(tileMock_0_1));
+        assertThat(structure.get().get(tileCoordinate(2, 0)), is(tileMock_1_0));
+        assertThat(structure.get().get(tileCoordinate(2, 1)), is(tileMock_1_1));
+    }
+
+    @Test
+    void getStructureAt_fails() {
+        var underTest = new ConcreteMapObject("name", null, coordinatePrototype(0, 1), null);
+        Either<String, java.util.Map<Map.TileCoordinate, TilePrototype>> structure = underTest.getStructureAt(tileCoordinate(0, 0));
+
+        assertThat(structure.isLeft(), is(true));
+        assertThat(structure.getLeft(), is("Object location must not result in negative coordinates, given: (0,0), origin is (0,1)"));
     }
 }

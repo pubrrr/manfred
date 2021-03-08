@@ -1,5 +1,6 @@
 package manfred.manfreditor.map;
 
+import io.vavr.control.Validation;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.manfreditor.map.Map.TileCoordinate;
@@ -11,15 +12,14 @@ import manfred.manfreditor.mapobject.ConcreteMapObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Map;
 
 import static manfred.manfreditor.helper.CoordinateHelper.coordinatePrototype;
 import static manfred.manfreditor.helper.CoordinateHelper.mockMapPrototype;
 import static manfred.manfreditor.helper.CoordinateHelper.tileCoordinate;
-import static manfred.manfreditor.map.ObjectInsertionValidator.Result;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.empty;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,10 +38,9 @@ class ObjectInsertionValidatorTest {
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
         Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator());
 
-        Result result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
 
-        assertTrue(result.wasSuccessful());
-        assertThat(result.getValidationMessages(), empty());
+        assertTrue(result.isValid());
     }
 
     @Test
@@ -50,10 +49,9 @@ class ObjectInsertionValidatorTest {
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
         Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator());
 
-        Result result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
 
-        assertTrue(result.wasSuccessful());
-        assertThat(result.getValidationMessages(), empty());
+        assertTrue(result.isValid());
     }
 
     @Test
@@ -62,10 +60,9 @@ class ObjectInsertionValidatorTest {
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
         Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(tileCoordinate(0, 0), new ColoredAccessibilityIndicator(null, null));
 
-        Result result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
 
-        assertTrue(result.wasSuccessful());
-        assertThat(result.getValidationMessages(), empty());
+        assertTrue(result.isValid());
     }
 
     @Test
@@ -76,10 +73,10 @@ class ObjectInsertionValidatorTest {
             tileCoordinate(0, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
         );
 
-        Result result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
 
-        assertFalse(result.wasSuccessful());
-        assertThat(result.getValidationMessages(), containsInAnyOrder("Tile (0,0) is not accessible, blocked by object tileName at (0,0)"));
+        assertFalse(result.isValid());
+        assertThat(result.getError(), containsInAnyOrder("Tile (0,0) is not accessible, blocked by object tileName at (0,0)"));
     }
 
     @Test
@@ -94,10 +91,10 @@ class ObjectInsertionValidatorTest {
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
         );
 
-        Result result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
 
-        assertFalse(result.wasSuccessful());
-        assertThat(result.getValidationMessages(), containsInAnyOrder(
+        assertFalse(result.isValid());
+        assertThat(result.getError(), containsInAnyOrder(
             "Tile (0,0) is not accessible, blocked by object tileName at (0,0)",
             "Tile (1,0) is not accessible, blocked by object tileName at (0,0)")
         );
@@ -115,10 +112,10 @@ class ObjectInsertionValidatorTest {
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
         );
 
-        Result result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
 
-        assertFalse(result.wasSuccessful());
-        assertThat(result.getValidationMessages(), containsInAnyOrder("Tile (1,0) is not accessible, blocked by object tileName at (0,0)"));
+        assertFalse(result.isValid());
+        assertThat(result.getError(), containsInAnyOrder("Tile (1,0) is not accessible, blocked by object tileName at (0,0)"));
     }
 
     @Test
@@ -133,10 +130,9 @@ class ObjectInsertionValidatorTest {
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
         );
 
-        Result result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
 
-        assertTrue(result.wasSuccessful());
-        assertThat(result.getValidationMessages(), empty());
+        assertTrue(result.isValid());
     }
 
     @Test
@@ -148,9 +144,26 @@ class ObjectInsertionValidatorTest {
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(3, 0)))
         );
 
-        Result result = underTest.mayObjectBeInserted(object, tileCoordinate(1, 0), mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(1, 0), mergedAccessibility);
 
-        assertFalse(result.wasSuccessful());
-        assertThat(result.getValidationMessages(), containsInAnyOrder("Tile (1,0) is not accessible, blocked by object tileName at (3,0)"));
+        assertFalse(result.isValid());
+        assertThat(result.getError(), containsInAnyOrder("Tile (1,0) is not accessible, blocked by object tileName at (3,0)"));
+    }
+
+    @Test
+    void objectWithYOffsetAtY0_isInvalid() {
+        MapPrototype structureMock = mockMapPrototype(Map.of(
+            coordinatePrototype(0, 0), TilePrototype.notAccessible(),
+            coordinatePrototype(0, 1), TilePrototype.notAccessible()
+        ));
+        ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 1), null);
+        Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(
+            tileCoordinate(0, 0), new EmptyAccessibilityIndicator()
+        );
+
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
+
+        assertFalse(result.isValid());
+        assertThat(result.getError(), containsInAnyOrder("Object location must not result in negative coordinates, given: (0,0), origin is (0,1)"));
     }
 }
