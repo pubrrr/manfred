@@ -1,7 +1,7 @@
 package manfred.manfreditor.map;
 
 import lombok.AllArgsConstructor;
-import manfred.data.infrastructure.map.MapPrototype;
+import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.manfreditor.map.Map.TileCoordinate;
 import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
 import manfred.manfreditor.mapobject.ConcreteMapObject;
@@ -16,12 +16,12 @@ import static java.util.stream.Collectors.toList;
 public class ObjectInsertionValidator {
 
     public Result mayObjectBeInserted(ConcreteMapObject mapObject, TileCoordinate tileCoordinate, java.util.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility) {
-        MapPrototype objectStructure = mapObject.getStructure();
+        java.util.Map<TileCoordinate, TilePrototype> objectStructure = mapObject.getStructureAt(tileCoordinate);
 
-        List<String> validationMessages = objectStructure.getCoordinateSet().stream()
-            .filter(coordinate -> !objectStructure.getFromMap(coordinate).isAccessible())
-            .map(tileCoordinate::translateBy)
-            .filter(tileCoordinateOnStructure -> !mergedAccessibility.get(tileCoordinateOnStructure).isAccessible())
+        List<String> validationMessages = objectStructure.entrySet().stream()
+            .filter(tilePrototypeByCoordinate -> !tilePrototypeByCoordinate.getValue().isAccessible())
+            .filter(tilePrototypeByCoordinate -> !mergedAccessibility.get(tilePrototypeByCoordinate.getKey()).isAccessible())
+            .map(java.util.Map.Entry::getKey)
             .map(toErrorMessage(mergedAccessibility))
             .collect(toList());
 

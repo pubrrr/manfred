@@ -53,8 +53,8 @@ public class InsertMapObjectComponentTest extends ComponentTestCase {
         CommandResult result = underTestCommandFactory.create(0, 0).execute();
 
         assertThat(result, failedWithMessage(
-            "Tile (0,0) is not accessible, blocked by object tree2 at (0,0),\n" +
-            "Tile (1,0) is not accessible, blocked by object tree2 at (0,0)"
+            "Tile (1,0) is not accessible, blocked by object tree2 at (0,0),\n" +
+            "Tile (0,0) is not accessible, blocked by object tree2 at (0,0)"
         ));
     }
 

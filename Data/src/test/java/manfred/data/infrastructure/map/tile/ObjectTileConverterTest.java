@@ -9,6 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -51,8 +52,11 @@ class ObjectTileConverterTest {
     @Test
     void accessibleObject() throws InvalidInputException {
         MapPrototype matrixMock = mockMapMatrix();
-        when(matrixMock.bottomLeft()).thenReturn(TilePrototype.accessible());
-        ValidatedMapTileDto mapTileDto = new ValidatedMapTileDto("tile", matrixMock, null, null);
+        MapPrototype.Coordinate originCoordinate = mock(MapPrototype.Coordinate.class);
+        when(matrixMock.getFromMap(eq(originCoordinate))).thenReturn(TilePrototype.accessible());
+        ValidatedMapTileDto mapTileDto = mock(ValidatedMapTileDto.class);
+        when(mapTileDto.getOriginCoordinate()).thenReturn(originCoordinate);
+        when(mapTileDto.getStructure()).thenReturn(matrixMock);
 
         when(mapTileReaderMock.load("tileValue")).thenReturn(mapTileDto);
 
@@ -66,8 +70,11 @@ class ObjectTileConverterTest {
     @Test
     void notAccessibleObject() throws InvalidInputException {
         MapPrototype matrixMock = mockMapMatrix();
-        when(matrixMock.bottomLeft()).thenReturn(TilePrototype.notAccessible());
-        ValidatedMapTileDto mapTileDto = new ValidatedMapTileDto("tile", matrixMock, null, null);
+        MapPrototype.Coordinate originCoordinate = mock(MapPrototype.Coordinate.class);
+        when(matrixMock.getFromMap(eq(originCoordinate))).thenReturn(TilePrototype.notAccessible());
+        ValidatedMapTileDto mapTileDto = mock(ValidatedMapTileDto.class);
+        when(mapTileDto.getOriginCoordinate()).thenReturn(originCoordinate);
+        when(mapTileDto.getStructure()).thenReturn(matrixMock);
 
         when(mapTileReaderMock.load("tileValue")).thenReturn(mapTileDto);
 

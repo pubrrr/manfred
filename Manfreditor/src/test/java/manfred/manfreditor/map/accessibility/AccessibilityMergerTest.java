@@ -39,6 +39,7 @@ class AccessibilityMergerTest {
         ConcreteMapObject mapObject = new ConcreteMapObject(
             "name",
             structureMock,
+            coordinatePrototype(0, 0),
             null
         );
 

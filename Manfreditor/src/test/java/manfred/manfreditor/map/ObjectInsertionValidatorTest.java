@@ -35,7 +35,7 @@ class ObjectInsertionValidatorTest {
     @Test
     void objectAndMapAreAlwaysAccessible() {
         MapPrototype structureMock = mockMapPrototype(Map.of(coordinatePrototype(0, 0), TilePrototype.accessible()));
-        ConcreteMapObject object = new ConcreteMapObject("name", structureMock, null);
+        ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
         Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator());
 
         Result result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
@@ -47,7 +47,7 @@ class ObjectInsertionValidatorTest {
     @Test
     void objectTileIsNotAccessible() {
         MapPrototype structureMock = mockMapPrototype(Map.of(coordinatePrototype(0, 0), TilePrototype.notAccessible()));
-        ConcreteMapObject object = new ConcreteMapObject("name", structureMock, null);
+        ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
         Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator());
 
         Result result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
@@ -59,7 +59,7 @@ class ObjectInsertionValidatorTest {
     @Test
     void mapIsNotAccessible() {
         MapPrototype structureMock = mockMapPrototype(Map.of(coordinatePrototype(0, 0), TilePrototype.accessible()));
-        ConcreteMapObject object = new ConcreteMapObject("name", structureMock, null);
+        ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
         Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(tileCoordinate(0, 0), new ColoredAccessibilityIndicator(null, null));
 
         Result result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
@@ -71,7 +71,7 @@ class ObjectInsertionValidatorTest {
     @Test
     void mapAndObjectAreNotAccessible() {
         MapPrototype structureMock = mockMapPrototype(Map.of(coordinatePrototype(0, 0), TilePrototype.notAccessible()));
-        ConcreteMapObject object = new ConcreteMapObject("name", structureMock, null);
+        ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
         Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(
             tileCoordinate(0, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
         );
@@ -88,7 +88,7 @@ class ObjectInsertionValidatorTest {
             coordinatePrototype(0, 0), TilePrototype.notAccessible(),
             coordinatePrototype(1, 0), TilePrototype.notAccessible()
         ));
-        ConcreteMapObject object = new ConcreteMapObject("name", structureMock, null);
+        ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
         Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(
             tileCoordinate(0, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0))),
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
@@ -109,7 +109,7 @@ class ObjectInsertionValidatorTest {
             coordinatePrototype(0, 0), TilePrototype.notAccessible(),
             coordinatePrototype(1, 0), TilePrototype.notAccessible()
         ));
-        ConcreteMapObject object = new ConcreteMapObject("name", structureMock, null);
+        ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
         Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(
             tileCoordinate(0, 0), new EmptyAccessibilityIndicator(),
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
@@ -127,7 +127,7 @@ class ObjectInsertionValidatorTest {
             coordinatePrototype(0, 0), TilePrototype.notAccessible(),
             coordinatePrototype(1, 0), TilePrototype.accessible()
         ));
-        ConcreteMapObject object = new ConcreteMapObject("name", structureMock, null);
+        ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
         Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(
             tileCoordinate(0, 0), new EmptyAccessibilityIndicator(),
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
@@ -142,7 +142,7 @@ class ObjectInsertionValidatorTest {
     @Test
     void objectAtAnotherTileThanOrigin() {
         MapPrototype structureMock = mockMapPrototype(Map.of(coordinatePrototype(0, 0), TilePrototype.notAccessible()));
-        ConcreteMapObject object = new ConcreteMapObject("name", structureMock, null);
+        ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
         Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(
             tileCoordinate(0, 0), new EmptyAccessibilityIndicator(),
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(3, 0)))

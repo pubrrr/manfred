@@ -1,6 +1,7 @@
 package manfred.data.infrastructure.map.tile;
 
 import manfred.data.InvalidInputException;
+import manfred.data.infrastructure.map.MapPrototype;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
@@ -33,7 +34,8 @@ public class ObjectTileConverter extends TileConverter {
             return TilePrototype.notAccessible();
         }
 
-        return validatedMapTileDto.getStructure().bottomLeft().isAccessible()
+        MapPrototype.Coordinate originCoordinate = validatedMapTileDto.getOriginCoordinate();
+        return validatedMapTileDto.getStructure().getFromMap(originCoordinate).isAccessible()
             ? TilePrototype.withObject(validatedMapTileDto).andAccessible()
             : TilePrototype.withObject(validatedMapTileDto).andNotAccessible();
     }

@@ -8,5 +8,9 @@ public interface SpriteInterface {
 
     PositiveInt getWidth();
 
+    default int getYOffset() {
+        return 0;
+    }
+
     BufferedImage getImage();
 }

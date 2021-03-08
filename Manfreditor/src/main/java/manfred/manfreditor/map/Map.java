@@ -97,6 +97,13 @@ public class Map {
             return new TileCoordinate(this.x.add(coordinatePrototype.getX()), this.y.add(coordinatePrototype.getY()));
         }
 
+        public TileCoordinate offsetBy(MapPrototype.Coordinate originCoordinate) {
+            return new TileCoordinate(
+                PositiveInt.of(this.x.value() - originCoordinate.getX().value()),
+                PositiveInt.of(this.y.value() - originCoordinate.getY().value())
+            );
+        }
+
         private TileCoordinate(MapPrototype.Coordinate coordinatePrototype) {
             this.x = coordinatePrototype.getX();
             this.y = coordinatePrototype.getY();
