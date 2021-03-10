@@ -1,6 +1,7 @@
 package manfred.manfreditor.controller.command;
 
 import manfred.manfreditor.gui.view.map.MapView;
+import manfred.manfreditor.map.LocatedMapObject;
 import manfred.manfreditor.map.MapModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,9 +23,11 @@ class DeleteMapObjectCommandTest {
     private DeleteMapObjectCommand.Factory commandFactory;
     private MapView mapViewMock;
     private MapModel mapModelMock;
+    private CommandHistory commandHistory;
 
     @BeforeEach
     void setUp() {
+        commandHistory = new CommandHistory();
         mapViewMock = mock(MapView.class);
         mapModelMock = mock(MapModel.class);
         commandFactory = new DeleteMapObjectCommand.Factory(mapViewMock, mapModelMock);
@@ -40,12 +43,28 @@ class DeleteMapObjectCommandTest {
     }
 
     @Test
-    void success() {
+    void failsWhenThereIsNoObjectToBeDeleted() {
         when(mapViewMock.getClickedTile(anyInt(), anyInt())).thenReturn(Optional.of(tileCoordinate(1, 2)));
+        when(mapModelMock.deleteObjectAt(any())).thenReturn(Optional.empty());
+
+        CommandResult result = commandFactory.create(0, 0).execute();
+
+        assertThat(result, failedWithMessage("No object could be deleted at tile (1,2)"));
+    }
+
+    @Test
+    void successAndRollback() {
+        LocatedMapObject deletedObject = new LocatedMapObject(null, null);
+        when(mapViewMock.getClickedTile(anyInt(), anyInt())).thenReturn(Optional.of(tileCoordinate(1, 2)));
+        when(mapModelMock.deleteObjectAt(any())).thenReturn(Optional.of(deletedObject));
 
         CommandResult result = commandFactory.create(0, 0).execute();
 
         assertThat(result, wasSuccessful());
         verify(mapModelMock).deleteObjectAt(any());
+
+        result.registerRollbackOperation(commandHistory);
+        commandHistory.undoLast();
+        verify(mapModelMock).forceInsertObjectAt(deletedObject);
     }
 }

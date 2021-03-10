@@ -52,16 +52,14 @@ public class MapObjectRepository {
         return this.objectsStorage.get(objectKey);
     }
 
-    public void populateWith(ValidatedMapTileDto newTileDto) {
-        objectsStorage.put(
-            new ObjectKey(newTileDto.getName()),
-            createNewObject(newTileDto)
-        );
+    public ObjectKey populateWith(ValidatedMapTileDto newTileDto) {
+        ObjectKey newKey = new ObjectKey(newTileDto.getName());
+        objectsStorage.put(newKey, createNewObject(newTileDto));
+        return newKey;
     }
 
-    public Optional<ObjectKey> getKey(String key) {
-        // TODO
-        return Optional.empty();
+    public void delete(ObjectKey objectKey) {
+        objectsStorage.remove(objectKey);
     }
 
     @ToString

@@ -3,6 +3,7 @@ package manfred.manfreditor.gui;
 import lombok.AllArgsConstructor;
 import manfred.manfreditor.controller.MapController;
 import manfred.manfreditor.controller.MapObjectsController;
+import manfred.manfreditor.controller.RollbackController;
 import manfred.manfreditor.gui.view.map.MapView;
 import manfred.manfreditor.gui.view.mapobject.MapObjectsView;
 import org.eclipse.swt.SWT;
@@ -26,6 +27,7 @@ public class GuiBuilder {
 
     private final MapObjectsController mapObjectsController;
     private final MapController mapController;
+    private final RollbackController rollbackController;
 
     private final MapView mapView;
     private final MapObjectsView mapObjectsView;
@@ -55,9 +57,13 @@ public class GuiBuilder {
             label.redraw();
         });
 
-        Button button = new Button(composite, SWT.CENTER);
-        button.setText("Map laden");
-        button.addSelectionListener(mapController.loadMap(mainShell));
+        Button loadMapButton = new Button(composite, SWT.CENTER);
+        loadMapButton.setText("Map laden");
+        loadMapButton.addSelectionListener(mapController.loadMap(mainShell));
+
+        Button rollbackButton = new Button(composite, SWT.CENTER);
+        rollbackButton.setText("Rückgängig");
+        rollbackButton.addSelectionListener(rollbackController);
     }
 
     private void addMapAndMapObjects(Shell mainShell) {
@@ -85,6 +91,8 @@ public class GuiBuilder {
         });
         mapController.addInsertPostAction(mapCanvas::redraw);
         mapController.addDeletePostAction(mapCanvas::redraw);
+        rollbackController.addPostAction(mapCanvas::redraw);
+        rollbackController.addPostAction(() -> mapCanvas.setSize(mapView.getMapViewSize()));
     }
 
     private void addMapObjectsCanvas(Composite mapAndMapObjectsContainer, Shell mainShell) {
@@ -97,5 +105,6 @@ public class GuiBuilder {
         mapObjectsCanvas.addMouseListener(mapObjectsController);
         mapObjectsController.addPostAction(mapObjectsCanvas::redraw);
         mapController.addLoadMapPostAction(selectedFile -> mapObjectsCanvas.redraw());
+        rollbackController.addPostAction(mapObjectsCanvas::redraw);
     }
 }

@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import manfred.data.InvalidInputException;
 import manfred.data.persistence.reader.MapSource;
+import manfred.manfreditor.common.Memento;
 import manfred.manfreditor.map.Map;
 import manfred.manfreditor.map.MapModel;
 import manfred.manfreditor.map.MapProvider;
@@ -22,6 +23,8 @@ public class LoadMapCommand implements Command {
 
     @Override
     public CommandResult execute() {
+        Memento<MapModel> backup = mapModel.backup();
+
         URL mapUrl;
         try {
             mapUrl = urlHelper.getUrlForFile(this.mapPath);
@@ -35,7 +38,7 @@ public class LoadMapCommand implements Command {
         } catch (InvalidInputException e) {
             return CommandResult.failure(e.getMessage());
         }
-        return CommandResult.success();
+        return CommandResult.success(() -> backup.restoreStateOf(mapModel));
     }
 
     @Component

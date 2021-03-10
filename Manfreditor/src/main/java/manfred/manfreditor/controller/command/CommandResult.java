@@ -7,10 +7,12 @@ import java.util.function.Consumer;
 
 public interface CommandResult {
 
+    CommandResult registerRollbackOperation(CommandHistory commandHistory);
+
     void onFailure(Consumer<String> errorConsumer);
 
-    static CommandResult success() {
-        return new Success();
+    static CommandResult success(RollbackOperation rollbackOperation) {
+        return new Success(rollbackOperation);
     }
 
     static CommandResult failure(String errorMessage) {

@@ -2,6 +2,7 @@ package manfred.manfreditor.controller.command;
 
 import lombok.AllArgsConstructor;
 import manfred.manfreditor.gui.view.map.MapView;
+import manfred.manfreditor.map.Map;
 import manfred.manfreditor.map.MapModel;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +17,14 @@ public class DeleteMapObjectCommand implements Command {
     @Override
     public CommandResult execute() {
         return mapView.getClickedTile(this.x, this.y)
-            .map(tileCoordinate -> {
-                mapModel.deleteObjectAt(tileCoordinate);
-                return CommandResult.success();
-            })
+            .map(this::deleteObjectAt)
             .orElse(CommandResult.failure("No map tile at clicked coordinates (" + this.x + "," + this.y + ") was found"));
+    }
+
+    private CommandResult deleteObjectAt(Map.TileCoordinate tileCoordinate) {
+        return mapModel.deleteObjectAt(tileCoordinate)
+            .map(locatedMapObject -> CommandResult.success(() -> mapModel.forceInsertObjectAt(locatedMapObject)))
+            .orElse(CommandResult.failure("No object could be deleted at tile (" + tileCoordinate.getX() + "," + tileCoordinate.getY() + ")"));
     }
 
     @Component

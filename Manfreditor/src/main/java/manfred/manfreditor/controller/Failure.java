@@ -1,6 +1,7 @@
 package manfred.manfreditor.controller;
 
 import lombok.ToString;
+import manfred.manfreditor.controller.command.CommandHistory;
 import manfred.manfreditor.controller.command.CommandResult;
 
 import java.util.function.Consumer;
@@ -12,6 +13,11 @@ public class Failure implements CommandResult {
 
     public Failure(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    @Override
+    public CommandResult registerRollbackOperation(CommandHistory commandHistory) {
+        return this;
     }
 
     @Override
