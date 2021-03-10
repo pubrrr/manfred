@@ -2,6 +2,7 @@ package manfred.manfreditor.controller;
 
 import lombok.AllArgsConstructor;
 import manfred.manfreditor.controller.command.CommandResult;
+import manfred.manfreditor.controller.command.DeleteMapObjectCommand;
 import manfred.manfreditor.controller.command.InsertMapObjectCommand;
 import manfred.manfreditor.controller.command.LoadMapCommand;
 import org.eclipse.swt.events.MouseEvent;
@@ -18,19 +19,22 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static manfred.manfreditor.controller.ControllerHelper.LEFT_MOUSE_BUTTON;
-import static manfred.manfreditor.controller.ControllerHelper.execute;
+import static manfred.manfreditor.controller.ControllerHelper.RIGHT_MOUSE_BUTTON;
 
 @Component
 @AllArgsConstructor
 public class MapController implements MouseListener {
 
+    private final ControllerHelper controllerHelper;
     private final LoadMapCommand.Factory loadMapCommandFactory;
     private final InsertMapObjectCommand.Factory insertMapObjectCommandFactory;
+    private final DeleteMapObjectCommand.Factory deleteMapObjectCommandFactory;
     private final List<Consumer<String>> loadMapPostActions;
     private final List<Runnable> insertPostActions;
+    private final List<Runnable> deletePostActions;
 
     public CommandResult loadMap(String selectedFile) {
-        return execute(loadMapCommandFactory.create(selectedFile));
+        return controllerHelper.execute(loadMapCommandFactory.create(selectedFile));
     }
 
     public SelectionListener loadMap(Shell mainShell) {
@@ -59,6 +63,10 @@ public class MapController implements MouseListener {
         this.insertPostActions.add(postAction);
     }
 
+    public void addDeletePostAction(Runnable postAction) {
+        this.deletePostActions.add(postAction);
+    }
+
     @Override
     public void mouseDoubleClick(MouseEvent e) {
     }
@@ -70,8 +78,11 @@ public class MapController implements MouseListener {
     @Override
     public void mouseUp(MouseEvent event) {
         if (event.button == LEFT_MOUSE_BUTTON) {
-            execute(insertMapObjectCommandFactory.create(event.x, event.y)).onFailure(System.out::println);
+            controllerHelper.execute(insertMapObjectCommandFactory.create(event.x, event.y)).onFailure(System.out::println);
             insertPostActions.forEach(Runnable::run);
+        } else if (event.button == RIGHT_MOUSE_BUTTON) {
+            controllerHelper.execute(deleteMapObjectCommandFactory.create(event.x, event.y)).onFailure(System.out::println);
+            deletePostActions.forEach(Runnable::run);
         }
     }
 }

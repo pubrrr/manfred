@@ -20,13 +20,14 @@ public class LoadMapObjectCommand implements Command {
 
     @Override
     public CommandResult execute() {
+        ValidatedMapTileDto validatedMapTileDto;
         try {
-            ValidatedMapTileDto validatedMapTileDto = mapTileReader.load(this.tileName);
-            mapObjectRepository.populateWith(validatedMapTileDto);
+            validatedMapTileDto = mapTileReader.load(this.tileName);
         } catch (InvalidInputException e) {
             return CommandResult.failure(e.getMessage());
         }
-        return CommandResult.success();
+        MapObjectRepository.ObjectKey newKey = mapObjectRepository.populateWith(validatedMapTileDto);
+        return CommandResult.success(() -> mapObjectRepository.delete(newKey));
     }
 
     @Component

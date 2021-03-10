@@ -2,11 +2,15 @@ package manfred.manfreditor.controller.command;
 
 import lombok.AllArgsConstructor;
 import manfred.manfreditor.gui.view.map.MapView;
+import manfred.manfreditor.map.Map;
 import manfred.manfreditor.map.MapModel;
 import manfred.manfreditor.mapobject.ConcreteMapObject;
 import manfred.manfreditor.mapobject.MapObjectRepository;
 import manfred.manfreditor.mapobject.SelectedObject;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.function.Function;
 
 @AllArgsConstructor
 public class InsertMapObjectCommand implements Command {
@@ -22,18 +26,23 @@ public class InsertMapObjectCommand implements Command {
     public CommandResult execute() {
         return selectedObject.getSelection()
             .map(mapObjectRepository::get)
-            .map(this::insertCorrespondingObject)
+            .map(this::getClickedTileAndInsertObject)
             .orElse(CommandResult.failure("Need to select an object before inserting it into the map"));
     }
 
-    private CommandResult insertCorrespondingObject(ConcreteMapObject concreteMapObject) {
+    private CommandResult getClickedTileAndInsertObject(ConcreteMapObject concreteMapObject) {
         return mapView.getClickedTile(this.x, this.y)
-            .map(tileCoordinate -> mapModel.tryInsertObjectAt(concreteMapObject, tileCoordinate))
-            .map(validationMessages -> validationMessages.isEmpty()
-                ? CommandResult.success()
-                : CommandResult.failure(String.join(",\n", validationMessages))
-            )
+            .map(insertObject(concreteMapObject))
             .orElse(CommandResult.failure("No map tile at clicked coordinates (" + this.x + "," + this.y + ") was found"));
+    }
+
+    private Function<Map.TileCoordinate, CommandResult> insertObject(ConcreteMapObject concreteMapObject) {
+        return tileCoordinate -> {
+            List<String> validationMessages = mapModel.tryInsertObjectAt(concreteMapObject, tileCoordinate);
+            return validationMessages.isEmpty()
+                ? CommandResult.success(() -> mapModel.deleteObjectAt(tileCoordinate))
+                : CommandResult.failure(String.join(",\n", validationMessages));
+        };
     }
 
     @Component

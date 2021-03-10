@@ -1,6 +1,7 @@
 package componentTests.map;
 
 import componentTests.TestManfreditorContext;
+import manfred.manfreditor.controller.command.CommandHistory;
 import manfred.manfreditor.controller.command.CommandResult;
 import manfred.manfreditor.controller.command.LoadMapObjectCommand;
 import manfred.manfreditor.mapobject.MapObjectRepository;
@@ -27,8 +28,11 @@ public class LoadMapObjectComponentTest {
     @Autowired
     private MapObjectRepository mapObjectRepository;
 
+    @Autowired
+    private CommandHistory commandHistory;
+
     @Test
-    void loadMapObject() {
+    void loadMapObjectAndRollBack() {
         assertThat(mapObjectRepository.getKeys(), empty());
 
         String objectName = "tree2";
@@ -39,6 +43,10 @@ public class LoadMapObjectComponentTest {
         List<MapObjectRepository.ObjectKey> keys = mapObjectRepository.getKeys();
         assertThat(keys, hasSize(1));
         assertThat(mapObjectRepository.get(keys.get(0)).getName(), is(objectName));
+
+        result.registerRollbackOperation(commandHistory);
+        commandHistory.undoLast();
+        assertThat(mapObjectRepository.getKeys(), hasSize(0));
     }
 
     @Test
