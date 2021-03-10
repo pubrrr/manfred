@@ -61,6 +61,10 @@ public class GuiBuilder {
         loadMapButton.setText("Map laden");
         loadMapButton.addSelectionListener(mapController.loadMap(mainShell));
 
+        Button saveMapButton = new Button(composite, SWT.CENTER);
+        saveMapButton.setText("Map speichern");
+        saveMapButton.addSelectionListener(mapController.saveMap(mainShell));
+
         Button rollbackButton = new Button(composite, SWT.CENTER);
         rollbackButton.setText("Rückgängig");
         rollbackButton.addSelectionListener(rollbackController);

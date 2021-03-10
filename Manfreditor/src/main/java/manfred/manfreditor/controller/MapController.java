@@ -5,6 +5,8 @@ import manfred.manfreditor.controller.command.CommandResult;
 import manfred.manfreditor.controller.command.DeleteMapObjectCommand;
 import manfred.manfreditor.controller.command.InsertMapObjectCommand;
 import manfred.manfreditor.controller.command.LoadMapCommand;
+import manfred.manfreditor.controller.command.SaveMapCommand;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -15,6 +17,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -27,6 +30,7 @@ public class MapController implements MouseListener {
 
     private final ControllerHelper controllerHelper;
     private final LoadMapCommand.Factory loadMapCommandFactory;
+    private final SaveMapCommand.Factory saveMapCommandFactory;
     private final InsertMapObjectCommand.Factory insertMapObjectCommandFactory;
     private final DeleteMapObjectCommand.Factory deleteMapObjectCommandFactory;
     private final List<Consumer<String>> loadMapPostActions;
@@ -50,6 +54,34 @@ public class MapController implements MouseListener {
                         messageBox.open();
                     });
                     loadMapPostActions.forEach(stringConsumer -> stringConsumer.accept(selectedFile));
+                }
+            }
+        };
+    }
+
+    public SelectionListener saveMap(Shell mainShell) {
+        return new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                FileDialog fileDialog = new FileDialog(mainShell);
+                String selectedFile = fileDialog.open();
+                if (selectedFile != null) {
+                    File fileToSaveIn = new File(selectedFile);
+                    if (fileToSaveIn.isFile()) {
+                        MessageBox messageBox = new MessageBox(mainShell, SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
+                        messageBox.setMessage("Obacht:\n\n" + selectedFile + "\ngibts scho. Willsch trotzdem?");
+                        int open = messageBox.open();
+                        if (open == SWT.CANCEL) {
+                            return;
+                        }
+                        System.out.println("Trotzdem");
+                    }
+                    controllerHelper.execute(saveMapCommandFactory.create())
+                        .onFailure(errorMessage -> {
+                            MessageBox messageBox = new MessageBox(mainShell, SWT.ICON_ERROR | SWT.OK);
+                            messageBox.setMessage("Des hod id fongtsionierd:\n\n" + errorMessage);
+                            messageBox.open();
+                        });
                 }
             }
         };
