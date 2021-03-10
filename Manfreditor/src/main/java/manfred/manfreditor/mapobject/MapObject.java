@@ -1,8 +1,9 @@
 package manfred.manfreditor.mapobject;
 
+import io.vavr.control.Either;
 import manfred.manfreditor.gui.view.map.MapViewCoordinate;
-import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
 import manfred.manfreditor.map.Map;
+import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Display;
 
@@ -14,5 +15,5 @@ public interface MapObject {
         return new None();
     }
 
-    void insertAccessibilityIndicatorsAt(Map.TileCoordinate tileCoordinate, java.util.Map<Map.TileCoordinate, AccessibilityIndicator> mergedAccessibility);
+    Either<String, io.vavr.collection.Map<Map.TileCoordinate, AccessibilityIndicator>> getStructureAt(Map.TileCoordinate objectLocation);
 }

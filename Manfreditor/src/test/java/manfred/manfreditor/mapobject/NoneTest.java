@@ -1,13 +1,15 @@
 package manfred.manfreditor.mapobject;
 
+import io.vavr.collection.Map;
+import io.vavr.control.Either;
+import manfred.manfreditor.map.Map.TileCoordinate;
 import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
-import manfred.manfreditor.map.Map;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.anEmptyMap;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 
 class NoneTest {
@@ -15,10 +17,11 @@ class NoneTest {
     @Test
     void testInsertAccessibility() {
         None underTest = new None();
-        HashMap<Map.TileCoordinate, AccessibilityIndicator> mergedAccessibility = new HashMap<>();
+        HashMap<TileCoordinate, AccessibilityIndicator> mergedAccessibility = new HashMap<>();
 
-        underTest.insertAccessibilityIndicatorsAt(mock(Map.TileCoordinate.class), mergedAccessibility);
+        Either<String, Map<TileCoordinate, AccessibilityIndicator>> structure = underTest.getStructureAt(mock(TileCoordinate.class));
 
-        assertThat(mergedAccessibility, anEmptyMap());
+        assertThat(structure.isRight(), is(true));
+        assertThat(structure.get().size(), is(0));
     }
 }

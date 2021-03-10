@@ -1,6 +1,6 @@
 package manfred.manfreditor.map;
 
-import com.google.common.collect.ImmutableMap;
+import io.vavr.collection.HashMap;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -11,25 +11,23 @@ import manfred.data.shared.PositiveInt;
 import manfred.manfreditor.gui.view.GridCoordinate;
 import manfred.manfreditor.mapobject.MapObject;
 
-import java.util.HashMap;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class Map {
 
     private final String name;
-    private final ImmutableMap<TileCoordinate, MapObject> mapMatrix;
+    private final io.vavr.collection.Map<TileCoordinate, MapObject> mapMatrix;
     private final PositiveInt sizeX;
     private final PositiveInt sizeY;
 
     public Map(String name, java.util.Map<MapPrototype.Coordinate, MapObject> mapMatrix) {
         this.name = name;
-        this.mapMatrix = ImmutableMap.copyOf(mapMatrix.entrySet().stream()
-            .collect(Collectors.toMap(
-                mapObjectByCoordinatePrototype -> new TileCoordinate(mapObjectByCoordinatePrototype.getKey()),
-                java.util.Map.Entry::getValue
-            )));
+        this.mapMatrix = HashMap.ofAll(
+            mapMatrix.entrySet().stream(),
+            mapObjectByCoordinatePrototype -> new TileCoordinate(mapObjectByCoordinatePrototype.getKey()),
+            java.util.Map.Entry::getValue
+        );
 
         if (mapMatrix.isEmpty()) {
             this.sizeX = PositiveInt.of(0);
@@ -40,7 +38,7 @@ public class Map {
         }
     }
 
-    private Map(String name, ImmutableMap<TileCoordinate, MapObject> mapMatrix, PositiveInt sizeX, PositiveInt sizeY) {
+    private Map(String name, io.vavr.collection.Map<TileCoordinate, MapObject> mapMatrix, PositiveInt sizeX, PositiveInt sizeY) {
         this.name = name;
         this.mapMatrix = mapMatrix;
         this.sizeX = sizeX;
@@ -67,17 +65,15 @@ public class Map {
     }
 
     public MapObject getObjectAt(TileCoordinate tileCoordinate) {
-        return this.mapMatrix.get(tileCoordinate);
+        return this.mapMatrix.get(tileCoordinate).get();
     }
 
-    public java.util.Map<TileCoordinate, MapObject> getObjects() {
+    public io.vavr.collection.Map<TileCoordinate, MapObject> getObjects() {
         return mapMatrix;
     }
 
     public Map insertObjectAt(MapObject mapObject, TileCoordinate tileCoordinate) {
-        var newMapMatrix = new HashMap<>(this.mapMatrix);
-        newMapMatrix.put(tileCoordinate, mapObject);
-        return new Map(this.name, ImmutableMap.copyOf(newMapMatrix), this.sizeX, this.sizeY);
+        return new Map(this.name, this.mapMatrix.put(tileCoordinate, mapObject), this.sizeX, this.sizeY);
     }
 
     @EqualsAndHashCode

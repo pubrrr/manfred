@@ -29,11 +29,11 @@ public class MapModel implements Memento<MapModel> {
         this.map = resultingMap;
     }
 
-    public java.util.Map<Map.TileCoordinate, MapObject> getObjects() {
+    public io.vavr.collection.Map<Map.TileCoordinate, MapObject> getObjects() {
         return this.map.getObjects();
     }
 
-    public java.util.Map<Map.TileCoordinate, AccessibilityIndicator> getMergedAccessibility() {
+    public io.vavr.collection.Map<Map.TileCoordinate, AccessibilityIndicator> getMergedAccessibility() {
         return this.accessibilityMerger.merge(this.map.getObjects());
     }
 
@@ -46,7 +46,7 @@ public class MapModel implements Memento<MapModel> {
     }
 
     public Validation<List<String>, ConcreteMapObject> tryInsertObjectAt(ConcreteMapObject mapObject, Map.TileCoordinate tileCoordinate) {
-        java.util.Map<Map.TileCoordinate, AccessibilityIndicator> mergedAccessibility = getMergedAccessibility();
+        io.vavr.collection.Map<Map.TileCoordinate, AccessibilityIndicator> mergedAccessibility = getMergedAccessibility();
 
         Validation<List<String>, ConcreteMapObject> result = objectInsertionValidator.mayObjectBeInserted(mapObject, tileCoordinate, mergedAccessibility);
 
@@ -62,7 +62,7 @@ public class MapModel implements Memento<MapModel> {
 
     public Optional<LocatedMapObject> deleteObjectAt(Map.TileCoordinate tileCoordinate) {
         Map.TileCoordinate tileCoordinateToDeleteObjectAt = getMergedAccessibility()
-            .get(tileCoordinate)
+            .get(tileCoordinate).get()
             .getSource()
             .map(Source::getTileCoordinate)
             .orElse(tileCoordinate);

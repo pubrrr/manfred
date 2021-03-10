@@ -1,5 +1,6 @@
 package manfred.manfreditor.map;
 
+import io.vavr.collection.HashMap;
 import io.vavr.control.Validation;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.tile.TilePrototype;
@@ -36,7 +37,7 @@ class ObjectInsertionValidatorTest {
     void objectAndMapAreAlwaysAccessible() {
         MapPrototype structureMock = mockMapPrototype(Map.of(coordinatePrototype(0, 0), TilePrototype.accessible()));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator());
+        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator());
 
         Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
 
@@ -47,7 +48,7 @@ class ObjectInsertionValidatorTest {
     void objectTileIsNotAccessible() {
         MapPrototype structureMock = mockMapPrototype(Map.of(coordinatePrototype(0, 0), TilePrototype.notAccessible()));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator());
+        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator());
 
         Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
 
@@ -58,7 +59,7 @@ class ObjectInsertionValidatorTest {
     void mapIsNotAccessible() {
         MapPrototype structureMock = mockMapPrototype(Map.of(coordinatePrototype(0, 0), TilePrototype.accessible()));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(tileCoordinate(0, 0), new ColoredAccessibilityIndicator(null, null));
+        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(tileCoordinate(0, 0), new ColoredAccessibilityIndicator(null, null));
 
         Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
 
@@ -69,7 +70,7 @@ class ObjectInsertionValidatorTest {
     void mapAndObjectAreNotAccessible() {
         MapPrototype structureMock = mockMapPrototype(Map.of(coordinatePrototype(0, 0), TilePrototype.notAccessible()));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(
+        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(
             tileCoordinate(0, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
         );
 
@@ -86,7 +87,7 @@ class ObjectInsertionValidatorTest {
             coordinatePrototype(1, 0), TilePrototype.notAccessible()
         ));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(
+        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(
             tileCoordinate(0, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0))),
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
         );
@@ -107,7 +108,7 @@ class ObjectInsertionValidatorTest {
             coordinatePrototype(1, 0), TilePrototype.notAccessible()
         ));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(
+        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(
             tileCoordinate(0, 0), new EmptyAccessibilityIndicator(),
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
         );
@@ -125,7 +126,7 @@ class ObjectInsertionValidatorTest {
             coordinatePrototype(1, 0), TilePrototype.accessible()
         ));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(
+        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(
             tileCoordinate(0, 0), new EmptyAccessibilityIndicator(),
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
         );
@@ -139,7 +140,7 @@ class ObjectInsertionValidatorTest {
     void objectAtAnotherTileThanOrigin() {
         MapPrototype structureMock = mockMapPrototype(Map.of(coordinatePrototype(0, 0), TilePrototype.notAccessible()));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(
+        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(
             tileCoordinate(0, 0), new EmptyAccessibilityIndicator(),
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(3, 0)))
         );
@@ -157,7 +158,7 @@ class ObjectInsertionValidatorTest {
             coordinatePrototype(0, 1), TilePrototype.notAccessible()
         ));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 1), null);
-        Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = Map.of(
+        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(
             tileCoordinate(0, 0), new EmptyAccessibilityIndicator()
         );
 
@@ -165,5 +166,23 @@ class ObjectInsertionValidatorTest {
 
         assertFalse(result.isValid());
         assertThat(result.getError(), containsInAnyOrder("Object location must not result in negative coordinates, given: (0,0), origin is (0,1)"));
+    }
+
+    @Test
+    void objectThatReachesOverTopAndRightBorderOfMapIsAllowed() {
+        MapPrototype structureMock = mockMapPrototype(Map.of(
+            coordinatePrototype(0, 0), TilePrototype.accessible(),
+            coordinatePrototype(0, 1), TilePrototype.accessible(),
+            coordinatePrototype(1, 0), TilePrototype.accessible(),
+            coordinatePrototype(1, 1), TilePrototype.accessible()
+        ));
+        ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
+        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(
+            tileCoordinate(0, 0), new EmptyAccessibilityIndicator()
+        );
+
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
+
+        assertTrue(result.isValid());
     }
 }

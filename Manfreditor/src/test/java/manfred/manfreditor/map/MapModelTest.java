@@ -1,5 +1,6 @@
 package manfred.manfreditor.map;
 
+import io.vavr.collection.HashMap;
 import io.vavr.control.Validation;
 import manfred.manfreditor.common.Memento;
 import manfred.manfreditor.map.accessibility.AccessibilityMerger;
@@ -11,13 +12,11 @@ import manfred.manfreditor.mapobject.MapObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 import static manfred.manfreditor.helper.CoordinateHelper.tileCoordinate;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -43,7 +42,7 @@ class MapModelTest {
 
     @Test
     void givenInsertionValidationIsSuccessful_thenObjectIsInserted() {
-        when(accessibilityMergerMock.merge(any())).thenReturn(new HashMap<>());
+        when(accessibilityMergerMock.merge(any())).thenReturn(HashMap.empty());
         when(objectInsertionValidator.mayObjectBeInserted(any(), any(), any())).thenReturn(Validation.valid(null));
 
         ConcreteMapObject objectToInsert = mock(ConcreteMapObject.class);
@@ -57,7 +56,7 @@ class MapModelTest {
     @Test
     void givenInsertionValidationFails_thenObjectIsNotInserted() {
         List<String> validationMessages = List.of("message1", "message2");
-        when(accessibilityMergerMock.merge(any())).thenReturn(new HashMap<>());
+        when(accessibilityMergerMock.merge(any())).thenReturn(HashMap.empty());
         when(objectInsertionValidator.mayObjectBeInserted(any(), any(), any())).thenReturn(
             Validation.invalid(validationMessages)
         );
@@ -71,7 +70,7 @@ class MapModelTest {
     @Test
     void deleteEmptyObject_insertsNewEmptyObjectAndNoDeletedObjectIsReturned() {
         when(this.mapMock.getObjectAt(any())).thenReturn(MapObject.none());
-        when(accessibilityMergerMock.merge(any())).thenReturn(java.util.Map.of(
+        when(accessibilityMergerMock.merge(any())).thenReturn(HashMap.of(
             tileCoordinate(0, 0), new EmptyAccessibilityIndicator()
         ));
 
@@ -89,7 +88,7 @@ class MapModelTest {
 
         var sourceTileCoordinate = tileCoordinate(1, 2);
         var nonEmptyObject = new ColoredAccessibilityIndicator(null, new Source("name", sourceTileCoordinate));
-        when(accessibilityMergerMock.merge(any())).thenReturn(java.util.Map.of(tileCoordinate(0, 0), nonEmptyObject));
+        when(accessibilityMergerMock.merge(any())).thenReturn(HashMap.of(tileCoordinate(0, 0), nonEmptyObject));
 
         Optional<LocatedMapObject> result = underTest.deleteObjectAt(tileCoordinate(0, 0));
 

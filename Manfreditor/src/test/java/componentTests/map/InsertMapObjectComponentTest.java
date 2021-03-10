@@ -53,8 +53,8 @@ public class InsertMapObjectComponentTest extends ComponentTestCase {
         CommandResult result = underTestCommandFactory.create(0, 0).execute();
 
         assertThat(result, failedWithMessage(
-            "Tile (1,0) is not accessible, blocked by object tree2 at (0,0),\n" +
-            "Tile (0,0) is not accessible, blocked by object tree2 at (0,0)"
+            "Tile (0,0) is not accessible, blocked by object tree2 at (0,0),\n" +
+            "Tile (1,0) is not accessible, blocked by object tree2 at (0,0)"
         ));
     }
 
@@ -64,7 +64,7 @@ public class InsertMapObjectComponentTest extends ComponentTestCase {
 
         result.registerRollbackOperation(commandHistory);
         commandHistory.undoLast();
-        MapObject mapObject = mapModel.getObjects().get(tileCoordinate(0, 2));
+        MapObject mapObject = mapModel.getObjects().get(tileCoordinate(0, 2)).get();
         assertThat(mapObject, instanceOf(None.class));
     }
 
@@ -75,7 +75,7 @@ public class InsertMapObjectComponentTest extends ComponentTestCase {
         CommandResult result = underTestCommandFactory.create(0, 0).execute();
 
         assertThat(result, wasSuccessful());
-        MapObject mapObject = mapModel.getObjects().get(tileCoordinate(0, 2));
+        MapObject mapObject = mapModel.getObjects().get(tileCoordinate(0, 2)).get();
         assertThat(mapObject, instanceOf(ConcreteMapObject.class));
         assertThat(((ConcreteMapObject) mapObject).getName(), is("tree2"));
         return result;

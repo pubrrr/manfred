@@ -49,12 +49,12 @@ public class DeleteMapObjectComponentTest extends ComponentTestCase {
         CommandResult result = underTestCommandFactory.create(0, 0).execute();
 
         assertThat(result, wasSuccessful());
-        MapObject mapObjectAfterDeletion = mapModel.getObjects().get(tileCoordinate(0, 0));
+        MapObject mapObjectAfterDeletion = mapModel.getObjects().get(tileCoordinate(0, 0)).get();
         assertThat(mapObjectAfterDeletion, instanceOf(None.class));
 
         result.registerRollbackOperation(commandHistory);
         commandHistory.undoLast();
-        MapObject mapObjectAfterRollback = mapModel.getObjects().get(tileCoordinate(0, 0));
+        MapObject mapObjectAfterRollback = mapModel.getObjects().get(tileCoordinate(0, 0)).get();
         assertThat(mapObjectAfterRollback, instanceOf(ConcreteMapObject.class));
         assertThat(((ConcreteMapObject) mapObjectAfterRollback).getName(), is("tree2"));
     }
@@ -68,7 +68,7 @@ public class DeleteMapObjectComponentTest extends ComponentTestCase {
         CommandResult result = underTestCommandFactory.create(TileViewSize.TILE_SIZE, 0).execute();
 
         assertThat(result, wasSuccessful());
-        MapObject mapObjectAfterDeletion = mapModel.getObjects().get(tileCoordinate(0, 0));
+        MapObject mapObjectAfterDeletion = mapModel.getObjects().get(tileCoordinate(0, 0)).get();
         assertThat(mapObjectAfterDeletion, instanceOf(None.class));
     }
 
@@ -76,22 +76,22 @@ public class DeleteMapObjectComponentTest extends ComponentTestCase {
     void deleteNonExistentObjectFails() {
         loadMap("emptyMap");
 
-        MapObject clickedMapObject = mapModel.getObjects().get(tileCoordinate(0, 0));
+        MapObject clickedMapObject = mapModel.getObjects().get(tileCoordinate(0, 0)).get();
         assertThat(clickedMapObject, instanceOf(None.class));
 
         CommandResult result = underTestCommandFactory.create(0, 0).execute();
 
         assertThat(result, failedWithMessage("No object could be deleted at tile (0,2)"));
-        MapObject mapObjectAfterDeletion = mapModel.getObjects().get(tileCoordinate(0, 0));
+        MapObject mapObjectAfterDeletion = mapModel.getObjects().get(tileCoordinate(0, 0)).get();
         assertThat(mapObjectAfterDeletion, instanceOf(None.class));
     }
 
     private void assertMapIsSetupAsExpected() {
-        MapObject mapObject = mapModel.getObjects().get(tileCoordinate(0, 0));
+        MapObject mapObject = mapModel.getObjects().get(tileCoordinate(0, 0)).get();
         assertThat(mapObject, instanceOf(ConcreteMapObject.class));
         assertThat(((ConcreteMapObject) mapObject).getName(), is("tree2"));
 
-        MapObject otherMapObject = mapModel.getObjects().get(tileCoordinate(1, 0));
+        MapObject otherMapObject = mapModel.getObjects().get(tileCoordinate(1, 0)).get();
         assertThat(otherMapObject, instanceOf(None.class));
     }
 }
