@@ -9,10 +9,8 @@ import manfred.data.persistence.reader.RawMapReader;
 import manfred.manfreditor.map.flattened.FlattenedMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.File;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -40,16 +38,8 @@ class MapExporterTest {
         when(rawMapReaderMock.save(any(), any())).thenReturn(expected);
         when(mapToDtoMapperMock.map(any())).thenReturn(mock(RawMapDto.class));
 
-        Try<Option<PreviousFileContent>> result = underTest.export(input, url());
+        Try<Option<PreviousFileContent>> result = underTest.export(input, mock(File.class));
 
         assertThat(result, is(expected));
-    }
-
-    private URL url() {
-        try {
-            return new URL("http://some.url");
-        } catch (MalformedURLException e) {
-            throw new AssertionFailedError("test issue", e);
-        }
     }
 }

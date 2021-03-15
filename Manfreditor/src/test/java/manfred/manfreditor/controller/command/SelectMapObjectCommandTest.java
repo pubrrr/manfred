@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessage;
+import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessageContaining;
 import static manfred.manfreditor.helper.SuccessfulCommandMatcher.wasSuccessful;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -52,7 +52,7 @@ class SelectMapObjectCommandTest {
 
         CommandResult result = commandFactory.create(0, 0).execute();
 
-        assertThat(result, failedWithMessage("No map object found at click position (0,0)"));
+        assertThat(result, failedWithMessageContaining("No map object found at click position (0,0)"));
     }
 
     @Test

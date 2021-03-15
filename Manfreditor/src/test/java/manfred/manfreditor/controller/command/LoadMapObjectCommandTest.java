@@ -8,7 +8,7 @@ import manfred.manfreditor.mapobject.MapObjectRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessage;
+import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessageContaining;
 import static manfred.manfreditor.helper.SuccessfulCommandMatcher.wasSuccessful;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -57,7 +57,7 @@ class LoadMapObjectCommandTest {
 
         CommandResult result = loadMapTileCommand.execute();
 
-        assertThat(result, failedWithMessage("errorMessage"));
+        assertThat(result, failedWithMessageContaining("errorMessage"));
     }
 
     private MapPrototype mapMatrixMock() {

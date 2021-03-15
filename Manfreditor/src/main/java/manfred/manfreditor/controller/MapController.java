@@ -76,7 +76,7 @@ public class MapController implements MouseListener {
                         }
                         System.out.println("Trotzdem");
                     }
-                    controllerHelper.execute(saveMapCommandFactory.create())
+                    controllerHelper.execute(saveMapCommandFactory.create(fileToSaveIn, mainShell))
                         .onFailure(errorMessage -> {
                             MessageBox messageBox = new MessageBox(mainShell, SWT.ICON_ERROR | SWT.OK);
                             messageBox.setMessage("Des hod id fongtsionierd:\n\n" + errorMessage);

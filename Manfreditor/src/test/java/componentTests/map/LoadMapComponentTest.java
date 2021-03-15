@@ -12,7 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import java.io.File;
 import java.net.MalformedURLException;
 
-import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessage;
+import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessageContaining;
 import static manfred.manfreditor.helper.SuccessfulCommandMatcher.wasSuccessful;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
@@ -54,6 +54,6 @@ public class LoadMapComponentTest {
 
         CommandResult commandResult = commandFactory.create(nonExistent).execute();
 
-        assertThat(commandResult, failedWithMessage("Could not read map from file:" + nonExistent));
+        assertThat(commandResult, failedWithMessageContaining("Could not read map from file:" + nonExistent));
     }
 }

@@ -16,7 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.Optional;
 
-import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessage;
+import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessageContaining;
 import static manfred.manfreditor.helper.CoordinateHelper.tileCoordinate;
 import static manfred.manfreditor.helper.SuccessfulCommandMatcher.wasSuccessful;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -81,7 +81,7 @@ public class DeleteMapObjectComponentTest extends ComponentTestCase {
 
         CommandResult result = underTestCommandFactory.create(0, 0).execute();
 
-        assertThat(result, failedWithMessage("No object could be deleted at tile (0,2)"));
+        assertThat(result, failedWithMessageContaining("No object could be deleted at tile (0,2)"));
         MapObject mapObjectAfterDeletion = mapModel.getObjects().get(tileCoordinate(0, 0)).get();
         assertThat(mapObjectAfterDeletion, instanceOf(None.class));
     }

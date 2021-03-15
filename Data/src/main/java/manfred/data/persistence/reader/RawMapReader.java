@@ -45,14 +45,12 @@ public class RawMapReader {
         return () -> new InvalidInputException("Did not find resource for map " + name);
     }
 
-    public Try<Option<PreviousFileContent>> save(RawMapDto mapDto, URL targetUrl) {
-        File file = new File(targetUrl.getFile());
-
-        return Try.of(() -> file.isFile() ? Files.readAllLines(file.toPath()) : List.of(""))
+    public Try<Option<PreviousFileContent>> save(RawMapDto mapDto, File targetFile) {
+        return Try.of(() -> targetFile.isFile() ? Files.readAllLines(targetFile.toPath()) : List.of(""))
             .map(lines -> String.join("\n", lines))
             .map(previousFileContent -> previousFileContent.length() > 0
                 ? Option.some(new PreviousFileContent(previousFileContent))
                 : Option.<PreviousFileContent>none())
-            .andThenTry(() -> objectMapper.writeValue(new File(targetUrl.getFile()), mapDto));
+            .andThenTry(() -> objectMapper.writeValue(targetFile, mapDto));
     }
 }

@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessage;
+import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessageContaining;
 import static manfred.manfreditor.helper.CoordinateHelper.tileCoordinate;
 import static manfred.manfreditor.helper.SuccessfulCommandMatcher.wasSuccessful;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -52,7 +52,7 @@ public class InsertMapObjectComponentTest extends ComponentTestCase {
 
         CommandResult result = underTestCommandFactory.create(0, 0).execute();
 
-        assertThat(result, failedWithMessage(
+        assertThat(result, failedWithMessageContaining(
             "Tile (0,0) is not accessible, blocked by object tree2 at (0,0),\n" +
             "Tile (1,0) is not accessible, blocked by object tree2 at (0,0)"
         ));

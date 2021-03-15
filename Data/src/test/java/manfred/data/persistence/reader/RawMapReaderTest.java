@@ -65,7 +65,7 @@ class RawMapReaderTest {
         fileWriter.write("previous file content");
         fileWriter.close();
 
-        Try<Option<PreviousFileContent>> result = underTest.save(input, temporaryFile.toURI().toURL());
+        Try<Option<PreviousFileContent>> result = underTest.save(input, temporaryFile);
 
         assertThat(result.isSuccess(), is(true));
         assertThat(result.get().get().getContent(), is("previous file content"));
@@ -78,7 +78,7 @@ class RawMapReaderTest {
         var input = new RawMapDto();
         input.setName("name");
 
-        Try<Option<PreviousFileContent>> result = underTest.save(input, temporaryFile.toURI().toURL());
+        Try<Option<PreviousFileContent>> result = underTest.save(input, temporaryFile);
 
         assertThat(result.isSuccess(), is(true));
         assertThat(result.get().isEmpty(), is(true));
@@ -91,7 +91,8 @@ class RawMapReaderTest {
         var input = new RawMapDto();
         input.setName("name");
 
-        Try<Option<PreviousFileContent>> result = underTest.save(input, new URL("http://some.unknown.file"));
+        assertThat(temporaryFile.setReadOnly(), is(true));
+        Try<Option<PreviousFileContent>> result = underTest.save(input, temporaryFile);
 
         assertThat(result.isFailure(), is(true));
         assertThat(result.getCause(), instanceOf(IOException.class));

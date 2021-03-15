@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
-import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessage;
+import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessageContaining;
 import static manfred.manfreditor.helper.SuccessfulCommandMatcher.wasSuccessful;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -63,7 +63,7 @@ class InsertMapObjectCommandTest {
 
         CommandResult result = commandFactory.create(0, 0).execute();
 
-        assertThat(result, failedWithMessage("Need to select an object before inserting it into the map"));
+        assertThat(result, failedWithMessageContaining("Need to select an object before inserting it into the map"));
     }
 
     @Test
@@ -74,7 +74,7 @@ class InsertMapObjectCommandTest {
 
         CommandResult result = commandFactory.create(0, 0).execute();
 
-        assertThat(result, failedWithMessage("No map tile at clicked coordinates (0,0) was found"));
+        assertThat(result, failedWithMessageContaining("No map tile at clicked coordinates (0,0) was found"));
     }
 
     @Test
@@ -86,6 +86,6 @@ class InsertMapObjectCommandTest {
 
         CommandResult result = commandFactory.create(0, 0).execute();
 
-        assertThat(result, failedWithMessage("message1,\nmessage2"));
+        assertThat(result, failedWithMessageContaining("message1,\nmessage2"));
     }
 }

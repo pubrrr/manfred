@@ -12,7 +12,7 @@ public class CommandFailedMatcher extends BaseMatcher<CommandResult> {
         this.expectedMessage = expectedMessage;
     }
 
-    public static CommandFailedMatcher failedWithMessage(String expectedMessage) {
+    public static CommandFailedMatcher failedWithMessageContaining(String expectedMessage) {
         return new CommandFailedMatcher(expectedMessage);
     }
 
@@ -23,7 +23,7 @@ public class CommandFailedMatcher extends BaseMatcher<CommandResult> {
         }
         StringBuilder actualErrorMessage = new StringBuilder();
         ((CommandResult) actual).onFailure(actualErrorMessage::append);
-        return actualErrorMessage.toString().equals(expectedMessage);
+        return actualErrorMessage.toString().contains(expectedMessage);
     }
 
     @Override
