@@ -44,7 +44,8 @@ public class MapView {
     }
 
     private void drawAccessibility(GC gc, Display display) {
-        mapModel.getMergedAccessibility()
+        mapModel.getFlattenedMap()
+            .getAccessibility()
             .collect(sortingByCoordinates())
             .forEach((bottomLeft, accessibilityIndicator) -> accessibilityIndicator.indicateAccessibilityAt(bottomLeft, gc, display));
     }

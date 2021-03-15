@@ -4,11 +4,10 @@ import io.vavr.collection.HashMap;
 import io.vavr.control.Validation;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.tile.TilePrototype;
-import manfred.manfreditor.map.Map.TileCoordinate;
-import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
 import manfred.manfreditor.map.accessibility.ColoredAccessibilityIndicator;
 import manfred.manfreditor.map.accessibility.EmptyAccessibilityIndicator;
 import manfred.manfreditor.map.accessibility.Source;
+import manfred.manfreditor.map.flattened.FlattenedMap;
 import manfred.manfreditor.mapobject.ConcreteMapObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,9 +36,9 @@ class ObjectInsertionValidatorTest {
     void objectAndMapAreAlwaysAccessible() {
         MapPrototype structureMock = mockMapPrototype(Map.of(coordinatePrototype(0, 0), TilePrototype.accessible()));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator());
+        var flattenedMap = new FlattenedMap("name", HashMap.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator()));
 
-        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), flattenedMap);
 
         assertTrue(result.isValid());
     }
@@ -48,9 +47,9 @@ class ObjectInsertionValidatorTest {
     void objectTileIsNotAccessible() {
         MapPrototype structureMock = mockMapPrototype(Map.of(coordinatePrototype(0, 0), TilePrototype.notAccessible()));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator());
+        var flattenedMap = new FlattenedMap("name", HashMap.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator()));
 
-        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), flattenedMap);
 
         assertTrue(result.isValid());
     }
@@ -59,9 +58,9 @@ class ObjectInsertionValidatorTest {
     void mapIsNotAccessible() {
         MapPrototype structureMock = mockMapPrototype(Map.of(coordinatePrototype(0, 0), TilePrototype.accessible()));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(tileCoordinate(0, 0), new ColoredAccessibilityIndicator(null, null));
+        var flattenedMap = new FlattenedMap("name", HashMap.of(tileCoordinate(0, 0), new ColoredAccessibilityIndicator(null, null)));
 
-        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), flattenedMap);
 
         assertTrue(result.isValid());
     }
@@ -70,11 +69,11 @@ class ObjectInsertionValidatorTest {
     void mapAndObjectAreNotAccessible() {
         MapPrototype structureMock = mockMapPrototype(Map.of(coordinatePrototype(0, 0), TilePrototype.notAccessible()));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(
+        var flattenedMap = new FlattenedMap("name", HashMap.of(
             tileCoordinate(0, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
-        );
+        ));
 
-        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), flattenedMap);
 
         assertFalse(result.isValid());
         assertThat(result.getError(), containsInAnyOrder("Tile (0,0) is not accessible, blocked by object tileName at (0,0)"));
@@ -87,12 +86,12 @@ class ObjectInsertionValidatorTest {
             coordinatePrototype(1, 0), TilePrototype.notAccessible()
         ));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(
+        var flattenedMap = new FlattenedMap("name", HashMap.of(
             tileCoordinate(0, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0))),
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
-        );
+        ));
 
-        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), flattenedMap);
 
         assertFalse(result.isValid());
         assertThat(result.getError(), containsInAnyOrder(
@@ -108,12 +107,12 @@ class ObjectInsertionValidatorTest {
             coordinatePrototype(1, 0), TilePrototype.notAccessible()
         ));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(
+        var flattenedMap = new FlattenedMap("name", HashMap.of(
             tileCoordinate(0, 0), new EmptyAccessibilityIndicator(),
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
-        );
+        ));
 
-        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), flattenedMap);
 
         assertFalse(result.isValid());
         assertThat(result.getError(), containsInAnyOrder("Tile (1,0) is not accessible, blocked by object tileName at (0,0)"));
@@ -126,12 +125,12 @@ class ObjectInsertionValidatorTest {
             coordinatePrototype(1, 0), TilePrototype.accessible()
         ));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(
+        var flattenedMap = new FlattenedMap("name", HashMap.of(
             tileCoordinate(0, 0), new EmptyAccessibilityIndicator(),
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
-        );
+        ));
 
-        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), flattenedMap);
 
         assertTrue(result.isValid());
     }
@@ -140,12 +139,12 @@ class ObjectInsertionValidatorTest {
     void objectAtAnotherTileThanOrigin() {
         MapPrototype structureMock = mockMapPrototype(Map.of(coordinatePrototype(0, 0), TilePrototype.notAccessible()));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(
+        var flattenedMap = new FlattenedMap("name", HashMap.of(
             tileCoordinate(0, 0), new EmptyAccessibilityIndicator(),
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(3, 0)))
-        );
+        ));
 
-        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(1, 0), mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(1, 0), flattenedMap);
 
         assertFalse(result.isValid());
         assertThat(result.getError(), containsInAnyOrder("Tile (1,0) is not accessible, blocked by object tileName at (3,0)"));
@@ -158,11 +157,9 @@ class ObjectInsertionValidatorTest {
             coordinatePrototype(0, 1), TilePrototype.notAccessible()
         ));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 1), null);
-        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(
-            tileCoordinate(0, 0), new EmptyAccessibilityIndicator()
-        );
+        var flattenedMap = new FlattenedMap("name", HashMap.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator()));
 
-        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), flattenedMap);
 
         assertFalse(result.isValid());
         assertThat(result.getError(), containsInAnyOrder("Object location must not result in negative coordinates, given: (0,0), origin is (0,1)"));
@@ -177,11 +174,9 @@ class ObjectInsertionValidatorTest {
             coordinatePrototype(1, 1), TilePrototype.accessible()
         ));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility = HashMap.of(
-            tileCoordinate(0, 0), new EmptyAccessibilityIndicator()
-        );
+        var flattenedMap = new FlattenedMap("name", HashMap.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator()));
 
-        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), flattenedMap);
 
         assertTrue(result.isValid());
     }
