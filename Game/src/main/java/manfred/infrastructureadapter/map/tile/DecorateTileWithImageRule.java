@@ -48,9 +48,12 @@ public class DecorateTileWithImageRule implements TileConversionRule<MapTile> {
             PositiveInt.Strict imageWidth = this.gameConfig.getPixelBlockSize().times(validatedMapTileDto.getStructure().getSizeX());
             PositiveInt imageHeight = imageWidth.times(image.getHeight()).divideBy(PositiveInt.ofNonZero(image.getWidth()));
 
+            MapPrototype.Coordinate originCoordinate = validatedMapTileDto.getOriginCoordinate();
+            int yOffset = originCoordinate.getY().times(this.gameConfig.getPixelBlockSize()).value();
+
             MapTile wrappedTile = tileConversionAction.create();
 
-            return new MapTileWithSprite(wrappedTile, new SimpleSprite(imageWidth, imageHeight, image));
+            return new MapTileWithSprite(wrappedTile, new SimpleSprite(imageWidth, imageHeight, yOffset, image));
         };
     }
 

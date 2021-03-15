@@ -78,8 +78,8 @@ public class MapPrototype {
         return this.map.get(coordinate.x.value(), coordinate.y.value());
     }
 
-    public TilePrototype bottomLeft() {
-        return getFromMap(new Coordinate(PositiveInt.of(0), PositiveInt.of(0)));
+    public Coordinate getBottomLeftCoordinate() {
+        return new Coordinate(PositiveInt.of(0), PositiveInt.of(0));
     }
 
     @EqualsAndHashCode
@@ -92,6 +92,10 @@ public class MapPrototype {
         protected Coordinate(PositiveInt x, PositiveInt y) {
             this.x = x;
             this.y = y;
+        }
+
+        public String shortRepresentation() {
+            return "(" + x.value() + "," + y.value() + ")";
         }
     }
 }

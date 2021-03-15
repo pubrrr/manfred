@@ -1,115 +1,62 @@
 package manfred.manfreditor.mapobject;
 
+import io.vavr.collection.Map;
+import io.vavr.control.Either;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.tile.TilePrototype;
+import manfred.manfreditor.map.Map.TileCoordinate;
 import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
 import manfred.manfreditor.map.accessibility.ColoredAccessibilityIndicator;
 import manfred.manfreditor.map.accessibility.EmptyAccessibilityIndicator;
-import manfred.manfreditor.map.Map;
+import manfred.manfreditor.map.accessibility.Source;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
 
 import static manfred.manfreditor.helper.CoordinateHelper.coordinatePrototype;
 import static manfred.manfreditor.helper.CoordinateHelper.mockMapPrototype;
 import static manfred.manfreditor.helper.CoordinateHelper.tileCoordinate;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.aMapWithSize;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 
 public class ConcreteMapObjectTest {
 
     @Test
-    void insertAccessibility_objectStructureHasOnlyOneTile() {
-        MapPrototype mapPrototypeMock = mockMapPrototype(new HashMap<>());
-        ConcreteMapObject underTest = new ConcreteMapObject("name", mapPrototypeMock, null);
-        java.util.Map<Map.TileCoordinate, AccessibilityIndicator> mergedAccessibility = new HashMap<>();
+    void getStructureAt_withOffset() {
+        TilePrototype tileMock_0_0 = TilePrototype.notAccessible();
+        TilePrototype tileMock_1_0 = TilePrototype.accessible();
+        TilePrototype tileMock_0_1 = TilePrototype.notAccessible();
+        TilePrototype tileMock_1_1 = TilePrototype.accessible();
 
-        underTest.insertAccessibilityIndicatorsAt(tileCoordinate(0, 0), mergedAccessibility);
+        MapPrototype mapPrototypeMock = mockMapPrototype(java.util.Map.of(
+            coordinatePrototype(0, 0), tileMock_0_0,
+            coordinatePrototype(1, 0), tileMock_1_0,
+            coordinatePrototype(0, 1), tileMock_0_1,
+            coordinatePrototype(1, 1), tileMock_1_1
+        ));
 
-        assertThat(mergedAccessibility, aMapWithSize(0));
+        var underTest = new ConcreteMapObject("name", mapPrototypeMock, coordinatePrototype(0, 1), null);
+        Either<String, Map<TileCoordinate, AccessibilityIndicator>> structure = underTest.getStructureAt(tileCoordinate(1, 1));
+
+        AccessibilityIndicator indicator_1_0 = structure.get().get(tileCoordinate(1, 0)).get();
+        assertThat(indicator_1_0, instanceOf(ColoredAccessibilityIndicator.class));
+        assertThat(indicator_1_0.getSource().isPresent(), is(true));
+        assertThat(indicator_1_0.getSource().get(), is(new Source("name", tileCoordinate(1, 1))));
+
+        AccessibilityIndicator indicator_1_1 = structure.get().get(tileCoordinate(1, 1)).get();
+        assertThat(indicator_1_1, instanceOf(ColoredAccessibilityIndicator.class));
+        assertThat(indicator_1_1.getSource().isPresent(), is(true));
+        assertThat(indicator_1_1.getSource().get(), is(new Source("name", tileCoordinate(1, 1))));
+
+        assertThat(structure.get().get(tileCoordinate(2, 0)).get(), instanceOf(EmptyAccessibilityIndicator.class));
+        assertThat(structure.get().get(tileCoordinate(2, 1)).get(), instanceOf(EmptyAccessibilityIndicator.class));
     }
 
     @Test
-    void insertAccessibility_objectStructureHasOnlyOneAccessibleTile() {
-        MapPrototype mapPrototypeMock = mockMapPrototype(java.util.Map.of(
-            coordinatePrototype(0, 0), TilePrototype.accessible()
-        ));
+    void getStructureAt_fails() {
+        var underTest = new ConcreteMapObject("name", null, coordinatePrototype(0, 1), null);
+        Either<String, Map<TileCoordinate, AccessibilityIndicator>> structure = underTest.getStructureAt(tileCoordinate(0, 0));
 
-        ConcreteMapObject underTest = new ConcreteMapObject("name", mapPrototypeMock, null);
-        java.util.Map<Map.TileCoordinate, AccessibilityIndicator> mergedAccessibility = new HashMap<>();
-
-        underTest.insertAccessibilityIndicatorsAt(tileCoordinate(0, 0), mergedAccessibility);
-
-        assertThat(mergedAccessibility, aMapWithSize(0));
-    }
-
-    @Test
-    void insertAccessibility_objectStructureHasOnlyOneNonAccessibleTile() {
-        MapPrototype mapPrototypeMock = mockMapPrototype(java.util.Map.of(
-            coordinatePrototype(0, 0), TilePrototype.notAccessible()
-        ));
-
-        ConcreteMapObject underTest = new ConcreteMapObject("name", mapPrototypeMock, null);
-        java.util.Map<Map.TileCoordinate, AccessibilityIndicator> mergedAccessibility = new HashMap<>();
-
-        Map.TileCoordinate tileCoordinate = tileCoordinate(0, 0);
-        underTest.insertAccessibilityIndicatorsAt(tileCoordinate, mergedAccessibility);
-
-        assertThat(mergedAccessibility, aMapWithSize(1));
-        assertThat(mergedAccessibility.get(tileCoordinate), instanceOf(ColoredAccessibilityIndicator.class));
-    }
-
-    @Test
-    void insertAccessibility_objectStructureHasOneNonAccessibleAndOneAccessibleTile() {
-        MapPrototype.Coordinate coordinatePrototype_1_0 = coordinatePrototype(1, 0);
-        MapPrototype mapPrototypeMock = mockMapPrototype(java.util.Map.of(
-            coordinatePrototype(0, 0), TilePrototype.accessible(),
-            coordinatePrototype_1_0, TilePrototype.notAccessible()
-        ));
-
-        ConcreteMapObject underTest = new ConcreteMapObject("name", mapPrototypeMock, null);
-        java.util.Map<Map.TileCoordinate, AccessibilityIndicator> mergedAccessibility = new HashMap<>();
-
-        Map.TileCoordinate tileCoordinate = tileCoordinate(0, 0);
-        underTest.insertAccessibilityIndicatorsAt(tileCoordinate, mergedAccessibility);
-
-        assertThat(mergedAccessibility, aMapWithSize(1));
-        assertThat(mergedAccessibility.get(tileCoordinate.translateBy(coordinatePrototype_1_0)), instanceOf(ColoredAccessibilityIndicator.class));
-    }
-
-    @Test
-    void insertAccessibility_givenInitializedInput_insertsNonAccessibleTiles() {
-        MapPrototype.Coordinate coordinatePrototype_1_0 = coordinatePrototype(1, 0);
-        MapPrototype.Coordinate coordinatePrototype_1_1 = coordinatePrototype(1, 1);
-
-        MapPrototype mapPrototypeMock = mockMapPrototype(java.util.Map.of(
-            coordinatePrototype(0, 0), TilePrototype.accessible(),
-            coordinatePrototype_1_0, TilePrototype.notAccessible(),
-            coordinatePrototype(0, 1), TilePrototype.accessible(),
-            coordinatePrototype_1_1, TilePrototype.notAccessible()
-        ));
-
-        Map.TileCoordinate tileCoordinate = tileCoordinate(0, 0);
-
-        ConcreteMapObject underTest = new ConcreteMapObject("name", mapPrototypeMock, null);
-        java.util.Map<Map.TileCoordinate, AccessibilityIndicator> mergedAccessibility = new HashMap<>();
-        mergedAccessibility.put(tileCoordinate.translateBy(coordinatePrototype(0, 0)), new EmptyAccessibilityIndicator());
-        mergedAccessibility.put(tileCoordinate.translateBy(coordinatePrototype(1, 0)), new EmptyAccessibilityIndicator());
-        mergedAccessibility.put(tileCoordinate.translateBy(coordinatePrototype(2, 0)), new EmptyAccessibilityIndicator());
-        mergedAccessibility.put(tileCoordinate.translateBy(coordinatePrototype(0, 1)), new EmptyAccessibilityIndicator());
-        mergedAccessibility.put(tileCoordinate.translateBy(coordinatePrototype(1, 1)), new EmptyAccessibilityIndicator());
-        mergedAccessibility.put(tileCoordinate.translateBy(coordinatePrototype(2, 1)), new EmptyAccessibilityIndicator());
-
-        underTest.insertAccessibilityIndicatorsAt(tileCoordinate, mergedAccessibility);
-
-        assertThat(mergedAccessibility, aMapWithSize(6));
-        assertThat(mergedAccessibility.get(tileCoordinate.translateBy(coordinatePrototype_1_0)), instanceOf(ColoredAccessibilityIndicator.class));
-        assertThat(mergedAccessibility.get(tileCoordinate.translateBy(coordinatePrototype_1_1)), instanceOf(ColoredAccessibilityIndicator.class));
-
-        assertThat(mergedAccessibility.get(tileCoordinate.translateBy(coordinatePrototype(0, 0))), instanceOf(EmptyAccessibilityIndicator.class));
-        assertThat(mergedAccessibility.get(tileCoordinate.translateBy(coordinatePrototype(0, 1))), instanceOf(EmptyAccessibilityIndicator.class));
-        assertThat(mergedAccessibility.get(tileCoordinate.translateBy(coordinatePrototype(2, 0))), instanceOf(EmptyAccessibilityIndicator.class));
-        assertThat(mergedAccessibility.get(tileCoordinate.translateBy(coordinatePrototype(2, 1))), instanceOf(EmptyAccessibilityIndicator.class));
+        assertThat(structure.isLeft(), is(true));
+        assertThat(structure.getLeft(), is("Object location must not result in negative coordinates, given: (0,0), origin is (0,1)"));
     }
 }

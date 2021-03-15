@@ -1,9 +1,12 @@
 package manfred.manfreditor.mapobject;
 
+import io.vavr.collection.HashMap;
+import io.vavr.collection.Map;
+import io.vavr.control.Either;
 import lombok.EqualsAndHashCode;
 import manfred.manfreditor.gui.view.map.MapViewCoordinate;
+import manfred.manfreditor.map.Map.TileCoordinate;
 import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
-import manfred.manfreditor.map.Map;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Display;
 
@@ -15,6 +18,7 @@ public class None implements MapObject {
     }
 
     @Override
-    public void insertAccessibilityIndicatorsAt(Map.TileCoordinate tileCoordinate, java.util.Map<Map.TileCoordinate, AccessibilityIndicator> mergedAccessibility) {
+    public Either<String, Map<TileCoordinate, AccessibilityIndicator>> getStructureAt(TileCoordinate objectLocation) {
+        return Either.right(HashMap.empty());
     }
 }

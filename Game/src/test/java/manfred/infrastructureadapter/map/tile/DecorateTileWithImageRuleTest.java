@@ -93,8 +93,12 @@ class DecorateTileWithImageRuleTest {
     }
 
     private MapPrototype prepareMapTileWithObject() {
+        MapPrototype.Coordinate originCoordinate = mock(MapPrototype.Coordinate.class);
+        when(originCoordinate.getY()).thenReturn(PositiveInt.of(1));
+
         MapPrototype structureMock = mock(MapPrototype.class);
         when(structureMock.getSizeX()).thenReturn(PositiveInt.ofNonZero(1));
+        when(structureMock.getBottomLeftCoordinate()).thenReturn(originCoordinate);
         ValidatedMapTileDto mapTileDto = new ValidatedMapTileDto("tileName", structureMock, new BufferedImage(1, 2, 1), null);
 
         TilePrototype tilePrototypeMock = mock(TilePrototype.class);

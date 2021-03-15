@@ -40,6 +40,7 @@ public class MapObjectRepository {
         return new ConcreteMapObject(
             validatedMapTileDto.getName(),
             validatedMapTileDto.getStructure(),
+            validatedMapTileDto.getOriginCoordinate(),
             imageData
         );
     }

@@ -1,5 +1,6 @@
 package manfred.manfreditor.controller.command;
 
+import io.vavr.control.Validation;
 import lombok.AllArgsConstructor;
 import manfred.manfreditor.gui.view.map.MapView;
 import manfred.manfreditor.map.Map;
@@ -38,10 +39,11 @@ public class InsertMapObjectCommand implements Command {
 
     private Function<Map.TileCoordinate, CommandResult> insertObject(ConcreteMapObject concreteMapObject) {
         return tileCoordinate -> {
-            List<String> validationMessages = mapModel.tryInsertObjectAt(concreteMapObject, tileCoordinate);
-            return validationMessages.isEmpty()
-                ? CommandResult.success(() -> mapModel.deleteObjectAt(tileCoordinate))
-                : CommandResult.failure(String.join(",\n", validationMessages));
+            Validation<List<String>, ConcreteMapObject> validation = mapModel.tryInsertObjectAt(concreteMapObject, tileCoordinate);
+            return validation.fold(
+                errorMessages -> CommandResult.failure(String.join(",\n", errorMessages)),
+                ignoreThis -> CommandResult.success(() -> mapModel.deleteObjectAt(tileCoordinate))
+            );
         };
     }
 

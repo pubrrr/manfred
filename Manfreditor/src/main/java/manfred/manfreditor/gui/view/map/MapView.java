@@ -1,5 +1,6 @@
 package manfred.manfreditor.gui.view.map;
 
+import io.vavr.Tuple2;
 import lombok.AllArgsConstructor;
 import manfred.manfreditor.gui.view.GridFilter;
 import manfred.manfreditor.map.Map;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Component
@@ -23,29 +25,27 @@ public class MapView {
     private final ViewCoordinateMapper viewCoordinateMapper;
 
     public void draw(GC gc, Display display) {
-        SortedMap<MapViewCoordinate, MapObject> mapObjects = mapModel.getObjects()
-            .entrySet().stream()
-            .collect(Collectors.toMap(
-                mapObjectByTileCoordinate -> viewCoordinateMapper.mapToBottomLeft(mapObjectByTileCoordinate.getKey()),
-                java.util.Map.Entry::getValue,
-                (mapObject, mapObjectWithSameCoordinate) -> mapObject,
-                TreeMap::new
-            ));
+        SortedMap<MapViewCoordinate, MapObject> mapObjects = mapModel
+            .getObjects()
+            .collect(sortingByCoordinates());
 
         drawAccessibility(gc, display);
         drawGrid(mapObjects, gc);
         drawObjects(mapObjects, gc, display);
     }
 
+    private <T> Collector<Tuple2<Map.TileCoordinate, T>, ?, TreeMap<MapViewCoordinate, T>> sortingByCoordinates() {
+        return Collectors.toMap(
+            mapObjectByTileCoordinate -> viewCoordinateMapper.mapToBottomLeft(mapObjectByTileCoordinate._1()),
+            Tuple2::_2,
+            (mapObject, mapObjectWithSameCoordinate) -> mapObject,
+            TreeMap::new
+        );
+    }
+
     private void drawAccessibility(GC gc, Display display) {
         mapModel.getMergedAccessibility()
-            .entrySet().stream()
-            .collect(Collectors.toMap(
-                mapObjectByTileCoordinate -> viewCoordinateMapper.mapToBottomLeft(mapObjectByTileCoordinate.getKey()),
-                java.util.Map.Entry::getValue,
-                (mapObject, mapObjectWithSameCoordinate) -> mapObject,
-                TreeMap::new
-            ))
+            .collect(sortingByCoordinates())
             .forEach((bottomLeft, accessibilityIndicator) -> accessibilityIndicator.indicateAccessibilityAt(bottomLeft, gc, display));
     }
 
@@ -76,7 +76,7 @@ public class MapView {
     public Optional<Map.TileCoordinate> getClickedTile(int x, int y) {
         return mapModel.getObjects()
             .keySet()
-            .stream()
+            .toJavaStream()
             .map(mapObject -> java.util.Map.entry(mapObject.invertY(), mapObject))
             .filter(GridFilter.tileWithSizeContains(TileViewSize.TILE_SIZE, x, y))
             .findAny()
