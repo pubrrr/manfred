@@ -1,6 +1,8 @@
 package manfred.manfreditor.map;
 
+import io.vavr.Function1;
 import io.vavr.collection.HashMap;
+import io.vavr.collection.List;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,6 +38,18 @@ public class Map {
             this.sizeX = findMaxValue(mapMatrix.keySet(), MapPrototype.Coordinate::getX).add(1);
             this.sizeY = findMaxValue(mapMatrix.keySet(), MapPrototype.Coordinate::getY).add(1);
         }
+    }
+
+    public Map(String name, PositiveInt columns, PositiveInt rows) {
+        this.name = name;
+        this.sizeX = columns;
+        this.sizeY = rows;
+        List<Integer> xCoordinates = List.range(0, columns.value());
+        List<Integer> yCoordinates = List.range(0, rows.value());
+
+        this.mapMatrix = xCoordinates.crossProduct(yCoordinates)
+            .map(xAndY -> new TileCoordinate(PositiveInt.of(xAndY._1), PositiveInt.of(xAndY._2)))
+            .toMap(Function.identity(), Function1.constant(MapObject.none()));
     }
 
     private Map(String name, io.vavr.collection.Map<TileCoordinate, MapObject> mapMatrix, PositiveInt sizeX, PositiveInt sizeY) {
