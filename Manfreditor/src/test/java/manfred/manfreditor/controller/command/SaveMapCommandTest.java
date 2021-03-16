@@ -4,9 +4,11 @@ import io.vavr.control.Option;
 import io.vavr.control.Try;
 import manfred.data.persistence.PreviousFileContent;
 import manfred.manfreditor.common.FileWriter;
+import manfred.manfreditor.gui.PopupProvider;
 import manfred.manfreditor.map.MapModel;
 import manfred.manfreditor.map.export.MapExporter;
 import manfred.manfreditor.map.flattened.FlattenedMap;
+import org.eclipse.swt.SWT;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +19,9 @@ import static manfred.manfreditor.helper.SuccessfulCommandMatcher.wasSuccessful;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -27,6 +31,7 @@ class SaveMapCommandTest {
     private MapModel mapModelMock;
     private MapExporter mapExporterMock;
     private FileWriter fileWriterMock;
+    private PopupProvider popupProviderMock;
     private CommandHistory commandHistory;
 
     @BeforeEach
@@ -35,7 +40,8 @@ class SaveMapCommandTest {
         mapModelMock = mock(MapModel.class);
         mapExporterMock = mock(MapExporter.class);
         fileWriterMock = mock(FileWriter.class);
-        commandFactory = new SaveMapCommand.Factory(mapModelMock, mapExporterMock, fileWriterMock);
+        popupProviderMock = mock(PopupProvider.class);
+        commandFactory = new SaveMapCommand.Factory(mapModelMock, mapExporterMock, fileWriterMock, popupProviderMock);
     }
 
     @Test
@@ -51,9 +57,15 @@ class SaveMapCommandTest {
         assertThat(result, wasSuccessful());
         verify(mapExporterMock).export(eq(mapToSave), eq(fileToSaveIn));
 
+        when(popupProviderMock.showConfirmationDialog(any(), any())).thenReturn(SWT.NO);
         result.registerRollbackOperation(commandHistory);
         commandHistory.undoLast();
-        verify(fileToSaveIn).delete();
+        verify(fileToSaveIn, never()).delete();
+
+        when(popupProviderMock.showConfirmationDialog(any(), any())).thenReturn(SWT.YES);
+        result.registerRollbackOperation(commandHistory);
+        commandHistory.undoLast();
+        verify(fileToSaveIn, atLeastOnce()).delete();
     }
 
     @Test
@@ -72,9 +84,15 @@ class SaveMapCommandTest {
         assertThat(result, wasSuccessful());
         verify(mapExporterMock).export(eq(mapToSave), eq(fileToSaveIn));
 
+        when(popupProviderMock.showConfirmationDialog(any(), any())).thenReturn(SWT.NO);
         result.registerRollbackOperation(commandHistory);
         commandHistory.undoLast();
-        verify(fileWriterMock).write(eq(fileToSaveIn), eq("previous content"));
+        verify(fileWriterMock, never()).write(eq(fileToSaveIn), eq("previous content"));
+
+        when(popupProviderMock.showConfirmationDialog(any(), any())).thenReturn(SWT.YES);
+        result.registerRollbackOperation(commandHistory);
+        commandHistory.undoLast();
+        verify(fileWriterMock, atLeastOnce()).write(eq(fileToSaveIn), eq("previous content"));
     }
 
     @Test
