@@ -57,6 +57,10 @@ public class GuiBuilder {
             label.redraw();
         });
 
+        Button newMapButton = new Button(composite, SWT.CENTER);
+        newMapButton.setText("Neue Map");
+        newMapButton.addSelectionListener(mapController.createNewMap(mainShell));
+
         Button loadMapButton = new Button(composite, SWT.CENTER);
         loadMapButton.setText("Map laden");
         loadMapButton.addSelectionListener(mapController.loadMap(mainShell));
