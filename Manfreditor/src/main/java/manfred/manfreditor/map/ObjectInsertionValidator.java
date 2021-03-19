@@ -3,6 +3,7 @@ package manfred.manfreditor.map;
 import io.vavr.control.Validation;
 import manfred.manfreditor.map.Map.TileCoordinate;
 import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
+import manfred.manfreditor.map.flattened.FlattenedMap;
 import manfred.manfreditor.mapobject.ConcreteMapObject;
 import org.springframework.stereotype.Component;
 
@@ -17,13 +18,13 @@ public class ObjectInsertionValidator {
     public Validation<List<String>, ConcreteMapObject> mayObjectBeInserted(
         ConcreteMapObject mapObject,
         TileCoordinate tileCoordinate,
-        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility
+        FlattenedMap flattenedMap
     ) {
         return mapObject.getStructureAt(tileCoordinate)
             .toValidation()
             .mapError(List::of)
             .flatMap(tileCoordinateTilePrototypeMap -> {
-                List<String> collect = getInvalidTileMessages(mergedAccessibility, tileCoordinateTilePrototypeMap);
+                List<String> collect = getInvalidTileMessages(flattenedMap, tileCoordinateTilePrototypeMap);
                 return collect.isEmpty()
                     ? Validation.valid(mapObject)
                     : Validation.invalid(collect);
@@ -31,26 +32,26 @@ public class ObjectInsertionValidator {
     }
 
     private List<String> getInvalidTileMessages(
-        io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility,
+        FlattenedMap flattenedMap,
         io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> tileCoordinateTilePrototypeMap
     ) {
         return tileCoordinateTilePrototypeMap
             .filterNotValues(AccessibilityIndicator::isAccessible)
-            .filterNotKeys(tileCoordinate -> mergedAccessibility.get(tileCoordinate).map(AccessibilityIndicator::isAccessible).getOrElse(true))
+            .filterNotKeys(tileCoordinate -> flattenedMap.get(tileCoordinate).map(AccessibilityIndicator::isAccessible).getOrElse(true))
             .keySet()
-            .map(toErrorMessage(mergedAccessibility))
+            .map(toErrorMessage(flattenedMap))
             .collect(toList());
     }
 
-    private Function<TileCoordinate, String> toErrorMessage(io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility) {
+    private Function<TileCoordinate, String> toErrorMessage(FlattenedMap flattenedMap) {
         return tileCoordinateOnStructure -> "Tile (" + tileCoordinateOnStructure.getX() + "," + tileCoordinateOnStructure.getY() + ") " +
-            "is not accessible, blocked by " + getBlockingObject(mergedAccessibility, tileCoordinateOnStructure);
+            "is not accessible, blocked by " + getBlockingObject(flattenedMap, tileCoordinateOnStructure);
     }
 
-    private String getBlockingObject(io.vavr.collection.Map<TileCoordinate, AccessibilityIndicator> mergedAccessibility, TileCoordinate tileCoordinateOnStructure) {
-        return mergedAccessibility.get(tileCoordinateOnStructure).get()
+    private String getBlockingObject(FlattenedMap flattenedMap, TileCoordinate tileCoordinateOnStructure) {
+        return flattenedMap.get(tileCoordinateOnStructure).get()
             .getSource()
-            .map(source -> "object " + source.getTileName() + " at (" + source.getTileCoordinate().getX() + "," + source.getTileCoordinate().getY() + ")")
+            .map(source -> "object " + source.getTileName() + " at " + source.getTileCoordinate().shortRepresentation())
             .orElse("no object");
     }
 }

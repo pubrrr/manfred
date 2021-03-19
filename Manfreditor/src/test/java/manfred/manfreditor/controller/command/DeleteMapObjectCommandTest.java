@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessage;
+import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessageContaining;
 import static manfred.manfreditor.helper.CoordinateHelper.tileCoordinate;
 import static manfred.manfreditor.helper.SuccessfulCommandMatcher.wasSuccessful;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -39,7 +39,7 @@ class DeleteMapObjectCommandTest {
 
         CommandResult result = commandFactory.create(0, 0).execute();
 
-        assertThat(result, failedWithMessage("No map tile at clicked coordinates (0,0) was found"));
+        assertThat(result, failedWithMessageContaining("No map tile at clicked coordinates (0,0) was found"));
     }
 
     @Test
@@ -49,7 +49,7 @@ class DeleteMapObjectCommandTest {
 
         CommandResult result = commandFactory.create(0, 0).execute();
 
-        assertThat(result, failedWithMessage("No object could be deleted at tile (1,2)"));
+        assertThat(result, failedWithMessageContaining("No object could be deleted at tile (1,2)"));
     }
 
     @Test

@@ -48,8 +48,8 @@ public class LoadMapCommand implements Command {
         private final MapModel mapModel;
         private final CommandUrlHelper urlHelper;
 
-        public Command create(String mapName) {
-            return new LoadMapCommand(mapModel, mapProvider, mapName, urlHelper);
+        public Command create(String mapPath) {
+            return new LoadMapCommand(mapModel, mapProvider, mapPath, urlHelper);
         }
     }
 }

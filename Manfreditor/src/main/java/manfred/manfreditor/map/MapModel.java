@@ -3,9 +3,9 @@ package manfred.manfreditor.map;
 import io.vavr.control.Validation;
 import manfred.data.shared.PositiveInt;
 import manfred.manfreditor.common.Memento;
-import manfred.manfreditor.map.accessibility.AccessibilityIndicator;
 import manfred.manfreditor.map.accessibility.AccessibilityMerger;
 import manfred.manfreditor.map.accessibility.Source;
+import manfred.manfreditor.map.flattened.FlattenedMap;
 import manfred.manfreditor.mapobject.ConcreteMapObject;
 import manfred.manfreditor.mapobject.MapObject;
 import manfred.manfreditor.mapobject.None;
@@ -33,8 +33,11 @@ public class MapModel implements Memento<MapModel> {
         return this.map.getObjects();
     }
 
-    public io.vavr.collection.Map<Map.TileCoordinate, AccessibilityIndicator> getMergedAccessibility() {
-        return this.accessibilityMerger.merge(this.map.getObjects());
+    public FlattenedMap getFlattenedMap() {
+        return new FlattenedMap(
+            this.map.getName(),
+            this.accessibilityMerger.merge(this.map.getObjects())
+        );
     }
 
     public PositiveInt getSizeY() {
@@ -46,9 +49,11 @@ public class MapModel implements Memento<MapModel> {
     }
 
     public Validation<List<String>, ConcreteMapObject> tryInsertObjectAt(ConcreteMapObject mapObject, Map.TileCoordinate tileCoordinate) {
-        io.vavr.collection.Map<Map.TileCoordinate, AccessibilityIndicator> mergedAccessibility = getMergedAccessibility();
-
-        Validation<List<String>, ConcreteMapObject> result = objectInsertionValidator.mayObjectBeInserted(mapObject, tileCoordinate, mergedAccessibility);
+        Validation<List<String>, ConcreteMapObject> result = objectInsertionValidator.mayObjectBeInserted(
+            mapObject,
+            tileCoordinate,
+            getFlattenedMap()
+        );
 
         if (result.isValid()) {
             this.map = this.map.insertObjectAt(mapObject, tileCoordinate);
@@ -61,7 +66,7 @@ public class MapModel implements Memento<MapModel> {
     }
 
     public Optional<LocatedMapObject> deleteObjectAt(Map.TileCoordinate tileCoordinate) {
-        Map.TileCoordinate tileCoordinateToDeleteObjectAt = getMergedAccessibility()
+        Map.TileCoordinate tileCoordinateToDeleteObjectAt = getFlattenedMap()
             .get(tileCoordinate).get()
             .getSource()
             .map(Source::getTileCoordinate)

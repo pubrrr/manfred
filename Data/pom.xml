@@ -49,6 +49,11 @@
             <version>4.6.1</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>io.vavr</groupId>
+            <artifactId>vavr</artifactId>
+            <version>1.0.0-alpha-3</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessage;
+import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessageContaining;
 import static manfred.manfreditor.helper.SuccessfulCommandMatcher.wasSuccessful;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -63,7 +63,7 @@ class LoadMapCommandTest {
 
         CommandResult result = loadMapCommand.execute();
 
-        assertThat(result, failedWithMessage("errorMessage"));
+        assertThat(result, failedWithMessageContaining("errorMessage"));
     }
 
     @Test
@@ -73,6 +73,6 @@ class LoadMapCommandTest {
 
         CommandResult result = loadMapCommand.execute();
 
-        assertThat(result, failedWithMessage("Could not create URL for map file name: message"));
+        assertThat(result, failedWithMessageContaining("Could not create URL for map file name: message"));
     }
 }
