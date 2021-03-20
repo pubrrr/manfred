@@ -36,12 +36,13 @@ public class GuiBuilder {
         Display mainDisplay = new Display();
         Shell mainShell = new Shell(mainDisplay);
         mainShell.setText("Manfreditor");
-        mainShell.setMinimumSize(mainShell.getSize());
-        mainShell.setLayout(new RowLayout(SWT.VERTICAL));
+        mainShell.setLayout(new GridLayout(1, false));
 
         addControlButtons(mainShell);
         addMapAndMapObjects(mainShell);
 
+        mainShell.layout();
+        mainShell.setMinimumSize(mainShell.getSize());
         return new Gui(mainShell, mainDisplay);
     }
 
@@ -56,6 +57,10 @@ public class GuiBuilder {
             label.setText(selectedFile);
             label.redraw();
         });
+
+        Button newMapButton = new Button(composite, SWT.CENTER);
+        newMapButton.setText("Neue Map");
+        newMapButton.addSelectionListener(mapController.createNewMap(mainShell));
 
         Button loadMapButton = new Button(composite, SWT.CENTER);
         loadMapButton.setText("Map laden");
@@ -72,7 +77,8 @@ public class GuiBuilder {
 
     private void addMapAndMapObjects(Shell mainShell) {
         Composite mapAndMapObjectsContainer = new Composite(mainShell, SWT.BORDER);
-        mapAndMapObjectsContainer.setLayoutData(new RowData(1400, 800));
+        GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+        mapAndMapObjectsContainer.setLayoutData(gridData);
         mapAndMapObjectsContainer.setLayout(new GridLayout(2, false));
 
         addMapCanvas(mapAndMapObjectsContainer, mainShell);
@@ -81,12 +87,11 @@ public class GuiBuilder {
 
     private void addMapCanvas(Composite mapAndMapObjectsContainer, Shell mainShell) {
         ScrolledComposite mapScrollContainer = new ScrolledComposite(mapAndMapObjectsContainer, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-        mapScrollContainer.setLayoutData(new GridData(SWT.BEGINNING, SWT.BEGINNING, false, true));
+        mapScrollContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         mapScrollContainer.setLayout(new FillLayout());
 
-        Canvas mapCanvas = new Canvas(mapScrollContainer, SWT.BORDER);
+        Canvas mapCanvas = new Canvas(mapScrollContainer, SWT.NONE);
         mapScrollContainer.setContent(mapCanvas); // to make scrolling work
-        mapCanvas.setSize(700, 700);
         mapCanvas.addMouseListener(mapController);
         mapCanvas.addPaintListener(event -> mapView.draw(event.gc, mainShell.getDisplay()));
         mapController.addLoadMapPostAction(selectedFile -> {
@@ -101,7 +106,7 @@ public class GuiBuilder {
 
     private void addMapObjectsCanvas(Composite mapAndMapObjectsContainer, Shell mainShell) {
         Canvas mapObjectsCanvas = new Canvas(mapAndMapObjectsContainer, SWT.BORDER);
-        GridData layoutData = new GridData(SWT.END, SWT.TOP, true, true);
+        GridData layoutData = new GridData(SWT.END, SWT.FILL, false, true);
         layoutData.widthHint = MapObjectsView.NUMBER_OF_COLUMNS.value() * MapObjectsView.OBJECT_TILE_SIZE + 1;
         layoutData.heightHint = 700;
         mapObjectsCanvas.setLayoutData(layoutData);
