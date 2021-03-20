@@ -1,8 +1,10 @@
 package manfred.manfreditor.controller;
 
 import lombok.AllArgsConstructor;
+import manfred.manfreditor.controller.command.LoadMapObjectCommand;
 import manfred.manfreditor.controller.command.SelectMapObjectCommand;
 import manfred.manfreditor.gui.NewMapObjectDialog;
+import manfred.manfreditor.gui.PopupProvider;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -13,7 +15,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 import static manfred.manfreditor.controller.ControllerHelper.LEFT_MOUSE_BUTTON;
 
@@ -23,7 +24,9 @@ public class MapObjectsController implements MouseListener {
 
     private final ControllerHelper controllerHelper;
     private final SelectMapObjectCommand.Factory selectMapObjectCommandFactory;
+    private final LoadMapObjectCommand.Factory loadMapObjectCommandFactory;
     private final List<Runnable> postActions = new LinkedList<>();
+    private final PopupProvider popupProvider;
 
     @Override
     public void mouseDoubleClick(MouseEvent e) {
@@ -46,8 +49,16 @@ public class MapObjectsController implements MouseListener {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 var newMapObjectDialog = new NewMapObjectDialog(mainShell);
-                Optional<NewMapObjectDialog.ResultData> result = newMapObjectDialog.open();
-                System.out.println(result);
+                newMapObjectDialog.open()
+                    .map(resultData -> loadMapObjectCommandFactory.create(
+                        resultData.getYamlFilePath(),
+                        resultData.getImageFilePath()
+                    ))
+                    .map(controllerHelper::execute)
+                    .ifPresent(commandResult -> commandResult.onFailure(
+                        errorMessage -> popupProvider.showMessage(mainShell, errorMessage)
+                    ));
+                postActions.forEach(Runnable::run);
             }
         };
     }

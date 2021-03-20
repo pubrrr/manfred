@@ -35,14 +35,15 @@ public class LoadMapObjectComponentTest {
     void loadMapObjectAndRollBack() {
         assertThat(mapObjectRepository.getKeys(), empty());
 
-        String objectName = "tree2";
-        CommandResult result = commandFactory.create(objectName).execute();
+        String yamlFile = getClass().getResource("/mapObject/tree2.yaml").getFile();
+        String imageFile = getClass().getResource("/mapObject/tree2.png").getFile();
+        CommandResult result = commandFactory.create(yamlFile, imageFile).execute();
 
         assertThat(result, wasSuccessful());
 
         List<MapObjectRepository.ObjectKey> keys = mapObjectRepository.getKeys();
         assertThat(keys, hasSize(1));
-        assertThat(mapObjectRepository.get(keys.get(0)).getName(), is(objectName));
+        assertThat(mapObjectRepository.get(keys.get(0)).getName(), is("tree2"));
 
         result.registerRollbackOperation(commandHistory);
         commandHistory.undoLast();
@@ -51,9 +52,9 @@ public class LoadMapObjectComponentTest {
 
     @Test
     void loadUnknownObject() {
-        CommandResult result = commandFactory.create("unknown object").execute();
+        CommandResult result = commandFactory.create("unknown object", "another unknown object").execute();
 
-        assertThat(result, failedWithMessageContaining("Did not find resource for map object unknown object"));
+        assertThat(result, failedWithMessageContaining("unknown object is not a yaml file"));
     }
 
     @Configuration
