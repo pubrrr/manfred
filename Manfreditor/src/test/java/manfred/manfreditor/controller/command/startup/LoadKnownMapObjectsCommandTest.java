@@ -127,4 +127,20 @@ class LoadKnownMapObjectsCommandTest {
         assertThat(result, wasSuccessful());
         verify(commandMock, times(2)).execute();
     }
+
+    @Test
+    void pngYamlAndAnotherFileWithSameNameInDirectory_otherFileIsIgnored() {
+        when(fileHelperMock.getFilesIn(any())).thenReturn(new File[]{
+            new File("name.yaml"),
+            new File("name.png"),
+            new File("name.other"),
+        });
+        Command commandMock = mock(Command.class);
+        when(loadMapObjectCommandFactoryMock.create(any(File.class), any(File.class))).thenReturn(commandMock);
+
+        CommandResult result = underTest.execute();
+
+        assertThat(result, wasSuccessful());
+        verify(commandMock, atLeastOnce()).execute();
+    }
 }

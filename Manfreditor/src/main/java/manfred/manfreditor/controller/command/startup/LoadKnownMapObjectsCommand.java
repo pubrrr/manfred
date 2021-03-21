@@ -28,7 +28,7 @@ public class LoadKnownMapObjectsCommand implements Command {
         List.of(files)
             .groupBy(file -> stripFileExtension(file.getName()))
             .values()
-            .filter(filesWithSameName -> filesWithSameName.size() == 2)
+            .filter(filesWithSameName -> filesWithSameName.size() >= 2)
             .filter(filesWithSameName -> filesWithSameName.find(file -> file.getName().endsWith("yaml")).isDefined())
             .filter(filesWithSameName -> filesWithSameName.find(file -> file.getName().endsWith("png")).isDefined())
             .map(filesWithSameName -> loadMapObjectCommandFactory.create(
