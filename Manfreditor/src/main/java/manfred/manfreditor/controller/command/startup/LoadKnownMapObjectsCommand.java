@@ -32,8 +32,8 @@ public class LoadKnownMapObjectsCommand implements Command {
             .filter(filesWithSameName -> filesWithSameName.find(file -> file.getName().endsWith("yaml")).isDefined())
             .filter(filesWithSameName -> filesWithSameName.find(file -> file.getName().endsWith("png")).isDefined())
             .map(filesWithSameName -> loadMapObjectCommandFactory.create(
-                filesWithSameName.filter(file -> file.getName().endsWith("yaml")).head().getAbsolutePath(),
-                filesWithSameName.filter(file -> file.getName().endsWith("png")).head().getAbsolutePath()
+                filesWithSameName.filter(file -> file.getName().endsWith("yaml")).head(),
+                filesWithSameName.filter(file -> file.getName().endsWith("png")).head()
             ))
             .forEach(Command::execute);
         return CommandResult.success(() -> {});

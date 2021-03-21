@@ -15,18 +15,16 @@ public class LoadMapObjectCommand implements Command {
 
     private final MapTileReader mapTileReader;
     private final MapObjectRepository mapObjectRepository;
-    private final String yamlFilePath;
-    private final String imageFilePath;
+    private final File yamlFile;
+    private final File imageFile;
 
     @Override
     public CommandResult execute() {
-        File yamlFile = new File(yamlFilePath);
-        if (!yamlFile.isFile() || !yamlFilePath.endsWith("yaml")) {
+        if (!yamlFile.isFile() || !yamlFile.getName().endsWith("yaml")) {
             return CommandResult.failure(yamlFile + " is not a yaml file");
         }
-        File imageFile = new File(imageFilePath);
-        if (!imageFile.isFile() || !imageFilePath.endsWith("png")) {
-            return CommandResult.failure(imageFilePath + " is not a png file");
+        if (!imageFile.isFile() || !imageFile.getName().endsWith("png")) {
+            return CommandResult.failure(imageFile + " is not a png file");
         }
 
         ValidatedMapTileDto validatedMapTileDto;
@@ -51,7 +49,11 @@ public class LoadMapObjectCommand implements Command {
         }
 
         public Command create(String yamlFilePath, String imageFilePath) {
-            return new LoadMapObjectCommand(mapTileReader, mapObjectRepository, yamlFilePath, imageFilePath);
+            return new LoadMapObjectCommand(mapTileReader, mapObjectRepository, new File(yamlFilePath), new File(imageFilePath));
+        }
+
+        public Command create(File yamlFile, File imageFile) {
+            return new LoadMapObjectCommand(mapTileReader, mapObjectRepository, yamlFile, imageFile);
         }
     }
 }

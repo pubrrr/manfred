@@ -49,7 +49,7 @@ class LoadKnownMapObjectsCommandTest {
         CommandResult result = underTest.execute();
 
         assertThat(result, wasSuccessful());
-        verify(loadMapObjectCommandFactoryMock, never()).create(any(), any());
+        verify(loadMapObjectCommandFactoryMock, never()).create(any(File.class), any(File.class));
     }
 
     @Test
@@ -59,7 +59,7 @@ class LoadKnownMapObjectsCommandTest {
             new File("name.png")
         });
         Command commandMock = mock(Command.class);
-        when(loadMapObjectCommandFactoryMock.create(any(), any())).thenReturn(commandMock);
+        when(loadMapObjectCommandFactoryMock.create(any(File.class), any(File.class))).thenReturn(commandMock);
 
         CommandResult result = underTest.execute();
 
@@ -74,7 +74,7 @@ class LoadKnownMapObjectsCommandTest {
             new File("name.png")
         });
         Command commandMock = mock(Command.class);
-        when(loadMapObjectCommandFactoryMock.create(any(), any())).thenReturn(commandMock);
+        when(loadMapObjectCommandFactoryMock.create(any(File.class), any(File.class))).thenReturn(commandMock);
 
         CommandResult result = underTest.execute();
 
@@ -89,7 +89,7 @@ class LoadKnownMapObjectsCommandTest {
             new File("name.yaml")
         });
         Command commandMock = mock(Command.class);
-        when(loadMapObjectCommandFactoryMock.create(any(), any())).thenReturn(commandMock);
+        when(loadMapObjectCommandFactoryMock.create(any(File.class), any(File.class))).thenReturn(commandMock);
 
         CommandResult result = underTest.execute();
 
@@ -103,7 +103,7 @@ class LoadKnownMapObjectsCommandTest {
             new File("name.yaml")
         });
         Command commandMock = mock(Command.class);
-        when(loadMapObjectCommandFactoryMock.create(any(), any())).thenReturn(commandMock);
+        when(loadMapObjectCommandFactoryMock.create(any(File.class), any(File.class))).thenReturn(commandMock);
 
         CommandResult result = underTest.execute();
 
@@ -120,7 +120,7 @@ class LoadKnownMapObjectsCommandTest {
             new File("otherName.png")
         });
         Command commandMock = mock(Command.class);
-        when(loadMapObjectCommandFactoryMock.create(any(), any())).thenReturn(commandMock);
+        when(loadMapObjectCommandFactoryMock.create(any(File.class), any(File.class))).thenReturn(commandMock);
 
         CommandResult result = underTest.execute();
 
