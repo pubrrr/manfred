@@ -1,6 +1,7 @@
 package manfred.manfreditor.mapobject;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
 import manfred.data.shared.PositiveInt;
@@ -65,6 +66,7 @@ public class MapObjectRepository {
 
     @ToString
     @EqualsAndHashCode
+    @Getter
     public static class ObjectKey {
         private final String key;
 

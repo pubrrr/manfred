@@ -1,7 +1,7 @@
 package componentTests.map;
 
 import componentTests.TestManfreditorContext;
-import manfred.manfreditor.common.FileWriter;
+import manfred.manfreditor.common.FileHelper;
 import manfred.manfreditor.controller.command.CommandHistory;
 import manfred.manfreditor.controller.command.CommandResult;
 import manfred.manfreditor.controller.command.LoadMapCommand;
@@ -37,7 +37,7 @@ public class SaveMapComponentTest extends ComponentTestCase {
     private LoadMapCommand.Factory loadMapCommandFactory;
 
     @Autowired
-    private FileWriter fileWriter;
+    private FileHelper fileHelper;
 
     @Autowired
     private PopupProvider popupProviderMock;
@@ -76,7 +76,7 @@ public class SaveMapComponentTest extends ComponentTestCase {
     @Test
     void saveMapToExistingFileWithContent() throws IOException {
         loadAMap();
-        fileWriter.write(temporaryFile, "previous content");
+        fileHelper.write(temporaryFile, "previous content");
         assertFileContains("previous content");
 
         CommandResult result = commandFactory.create(temporaryFile, null).execute();
