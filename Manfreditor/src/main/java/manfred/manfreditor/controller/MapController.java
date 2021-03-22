@@ -5,7 +5,9 @@ import manfred.manfreditor.controller.command.CommandResult;
 import manfred.manfreditor.controller.command.DeleteMapObjectCommand;
 import manfred.manfreditor.controller.command.InsertMapObjectCommand;
 import manfred.manfreditor.controller.command.LoadMapCommand;
+import manfred.manfreditor.controller.command.NewMapCommand;
 import manfred.manfreditor.controller.command.SaveMapCommand;
+import manfred.manfreditor.gui.NewMapDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import static manfred.manfreditor.controller.ControllerHelper.LEFT_MOUSE_BUTTON;
@@ -31,8 +34,10 @@ public class MapController implements MouseListener {
     private final ControllerHelper controllerHelper;
     private final LoadMapCommand.Factory loadMapCommandFactory;
     private final SaveMapCommand.Factory saveMapCommandFactory;
+    private final NewMapCommand.Factory newMapCommandFactory;
     private final InsertMapObjectCommand.Factory insertMapObjectCommandFactory;
     private final DeleteMapObjectCommand.Factory deleteMapObjectCommandFactory;
+
     private final List<Consumer<String>> loadMapPostActions;
     private final List<Runnable> insertPostActions;
     private final List<Runnable> deletePostActions;
@@ -84,6 +89,30 @@ public class MapController implements MouseListener {
                         });
                 }
             }
+        };
+    }
+
+    public SelectionListener createNewMap(Shell mainShell) {
+        return new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                NewMapDialog newMapDialog = new NewMapDialog(mainShell);
+                Optional<NewMapDialog.ResultData> result = newMapDialog.open();
+                result.ifPresent(executeCreateNewMapCommand(mainShell));
+            }
+        };
+    }
+
+    private Consumer<NewMapDialog.ResultData> executeCreateNewMapCommand(Shell mainShell) {
+        return resultData -> {
+            controllerHelper
+                .execute(newMapCommandFactory.create(resultData.getName(), resultData.getColumns(), resultData.getRows()))
+                .onFailure(errorMessage -> {
+                    MessageBox messageBox = new MessageBox(mainShell, SWT.ICON_ERROR | SWT.OK);
+                    messageBox.setMessage("Des hod id fongtsionierd:\n\n" + errorMessage);
+                    messageBox.open();
+                });
+            loadMapPostActions.forEach(stringConsumer -> stringConsumer.accept("new map"));
         };
     }
 
