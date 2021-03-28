@@ -6,6 +6,8 @@ import manfred.data.persistence.dto.RawMapTileDto;
 import org.eclipse.swt.graphics.ImageData;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 
@@ -31,21 +33,21 @@ public class RawMapTileDtoReader {
             throw new InvalidInputException("Did not find image resource for map object " + name);
         }
 
-        return load(yamlURL, imageURL);
+        return load(new File(yamlURL.getFile()), new File(imageURL.getFile()));
     }
 
-    RawMapTileDto load(URL yamlURL, URL imageURL) throws InvalidInputException {
+    RawMapTileDto load(File yamlFile, File imageFile) throws InvalidInputException {
         try {
-            RawMapTileDto mapTileDto = objectMapper.readValue(yamlURL, RawMapTileDto.class);
-            mapTileDto.setImageData(new ImageData(imageURL.openStream()));
-            mapTileDto.setImage(imageLoader.load(imageURL));
+            RawMapTileDto mapTileDto = objectMapper.readValue(yamlFile, RawMapTileDto.class);
+            mapTileDto.setImageData(new ImageData(new FileInputStream(imageFile)));
+            mapTileDto.setImage(imageLoader.load(imageFile));
             return mapTileDto;
         } catch (IOException e) {
-            throw new InvalidInputException("Could not read map tile " + yamlURL, e);
+            throw new InvalidInputException("Could not read map tile " + yamlFile, e);
         }
     }
 
     public RawMapTileDto load(MapTileSource mapTileSource) throws InvalidInputException {
-        return load(mapTileSource.getTileUrl(), mapTileSource.getImageUrl());
+        return load(mapTileSource.getYamlFile(), mapTileSource.getImageFile());
     }
 }

@@ -79,7 +79,6 @@ public class MapController implements MouseListener {
                         if (open == SWT.CANCEL) {
                             return;
                         }
-                        System.out.println("Trotzdem");
                     }
                     controllerHelper.execute(saveMapCommandFactory.create(fileToSaveIn, mainShell))
                         .onFailure(errorMessage -> {

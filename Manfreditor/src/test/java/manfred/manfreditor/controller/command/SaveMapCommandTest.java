@@ -3,7 +3,7 @@ package manfred.manfreditor.controller.command;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import manfred.data.persistence.PreviousFileContent;
-import manfred.manfreditor.common.FileWriter;
+import manfred.manfreditor.common.FileHelper;
 import manfred.manfreditor.gui.PopupProvider;
 import manfred.manfreditor.map.MapModel;
 import manfred.manfreditor.map.export.MapExporter;
@@ -30,7 +30,7 @@ class SaveMapCommandTest {
     private SaveMapCommand.Factory commandFactory;
     private MapModel mapModelMock;
     private MapExporter mapExporterMock;
-    private FileWriter fileWriterMock;
+    private FileHelper fileHelperMock;
     private PopupProvider popupProviderMock;
     private CommandHistory commandHistory;
 
@@ -39,9 +39,9 @@ class SaveMapCommandTest {
         commandHistory = new CommandHistory();
         mapModelMock = mock(MapModel.class);
         mapExporterMock = mock(MapExporter.class);
-        fileWriterMock = mock(FileWriter.class);
+        fileHelperMock = mock(FileHelper.class);
         popupProviderMock = mock(PopupProvider.class);
-        commandFactory = new SaveMapCommand.Factory(mapModelMock, mapExporterMock, fileWriterMock, popupProviderMock);
+        commandFactory = new SaveMapCommand.Factory(mapModelMock, mapExporterMock, fileHelperMock, popupProviderMock);
     }
 
     @Test
@@ -77,7 +77,7 @@ class SaveMapCommandTest {
         when(mapExporterMock.export(any(), any())).thenReturn(
             Try.success(Option.some(new PreviousFileContent("previous content")))
         );
-        when(fileWriterMock.write(any(), any())).thenReturn(Try.success(null));
+        when(fileHelperMock.write(any(), any())).thenReturn(Try.success(null));
 
         CommandResult result = commandFactory.create(fileToSaveIn, null).execute();
 
@@ -87,12 +87,12 @@ class SaveMapCommandTest {
         when(popupProviderMock.showConfirmationDialog(any(), any())).thenReturn(SWT.NO);
         result.registerRollbackOperation(commandHistory);
         commandHistory.undoLast();
-        verify(fileWriterMock, never()).write(eq(fileToSaveIn), eq("previous content"));
+        verify(fileHelperMock, never()).write(eq(fileToSaveIn), eq("previous content"));
 
         when(popupProviderMock.showConfirmationDialog(any(), any())).thenReturn(SWT.YES);
         result.registerRollbackOperation(commandHistory);
         commandHistory.undoLast();
-        verify(fileWriterMock, atLeastOnce()).write(eq(fileToSaveIn), eq("previous content"));
+        verify(fileHelperMock, atLeastOnce()).write(eq(fileToSaveIn), eq("previous content"));
     }
 
     @Test

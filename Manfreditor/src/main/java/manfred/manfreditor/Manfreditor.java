@@ -1,13 +1,18 @@
 package manfred.manfreditor;
 
+import manfred.manfreditor.controller.command.Command;
 import manfred.manfreditor.gui.GuiBuilder;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class Manfreditor {
 
     private final GuiBuilder guiBuilder;
+    private final List<Command> startupCommands;
 
     public static void main(String[] args) {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ManfreditorContext.class)) {
@@ -15,11 +20,13 @@ public class Manfreditor {
         }
     }
 
-    public Manfreditor(GuiBuilder guiBuilder) {
+    public Manfreditor(GuiBuilder guiBuilder, @Qualifier("StartupCommands")List<Command> startupCommands) {
         this.guiBuilder = guiBuilder;
+        this.startupCommands = startupCommands;
     }
 
     public void run() {
+        startupCommands.forEach(Command::execute);
         guiBuilder.build().show();
     }
 }

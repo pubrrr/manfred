@@ -3,7 +3,7 @@ package manfred.manfreditor.controller.command;
 import io.vavr.control.Option;
 import lombok.AllArgsConstructor;
 import manfred.data.persistence.PreviousFileContent;
-import manfred.manfreditor.common.FileWriter;
+import manfred.manfreditor.common.FileHelper;
 import manfred.manfreditor.gui.PopupProvider;
 import manfred.manfreditor.map.MapModel;
 import manfred.manfreditor.map.export.MapExporter;
@@ -20,7 +20,7 @@ public class SaveMapCommand implements Command {
 
     private final MapModel mapModel;
     private final MapExporter mapExporter;
-    private final FileWriter fileWriter;
+    private final FileHelper fileHelper;
     private final PopupProvider popupProvider;
     private final File fileToSaveIn;
     private final Shell outputShell;
@@ -55,7 +55,7 @@ public class SaveMapCommand implements Command {
         return () -> {
             int clickedButton = this.popupProvider.showConfirmationDialog(outputShell, "Wirklich alten Zustand von " + fileToSaveIn.getName() + " wiederherstellen?");
             if (clickedButton == SWT.YES) {
-                fileWriter.write(fileToSaveIn, previousFileContent.getContent())
+                fileHelper.write(fileToSaveIn, previousFileContent.getContent())
                     .onFailure(throwable -> popupProvider.showMessage(
                         outputShell,
                         "Restoring previous file content failed:\n" + throwable.getMessage())
@@ -70,11 +70,11 @@ public class SaveMapCommand implements Command {
 
         private final MapModel mapModel;
         private final MapExporter mapExporter;
-        private final FileWriter fileWriter;
+        private final FileHelper fileHelper;
         private final PopupProvider popupProvider;
 
         public Command create(File fileToSaveIn, Shell outputShell) {
-            return new SaveMapCommand(mapModel, mapExporter, fileWriter, popupProvider, fileToSaveIn, outputShell);
+            return new SaveMapCommand(mapModel, mapExporter, fileHelper, popupProvider, fileToSaveIn, outputShell);
         }
     }
 }

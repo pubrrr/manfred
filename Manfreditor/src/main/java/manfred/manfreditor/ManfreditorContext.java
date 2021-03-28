@@ -2,6 +2,8 @@ package manfred.manfreditor;
 
 import manfred.data.DataContext;
 import manfred.data.infrastructure.map.TileConversionRule;
+import manfred.manfreditor.controller.command.Command;
+import manfred.manfreditor.controller.command.startup.LoadKnownMapObjectsCommand;
 import manfred.manfreditor.gui.view.mapobject.MapObjectsView;
 import manfred.manfreditor.gui.view.mapobject.ObjectsViewCoordinateFactory;
 import manfred.manfreditor.map.accessibility.AccessibilityMerger;
@@ -18,6 +20,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Configuration
 @ComponentScan(basePackages = "manfred.manfreditor")
@@ -42,5 +45,10 @@ public class ManfreditorContext {
     @Bean
     public SelectedObject selectedObject() {
         return new SelectedObject(SelectionState.empty());
+    }
+
+    @Bean("StartupCommands")
+    public List<Command> startupCommands(LoadKnownMapObjectsCommand loadKnownMapObjectsCommand) {
+        return List.of(loadKnownMapObjectsCommand);
     }
 }

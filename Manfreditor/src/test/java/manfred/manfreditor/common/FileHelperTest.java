@@ -10,13 +10,13 @@ import java.nio.file.Files;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-class FileWriterTest {
+class FileHelperTest {
 
-    private FileWriter underTest;
+    private FileHelper underTest;
 
     @BeforeEach
     void setUp() {
-        underTest = new FileWriter();
+        underTest = new FileHelper();
     }
 
     @Test

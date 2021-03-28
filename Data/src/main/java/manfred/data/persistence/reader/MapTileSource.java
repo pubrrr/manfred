@@ -2,10 +2,10 @@ package manfred.data.persistence.reader;
 
 import lombok.Value;
 
-import java.net.URL;
+import java.io.File;
 
 @Value
 public class MapTileSource {
-    URL tileUrl;
-    URL imageUrl;
+    File yamlFile;
+    File imageFile;
 }
