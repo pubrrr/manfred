@@ -14,6 +14,7 @@ import manfred.manfreditor.map.objectfactory.ConcreteMapObjectFactory;
 import manfred.manfreditor.mapobject.MapObject;
 import manfred.manfreditor.mapobject.SelectedObject;
 import manfred.manfreditor.mapobject.SelectionState;
+import org.eclipse.swt.graphics.ImageLoader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -50,5 +51,10 @@ public class ManfreditorContext {
     @Bean("StartupCommands")
     public List<Command> startupCommands(LoadKnownMapObjectsCommand loadKnownMapObjectsCommand) {
         return List.of(loadKnownMapObjectsCommand);
+    }
+
+    @Bean
+    public ImageLoader swtImageLoader() {
+        return new ImageLoader();
     }
 }

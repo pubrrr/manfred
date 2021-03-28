@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.util.LinkedList;
 import java.util.List;
 
+import static io.vavr.API.TODO;
 import static manfred.manfreditor.controller.ControllerHelper.LEFT_MOUSE_BUTTON;
 
 @Component
@@ -27,6 +28,7 @@ public class MapObjectsController implements MouseListener {
     private final LoadMapObjectCommand.Factory loadMapObjectCommandFactory;
     private final List<Runnable> postActions = new LinkedList<>();
     private final PopupProvider popupProvider;
+    private final NewMapObjectDialog.Factory newMapObjectDialogFactory;
 
     @Override
     public void mouseDoubleClick(MouseEvent e) {
@@ -44,20 +46,20 @@ public class MapObjectsController implements MouseListener {
         }
     }
 
-    public SelectionListener loadObject(Shell mainShell) {
+    public SelectionListener newObject(Shell mainShell) {
         return new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                var newMapObjectDialog = new NewMapObjectDialog(mainShell);
-                newMapObjectDialog.open()
-                    .map(resultData -> loadMapObjectCommandFactory.create(
-                        resultData.getYamlFilePath(),
-                        resultData.getImageFilePath()
-                    ))
-                    .map(controllerHelper::execute)
-                    .ifPresent(commandResult -> commandResult.onFailure(
-                        errorMessage -> popupProvider.showMessage(mainShell, errorMessage)
-                    ));
+                NewMapObjectDialog newMapObjectDialog = newMapObjectDialogFactory.create(mainShell);
+                newMapObjectDialog.open().ifPresent(TODO());
+//                    .map(resultData -> loadMapObjectCommandFactory.create(
+//                        resultData.getYamlFilePath(),
+//                        resultData.getImageFilePath()
+//                    ))
+//                    .map(controllerHelper::execute)
+//                    .ifPresent(commandResult -> commandResult.onFailure(
+//                        errorMessage -> popupProvider.showMessage(mainShell, errorMessage)
+//                    ));
                 postActions.forEach(Runnable::run);
             }
         };

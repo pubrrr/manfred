@@ -58,9 +58,9 @@ public class GuiBuilder {
             label.redraw();
         });
 
-        Button loadMapObjectButton = new Button(composite, SWT.CENTER);
-        loadMapObjectButton.setText("Objekt laden");
-        loadMapObjectButton.addSelectionListener(mapObjectsController.loadObject(mainShell));
+        Button newMapObjectButton = new Button(composite, SWT.CENTER);
+        newMapObjectButton.setText("Neues Objekt");
+        newMapObjectButton.addSelectionListener(mapObjectsController.newObject(mainShell));
 
         Button newMapButton = new Button(composite, SWT.CENTER);
         newMapButton.setText("Neue Map");
