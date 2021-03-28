@@ -14,7 +14,7 @@ public class Bounds{
 			this.lowerBound = lowerBound;
 			this.upperBound = upperBound;
 		} else {
-			throw new IllegalArgumentException("Bounds have to be positive and upper bound has to be larger than lower bound.");
+			throw new IllegalArgumentException("Bounds have to be positive and upper bound has to be larger than lower bound (or equal).");
 		}
 	}
 	

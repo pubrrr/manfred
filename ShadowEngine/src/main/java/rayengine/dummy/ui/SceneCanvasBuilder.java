@@ -40,6 +40,9 @@ public class SceneCanvasBuilder {
 					rayAlgorithm.castShadow(szeneCanvas, character, e.gc);
 				}
 				character.draw(e.gc);
+				if(rayAlgorithm != null) {
+					character.castShadowOnSelf(e.gc);
+				}
 			}
 		});
 		

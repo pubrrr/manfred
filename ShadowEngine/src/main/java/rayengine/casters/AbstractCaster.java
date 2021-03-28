@@ -4,6 +4,8 @@ import static rayengine.dummy.MathUtil.RADIANTS_PER_DEGREE;
 
 import java.awt.Point;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -150,4 +152,6 @@ public abstract class AbstractCaster<T extends AbstractSection> {
 	protected abstract void initializeSections(int height);
 	
 	protected abstract T createSection(int width, int height);
+	
+	public abstract void castShadowOnSelf(GC gc);
 }
