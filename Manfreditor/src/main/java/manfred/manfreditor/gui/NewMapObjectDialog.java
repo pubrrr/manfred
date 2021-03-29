@@ -92,7 +92,7 @@ public class NewMapObjectDialog extends Dialog {
         Button loadButton = new Button(shell, SWT.CENTER);
         loadButton.setText("laden");
         loadButton.setLayoutData(new GridData(SWT.END, SWT.TOP, true, true));
-        loadButton.addSelectionListener(newMapObjectController.setImageFromPath(imagePathTextField.getText()));
+        loadButton.addSelectionListener(newMapObjectController.setImageFromPath(imagePathTextField::getText));
     }
 
     private void addObjectCanvas(Shell shell) {

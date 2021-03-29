@@ -15,6 +15,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.springframework.stereotype.Component;
 
+import java.util.function.Supplier;
+
 import static io.vavr.API.TODO;
 
 @Component
@@ -33,12 +35,12 @@ public class NewMapObjectController {
         return e -> newMapObjectModel.setName(name);
     }
 
-    public SelectionListener setImageFromPath(String imagePath) {
+    public SelectionListener setImageFromPath(Supplier<String> imagePathSupplier) {
         return new SelectionAdapter() {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                controllerHelper.execute(loadObjectImageCommandFactory.create(imagePath));
+                controllerHelper.execute(loadObjectImageCommandFactory.create(imagePathSupplier.get()));
             }
         };
     }
