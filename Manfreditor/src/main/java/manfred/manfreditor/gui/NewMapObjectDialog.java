@@ -1,6 +1,7 @@
 package manfred.manfreditor.gui;
 
-import io.vavr.control.Either;
+import io.vavr.collection.Seq;
+import io.vavr.control.Validation;
 import lombok.AllArgsConstructor;
 import manfred.manfreditor.controller.NewMapObjectController;
 import manfred.manfreditor.mapobject.NewMapObjectData;
@@ -149,9 +150,10 @@ public class NewMapObjectDialog extends Dialog {
             new SelectionAdapter() {
                 @Override
                 public void widgetSelected(SelectionEvent e) {
-                    Either<String, NewMapObjectData> errorOrResult = newMapObjectController.getResult();
+                    Validation<Seq<String>, NewMapObjectData> errorOrResult = newMapObjectController.getResult();
                     errorOrResult
-                        .peekLeft(errorMessage -> new PopupProvider().showMessage(shell, errorMessage))
+                        .toEither()
+                        .peekLeft(errorMessages -> new PopupProvider().showMessage(shell, String.join(",\n", errorMessages)))
                         .peek(newMapObjectData -> {
                             NewMapObjectDialog.this.result = Optional.of(newMapObjectData);
                             shell.dispose();

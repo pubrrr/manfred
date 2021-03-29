@@ -1,6 +1,7 @@
 package manfred.manfreditor.controller;
 
-import io.vavr.control.Either;
+import io.vavr.collection.Seq;
+import io.vavr.control.Validation;
 import lombok.AllArgsConstructor;
 import manfred.manfreditor.controller.newmapobject.LoadObjectImageCommand;
 import manfred.manfreditor.mapobject.NewMapObjectData;
@@ -52,7 +53,7 @@ public class NewMapObjectController {
         };
     }
 
-    public Either<String, NewMapObjectData> getResult() {
-        return TODO();
+    public Validation<Seq<String>, NewMapObjectData> getResult() {
+        return newMapObjectModel.getResult();
     }
 }
