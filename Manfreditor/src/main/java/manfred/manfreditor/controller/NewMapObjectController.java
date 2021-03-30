@@ -14,6 +14,7 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -51,13 +52,13 @@ public class NewMapObjectController {
         };
     }
 
-    public MouseListener clickOnObjectPreview() {
+    public MouseListener clickOnObjectPreview(Supplier<Point> canvasSizeSupplier) {
         return new MouseAdapter() {
 
             @Override
             public void mouseUp(MouseEvent event) {
                 if (event.button == LEFT_MOUSE_BUTTON) {
-                    controllerHelper.execute(clickObjectPreviewCommandFactory.create(event.x, event.y));
+                    controllerHelper.execute(clickObjectPreviewCommandFactory.create(event.x, event.y, canvasSizeSupplier.get()));
                     postActions.forEach(Runnable::run);
                 }
             }

@@ -1,7 +1,12 @@
 package manfred.manfreditor.mapobject;
 
+import io.vavr.collection.HashMap;
+import io.vavr.collection.Map;
 import io.vavr.collection.Seq;
 import io.vavr.control.Validation;
+import lombok.AllArgsConstructor;
+import lombok.Value;
+import manfred.data.shared.PositiveInt;
 import org.eclipse.swt.graphics.ImageData;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +17,7 @@ public class NewMapObjectModel {
 
     private String name;
     private ImageData imageData;
+    private Map<PreviewTileCoordinate, Boolean> accessibilityGrid = HashMap.of(new PreviewTileCoordinate(0, 0), true);
 
     public void newSession() {
         this.name = null;
@@ -30,6 +36,10 @@ public class NewMapObjectModel {
         return Optional.ofNullable(imageData);
     }
 
+    public AccessibilityGrid getAccessibilityGrid() {
+        return new AccessibilityGrid(accessibilityGrid);
+    }
+
     public Validation<Seq<String>, NewMapObjectData> getResult() {
         return Validation
             .combine(
@@ -37,5 +47,26 @@ public class NewMapObjectModel {
                 imageData == null ? Validation.invalid("no image data given") : Validation.valid(this.imageData)
             )
             .ap(NewMapObjectData::new);
+    }
+
+    public void invertAccessibility(PreviewTileCoordinate previewTileCoordinate) {
+        if (this.accessibilityGrid.containsKey(previewTileCoordinate)) {
+            this.accessibilityGrid = this.accessibilityGrid.put(
+                previewTileCoordinate,
+                !this.accessibilityGrid.get(previewTileCoordinate).get()
+            );
+        }
+    }
+
+    @Value
+    @AllArgsConstructor
+    public static class PreviewTileCoordinate {
+        PositiveInt x;
+        PositiveInt y;
+
+        private PreviewTileCoordinate(int x, int y) {
+            this.x = PositiveInt.of(x);
+            this.y = PositiveInt.of(y);
+        }
     }
 }

@@ -105,7 +105,7 @@ public class NewMapObjectDialog extends Dialog {
         layoutData.widthHint = 1000;
         layoutData.heightHint = 480;
         objectPreviewCanvas.setLayoutData(layoutData);
-        objectPreviewCanvas.addMouseListener(newMapObjectController.clickOnObjectPreview());
+        objectPreviewCanvas.addMouseListener(newMapObjectController.clickOnObjectPreview(objectPreviewCanvas::getSize));
         objectPreviewCanvas.addPaintListener(event -> newMapObjectView.draw(event.gc, shell.getDisplay(), objectPreviewCanvas.getSize()));
         newMapObjectController.addPostAction(objectPreviewCanvas::redraw);
     }
