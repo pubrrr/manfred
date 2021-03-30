@@ -4,6 +4,7 @@ import io.vavr.collection.Seq;
 import io.vavr.control.Validation;
 import lombok.AllArgsConstructor;
 import manfred.manfreditor.controller.NewMapObjectController;
+import manfred.manfreditor.gui.view.mapobject.NewMapObjectView;
 import manfred.manfreditor.mapobject.NewMapObjectData;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -25,14 +26,17 @@ import java.util.Optional;
 public class NewMapObjectDialog extends Dialog {
 
     private final NewMapObjectController newMapObjectController;
+    private final NewMapObjectView newMapObjectView;
+
     private Button okButton;
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private Optional<NewMapObjectData> result = Optional.empty();
 
-    private NewMapObjectDialog(Shell parent, NewMapObjectController newMapObjectController) {
+    private NewMapObjectDialog(Shell parent, NewMapObjectController newMapObjectController, NewMapObjectView newMapObjectView) {
         super(parent);
         this.newMapObjectController = newMapObjectController;
+        this.newMapObjectView = newMapObjectView;
     }
 
     public Optional<NewMapObjectData> open() {
@@ -102,6 +106,8 @@ public class NewMapObjectDialog extends Dialog {
         layoutData.heightHint = 480;
         objectPreviewCanvas.setLayoutData(layoutData);
         objectPreviewCanvas.addMouseListener(newMapObjectController.clickOnObjectPreview());
+        objectPreviewCanvas.addPaintListener(event -> newMapObjectView.draw(event.gc, shell.getDisplay(), objectPreviewCanvas.getSize()));
+        newMapObjectController.addPostAction(objectPreviewCanvas::redraw);
     }
 
     private void addBrowseButtonForTextField(Text textField, Shell shell) {
@@ -168,10 +174,11 @@ public class NewMapObjectDialog extends Dialog {
     public static class Factory {
 
         private final NewMapObjectController newMapObjectController;
+        private final NewMapObjectView newMapObjectView;
 
         public NewMapObjectDialog create(Shell shell) {
             newMapObjectController.newSession();
-            return new NewMapObjectDialog(shell, newMapObjectController);
+            return new NewMapObjectDialog(shell, newMapObjectController, newMapObjectView);
         }
     }
 }
