@@ -5,6 +5,7 @@ import io.vavr.collection.Map;
 import io.vavr.collection.Seq;
 import io.vavr.control.Validation;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import manfred.data.shared.PositiveInt;
 import org.eclipse.swt.graphics.ImageData;
@@ -13,7 +14,10 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class NewMapObjectModel {
+
+    private final ObjectAccessibilityValidator objectAccessibilityValidator;
 
     private String name;
     private ImageData imageData;
@@ -44,7 +48,8 @@ public class NewMapObjectModel {
         return Validation
             .combine(
                 name == null ? Validation.invalid("no name given") : Validation.valid(this.name),
-                imageData == null ? Validation.invalid("no image data given") : Validation.valid(this.imageData)
+                imageData == null ? Validation.invalid("no image data given") : Validation.valid(this.imageData),
+                objectAccessibilityValidator.validate(getAccessibilityGrid())
             )
             .ap(NewMapObjectData::new);
     }

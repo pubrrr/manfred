@@ -1,7 +1,7 @@
 package manfred.manfreditor.controller;
 
 import lombok.AllArgsConstructor;
-import manfred.manfreditor.controller.command.LoadMapObjectCommand;
+import manfred.manfreditor.controller.command.CreateMapObjectCommand;
 import manfred.manfreditor.controller.command.SelectMapObjectCommand;
 import manfred.manfreditor.gui.NewMapObjectDialog;
 import manfred.manfreditor.gui.PopupProvider;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import java.util.LinkedList;
 import java.util.List;
 
-import static io.vavr.API.TODO;
 import static manfred.manfreditor.controller.ControllerHelper.LEFT_MOUSE_BUTTON;
 
 @Component
@@ -25,7 +24,7 @@ public class MapObjectsController implements MouseListener {
 
     private final ControllerHelper controllerHelper;
     private final SelectMapObjectCommand.Factory selectMapObjectCommandFactory;
-    private final LoadMapObjectCommand.Factory loadMapObjectCommandFactory;
+    private final CreateMapObjectCommand.Factory createMapObjectCommandFactory;
     private final List<Runnable> postActions = new LinkedList<>();
     private final PopupProvider popupProvider;
     private final NewMapObjectDialog.Factory newMapObjectDialogFactory;
@@ -51,15 +50,12 @@ public class MapObjectsController implements MouseListener {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 NewMapObjectDialog newMapObjectDialog = newMapObjectDialogFactory.create(mainShell);
-                newMapObjectDialog.open().ifPresent(TODO());
-//                    .map(resultData -> loadMapObjectCommandFactory.create(
-//                        resultData.getYamlFilePath(),
-//                        resultData.getImageFilePath()
-//                    ))
-//                    .map(controllerHelper::execute)
-//                    .ifPresent(commandResult -> commandResult.onFailure(
-//                        errorMessage -> popupProvider.showMessage(mainShell, errorMessage)
-//                    ));
+                newMapObjectDialog.open()
+                    .map(createMapObjectCommandFactory::create)
+                    .map(controllerHelper::execute)
+                    .ifPresent(commandResult -> commandResult.onFailure(
+                        errorMessage -> popupProvider.showMessage(mainShell, errorMessage)
+                    ));
                 postActions.forEach(Runnable::run);
             }
         };

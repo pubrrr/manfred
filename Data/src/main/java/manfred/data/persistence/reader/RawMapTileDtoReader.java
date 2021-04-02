@@ -1,39 +1,42 @@
 package manfred.data.persistence.reader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.vavr.CheckedFunction0;
+import io.vavr.CheckedRunnable;
+import io.vavr.control.Try;
+import lombok.AllArgsConstructor;
 import manfred.data.InvalidInputException;
 import manfred.data.persistence.dto.RawMapTileDto;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.ImageData;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
+
+import static io.vavr.API.Try;
 
 @Component
+@AllArgsConstructor
 public class RawMapTileDtoReader {
 
     private final ObjectMapper objectMapper;
     private final ImageLoader imageLoader;
-
-    public RawMapTileDtoReader(ObjectMapper objectMapper, ImageLoader imageLoader) {
-        this.objectMapper = objectMapper;
-        this.imageLoader = imageLoader;
-    }
+    private final UrlHelper urlHelper;
 
     public RawMapTileDto load(String name) throws InvalidInputException {
-        URL yamlURL = getClass().getResource("/maps/tiles/" + name + ".yaml");
-        if (yamlURL == null) {
+        File yamlFile = urlHelper.getFileForMapTile(name);
+        if (!yamlFile.isFile()) {
             throw new InvalidInputException("Did not find resource for map object " + name);
         }
 
-        URL imageURL = getClass().getResource("/maps/tiles/" + name + ".png");
-        if (imageURL == null) {
+        File imageFile = urlHelper.getImageFileForMapTile(name);
+        if (!imageFile.isFile()) {
             throw new InvalidInputException("Did not find image resource for map object " + name);
         }
 
-        return load(new File(yamlURL.getFile()), new File(imageURL.getFile()));
+        return load(yamlFile, imageFile);
     }
 
     RawMapTileDto load(File yamlFile, File imageFile) throws InvalidInputException {
@@ -49,5 +52,28 @@ public class RawMapTileDtoReader {
 
     public RawMapTileDto load(MapTileSource mapTileSource) throws InvalidInputException {
         return load(mapTileSource.getYamlFile(), mapTileSource.getImageFile());
+    }
+
+    public Try<Void> save(RawMapTileDto mapTileDto) {
+        File yamlFile = urlHelper.getFileForMapTile(mapTileDto.getName());
+        File imageFile = urlHelper.getImageFileForMapTile(mapTileDto.getName());
+
+        return Try(writeTileDataTo(mapTileDto, yamlFile))
+            .andThenTry(writeImageTo(mapTileDto.getImageData(), imageFile));
+    }
+
+    private CheckedFunction0<Void> writeTileDataTo(RawMapTileDto mapTileDto, File yamlFile) {
+        return () -> {
+            objectMapper.writeValue(yamlFile, mapTileDto);
+            return null;
+        };
+    }
+
+    private CheckedRunnable writeImageTo(ImageData imageData, File imageFile) {
+        return () -> {
+            var imageLoader = new org.eclipse.swt.graphics.ImageLoader();
+            imageLoader.data = new ImageData[]{imageData};
+            imageLoader.save(imageFile.getAbsolutePath(), SWT.IMAGE_PNG);
+        };
     }
 }

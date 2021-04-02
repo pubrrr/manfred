@@ -7,4 +7,5 @@ import org.eclipse.swt.graphics.ImageData;
 public class NewMapObjectData {
     String name;
     ImageData imageData;
+    AccessibilityGrid accessibilityGrid;
 }
