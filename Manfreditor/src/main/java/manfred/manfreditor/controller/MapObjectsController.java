@@ -1,7 +1,7 @@
 package manfred.manfreditor.controller;
 
 import lombok.AllArgsConstructor;
-import manfred.manfreditor.controller.command.LoadMapObjectCommand;
+import manfred.manfreditor.controller.command.CreateMapObjectCommand;
 import manfred.manfreditor.controller.command.SelectMapObjectCommand;
 import manfred.manfreditor.gui.NewMapObjectDialog;
 import manfred.manfreditor.gui.PopupProvider;
@@ -24,9 +24,10 @@ public class MapObjectsController implements MouseListener {
 
     private final ControllerHelper controllerHelper;
     private final SelectMapObjectCommand.Factory selectMapObjectCommandFactory;
-    private final LoadMapObjectCommand.Factory loadMapObjectCommandFactory;
+    private final CreateMapObjectCommand.Factory createMapObjectCommandFactory;
     private final List<Runnable> postActions = new LinkedList<>();
     private final PopupProvider popupProvider;
+    private final NewMapObjectDialog.Factory newMapObjectDialogFactory;
 
     @Override
     public void mouseDoubleClick(MouseEvent e) {
@@ -44,16 +45,13 @@ public class MapObjectsController implements MouseListener {
         }
     }
 
-    public SelectionListener loadObject(Shell mainShell) {
+    public SelectionListener newObject(Shell mainShell) {
         return new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                var newMapObjectDialog = new NewMapObjectDialog(mainShell);
+                NewMapObjectDialog newMapObjectDialog = newMapObjectDialogFactory.create(mainShell);
                 newMapObjectDialog.open()
-                    .map(resultData -> loadMapObjectCommandFactory.create(
-                        resultData.getYamlFilePath(),
-                        resultData.getImageFilePath()
-                    ))
+                    .map(createMapObjectCommandFactory::create)
                     .map(controllerHelper::execute)
                     .ifPresent(commandResult -> commandResult.onFailure(
                         errorMessage -> popupProvider.showMessage(mainShell, errorMessage)

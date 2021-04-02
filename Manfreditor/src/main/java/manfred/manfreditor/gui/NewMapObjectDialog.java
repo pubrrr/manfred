@@ -1,41 +1,56 @@
 package manfred.manfreditor.gui;
 
-import lombok.Data;
+import io.vavr.collection.Seq;
+import io.vavr.control.Validation;
+import lombok.AllArgsConstructor;
+import manfred.manfreditor.newmapobject.controller.NewMapObjectController;
+import manfred.manfreditor.newmapobject.view.NewMapObjectView;
+import manfred.manfreditor.newmapobject.model.NewMapObjectData;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 public class NewMapObjectDialog extends Dialog {
 
-    private final ResultData resultData = new ResultData();
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    private Optional<ResultData> result = Optional.empty();
+    private final NewMapObjectController newMapObjectController;
+    private final NewMapObjectView newMapObjectView;
 
-    public NewMapObjectDialog(Shell parent) {
+    private Button okButton;
+
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    private Optional<NewMapObjectData> result = Optional.empty();
+
+    private NewMapObjectDialog(Shell parent, NewMapObjectController newMapObjectController, NewMapObjectView newMapObjectView) {
         super(parent);
+        this.newMapObjectController = newMapObjectController;
+        this.newMapObjectView = newMapObjectView;
     }
 
-    public Optional<ResultData> open() {
+    public Optional<NewMapObjectData> open() {
         Shell parent = getParent();
         Shell shell = new Shell(parent);
-        shell.setSize(450, 130);
+        shell.setSize(500, 620);
         shell.setText("Neue Map");
-        GridLayout layout = new GridLayout(3, false);
+        GridLayout layout = new GridLayout(4, false);
         shell.setLayout(layout);
 
-        addYamlFileInput(shell);
+        addNameTextField(shell);
         addImageFileInput(shell);
+
+        addObjectCanvas(shell);
 
         addAbortButton(shell);
         addOkButton(shell);
@@ -50,36 +65,49 @@ public class NewMapObjectDialog extends Dialog {
         return this.result;
     }
 
-    private void addYamlFileInput(Shell shell) {
-        Label yamlLabel = new Label(shell, 0);
-        yamlLabel.setText("Yaml:");
-        GridData yamlLabelLayout = new GridData(80, 20);
-        yamlLabelLayout.verticalAlignment = SWT.BEGINNING;
-        yamlLabel.setLayoutData(yamlLabelLayout);
+    private void addNameTextField(Shell shell) {
+        Label nameLabel = new Label(shell, 0);
+        nameLabel.setText("Name:");
+        GridData nameLabelLayout = new GridData(SWT.TOP, SWT.BEGINNING, true, false);
+        nameLabelLayout.verticalAlignment = SWT.BEGINNING;
+        nameLabel.setLayoutData(nameLabelLayout);
 
-        Text pathTextField = new Text(shell, SWT.BORDER);
-        GridData pathTextFieldLayout = new GridData(SWT.BEGINNING, SWT.TOP, true, false);
-        pathTextFieldLayout.widthHint = 300;
-        pathTextField.setLayoutData(pathTextFieldLayout);
-        pathTextField.addModifyListener(e -> this.resultData.yamlFilePath = pathTextField.getText());
-
-        addBrowseButtonForTextField(pathTextField, shell);
+        Text nameField = new Text(shell, SWT.BORDER);
+        GridData nameFieldLayout = new GridData(SWT.TOP, SWT.END, true, false, 3, 1);
+        nameFieldLayout.widthHint = 300;
+        nameField.setLayoutData(nameFieldLayout);
+        nameField.addModifyListener(newMapObjectController.setName(nameField::getText));
     }
 
     private void addImageFileInput(Shell shell) {
-        Label yamlLabel = new Label(shell, 0);
-        yamlLabel.setText("Bild:");
-        GridData yamlLabelLayout = new GridData(80, 20);
-        yamlLabelLayout.verticalAlignment = SWT.BEGINNING;
-        yamlLabel.setLayoutData(yamlLabelLayout);
+        Label imageLabel = new Label(shell, 0);
+        imageLabel.setText("Bild:");
+        GridData imageLabelLayout = new GridData(80, 20);
+        imageLabelLayout.verticalAlignment = SWT.BEGINNING;
+        imageLabel.setLayoutData(imageLabelLayout);
 
-        Text pathTextField = new Text(shell, SWT.BORDER);
-        GridData pathTextFieldLayout = new GridData(SWT.BEGINNING, SWT.TOP, true, false);
-        pathTextFieldLayout.widthHint = 300;
-        pathTextField.setLayoutData(pathTextFieldLayout);
-        pathTextField.addModifyListener(e -> this.resultData.imageFilePath = pathTextField.getText());
+        Text imagePathTextField = new Text(shell, SWT.BORDER);
+        GridData imagePathTextFieldLayout = new GridData(SWT.BEGINNING, SWT.TOP, true, false);
+        imagePathTextFieldLayout.widthHint = 300;
+        imagePathTextField.setLayoutData(imagePathTextFieldLayout);
 
-        addBrowseButtonForTextField(pathTextField, shell);
+        addBrowseButtonForTextField(imagePathTextField, shell);
+
+        Button loadButton = new Button(shell, SWT.CENTER);
+        loadButton.setText("laden");
+        loadButton.setLayoutData(new GridData(SWT.END, SWT.TOP, true, true));
+        loadButton.addSelectionListener(newMapObjectController.setImageFromPath(imagePathTextField::getText));
+    }
+
+    private void addObjectCanvas(Shell shell) {
+        Canvas objectPreviewCanvas = new Canvas(shell, SWT.BORDER);
+        GridData layoutData = new GridData(SWT.BEGINNING, SWT.TOP, true, true, 4, 1);
+        layoutData.widthHint = 1000;
+        layoutData.heightHint = 480;
+        objectPreviewCanvas.setLayoutData(layoutData);
+        objectPreviewCanvas.addMouseListener(newMapObjectController.clickOnObjectPreview(objectPreviewCanvas::getSize));
+        objectPreviewCanvas.addPaintListener(event -> newMapObjectView.draw(event.gc, shell.getDisplay(), objectPreviewCanvas.getSize()));
+        newMapObjectController.addPostAction(objectPreviewCanvas::redraw);
     }
 
     private void addBrowseButtonForTextField(Text textField, Shell shell) {
@@ -97,6 +125,7 @@ public class NewMapObjectDialog extends Dialog {
                     if (selectedFile != null) {
                         textField.setText(selectedFile);
                         textField.redraw();
+                        okButton.setEnabled(true);
                     }
                 }
             }
@@ -105,6 +134,7 @@ public class NewMapObjectDialog extends Dialog {
 
     private void addAbortButton(Shell shell) {
         Button button = new Button(shell, SWT.CENTER);
+        button.setLayoutData(new GridData(SWT.END, SWT.BOTTOM, false, true, 2, 1));
         button.setText("Abbrechen");
         button.addSelectionListener(
             new SelectionAdapter() {
@@ -118,35 +148,37 @@ public class NewMapObjectDialog extends Dialog {
     }
 
     private void addOkButton(Shell shell) {
-        Button button = new Button(shell, SWT.CENTER);
-        button.setText("OK");
-        button.addSelectionListener(
+        okButton = new Button(shell, SWT.CENTER);
+        okButton.setLayoutData(new GridData(SWT.END, SWT.BOTTOM, false, true));
+        okButton.setText("OK");
+        okButton.setEnabled(false);
+        okButton.addSelectionListener(
             new SelectionAdapter() {
                 @Override
                 public void widgetSelected(SelectionEvent e) {
-                    PopupProvider popupProvider = new PopupProvider();
-                    if (NewMapObjectDialog.this.resultData.yamlFilePath.isEmpty()) {
-                        popupProvider.showMessage(shell, "Yaml file path must not be empty");
-                        return;
-                    }
-                    if (NewMapObjectDialog.this.resultData.imageFilePath.isEmpty()) {
-                        popupProvider.showMessage(shell, "Image file path must not be empty");
-                        return;
-                    }
-                    NewMapObjectDialog.this.result = Optional.of(NewMapObjectDialog.this.resultData);
-                    shell.dispose();
+                    Validation<Seq<String>, NewMapObjectData> errorOrResult = newMapObjectController.getResult();
+                    errorOrResult
+                        .toEither()
+                        .peekLeft(errorMessages -> new PopupProvider().showMessage(shell, String.join(",\n", errorMessages)))
+                        .peek(newMapObjectData -> {
+                            NewMapObjectDialog.this.result = Optional.of(newMapObjectData);
+                            shell.dispose();
+                        });
                 }
             }
         );
     }
 
-    @Data
-    public static class ResultData {
+    @Component
+    @AllArgsConstructor
+    public static class Factory {
 
-        private String yamlFilePath = "";
-        private String imageFilePath = "";
+        private final NewMapObjectController newMapObjectController;
+        private final NewMapObjectView newMapObjectView;
 
-        private ResultData() {
+        public NewMapObjectDialog create(Shell shell) {
+            newMapObjectController.newSession();
+            return new NewMapObjectDialog(shell, newMapObjectController, newMapObjectView);
         }
     }
 }
