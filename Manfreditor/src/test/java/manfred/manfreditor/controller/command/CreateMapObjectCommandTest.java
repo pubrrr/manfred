@@ -21,20 +21,27 @@ class CreateMapObjectCommandTest {
 
     private CreateMapObjectCommand.Factory commandFactory;
     private MapObjectExporter mapObjectExporterMock;
+    private LoadMapObjectCommand.Factory loadMapObjectCommandFactoryMock;
     private CommandHistory commandHistory;
 
     @BeforeEach
     void setUp() {
         commandHistory = new CommandHistory();
         mapObjectExporterMock = mock(MapObjectExporter.class);
-        commandFactory = new CreateMapObjectCommand.Factory(mapObjectExporterMock);
+        loadMapObjectCommandFactoryMock = mock(LoadMapObjectCommand.Factory.class);
+        commandFactory = new CreateMapObjectCommand.Factory(mapObjectExporterMock, loadMapObjectCommandFactoryMock);
     }
 
     @Test
     void create() {
         var input = new NewMapObjectData("name", null, null);
-        File saveFileMock = mock(File.class);
-        when(mapObjectExporterMock.export(any())).thenReturn(Try.success(List.of(saveFileMock)));
+        File yamlFileMock = mockFile("test.yaml");
+        File imageFileMock = mockFile("test.png");
+        when(mapObjectExporterMock.export(any())).thenReturn(Try.success(List.of(yamlFileMock, imageFileMock)));
+
+        RollbackOperation rollbackOperationMock = mock(RollbackOperation.class);
+        Command commandMock = () -> CommandResult.success(rollbackOperationMock);
+        when(loadMapObjectCommandFactoryMock.create(any(File.class), any(File.class))).thenReturn(commandMock);
 
         CommandResult result = commandFactory.create(input).execute();
 
@@ -42,7 +49,26 @@ class CreateMapObjectCommandTest {
         result.registerRollbackOperation(commandHistory);
 
         commandHistory.undoLast();
-        verify(saveFileMock).delete();
+        verify(yamlFileMock).delete();
+        verify(imageFileMock).delete();
+        verify(rollbackOperationMock).rollback();
+    }
+
+    @Test
+    void loadingCreatedFilesFails() {
+        var input = new NewMapObjectData("name", null, null);
+        File yamlFileMock = mockFile("test.yaml");
+        File imageFileMock = mockFile("test.png");
+        when(mapObjectExporterMock.export(any())).thenReturn(Try.success(List.of(yamlFileMock, imageFileMock)));
+
+        Command failingCommand = () -> CommandResult.failure("loading files faild error message");
+        when(loadMapObjectCommandFactoryMock.create(any(File.class), any(File.class))).thenReturn(failingCommand);
+
+        CommandResult result = commandFactory.create(input).execute();
+
+        assertThat(result, failedWithMessageContaining("loading files faild error message"));
+        verify(yamlFileMock).delete();
+        verify(imageFileMock).delete();
     }
 
     @Test
@@ -54,5 +80,11 @@ class CreateMapObjectCommandTest {
         CommandResult result = commandFactory.create(input).execute();
 
         assertThat(result, failedWithMessageContaining("error message"));
+    }
+
+    private File mockFile(String fileName) {
+        File fileMock = mock(File.class);
+        when(fileMock.getName()).thenReturn(fileName);
+        return fileMock;
     }
 }

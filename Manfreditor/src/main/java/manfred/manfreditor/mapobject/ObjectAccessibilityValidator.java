@@ -2,9 +2,11 @@ package manfred.manfreditor.mapobject;
 
 import io.vavr.collection.Map;
 import io.vavr.control.Validation;
+import org.springframework.stereotype.Component;
 
 import static manfred.manfreditor.mapobject.NewMapObjectModel.*;
 
+@Component
 public class ObjectAccessibilityValidator {
 
     public Validation<String, AccessibilityGrid> validate(AccessibilityGrid accessibilityGrid) {

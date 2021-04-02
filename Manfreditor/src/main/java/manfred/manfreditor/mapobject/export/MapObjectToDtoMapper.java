@@ -5,11 +5,13 @@ import manfred.data.persistence.dto.RawMapTileDto;
 import manfred.manfreditor.mapobject.AccessibilityGrid;
 import manfred.manfreditor.mapobject.NewMapObjectData;
 import manfred.manfreditor.mapobject.NewMapObjectModel.PreviewTileCoordinate;
+import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 
+@Component
 public class MapObjectToDtoMapper {
 
     public RawMapTileDto map(NewMapObjectData newMapObjectData) {

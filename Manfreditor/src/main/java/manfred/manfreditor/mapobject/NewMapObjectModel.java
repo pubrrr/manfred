@@ -5,9 +5,8 @@ import io.vavr.collection.Map;
 import io.vavr.collection.Seq;
 import io.vavr.control.Validation;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import manfred.data.shared.PositiveInt;
 import org.eclipse.swt.graphics.ImageData;
 import org.springframework.stereotype.Component;
 
@@ -64,6 +63,7 @@ public class NewMapObjectModel {
     }
 
     @AllArgsConstructor
+    @EqualsAndHashCode
     public static class PreviewTileCoordinate {
         private final int x;
         private final int y;

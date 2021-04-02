@@ -34,6 +34,7 @@ public class NewMapObjectController {
     private final List<Runnable> postActions;
 
     public void newSession() {
+        this.postActions.clear();
         newMapObjectModel.newSession();
     }
 
