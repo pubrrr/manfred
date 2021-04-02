@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -41,13 +42,44 @@ class RawMapTileDtoReaderTest {
 
         RawMapTileDto input = new RawMapTileDto("testName", List.of("1,0"), null, someImageData());
 
-        Try<Void> result = underTest.save(input);
+        Try<io.vavr.collection.List<File>> result = underTest.save(input);
 
-        assertThat(result.toString(), result.isSuccess(), is(true));
+        assertThat(result.isSuccess(), is(true));
+        assertThat(result.get(), containsInAnyOrder(yamlFile, imageFile));
         assertThat(imageFile.isFile(), is(true));
 
         List<String> fileContents = Files.readAllLines(yamlFile.toPath());
         assertThat(fileContents.toString(), fileContents, hasItems("name: \"testName\"", "- \"1,0\""));
+    }
+
+    @Test
+    void saveToFileFailsWhenYamlFileAlreadyExists() throws IOException {
+        File yamlFile = createTempFile("test.yaml");
+        Files.writeString(yamlFile.toPath(), "some content...");
+        when(urlHelperMock.getFileForMapTile(anyString())).thenReturn(yamlFile);
+
+        RawMapTileDto input = new RawMapTileDto("testName", List.of("1,0"), null, someImageData());
+
+        Try<io.vavr.collection.List<File>> result = underTest.save(input);
+
+        assertThat(result.isFailure(), is(true));
+        assertThat(result.getCause().getMessage(), is("yaml file for tile testName already contains content"));
+    }
+
+    @Test
+    void saveToFileFailsWhenImageFileAlreadyExists() throws IOException {
+        File yamlFile = createTempFile("test.yaml");
+        when(urlHelperMock.getFileForMapTile(anyString())).thenReturn(yamlFile);
+        File imageFile = createTempFile("test.png");
+        Files.writeString(imageFile.toPath(), "some content...");
+        when(urlHelperMock.getImageFileForMapTile(anyString())).thenReturn(imageFile);
+
+        RawMapTileDto input = new RawMapTileDto("testName", List.of("1,0"), null, someImageData());
+
+        Try<io.vavr.collection.List<File>> result = underTest.save(input);
+
+        assertThat(result.isFailure(), is(true));
+        assertThat(result.getCause().getMessage(), is("image file for tile testName already contains content"));
     }
 
     private ImageData someImageData() {

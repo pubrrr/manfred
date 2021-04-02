@@ -5,6 +5,11 @@ import manfred.manfreditor.mapobject.NewMapObjectData;
 import manfred.manfreditor.mapobject.export.MapObjectExporter;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+
+import static manfred.manfreditor.controller.command.CommandResult.*;
+import static manfred.manfreditor.controller.command.CommandResult.failure;
+
 @AllArgsConstructor
 public class CreateMapObjectCommand implements Command {
 
@@ -13,7 +18,11 @@ public class CreateMapObjectCommand implements Command {
 
     @Override
     public CommandResult execute() {
-        return null;
+        return mapObjectExporter.export(newMapObjectData)
+            .fold(
+                exception -> failure(exception.getMessage()),
+                savedFiles -> success(() -> savedFiles.forEach(File::delete))
+            );
     }
 
     @Component

@@ -64,6 +64,6 @@ class ClickObjectPreviewCommandTest {
     }
 
     private PreviewTileCoordinate someTileCoordinate() {
-        return new PreviewTileCoordinate(PositiveInt.of(0), PositiveInt.of(0));
+        return new PreviewTileCoordinate(0, 0);
     }
 }

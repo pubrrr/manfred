@@ -60,6 +60,6 @@ class ObjectAccessibilityValidatorTest {
     }
 
     private PreviewTileCoordinate previewTileCoordinate(int x, int y) {
-        return new PreviewTileCoordinate(PositiveInt.of(x), PositiveInt.of(y));
+        return new PreviewTileCoordinate(x, y);
     }
 }

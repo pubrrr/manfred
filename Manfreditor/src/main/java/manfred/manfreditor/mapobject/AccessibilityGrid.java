@@ -12,16 +12,14 @@ public class AccessibilityGrid {
 
     public int getSizeX() {
         return accessibilityGrid.keySet()
-            .map(PreviewTileCoordinate::getX)
-            .map(PositiveInt::value)
+            .map(PreviewTileCoordinate::x)
             .max()
             .getOrElse(0) + 1;
     }
 
     public int getSizeY() {
         return accessibilityGrid.keySet()
-            .map(PreviewTileCoordinate::getY)
-            .map(PositiveInt::value)
+            .map(PreviewTileCoordinate::y)
             .max()
             .getOrElse(0) + 1;
     }

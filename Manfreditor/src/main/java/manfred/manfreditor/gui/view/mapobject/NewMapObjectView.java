@@ -61,8 +61,8 @@ public class NewMapObjectView {
         int gridSizeY = newMapObjectModel.getAccessibilityGrid().getSizeY();
 
         return previewTileCoordinate -> new PreviewViewCoordinate(
-            previewTileCoordinate.getX().value() * gridTileSize + gridLeftCoordinate,
-            (gridSizeY - previewTileCoordinate.getY().value() - 1) * gridTileSize + gridTopCoordinate
+            previewTileCoordinate.x() * gridTileSize + gridLeftCoordinate,
+            (gridSizeY - previewTileCoordinate.y() - 1) * gridTileSize + gridTopCoordinate
         );
     }
 

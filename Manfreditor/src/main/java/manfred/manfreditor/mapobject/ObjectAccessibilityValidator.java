@@ -9,7 +9,7 @@ public class ObjectAccessibilityValidator {
 
     public Validation<String, AccessibilityGrid> validate(AccessibilityGrid accessibilityGrid) {
         Map<PreviewTileCoordinate, Boolean> inaccessibleTilesAtX0 = accessibilityGrid.getGrid()
-            .filterKeys(previewTileCoordinate -> previewTileCoordinate.getX().value() == 0)
+            .filterKeys(previewTileCoordinate -> previewTileCoordinate.x() == 0)
             .filterValues(isAccessible -> !isAccessible);
 
         if (inaccessibleTilesAtX0.size() == 0) {

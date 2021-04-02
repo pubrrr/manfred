@@ -63,15 +63,17 @@ public class NewMapObjectModel {
         }
     }
 
-    @Value
     @AllArgsConstructor
     public static class PreviewTileCoordinate {
-        PositiveInt x;
-        PositiveInt y;
+        private final int x;
+        private final int y;
 
-        private PreviewTileCoordinate(int x, int y) {
-            this.x = PositiveInt.of(x);
-            this.y = PositiveInt.of(y);
+        public int x() {
+            return x;
+        }
+
+        public int y() {
+            return y;
         }
     }
 }
