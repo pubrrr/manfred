@@ -2,8 +2,8 @@ package manfred.manfreditor.controller.command;
 
 import io.vavr.collection.List;
 import io.vavr.control.Try;
-import manfred.manfreditor.mapobject.NewMapObjectData;
-import manfred.manfreditor.mapobject.export.MapObjectExporter;
+import manfred.manfreditor.newmapobject.model.NewMapObjectData;
+import manfred.manfreditor.newmapobject.model.export.MapObjectExporter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

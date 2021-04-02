@@ -5,8 +5,8 @@ import io.vavr.Tuple2;
 import io.vavr.collection.List;
 import io.vavr.control.Try;
 import lombok.AllArgsConstructor;
-import manfred.manfreditor.mapobject.NewMapObjectData;
-import manfred.manfreditor.mapobject.export.MapObjectExporter;
+import manfred.manfreditor.newmapobject.model.NewMapObjectData;
+import manfred.manfreditor.newmapobject.model.export.MapObjectExporter;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -27,8 +27,8 @@ public class CreateMapObjectCommand implements Command {
             .flatMap(this::loadCreatedFiles)
             .fold(
                 exception -> failure(exception.getMessage()),
-                savedFilesAndCommandResult -> success(
-                    deleteFiles(savedFilesAndCommandResult._1).andThen(savedFilesAndCommandResult._2)
+                savedFilesAndLoadObjectRollback -> success(
+                    deleteFiles(savedFilesAndLoadObjectRollback._1).andThen(savedFilesAndLoadObjectRollback._2)
                 )
             );
     }

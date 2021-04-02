@@ -1,8 +1,8 @@
-package manfred.manfreditor.controller.newmapobject;
+package manfred.manfreditor.newmapobject.controller.command;
 
 import manfred.manfreditor.controller.command.CommandHistory;
 import manfred.manfreditor.controller.command.CommandResult;
-import manfred.manfreditor.mapobject.NewMapObjectModel;
+import manfred.manfreditor.newmapobject.model.NewMapObjectModel;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;

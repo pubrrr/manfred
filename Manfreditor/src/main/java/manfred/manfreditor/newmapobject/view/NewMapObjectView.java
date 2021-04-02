@@ -1,10 +1,10 @@
-package manfred.manfreditor.gui.view.mapobject;
+package manfred.manfreditor.newmapobject.view;
 
 import io.vavr.Tuple2;
 import io.vavr.control.Option;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import manfred.manfreditor.mapobject.NewMapObjectModel;
+import manfred.manfreditor.newmapobject.model.NewMapObjectModel;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static manfred.manfreditor.mapobject.NewMapObjectModel.*;
+import static manfred.manfreditor.newmapobject.model.NewMapObjectModel.*;
 
 @Component
 @AllArgsConstructor

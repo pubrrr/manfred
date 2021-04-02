@@ -1,9 +1,9 @@
-package manfred.manfreditor.controller.newmapobject;
+package manfred.manfreditor.newmapobject.controller.command;
 
 import lombok.AllArgsConstructor;
 import manfred.manfreditor.controller.command.Command;
 import manfred.manfreditor.controller.command.CommandResult;
-import manfred.manfreditor.mapobject.NewMapObjectModel;
+import manfred.manfreditor.newmapobject.model.NewMapObjectModel;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 import org.springframework.stereotype.Component;

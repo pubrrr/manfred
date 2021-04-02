@@ -1,10 +1,10 @@
-package manfred.manfreditor.mapobject.export;
+package manfred.manfreditor.newmapobject.model.export;
 
 import io.vavr.collection.List;
 import io.vavr.control.Try;
 import lombok.AllArgsConstructor;
 import manfred.data.persistence.reader.RawMapTileDtoReader;
-import manfred.manfreditor.mapobject.NewMapObjectData;
+import manfred.manfreditor.newmapobject.model.NewMapObjectData;
 import org.springframework.stereotype.Component;
 
 import java.io.File;

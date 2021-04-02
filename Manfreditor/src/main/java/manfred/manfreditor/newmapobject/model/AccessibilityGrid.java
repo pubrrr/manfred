@@ -1,9 +1,9 @@
-package manfred.manfreditor.mapobject;
+package manfred.manfreditor.newmapobject.model;
 
 import io.vavr.collection.Map;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import manfred.manfreditor.mapobject.NewMapObjectModel.PreviewTileCoordinate;
+import manfred.manfreditor.newmapobject.model.NewMapObjectModel.PreviewTileCoordinate;
 
 @AllArgsConstructor
 @EqualsAndHashCode

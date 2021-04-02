@@ -44,7 +44,9 @@ public class RawMapTileDtoReader {
     RawMapTileDto load(File yamlFile, File imageFile) throws InvalidInputException {
         try {
             RawMapTileDto mapTileDto = objectMapper.readValue(yamlFile, RawMapTileDto.class);
-            mapTileDto.setImageData(new ImageData(new FileInputStream(imageFile)));
+            FileInputStream inputStream = new FileInputStream(imageFile);
+            mapTileDto.setImageData(new ImageData(inputStream));
+            inputStream.close();
             mapTileDto.setImage(imageLoader.load(imageFile));
             return mapTileDto;
         } catch (IOException e) {

@@ -1,10 +1,10 @@
-package manfred.manfreditor.mapobject.export;
+package manfred.manfreditor.newmapobject.model.export;
 
 import io.vavr.collection.Map;
 import manfred.data.persistence.dto.RawMapTileDto;
-import manfred.manfreditor.mapobject.AccessibilityGrid;
-import manfred.manfreditor.mapobject.NewMapObjectData;
-import manfred.manfreditor.mapobject.NewMapObjectModel.PreviewTileCoordinate;
+import manfred.manfreditor.newmapobject.model.AccessibilityGrid;
+import manfred.manfreditor.newmapobject.model.NewMapObjectData;
+import manfred.manfreditor.newmapobject.model.NewMapObjectModel.PreviewTileCoordinate;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;

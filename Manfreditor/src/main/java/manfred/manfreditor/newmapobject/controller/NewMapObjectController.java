@@ -1,12 +1,13 @@
-package manfred.manfreditor.controller;
+package manfred.manfreditor.newmapobject.controller;
 
 import io.vavr.collection.Seq;
 import io.vavr.control.Validation;
 import lombok.AllArgsConstructor;
-import manfred.manfreditor.controller.newmapobject.ClickObjectPreviewCommand;
-import manfred.manfreditor.controller.newmapobject.LoadObjectImageCommand;
-import manfred.manfreditor.mapobject.NewMapObjectData;
-import manfred.manfreditor.mapobject.NewMapObjectModel;
+import manfred.manfreditor.controller.ControllerHelper;
+import manfred.manfreditor.newmapobject.controller.command.ClickObjectPreviewCommand;
+import manfred.manfreditor.newmapobject.controller.command.LoadObjectImageCommand;
+import manfred.manfreditor.newmapobject.model.NewMapObjectData;
+import manfred.manfreditor.newmapobject.model.NewMapObjectModel;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;

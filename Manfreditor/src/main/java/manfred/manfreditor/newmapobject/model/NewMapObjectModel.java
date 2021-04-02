@@ -1,4 +1,4 @@
-package manfred.manfreditor.mapobject;
+package manfred.manfreditor.newmapobject.model;
 
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;

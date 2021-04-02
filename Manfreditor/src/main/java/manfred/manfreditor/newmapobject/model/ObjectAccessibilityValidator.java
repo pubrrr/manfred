@@ -1,10 +1,10 @@
-package manfred.manfreditor.mapobject;
+package manfred.manfreditor.newmapobject.model;
 
 import io.vavr.collection.Map;
 import io.vavr.control.Validation;
 import org.springframework.stereotype.Component;
 
-import static manfred.manfreditor.mapobject.NewMapObjectModel.*;
+import static manfred.manfreditor.newmapobject.model.NewMapObjectModel.PreviewTileCoordinate;
 
 @Component
 public class ObjectAccessibilityValidator {

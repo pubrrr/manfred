@@ -2,8 +2,9 @@ package manfred.manfreditor.mapobject;
 
 import io.vavr.collection.HashMap;
 import io.vavr.control.Validation;
-import manfred.data.shared.PositiveInt;
-import manfred.manfreditor.mapobject.NewMapObjectModel.PreviewTileCoordinate;
+import manfred.manfreditor.newmapobject.model.AccessibilityGrid;
+import manfred.manfreditor.newmapobject.model.NewMapObjectModel.PreviewTileCoordinate;
+import manfred.manfreditor.newmapobject.model.ObjectAccessibilityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package manfred.manfreditor.gui.view.mapobject;
+package manfred.manfreditor.newmapobject.view;
 
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
