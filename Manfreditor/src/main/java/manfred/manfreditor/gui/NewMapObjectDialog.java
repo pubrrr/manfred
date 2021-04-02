@@ -76,7 +76,7 @@ public class NewMapObjectDialog extends Dialog {
         GridData nameFieldLayout = new GridData(SWT.TOP, SWT.END, true, false, 3, 1);
         nameFieldLayout.widthHint = 300;
         nameField.setLayoutData(nameFieldLayout);
-        nameField.addModifyListener(newMapObjectController.setName(nameField.getText()));
+        nameField.addModifyListener(newMapObjectController.setName(nameField::getText));
     }
 
     private void addImageFileInput(Shell shell) {

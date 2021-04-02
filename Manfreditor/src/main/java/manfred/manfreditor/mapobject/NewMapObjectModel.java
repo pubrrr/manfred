@@ -25,6 +25,7 @@ public class NewMapObjectModel {
     public void newSession() {
         this.name = null;
         this.imageData = null;
+        this.accessibilityGrid = HashMap.of(new PreviewTileCoordinate(0, 0), true);
     }
 
     public void setName(String name) {
@@ -46,7 +47,7 @@ public class NewMapObjectModel {
     public Validation<Seq<String>, NewMapObjectData> getResult() {
         return Validation
             .combine(
-                name == null ? Validation.invalid("no name given") : Validation.valid(this.name),
+                name == null || name.isEmpty() ? Validation.invalid("no name given") : Validation.valid(this.name),
                 imageData == null ? Validation.invalid("no image data given") : Validation.valid(this.imageData),
                 objectAccessibilityValidator.validate(getAccessibilityGrid())
             )

@@ -1,5 +1,6 @@
 package manfred.manfreditor.mapobject;
 
+import io.vavr.collection.HashMap;
 import io.vavr.collection.Seq;
 import io.vavr.control.Validation;
 import org.eclipse.swt.graphics.ImageData;
@@ -12,7 +13,10 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class NewMapObjectModelTest {
@@ -60,9 +64,11 @@ class NewMapObjectModelTest {
         ImageData imageData = someImageData();
         Validation<Seq<String>, NewMapObjectData> initialResult = underTest.getResult();
         assertThat(initialResult.isValid(), is(false));
+        verify(objectAccessibilityValidatorMock, times(1)).validate(eq(defaultAccessibilityGrid()));
 
         underTest.setName("name");
         underTest.setImageData(imageData);
+        underTest.invertAccessibility(new NewMapObjectModel.PreviewTileCoordinate(0, 0));
         Validation<Seq<String>, NewMapObjectData> validResult = underTest.getResult();
         assertThat(validResult.isValid(), is(true));
 
@@ -70,6 +76,11 @@ class NewMapObjectModelTest {
         Validation<Seq<String>, NewMapObjectData> resultAfterReset = underTest.getResult();
         assertThat(resultAfterReset.isValid(), is(false));
         assertThat(resultAfterReset.getError(), equalTo(initialResult.getError()));
+        verify(objectAccessibilityValidatorMock, times(2)).validate(eq(defaultAccessibilityGrid()));
+    }
+
+    private AccessibilityGrid defaultAccessibilityGrid() {
+        return new AccessibilityGrid(HashMap.of(new NewMapObjectModel.PreviewTileCoordinate(0, 0), true));
     }
 
     private ImageData someImageData() {

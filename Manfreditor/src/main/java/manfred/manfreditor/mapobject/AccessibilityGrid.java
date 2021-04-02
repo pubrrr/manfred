@@ -2,10 +2,11 @@ package manfred.manfreditor.mapobject;
 
 import io.vavr.collection.Map;
 import lombok.AllArgsConstructor;
-import manfred.data.shared.PositiveInt;
+import lombok.EqualsAndHashCode;
 import manfred.manfreditor.mapobject.NewMapObjectModel.PreviewTileCoordinate;
 
 @AllArgsConstructor
+@EqualsAndHashCode
 public class AccessibilityGrid {
 
     private final Map<PreviewTileCoordinate, Boolean> accessibilityGrid;

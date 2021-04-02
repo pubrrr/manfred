@@ -38,8 +38,8 @@ public class NewMapObjectController {
         newMapObjectModel.newSession();
     }
 
-    public ModifyListener setName(String name) {
-        return e -> newMapObjectModel.setName(name);
+    public ModifyListener setName(Supplier<String> nameSupplier) {
+        return e -> newMapObjectModel.setName(nameSupplier.get());
     }
 
     public SelectionListener setImageFromPath(Supplier<String> imagePathSupplier) {
