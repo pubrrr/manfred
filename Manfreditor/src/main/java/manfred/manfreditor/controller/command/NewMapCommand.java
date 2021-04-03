@@ -23,7 +23,7 @@ public class NewMapCommand implements Command {
 
         Map newMap = newMapFactory.create(newMapName, PositiveInt.of(columns), PositiveInt.of(rows));
         mapModel.setMap(newMap);
-        return CommandResult.success(() -> backup.restoreStateOf(mapModel));
+        return CommandResult.successWithRollback(() -> backup.restoreStateOf(mapModel));
     }
 
     @Component

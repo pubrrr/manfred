@@ -23,7 +23,7 @@ public class DeleteMapObjectCommand implements Command {
 
     private CommandResult deleteObjectAt(Map.TileCoordinate tileCoordinate) {
         return mapModel.deleteObjectAt(tileCoordinate)
-            .map(locatedMapObject -> CommandResult.success(() -> mapModel.forceInsertObjectAt(locatedMapObject)))
+            .map(locatedMapObject -> CommandResult.successWithRollback(() -> mapModel.forceInsertObjectAt(locatedMapObject)))
             .orElse(CommandResult.failure("No object could be deleted at tile (" + tileCoordinate.getX() + "," + tileCoordinate.getY() + ")"));
     }
 

@@ -37,8 +37,8 @@ public class SaveMapCommand implements Command {
 
     private Function<Option<PreviousFileContent>, CommandResult> successWithFileRestore() {
         return optionalPreviousContent -> optionalPreviousContent.fold(
-            () -> CommandResult.success(deleteCreatedFile()),
-            previousFileContent -> CommandResult.success(tryToRestorePreviousContent(previousFileContent))
+            () -> CommandResult.successWithRollback(deleteCreatedFile()),
+            previousFileContent -> CommandResult.successWithRollback(tryToRestorePreviousContent(previousFileContent))
         );
     }
 

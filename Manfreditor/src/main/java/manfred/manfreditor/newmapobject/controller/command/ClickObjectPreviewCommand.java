@@ -9,7 +9,7 @@ import org.eclipse.swt.graphics.Point;
 import org.springframework.stereotype.Component;
 
 import static manfred.manfreditor.controller.command.CommandResult.failure;
-import static manfred.manfreditor.controller.command.CommandResult.success;
+import static manfred.manfreditor.controller.command.CommandResult.successWithRollback;
 
 @AllArgsConstructor
 public class ClickObjectPreviewCommand implements Command {
@@ -26,7 +26,7 @@ public class ClickObjectPreviewCommand implements Command {
             .peek(newMapObjectModel::invertAccessibility)
             .fold(
                 () -> failure("no tile clicked"),
-                previewTileCoordinate -> success(() -> newMapObjectModel.invertAccessibility(previewTileCoordinate))
+                previewTileCoordinate -> successWithRollback(() -> newMapObjectModel.invertAccessibility(previewTileCoordinate))
             );
     }
 

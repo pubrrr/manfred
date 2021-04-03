@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 
 import static manfred.manfreditor.controller.command.CommandResult.failure;
-import static manfred.manfreditor.controller.command.CommandResult.success;
+import static manfred.manfreditor.controller.command.CommandResult.successWithRollback;
 
 @AllArgsConstructor
 public class CreateMapObjectCommand implements Command {
@@ -27,7 +27,7 @@ public class CreateMapObjectCommand implements Command {
             .flatMap(this::loadCreatedFiles)
             .fold(
                 exception -> failure(exception.getMessage()),
-                savedFilesAndLoadObjectRollback -> success(
+                savedFilesAndLoadObjectRollback -> successWithRollback(
                     deleteFiles(savedFilesAndLoadObjectRollback._1).andThen(savedFilesAndLoadObjectRollback._2)
                 )
             );

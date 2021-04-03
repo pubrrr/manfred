@@ -42,7 +42,7 @@ public class InsertMapObjectCommand implements Command {
             Validation<List<String>, ConcreteMapObject> validation = mapModel.tryInsertObjectAt(concreteMapObject, tileCoordinate);
             return validation.fold(
                 errorMessages -> CommandResult.failure(String.join(",\n", errorMessages)),
-                ignoreThis -> CommandResult.success(() -> mapModel.deleteObjectAt(tileCoordinate))
+                ignoreThis -> CommandResult.successWithRollback(() -> mapModel.deleteObjectAt(tileCoordinate))
             );
         };
     }

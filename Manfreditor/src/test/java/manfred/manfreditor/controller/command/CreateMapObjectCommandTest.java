@@ -40,7 +40,7 @@ class CreateMapObjectCommandTest {
         when(mapObjectExporterMock.export(any())).thenReturn(Try.success(List.of(yamlFileMock, imageFileMock)));
 
         RollbackOperation rollbackOperationMock = mock(RollbackOperation.class);
-        Command commandMock = () -> CommandResult.success(rollbackOperationMock);
+        Command commandMock = () -> CommandResult.successWithRollback(rollbackOperationMock);
         when(loadMapObjectCommandFactoryMock.create(any(File.class), any(File.class))).thenReturn(commandMock);
 
         CommandResult result = commandFactory.create(input).execute();

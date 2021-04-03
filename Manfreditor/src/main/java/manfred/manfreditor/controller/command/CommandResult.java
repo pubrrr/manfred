@@ -7,13 +7,13 @@ import java.util.function.Consumer;
 
 public abstract class CommandResult {
 
-    public abstract boolean wasSuccessful();
-
     public abstract CommandResult registerRollbackOperation(CommandHistory commandHistory);
 
     public abstract void onFailure(Consumer<String> errorConsumer);
 
-    public static CommandResult success(RollbackOperation rollbackOperation) {
+    public abstract Try<RollbackOperation> toTry();
+
+    public static CommandResult successWithRollback(RollbackOperation rollbackOperation) {
         return new Success(rollbackOperation);
     }
 
@@ -21,19 +21,12 @@ public abstract class CommandResult {
         return new Failure(errorMessage);
     }
 
-    public abstract Try<RollbackOperation> toTry();
-
     static class Success extends CommandResult {
 
         private final RollbackOperation rollbackOperation;
 
         public Success(RollbackOperation rollbackOperation) {
             this.rollbackOperation = rollbackOperation;
-        }
-
-        @Override
-        public boolean wasSuccessful() {
-            return true;
         }
 
         @Override
@@ -60,11 +53,6 @@ public abstract class CommandResult {
 
         private Failure(String errorMessage) {
             this.errorMessage = errorMessage;
-        }
-
-        @Override
-        public boolean wasSuccessful() {
-            return false;
         }
 
         @Override

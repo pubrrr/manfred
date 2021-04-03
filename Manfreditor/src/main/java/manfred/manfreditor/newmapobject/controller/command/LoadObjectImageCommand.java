@@ -12,7 +12,7 @@ import java.util.Optional;
 
 import static io.vavr.API.Try;
 import static manfred.manfreditor.controller.command.CommandResult.failure;
-import static manfred.manfreditor.controller.command.CommandResult.success;
+import static manfred.manfreditor.controller.command.CommandResult.successWithRollback;
 
 @AllArgsConstructor
 public class LoadObjectImageCommand implements Command {
@@ -30,7 +30,7 @@ public class LoadObjectImageCommand implements Command {
             .peek(newMapObjectModel::setImageData)
             .fold(
                 throwable -> failure(throwable.getMessage()),
-                imageData -> success(() -> newMapObjectModel.setImageData(previousImageData.orElse(null)))
+                imageData -> successWithRollback(() -> newMapObjectModel.setImageData(previousImageData.orElse(null)))
             );
     }
 

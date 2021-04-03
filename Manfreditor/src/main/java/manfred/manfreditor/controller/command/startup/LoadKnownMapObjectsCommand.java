@@ -36,7 +36,7 @@ public class LoadKnownMapObjectsCommand implements Command {
                 filesWithSameName.filter(file -> file.getName().endsWith("png")).head()
             ))
             .forEach(Command::execute);
-        return CommandResult.success(() -> {});
+        return CommandResult.successWithRollback(() -> {});
     }
 
     private String stripFileExtension(String fileName) {

@@ -38,7 +38,7 @@ public class LoadMapCommand implements Command {
         } catch (InvalidInputException e) {
             return CommandResult.failure(e.getMessage());
         }
-        return CommandResult.success(() -> backup.restoreStateOf(mapModel));
+        return CommandResult.successWithRollback(() -> backup.restoreStateOf(mapModel));
     }
 
     @Component

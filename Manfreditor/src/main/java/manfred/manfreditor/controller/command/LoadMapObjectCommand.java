@@ -34,7 +34,7 @@ public class LoadMapObjectCommand implements Command {
             return CommandResult.failure(e.getMessage());
         }
         MapObjectRepository.ObjectKey newKey = mapObjectRepository.populateWith(validatedMapTileDto);
-        return CommandResult.success(() -> mapObjectRepository.delete(newKey));
+        return CommandResult.successWithRollback(() -> mapObjectRepository.delete(newKey));
     }
 
     @Component
