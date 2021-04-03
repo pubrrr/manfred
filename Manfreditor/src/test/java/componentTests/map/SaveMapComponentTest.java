@@ -2,11 +2,11 @@ package componentTests.map;
 
 import componentTests.TestManfreditorContext;
 import manfred.manfreditor.common.FileHelper;
-import manfred.manfreditor.controller.command.CommandHistory;
-import manfred.manfreditor.controller.command.CommandResult;
-import manfred.manfreditor.controller.command.LoadMapCommand;
-import manfred.manfreditor.controller.command.SaveMapCommand;
-import manfred.manfreditor.gui.PopupProvider;
+import manfred.manfreditor.common.command.CommandHistory;
+import manfred.manfreditor.common.command.CommandResult;
+import manfred.manfreditor.map.controller.command.LoadMapCommand;
+import manfred.manfreditor.map.controller.command.SaveMapCommand;
+import manfred.manfreditor.common.PopupProvider;
 import org.eclipse.swt.SWT;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

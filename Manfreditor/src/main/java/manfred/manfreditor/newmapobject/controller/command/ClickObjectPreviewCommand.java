@@ -1,15 +1,15 @@
 package manfred.manfreditor.newmapobject.controller.command;
 
 import lombok.AllArgsConstructor;
-import manfred.manfreditor.controller.command.Command;
-import manfred.manfreditor.controller.command.CommandResult;
+import manfred.manfreditor.common.command.Command;
+import manfred.manfreditor.common.command.CommandResult;
 import manfred.manfreditor.newmapobject.view.NewMapObjectView;
 import manfred.manfreditor.newmapobject.model.NewMapObjectModel;
 import org.eclipse.swt.graphics.Point;
 import org.springframework.stereotype.Component;
 
-import static manfred.manfreditor.controller.command.CommandResult.failure;
-import static manfred.manfreditor.controller.command.CommandResult.success;
+import static manfred.manfreditor.common.command.CommandResult.failure;
+import static manfred.manfreditor.common.command.CommandResult.successWithRollback;
 
 @AllArgsConstructor
 public class ClickObjectPreviewCommand implements Command {
@@ -26,7 +26,7 @@ public class ClickObjectPreviewCommand implements Command {
             .peek(newMapObjectModel::invertAccessibility)
             .fold(
                 () -> failure("no tile clicked"),
-                previewTileCoordinate -> success(() -> newMapObjectModel.invertAccessibility(previewTileCoordinate))
+                previewTileCoordinate -> successWithRollback(() -> newMapObjectModel.invertAccessibility(previewTileCoordinate))
             );
     }
 

@@ -3,7 +3,7 @@ package manfred.manfreditor.newmapobject.controller;
 import io.vavr.collection.Seq;
 import io.vavr.control.Validation;
 import lombok.AllArgsConstructor;
-import manfred.manfreditor.controller.ControllerHelper;
+import manfred.manfreditor.common.command.ControllerHelper;
 import manfred.manfreditor.newmapobject.controller.command.ClickObjectPreviewCommand;
 import manfred.manfreditor.newmapobject.controller.command.LoadObjectImageCommand;
 import manfred.manfreditor.newmapobject.model.NewMapObjectData;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static manfred.manfreditor.controller.ControllerHelper.LEFT_MOUSE_BUTTON;
+import static manfred.manfreditor.common.command.ControllerHelper.LEFT_MOUSE_BUTTON;
 
 @Component
 @AllArgsConstructor

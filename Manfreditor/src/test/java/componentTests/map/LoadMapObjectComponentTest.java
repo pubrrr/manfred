@@ -1,10 +1,10 @@
 package componentTests.map;
 
 import componentTests.TestManfreditorContext;
-import manfred.manfreditor.controller.command.CommandHistory;
-import manfred.manfreditor.controller.command.CommandResult;
-import manfred.manfreditor.controller.command.LoadMapObjectCommand;
-import manfred.manfreditor.mapobject.MapObjectRepository;
+import manfred.manfreditor.common.command.CommandHistory;
+import manfred.manfreditor.common.command.CommandResult;
+import manfred.manfreditor.map.controller.command.LoadMapObjectCommand;
+import manfred.manfreditor.map.model.mapobject.MapObjectRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

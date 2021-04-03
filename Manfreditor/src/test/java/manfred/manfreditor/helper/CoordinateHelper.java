@@ -3,7 +3,7 @@ package manfred.manfreditor.helper;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.data.shared.PositiveInt;
-import manfred.manfreditor.map.Map;
+import manfred.manfreditor.map.model.Map;
 
 import java.util.ArrayList;
 import java.util.HashMap;

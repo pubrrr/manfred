@@ -48,7 +48,7 @@ public class RawMapReader {
     public Try<Option<PreviousFileContent>> save(RawMapDto mapDto, File targetFile) {
         return Try.of(() -> targetFile.isFile() ? Files.readAllLines(targetFile.toPath()) : List.of(""))
             .map(lines -> String.join("\n", lines))
-            .map(previousFileContent -> previousFileContent.length() > 0
+            .map(previousFileContent -> !previousFileContent.isEmpty()
                 ? Option.some(new PreviousFileContent(previousFileContent))
                 : Option.<PreviousFileContent>none())
             .andThenTry(() -> objectMapper.writeValue(targetFile, mapDto));

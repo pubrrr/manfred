@@ -1,6 +1,6 @@
 package manfred.manfreditor.helper;
 
-import manfred.manfreditor.controller.command.CommandResult;
+import manfred.manfreditor.common.command.CommandResult;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 

@@ -1,8 +1,8 @@
 package manfred.manfreditor.newmapobject.controller.command;
 
 import lombok.AllArgsConstructor;
-import manfred.manfreditor.controller.command.Command;
-import manfred.manfreditor.controller.command.CommandResult;
+import manfred.manfreditor.common.command.Command;
+import manfred.manfreditor.common.command.CommandResult;
 import manfred.manfreditor.newmapobject.model.NewMapObjectModel;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 import static io.vavr.API.Try;
-import static manfred.manfreditor.controller.command.CommandResult.failure;
-import static manfred.manfreditor.controller.command.CommandResult.success;
+import static manfred.manfreditor.common.command.CommandResult.failure;
+import static manfred.manfreditor.common.command.CommandResult.successWithRollback;
 
 @AllArgsConstructor
 public class LoadObjectImageCommand implements Command {
@@ -30,7 +30,7 @@ public class LoadObjectImageCommand implements Command {
             .peek(newMapObjectModel::setImageData)
             .fold(
                 throwable -> failure(throwable.getMessage()),
-                imageData -> success(() -> newMapObjectModel.setImageData(previousImageData.orElse(null)))
+                imageData -> successWithRollback(() -> newMapObjectModel.setImageData(previousImageData.orElse(null)))
             );
     }
 
