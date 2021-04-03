@@ -1,15 +1,15 @@
 package componentTests.map;
 
-import manfred.manfreditor.controller.command.CommandHistory;
-import manfred.manfreditor.controller.command.CommandResult;
-import manfred.manfreditor.controller.command.DeleteMapObjectCommand;
-import manfred.manfreditor.controller.command.LoadMapCommand;
-import manfred.manfreditor.gui.view.map.MapView;
-import manfred.manfreditor.gui.view.map.TileViewSize;
-import manfred.manfreditor.map.MapModel;
-import manfred.manfreditor.mapobject.ConcreteMapObject;
-import manfred.manfreditor.mapobject.MapObject;
-import manfred.manfreditor.mapobject.None;
+import manfred.manfreditor.common.command.CommandHistory;
+import manfred.manfreditor.common.command.CommandResult;
+import manfred.manfreditor.map.controller.command.DeleteMapObjectCommand;
+import manfred.manfreditor.map.controller.command.LoadMapCommand;
+import manfred.manfreditor.map.view.map.MapView;
+import manfred.manfreditor.map.view.map.TileViewSize;
+import manfred.manfreditor.map.model.MapModel;
+import manfred.manfreditor.map.model.mapobject.ConcreteMapObject;
+import manfred.manfreditor.map.model.mapobject.MapObject;
+import manfred.manfreditor.map.model.mapobject.None;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;

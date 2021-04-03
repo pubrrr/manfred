@@ -59,7 +59,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.3</version>
                 <configuration>
-                    <mainClass>manfred.manfreditor.Manfreditor</mainClass>
+                    <mainClass>manfred.manfreditor.application.Manfreditor</mainClass>
                 </configuration>
             </plugin>
         </plugins>

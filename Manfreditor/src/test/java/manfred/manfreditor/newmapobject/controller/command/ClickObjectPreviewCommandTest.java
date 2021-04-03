@@ -1,8 +1,8 @@
 package manfred.manfreditor.newmapobject.controller.command;
 
 import io.vavr.control.Option;
-import manfred.manfreditor.controller.command.CommandHistory;
-import manfred.manfreditor.controller.command.CommandResult;
+import manfred.manfreditor.common.command.CommandHistory;
+import manfred.manfreditor.common.command.CommandResult;
 import manfred.manfreditor.newmapobject.model.NewMapObjectModel;
 import manfred.manfreditor.newmapobject.model.NewMapObjectModel.PreviewTileCoordinate;
 import manfred.manfreditor.newmapobject.view.NewMapObjectView;

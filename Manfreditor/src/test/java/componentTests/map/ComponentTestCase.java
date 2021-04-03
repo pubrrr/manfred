@@ -1,7 +1,7 @@
 package componentTests.map;
 
-import manfred.manfreditor.controller.command.CommandResult;
-import manfred.manfreditor.controller.command.LoadMapCommand;
+import manfred.manfreditor.common.command.CommandResult;
+import manfred.manfreditor.map.controller.command.LoadMapCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static manfred.manfreditor.helper.SuccessfulCommandMatcher.wasSuccessful;
