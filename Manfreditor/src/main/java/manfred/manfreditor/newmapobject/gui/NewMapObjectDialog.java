@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.springframework.stereotype.Component;
 
@@ -43,13 +44,14 @@ public class NewMapObjectDialog extends Dialog {
     public Optional<NewMapObjectData> open() {
         Shell parent = getParent();
         Shell shell = new Shell(parent);
-        shell.setSize(500, 620);
+        shell.setSize(500, 640);
         shell.setText("Neue Map");
         GridLayout layout = new GridLayout(4, false);
         shell.setLayout(layout);
 
         addNameTextField(shell);
         addImageFileInput(shell);
+        addRowAndColumnSpinner(shell);
 
         addObjectCanvas(shell);
 
@@ -98,6 +100,22 @@ public class NewMapObjectDialog extends Dialog {
         loadButton.setText("laden");
         loadButton.setLayoutData(new GridData(SWT.END, SWT.TOP, true, true));
         loadButton.addSelectionListener(newMapObjectController.setImageFromPath(imagePathTextField::getText));
+    }
+
+    private void addRowAndColumnSpinner(Shell shell) {
+        Label columnsLabel = new Label(shell, 0);
+        columnsLabel.setText("Spalten (x):");
+        GridData columnsLabelLayout = new GridData(80, 20);
+        columnsLabelLayout.verticalAlignment = SWT.BEGINNING;
+        columnsLabel.setLayoutData(columnsLabelLayout);
+
+        Spinner columnsSpinner = new Spinner(shell, 0);
+        GridData columnsSpinnerLayout = new GridData(SWT.END, SWT.TOP, true, false);
+        columnsSpinner.setLayoutData(columnsSpinnerLayout);
+        columnsSpinner.setMinimum(1);
+        columnsSpinner.setMaximum(20);
+        columnsSpinner.addModifyListener(e -> newMapObjectController.setColumns(columnsSpinner::getSelection));
+
     }
 
     private void addObjectCanvas(Shell shell) {

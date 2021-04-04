@@ -2,12 +2,14 @@ package manfred.manfreditor.newmapobject.model;
 
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Seq;
+import io.vavr.collection.Set;
 import io.vavr.control.Validation;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static manfred.manfreditor.newmapobject.model.NewMapObjectModel.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
@@ -68,7 +70,7 @@ class NewMapObjectModelTest {
 
         underTest.setName("name");
         underTest.setImageData(imageData);
-        underTest.invertAccessibility(new NewMapObjectModel.PreviewTileCoordinate(0, 0));
+        underTest.invertAccessibility(new PreviewTileCoordinate(0, 0));
         Validation<Seq<String>, NewMapObjectData> validResult = underTest.getResult();
         assertThat(validResult.isValid(), is(true));
 
@@ -79,8 +81,37 @@ class NewMapObjectModelTest {
         verify(objectAccessibilityValidatorMock, times(2)).validate(eq(defaultAccessibilityGrid()));
     }
 
+    @Test
+    void setAndGetColumns() {
+        assertThat(underTest.getColumns(), is(1));
+
+        underTest.setColumns(5);
+        assertThat(underTest.getColumns(), is(5));
+
+        AccessibilityGrid accessibilityGrid = underTest.getAccessibilityGrid();
+        Set<PreviewTileCoordinate> accessibilityGridCoordinates = accessibilityGrid.getGrid().keySet();
+        assertThat(accessibilityGridCoordinates, containsInAnyOrder(
+            new PreviewTileCoordinate(0, 0),
+            new PreviewTileCoordinate(1, 0),
+            new PreviewTileCoordinate(2, 0),
+            new PreviewTileCoordinate(3, 0),
+            new PreviewTileCoordinate(4, 0)
+        ));
+
+        underTest.setColumns(3);
+        assertThat(underTest.getColumns(), is(3));
+
+        AccessibilityGrid accessibilityGrid2 = underTest.getAccessibilityGrid();
+        Set<PreviewTileCoordinate> accessibilityGridCoordinates2 = accessibilityGrid2.getGrid().keySet();
+        assertThat(accessibilityGridCoordinates2, containsInAnyOrder(
+            new PreviewTileCoordinate(0, 0),
+            new PreviewTileCoordinate(1, 0),
+            new PreviewTileCoordinate(2, 0)
+        ));
+    }
+
     private AccessibilityGrid defaultAccessibilityGrid() {
-        return new AccessibilityGrid(HashMap.of(new NewMapObjectModel.PreviewTileCoordinate(0, 0), true));
+        return new AccessibilityGrid(HashMap.of(new PreviewTileCoordinate(0, 0), true));
     }
 
     private ImageData someImageData() {

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import manfred.manfreditor.common.command.ControllerHelper;
 import manfred.manfreditor.newmapobject.controller.command.ClickObjectPreviewCommand;
 import manfred.manfreditor.newmapobject.controller.command.LoadObjectImageCommand;
+import manfred.manfreditor.newmapobject.controller.command.SetColumnsCommand;
 import manfred.manfreditor.newmapobject.model.NewMapObjectData;
 import manfred.manfreditor.newmapobject.model.NewMapObjectModel;
 import org.eclipse.swt.events.ModifyListener;
@@ -31,6 +32,7 @@ public class NewMapObjectController {
     private final ControllerHelper controllerHelper;
     private final LoadObjectImageCommand.Factory loadObjectImageCommandFactory;
     private final ClickObjectPreviewCommand.Factory clickObjectPreviewCommandFactory;
+    private final SetColumnsCommand.Factory setColumnsCommandFactory;
 
     private final List<Runnable> postActions;
 
@@ -73,5 +75,10 @@ public class NewMapObjectController {
 
     public void addPostAction(Runnable postAction) {
         this.postActions.add(postAction);
+    }
+
+    public void setColumns(Supplier<Integer> rowsSupplier) {
+        controllerHelper.execute(setColumnsCommandFactory.create(rowsSupplier.get()));
+        postActions.forEach(Runnable::run);
     }
 }
