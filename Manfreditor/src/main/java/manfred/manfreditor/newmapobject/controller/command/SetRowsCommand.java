@@ -7,16 +7,16 @@ import manfred.manfreditor.newmapobject.model.NewMapObjectModel;
 import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
-public class SetColumnsCommand implements Command {
+public class SetRowsCommand implements Command {
 
     private final NewMapObjectModel newMapObjectModel;
-    private final int columns;
+    private final int rows;
 
     @Override
     public CommandResult execute() {
-        int previousColumns = this.newMapObjectModel.getColumns();
-        this.newMapObjectModel.setColumns(this.columns);
-        return CommandResult.successWithRollback(() -> this.newMapObjectModel.setColumns(previousColumns));
+        int previousRows = this.newMapObjectModel.getRows();
+        this.newMapObjectModel.setRows(this.rows);
+        return CommandResult.successWithRollback(() -> this.newMapObjectModel.setRows(previousRows));
     }
 
     @Component
@@ -25,8 +25,8 @@ public class SetColumnsCommand implements Command {
 
         private final NewMapObjectModel newMapObjectModel;
 
-        public Command create(int columns) {
-            return new SetColumnsCommand(newMapObjectModel, columns);
+        public Command create(int rows) {
+            return new SetRowsCommand(newMapObjectModel, rows);
         }
     }
 }

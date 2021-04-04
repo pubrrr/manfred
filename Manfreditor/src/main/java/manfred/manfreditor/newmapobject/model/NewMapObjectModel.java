@@ -1,10 +1,11 @@
 package manfred.manfreditor.newmapobject.model;
 
 import io.vavr.Tuple;
+import io.vavr.Tuple2;
 import io.vavr.collection.HashMap;
+import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import io.vavr.collection.Seq;
-import io.vavr.collection.Set;
 import io.vavr.collection.Stream;
 import io.vavr.control.Validation;
 import lombok.AllArgsConstructor;
@@ -71,20 +72,42 @@ public class NewMapObjectModel {
         return this.getAccessibilityGrid().getSizeX();
     }
 
-    public void setColumns(int rows) {
-        if (rows <= getColumns()) {
-            this.accessibilityGrid = this.accessibilityGrid.filterKeys(previewTileCoordinate -> previewTileCoordinate.x < rows);
+    public void setColumns(int columns) {
+        int currentColumns = getColumns();
+        if (columns <= currentColumns) {
+            this.accessibilityGrid = this.accessibilityGrid.filterKeys(tileCoordinate -> tileCoordinate.x < columns);
         } else {
             this.accessibilityGrid = this.accessibilityGrid.merge(
-                Stream.range(getAccessibilityGrid().getSizeX(), rows)
+                Stream.range(currentColumns, columns)
                     .crossProduct(getCoordinateRange(PreviewTileCoordinate::y))
-                    .toMap(xAndY -> Tuple.of(new PreviewTileCoordinate(xAndY._1, xAndY._2), true))
+                    .toMap(xAndYToNewAccessibleTile())
             );
         }
     }
 
-    private Set<Integer> getCoordinateRange(Function<PreviewTileCoordinate, Integer> coordinateToValue) {
-        return accessibilityGrid.keySet().map(coordinateToValue).distinct();
+    public int getRows() {
+        return this.getAccessibilityGrid().getSizeY();
+    }
+
+    public void setRows(int rows) {
+        int currentRows = getRows();
+        if (rows <= currentRows) {
+            this.accessibilityGrid = this.accessibilityGrid.filterKeys(tileCoordinate -> tileCoordinate.y < rows);
+        } else {
+            this.accessibilityGrid = this.accessibilityGrid.merge(
+                getCoordinateRange(PreviewTileCoordinate::x)
+                    .crossProduct(Stream.range(currentRows, rows))
+                    .toMap(xAndYToNewAccessibleTile())
+            );
+        }
+    }
+
+    private List<Integer> getCoordinateRange(Function<PreviewTileCoordinate, Integer> coordinateToValue) {
+        return accessibilityGrid.keySet().map(coordinateToValue).distinct().toList();
+    }
+
+    private Function<Tuple2<Integer, Integer>, Tuple2<PreviewTileCoordinate, Boolean>> xAndYToNewAccessibleTile() {
+        return xAndY -> Tuple.of(new PreviewTileCoordinate(xAndY._1, xAndY._2), true);
     }
 
     @AllArgsConstructor

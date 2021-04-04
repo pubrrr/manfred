@@ -44,7 +44,7 @@ public class NewMapObjectDialog extends Dialog {
     public Optional<NewMapObjectData> open() {
         Shell parent = getParent();
         Shell shell = new Shell(parent);
-        shell.setSize(500, 640);
+        shell.setSize(500, 680);
         shell.setText("Neue Map");
         GridLayout layout = new GridLayout(4, false);
         shell.setLayout(layout);
@@ -110,12 +110,26 @@ public class NewMapObjectDialog extends Dialog {
         columnsLabel.setLayoutData(columnsLabelLayout);
 
         Spinner columnsSpinner = new Spinner(shell, 0);
-        GridData columnsSpinnerLayout = new GridData(SWT.END, SWT.TOP, true, false);
+        GridData columnsSpinnerLayout = new GridData(SWT.BEGINNING, SWT.TOP, true, false);
+        columnsSpinnerLayout.horizontalSpan = 3;
         columnsSpinner.setLayoutData(columnsSpinnerLayout);
         columnsSpinner.setMinimum(1);
         columnsSpinner.setMaximum(20);
         columnsSpinner.addModifyListener(e -> newMapObjectController.setColumns(columnsSpinner::getSelection));
 
+        Label rowsLabel = new Label(shell, 0);
+        rowsLabel.setText("Zeilen (y):");
+        GridData rowsLabelLayout = new GridData(80, 20);
+        rowsLabelLayout.verticalAlignment = SWT.BEGINNING;
+        rowsLabel.setLayoutData(rowsLabelLayout);
+
+        Spinner rowsSpinner = new Spinner(shell, 0);
+        GridData rowsSpinnerLayout = new GridData(SWT.BEGINNING, SWT.TOP, true, false);
+        rowsSpinnerLayout.horizontalSpan = 3;
+        rowsSpinner.setLayoutData(rowsSpinnerLayout);
+        rowsSpinner.setMinimum(1);
+        rowsSpinner.setMaximum(20);
+        rowsSpinner.addModifyListener(e -> newMapObjectController.setRows(rowsSpinner::getSelection));
     }
 
     private void addObjectCanvas(Shell shell) {

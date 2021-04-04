@@ -110,6 +110,71 @@ class NewMapObjectModelTest {
         ));
     }
 
+    @Test
+    void setAndGetRows() {
+        assertThat(underTest.getRows(), is(1));
+
+        underTest.setRows(5);
+        assertThat(underTest.getRows(), is(5));
+
+        AccessibilityGrid accessibilityGrid = underTest.getAccessibilityGrid();
+        Set<PreviewTileCoordinate> accessibilityGridCoordinates = accessibilityGrid.getGrid().keySet();
+        assertThat(accessibilityGridCoordinates, containsInAnyOrder(
+            new PreviewTileCoordinate(0, 0),
+            new PreviewTileCoordinate(0, 1),
+            new PreviewTileCoordinate(0, 2),
+            new PreviewTileCoordinate(0, 3),
+            new PreviewTileCoordinate(0, 4)
+        ));
+
+        underTest.setRows(3);
+        assertThat(underTest.getRows(), is(3));
+
+        AccessibilityGrid accessibilityGrid2 = underTest.getAccessibilityGrid();
+        Set<PreviewTileCoordinate> accessibilityGridCoordinates2 = accessibilityGrid2.getGrid().keySet();
+        assertThat(accessibilityGridCoordinates2, containsInAnyOrder(
+            new PreviewTileCoordinate(0, 0),
+            new PreviewTileCoordinate(0, 1),
+            new PreviewTileCoordinate(0, 2)
+        ));
+    }
+
+    @Test
+    void setRowsAndColumns() {
+        underTest.setColumns(4);
+        underTest.setRows(2);
+
+        assertThat(underTest.getColumns(), is(4));
+        assertThat(underTest.getRows(), is(2));
+
+        AccessibilityGrid accessibilityGrid = underTest.getAccessibilityGrid();
+        Set<PreviewTileCoordinate> accessibilityGridCoordinates = accessibilityGrid.getGrid().keySet();
+        assertThat(accessibilityGridCoordinates, containsInAnyOrder(
+            new PreviewTileCoordinate(0, 0),
+            new PreviewTileCoordinate(1, 0),
+            new PreviewTileCoordinate(2, 0),
+            new PreviewTileCoordinate(3, 0),
+            new PreviewTileCoordinate(0, 1),
+            new PreviewTileCoordinate(1, 1),
+            new PreviewTileCoordinate(2, 1),
+            new PreviewTileCoordinate(3, 1)
+        ));
+
+        underTest.setColumns(3);
+        underTest.setRows(1);
+
+        assertThat(underTest.getColumns(), is(3));
+        assertThat(underTest.getRows(), is(1));
+
+        AccessibilityGrid accessibilityGrid2 = underTest.getAccessibilityGrid();
+        Set<PreviewTileCoordinate> accessibilityGridCoordinates2 = accessibilityGrid2.getGrid().keySet();
+        assertThat(accessibilityGridCoordinates2, containsInAnyOrder(
+            new PreviewTileCoordinate(0, 0),
+            new PreviewTileCoordinate(1, 0),
+            new PreviewTileCoordinate(2, 0)
+        ));
+    }
+
     private AccessibilityGrid defaultAccessibilityGrid() {
         return new AccessibilityGrid(HashMap.of(new PreviewTileCoordinate(0, 0), true));
     }
