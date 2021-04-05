@@ -2,6 +2,7 @@ package manfred.manfreditor.application;
 
 import manfred.data.DataContext;
 import manfred.data.infrastructure.map.TileConversionRule;
+import manfred.manfreditor.application.startup.LoadKnownMapsCommand;
 import manfred.manfreditor.common.CommonContext;
 import manfred.manfreditor.common.command.Command;
 import manfred.manfreditor.application.startup.LoadKnownMapObjectsCommand;
@@ -51,8 +52,11 @@ public class ManfreditorContext {
     }
 
     @Bean("StartupCommands")
-    public List<Command> startupCommands(LoadKnownMapObjectsCommand loadKnownMapObjectsCommand) {
-        return List.of(loadKnownMapObjectsCommand);
+    public List<Command> startupCommands(
+        LoadKnownMapObjectsCommand loadKnownMapObjectsCommand,
+        LoadKnownMapsCommand loadKnownMapsCommand
+    ) {
+        return List.of(loadKnownMapObjectsCommand, loadKnownMapsCommand);
     }
 
     @Bean

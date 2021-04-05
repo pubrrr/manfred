@@ -26,18 +26,18 @@ public class RawMapReader {
     public RawMapDto load(String name) throws InvalidInputException {
         URL yamlURL = urlHelper.getResourceForMap(name).orElseThrow(invalidInputException(name));
 
-        return load(yamlURL);
+        return load(new File(yamlURL.getFile()));
     }
 
     public RawMapDto load(MapSource source) throws InvalidInputException {
-        return load(source.getMapUrl());
+        return load(source.getMapFile());
     }
 
-    RawMapDto load(URL yamlURL) throws InvalidInputException {
+    RawMapDto load(File yamlFile) throws InvalidInputException {
         try {
-            return objectMapper.readValue(yamlURL, RawMapDto.class);
+            return objectMapper.readValue(yamlFile, RawMapDto.class);
         } catch (IOException e) {
-            throw new InvalidInputException("Could not read map from " + yamlURL, e);
+            throw new InvalidInputException("Could not read map from " + yamlFile, e);
         }
     }
 

@@ -1,5 +1,6 @@
 package componentTests.map;
 
+import componentTests.ComponentTestCase;
 import componentTests.TestManfreditorContext;
 import manfred.manfreditor.common.command.CommandHistory;
 import manfred.manfreditor.common.command.CommandResult;

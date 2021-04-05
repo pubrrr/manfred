@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static io.vavr.API.TODO;
+
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoadMapCommand implements Command {
 
@@ -35,7 +37,7 @@ public class LoadMapCommand implements Command {
         }
 
         try {
-            Map newMap = mapProvider.provide(new MapSource(mapUrl));
+            Map newMap = mapProvider.provide(new MapSource(TODO()));
             mapModel.setMap(newMap);
         } catch (InvalidInputException e) {
             return CommandResult.failure(e.getMessage());

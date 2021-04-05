@@ -1,4 +1,4 @@
-package componentTests.map;
+package componentTests;
 
 import manfred.manfreditor.common.command.CommandResult;
 import manfred.manfreditor.map.controller.command.LoadMapCommand;
