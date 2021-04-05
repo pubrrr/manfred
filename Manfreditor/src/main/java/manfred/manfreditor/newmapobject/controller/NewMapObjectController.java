@@ -47,15 +47,9 @@ public class NewMapObjectController {
         return e -> newMapObjectModel.setName(nameSupplier.get());
     }
 
-    public SelectionListener setImageFromPath(Supplier<String> imagePathSupplier) {
-        return new SelectionAdapter() {
-
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                controllerHelper.execute(loadObjectImageCommandFactory.create(imagePathSupplier.get()));
-                postActions.forEach(Runnable::run);
-            }
-        };
+    public void setImageFromPath(Supplier<String> imagePathSupplier) {
+        controllerHelper.execute(loadObjectImageCommandFactory.create(imagePathSupplier.get()));
+        postActions.forEach(Runnable::run);
     }
 
     public MouseListener clickOnObjectPreview(Supplier<Point> canvasSizeSupplier) {
