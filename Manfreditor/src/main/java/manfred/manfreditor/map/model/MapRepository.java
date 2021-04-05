@@ -1,22 +1,27 @@
 package manfred.manfreditor.map.model;
 
-import io.vavr.collection.List;
+import io.vavr.collection.HashMap;
+import io.vavr.collection.Set;
 import lombok.EqualsAndHashCode;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MapRepository {
 
+    private HashMap<MapKey, Map> repository = HashMap.empty();
+
     public MapKey populateWith(Map map) {
-        return null;
+        MapKey newKey = new MapKey(map.getName());
+        this.repository = this.repository.put(newKey, map);
+        return newKey;
     }
 
     public Map get(MapKey key) {
-        return null;
+        return this.repository.get(key).get();
     }
 
-    public List<MapKey> getKeys() {
-        return List.empty();
+    public Set<MapKey> getKeys() {
+        return this.repository.keySet();
     }
 
     @EqualsAndHashCode

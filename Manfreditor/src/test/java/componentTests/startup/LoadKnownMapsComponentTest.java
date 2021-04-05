@@ -20,6 +20,7 @@ public class LoadKnownMapsComponentTest {
     @Autowired
     private LoadKnownMapsCommand loadKnownMapsCommand;
 
+    @Autowired
     private MapRepository mapRepository;
 
     @Test
@@ -29,9 +30,9 @@ public class LoadKnownMapsComponentTest {
         CommandResult result = loadKnownMapsCommand.execute();
 
         assertThat(result, wasSuccessful());
-        Option<MapRepository.MapKey> waldKey = mapRepository.getKeys().find(key -> key.value.equals("wald"));
+        Option<MapRepository.MapKey> waldKey = mapRepository.getKeys().find(key -> key.value.equals("Wald"));
         assertThat(waldKey.isDefined(), is(true));
-        assertThat(mapRepository.get(waldKey.get()).getName(), is("wald"));
+        assertThat(mapRepository.get(waldKey.get()).getName(), is("Wald"));
     }
 
     @Configuration
