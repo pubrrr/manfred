@@ -3,6 +3,7 @@ package manfred.manfreditor.map.model;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Set;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,6 +25,7 @@ public class MapRepository {
         return this.repository.keySet();
     }
 
+    @ToString
     @EqualsAndHashCode
     public static class MapKey {
 
