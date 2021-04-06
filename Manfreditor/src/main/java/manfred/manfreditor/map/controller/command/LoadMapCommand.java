@@ -2,58 +2,39 @@ package manfred.manfreditor.map.controller.command;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import manfred.data.InvalidInputException;
-import manfred.data.persistence.reader.MapSource;
 import manfred.manfreditor.common.Memento;
 import manfred.manfreditor.common.command.Command;
 import manfred.manfreditor.common.command.CommandResult;
 import manfred.manfreditor.map.model.Map;
 import manfred.manfreditor.map.model.MapModel;
-import manfred.manfreditor.map.model.MapProvider;
+import manfred.manfreditor.map.model.MapRepository;
 import org.springframework.stereotype.Component;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import static io.vavr.API.TODO;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoadMapCommand implements Command {
 
     private final MapModel mapModel;
-    private final MapProvider mapProvider;
-    private final String mapPath;
-    private final CommandUrlHelper urlHelper;
+    private final MapRepository mapRepository;
+    private final MapRepository.MapKey mapKey;
 
     @Override
     public CommandResult execute() {
         Memento<MapModel> backup = mapModel.backup();
 
-        URL mapUrl;
-        try {
-            mapUrl = urlHelper.getUrlForFile(this.mapPath);
-        } catch (MalformedURLException e) {
-            return CommandResult.failure("Could not create URL for map file " + mapPath + ": " + e.getMessage());
-        }
+        Map map = mapRepository.get(mapKey);
+        mapModel.setMap(map);
 
-        try {
-            Map newMap = mapProvider.provide(new MapSource(TODO()));
-            mapModel.setMap(newMap);
-        } catch (InvalidInputException e) {
-            return CommandResult.failure(e.getMessage());
-        }
         return CommandResult.successWithRollback(() -> backup.restoreStateOf(mapModel));
     }
 
     @Component
     @AllArgsConstructor
     public static class Factory {
-        private final MapProvider mapProvider;
+        private final MapRepository mapRepository;
         private final MapModel mapModel;
-        private final CommandUrlHelper urlHelper;
 
-        public Command create(String mapPath) {
-            return new LoadMapCommand(mapModel, mapProvider, mapPath, urlHelper);
+        public Command create(MapRepository.MapKey mapKey) {
+            return new LoadMapCommand(mapModel, mapRepository, mapKey);
         }
     }
 }

@@ -1,20 +1,14 @@
 package manfred.manfreditor.map.controller.command;
 
-import manfred.data.InvalidInputException;
-import manfred.data.persistence.reader.MapSource;
 import manfred.manfreditor.common.command.Command;
 import manfred.manfreditor.common.command.CommandHistory;
 import manfred.manfreditor.common.command.CommandResult;
 import manfred.manfreditor.map.model.Map;
 import manfred.manfreditor.map.model.MapModel;
-import manfred.manfreditor.map.model.MapProvider;
+import manfred.manfreditor.map.model.MapRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import static manfred.manfreditor.helper.CommandFailedMatcher.failedWithMessageContaining;
 import static manfred.manfreditor.helper.SuccessfulCommandMatcher.wasSuccessful;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,26 +21,24 @@ class LoadMapCommandTest {
 
     private LoadMapCommand.Factory commandFactory;
     private MapModel mapModelMock;
-    private MapProvider mapProviderMock;
-    private CommandUrlHelper urlHelperMock;
+    private MapRepository mapRepositoryMock;
     private CommandHistory commandHistory;
 
     @BeforeEach
     void setUp() {
         commandHistory = new CommandHistory();
-        mapProviderMock = mock(MapProvider.class);
+        mapRepositoryMock = mock(MapRepository.class);
         mapModelMock = mock(MapModel.class);
-        urlHelperMock = mock(CommandUrlHelper.class);
-        commandFactory = new LoadMapCommand.Factory(mapProviderMock, mapModelMock, urlHelperMock);
+        commandFactory = new LoadMapCommand.Factory(mapRepositoryMock, mapModelMock);
     }
 
     @Test
-    void executeSuccessfullyAndRollBack() throws InvalidInputException, MalformedURLException {
+    void executeSuccessfullyAndRollBack() {
         Map resultingMap = mock(Map.class);
         MapModel backupMock = mock(MapModel.class);
-        Command loadMapCommand = commandFactory.create("name");
-        when(mapProviderMock.provide(any(MapSource.class))).thenReturn(resultingMap);
-        when(urlHelperMock.getUrlForFile(any())).thenReturn(new URL("http://some.url"));
+        MapRepository.MapKey mapKeyMock = mock(MapRepository.MapKey.class);
+        Command loadMapCommand = commandFactory.create(mapKeyMock);
+        when(mapRepositoryMock.get(any())).thenReturn(resultingMap);
         when(mapModelMock.backup()).thenReturn(backupMock);
 
         CommandResult result = loadMapCommand.execute();
@@ -57,25 +49,5 @@ class LoadMapCommandTest {
         result.registerRollbackOperation(commandHistory);
         commandHistory.undoLast();
         verify(backupMock).restoreStateOf(eq(this.mapModelMock));
-    }
-
-    @Test
-    void executeFails() throws InvalidInputException {
-        Command loadMapCommand = commandFactory.create("name");
-        when(mapProviderMock.provide(any(MapSource.class))).thenThrow(new InvalidInputException("errorMessage"));
-
-        CommandResult result = loadMapCommand.execute();
-
-        assertThat(result, failedWithMessageContaining("errorMessage"));
-    }
-
-    @Test
-    void invalidUrl() throws MalformedURLException {
-        Command loadMapCommand = commandFactory.create("name");
-        when(urlHelperMock.getUrlForFile(any())).thenThrow(new MalformedURLException("message"));
-
-        CommandResult result = loadMapCommand.execute();
-
-        assertThat(result, failedWithMessageContaining("Could not create URL for map file name: message"));
     }
 }

@@ -86,7 +86,7 @@ public class MapModel implements Memento<MapModel> {
     }
 
     @Override
-    public void restoreStateOf(MapModel backup) {
-        backup.map = this.map;
+    public void restoreStateOf(MapModel toRestore) {
+        toRestore.map = this.map;
     }
 }

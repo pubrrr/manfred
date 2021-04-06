@@ -107,7 +107,7 @@ public class SaveMapComponentTest extends ComponentTestCase {
     private void assertFileContainsExpectedContent() throws IOException {
         assertFileContains(
             "---\n" +
-            "name: \"nonEmptyTestMap\"\n" +
+            "name: \"nonEmptyMap\"\n" +
             "map:\n" +
             "- \"tree2,_tree2\"\n" +
             "persons: []\n" +

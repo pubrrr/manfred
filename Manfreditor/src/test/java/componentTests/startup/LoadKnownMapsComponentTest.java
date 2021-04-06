@@ -1,7 +1,7 @@
 package componentTests.startup;
 
-import componentTests.TestManfreditorContext;
 import io.vavr.control.Option;
+import manfred.manfreditor.application.ManfreditorContext;
 import manfred.manfreditor.application.startup.LoadKnownMapsCommand;
 import manfred.manfreditor.common.command.CommandResult;
 import manfred.manfreditor.map.model.MapRepository;
@@ -36,6 +36,6 @@ public class LoadKnownMapsComponentTest {
     }
 
     @Configuration
-    public static class TestContextClone extends TestManfreditorContext {
+    public static class TestContextClone extends ManfreditorContext {
     }
 }

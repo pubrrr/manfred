@@ -1,5 +1,5 @@
 ---
-name: test
+name: emptyMap
 map:
   - 1,1,tree2
   - 1,1,1
