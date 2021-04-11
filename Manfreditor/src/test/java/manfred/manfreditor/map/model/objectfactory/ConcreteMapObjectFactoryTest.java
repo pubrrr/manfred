@@ -2,6 +2,7 @@ package manfred.manfreditor.map.model.objectfactory;
 
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.TileConversionAction;
+import manfred.data.infrastructure.map.tile.MapTileStructurePrototype;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
 import manfred.manfreditor.map.model.mapobject.ConcreteMapObject;
@@ -69,8 +70,8 @@ class ConcreteMapObjectFactoryTest {
         return tilePrototypeMock;
     }
 
-    private MapPrototype mockTileStructure() {
-        return mock(MapPrototype.class);
+    private MapTileStructurePrototype mockTileStructure() {
+        return mock(MapTileStructurePrototype.class);
     }
 
     private BufferedImage someImage() {

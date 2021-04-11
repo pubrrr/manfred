@@ -51,7 +51,7 @@ class ObjectTileConverterTest {
 
     @Test
     void accessibleObject() throws InvalidInputException {
-        MapPrototype matrixMock = mockMapMatrix();
+        MapTileStructurePrototype matrixMock = mockMapMatrix();
         MapPrototype.Coordinate originCoordinate = mock(MapPrototype.Coordinate.class);
         when(matrixMock.getFromMap(eq(originCoordinate))).thenReturn(TilePrototype.accessible());
         ValidatedMapTileDto mapTileDto = mock(ValidatedMapTileDto.class);
@@ -69,7 +69,7 @@ class ObjectTileConverterTest {
 
     @Test
     void notAccessibleObject() throws InvalidInputException {
-        MapPrototype matrixMock = mockMapMatrix();
+        MapTileStructurePrototype matrixMock = mockMapMatrix();
         MapPrototype.Coordinate originCoordinate = mock(MapPrototype.Coordinate.class);
         when(matrixMock.getFromMap(eq(originCoordinate))).thenReturn(TilePrototype.notAccessible());
         ValidatedMapTileDto mapTileDto = mock(ValidatedMapTileDto.class);
@@ -85,7 +85,7 @@ class ObjectTileConverterTest {
         assertThat(tilePrototype.getTileObject().get(), is(mapTileDto));
     }
 
-    private MapPrototype mockMapMatrix() {
-        return mock(MapPrototype.class);
+    private MapTileStructurePrototype mockMapMatrix() {
+        return mock(MapTileStructurePrototype.class);
     }
 }

@@ -26,7 +26,7 @@ public class MapTileDtoValidator {
 
             return new ValidatedMapTileDto(
                 rawMapTile.getName(),
-                new MapPrototype("forTile " + rawMapTile.getName(), structure, List.of(), List.of(), List.of(), List.of()),
+                new MapTileStructurePrototype(structure),
                 rawMapTile.getImage(),
                 rawMapTile.getImageData()
             );

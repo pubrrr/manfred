@@ -9,20 +9,20 @@ import java.util.Optional;
 @Component
 public class UrlHelper {
 
-    public Optional<URL> getResourceForMap(String name) {
-        return Optional.ofNullable(getClass().getResource("/maps/" + name + ".yaml"));
+    public File getFileForMap(String name) {
+        return new File(getClass().getResource("/maps").getFile(), name + ".yaml");
     }
 
-    public Optional<URL> getResourceForPerson(String name) {
-        return Optional.ofNullable(getClass().getResource("/persons/" + name + ".yaml"));
+    public File getFileForPerson(String name) {
+        return new File(getClass().getResource("/persons").getFile(), name + ".yaml");
     }
 
     public Optional<URL> getImageResourceForPerson(String name) {
         return Optional.ofNullable(getClass().getResource("/persons/" + name + ".png"));
     }
 
-    public Optional<URL> getResourceForEnemy(Object name) {
-        return Optional.ofNullable(getClass().getResource("/enemies/" + name + ".yaml"));
+    public File getFileForEnemy(Object name) {
+        return new File(getClass().getResource("/enemies").getFile(), name + ".yaml");
     }
 
     public Optional<URL> getImageResourceForEnemy(String name) {

@@ -2,12 +2,19 @@ package componentTests.map;
 
 import componentTests.ComponentTestCase;
 import componentTests.TestManfreditorContext;
+import manfred.data.persistence.reader.MapSource;
+import manfred.data.shared.PositiveInt;
 import manfred.manfreditor.common.FileHelper;
+import manfred.manfreditor.common.PopupProvider;
 import manfred.manfreditor.common.command.CommandHistory;
 import manfred.manfreditor.common.command.CommandResult;
 import manfred.manfreditor.map.controller.command.LoadMapCommand;
 import manfred.manfreditor.map.controller.command.SaveMapCommand;
-import manfred.manfreditor.common.PopupProvider;
+import manfred.manfreditor.map.model.Map;
+import manfred.manfreditor.map.model.MapModel;
+import manfred.manfreditor.map.model.ObjectInsertionValidator;
+import manfred.manfreditor.map.model.accessibility.AccessibilityMerger;
+import manfred.manfreditor.map.model.flattened.FlattenedMap;
 import org.eclipse.swt.SWT;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,15 +44,14 @@ public class SaveMapComponentTest extends ComponentTestCase {
     @Autowired
     private LoadMapCommand.Factory loadMapCommandFactory;
 
-    @Autowired
-    private FileHelper fileHelper;
+    private final FileHelper fileHelper = new FileHelper();
 
     @Autowired
     private PopupProvider popupProviderMock;
 
     private CommandHistory commandHistory;
 
-    private File temporaryFile;
+    private static File temporaryFile;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -63,7 +69,7 @@ public class SaveMapComponentTest extends ComponentTestCase {
     void saveMapToNewFile() throws IOException {
         loadAMap();
 
-        CommandResult result = commandFactory.create(temporaryFile, null).execute();
+        CommandResult result = commandFactory.create(null).execute();
 
         assertThat(result, wasSuccessful());
         assertFileContainsExpectedContent();
@@ -80,7 +86,7 @@ public class SaveMapComponentTest extends ComponentTestCase {
         fileHelper.write(temporaryFile, "previous content");
         assertFileContains("previous content");
 
-        CommandResult result = commandFactory.create(temporaryFile, null).execute();
+        CommandResult result = commandFactory.create(null).execute();
 
         assertThat(result, wasSuccessful());
         assertFileContainsExpectedContent();
@@ -95,7 +101,7 @@ public class SaveMapComponentTest extends ComponentTestCase {
     void saveMapFails() {
         temporaryFile.setReadOnly();
 
-        CommandResult result = commandFactory.create(temporaryFile, null).execute();
+        CommandResult result = commandFactory.create(null).execute();
 
         assertThat(result, failedWithMessageContaining("testMap"));
     }
@@ -126,8 +132,33 @@ public class SaveMapComponentTest extends ComponentTestCase {
     public static class TestContextClone extends TestManfreditorContext {
 
         @Bean
+        public FileHelper fileHelper() {
+            FileHelper mock = mock(FileHelper.class);
+            when(mock.write(any(), any())).thenCallRealMethod();
+            return mock;
+        }
+
+        @Bean
         public PopupProvider popupProvider() {
             return mock(PopupProvider.class);
+        }
+
+        @Bean
+        public MapModel mapModel(AccessibilityMerger accessibilityMerger, ObjectInsertionValidator objectInsertionValidator) {
+            return new MapModelDouble(new Map("test", PositiveInt.of(0), PositiveInt.of(0), new MapSource(new File(""))), accessibilityMerger, objectInsertionValidator);
+        }
+    }
+
+    private static class MapModelDouble extends MapModel {
+
+        public MapModelDouble(Map initialMap, AccessibilityMerger accessibilityMerger, ObjectInsertionValidator objectInsertionValidator) {
+            super(initialMap, accessibilityMerger, objectInsertionValidator);
+        }
+
+        @Override
+        public FlattenedMap getFlattenedMap() {
+            FlattenedMap actualFlatMap = super.getFlattenedMap();
+            return new FlattenedMap(actualFlatMap.getName(), actualFlatMap.getAccessibility(), new MapSource(SaveMapComponentTest.temporaryFile));
         }
     }
 }

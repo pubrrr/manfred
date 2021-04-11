@@ -7,11 +7,10 @@ import manfred.data.persistence.dto.RawMapDto;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 
-import java.net.URL;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 
 @AllArgsConstructor
@@ -23,14 +22,14 @@ public class PersonsValidator extends MapObjectDtoValidator<MapPersonDto> implem
     public List<String> validate(RawMapDto rawMapDto, MapMatrix<TilePrototype> mapMatrix) {
         List<MapPersonDto> persons = rawMapDto.getPersons();
 
-        List<String> validationMessages = new LinkedList<>(validateTargetsExist(persons, urlHelper::getResourceForPerson));
+        List<String> validationMessages = new LinkedList<>(validateTargetsExist(persons, urlHelper::getFileForPerson));
         validationMessages.addAll(validateTilesAreAccessible(mapMatrix, persons));
 
         return validationMessages;
     }
 
     @Override
-    protected Function<Map.Entry<String, Optional<URL>>, String> targetNotExistentErrorMessage() {
+    protected Function<Map.Entry<String, File>, String> targetNotExistentErrorMessage() {
         return emptyResourceByTarget -> "Resource for person " + emptyResourceByTarget.getKey() + " not found";
     }
 

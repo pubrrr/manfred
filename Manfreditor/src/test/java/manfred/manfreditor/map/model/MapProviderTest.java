@@ -32,7 +32,7 @@ class MapProviderTest {
     @Test
     void provide() throws InvalidInputException {
         Map mapMock = mock(Map.class);
-        when(mapReaderMock.load(any(MapSource.class))).thenReturn(new MapPrototype("", null, List.of(), List.of(), List.of(), null));
+        when(mapReaderMock.load(any(MapSource.class))).thenReturn(new MapPrototype("", null, List.of(), List.of(), List.of(), null, null));
         when(mapConverterMock.convert(any())).thenReturn(mapMock);
 
         Map result = underTest.provide("name");

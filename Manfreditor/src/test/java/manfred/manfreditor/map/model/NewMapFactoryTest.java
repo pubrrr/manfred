@@ -1,22 +1,31 @@
 package manfred.manfreditor.map.model;
 
+import manfred.data.persistence.reader.UrlHelper;
 import manfred.data.shared.PositiveInt;
 import manfred.manfreditor.map.model.mapobject.None;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+
 import static manfred.manfreditor.helper.CoordinateHelper.tileCoordinate;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class NewMapFactoryTest {
 
     private NewMapFactory underTest;
+    private UrlHelper urlHelperMock;
 
     @BeforeEach
     void setUp() {
-        underTest = new NewMapFactory();
+        urlHelperMock = mock(UrlHelper.class);
+        when(urlHelperMock.getFileForMap(any())).thenReturn(new File(""));
+        underTest = new NewMapFactory(urlHelperMock);
     }
 
     @Test

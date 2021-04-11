@@ -54,7 +54,7 @@ class RawMapReaderTest {
     @Test
     void unknownInputFile() {
         InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.load("unknown"));
-        assertThat(exception.getMessage(), containsString("Did not find resource for map"));
+        assertThat(exception.getMessage(), containsString("Could not read map from"));
     }
 
     @Test

@@ -36,7 +36,8 @@ public class MapModel implements Memento<MapModel> {
     public FlattenedMap getFlattenedMap() {
         return new FlattenedMap(
             this.map.getName(),
-            this.accessibilityMerger.merge(this.map.getObjects())
+            this.accessibilityMerger.merge(this.map.getObjects()),
+            this.map.getSource()
         );
     }
 

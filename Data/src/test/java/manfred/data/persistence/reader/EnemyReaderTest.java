@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.net.URL;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -33,7 +34,7 @@ class EnemyReaderTest {
     @Test
     void testConvert() throws InvalidInputException {
         URL url = getClass().getResource("/enemy/testMongo.yaml");
-        EnemyDto result = underTest.load(url, url);
+        EnemyDto result = underTest.load(new File(url.getFile()), url);
 
         assertThat(result.getName(), equalTo("Mongo"));
         assertThat(result.getHealthPoints(), equalTo(PositiveInt.of(20)));
@@ -44,6 +45,6 @@ class EnemyReaderTest {
     @Test
     void unknownInputFile() {
         InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.load("unknown"));
-        assertThat(exception.getMessage(), containsString("Resource for enemy unknown not found"));
+        assertThat(exception.getMessage(), containsString("Image resource for enemy unknown not found"));
     }
 }

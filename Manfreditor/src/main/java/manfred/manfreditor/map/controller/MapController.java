@@ -69,25 +69,13 @@ public class MapController implements MouseListener {
         return new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                FileDialog fileDialog = new FileDialog(mainShell);
-                String selectedFile = fileDialog.open();
-                if (selectedFile != null) {
-                    File fileToSaveIn = new File(selectedFile);
-                    if (fileToSaveIn.isFile()) {
-                        MessageBox messageBox = new MessageBox(mainShell, SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
-                        messageBox.setMessage("Obacht:\n\n" + selectedFile + "\ngibts scho. Willsch trotzdem?");
-                        int open = messageBox.open();
-                        if (open == SWT.CANCEL) {
-                            return;
-                        }
-                    }
-                    controllerHelper.execute(saveMapCommandFactory.create(fileToSaveIn, mainShell))
-                        .onFailure(errorMessage -> {
-                            MessageBox messageBox = new MessageBox(mainShell, SWT.ICON_ERROR | SWT.OK);
-                            messageBox.setMessage("Des hod id fongtsionierd:\n\n" + errorMessage);
-                            messageBox.open();
-                        });
-                }
+                controllerHelper.execute(saveMapCommandFactory.create(mainShell))
+                    .onFailure(errorMessage -> {
+                        MessageBox messageBox = new MessageBox(mainShell, SWT.ICON_ERROR | SWT.OK);
+                        messageBox.setMessage("Des hod id fongtsionierd:\n\n" + errorMessage);
+                        messageBox.open();
+                    })
+                    .onSuccess(() -> popupProvider.showMessage(mainShell, "Gschbeicherd. Bassd."));
             }
         };
     }

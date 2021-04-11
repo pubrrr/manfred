@@ -9,9 +9,10 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import manfred.data.infrastructure.map.MapPrototype;
+import manfred.data.persistence.reader.MapSource;
 import manfred.data.shared.PositiveInt;
-import manfred.manfreditor.map.view.GridCoordinate;
 import manfred.manfreditor.map.model.mapobject.MapObject;
+import manfred.manfreditor.map.view.GridCoordinate;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -20,16 +21,18 @@ public class Map {
 
     private final String name;
     private final io.vavr.collection.Map<TileCoordinate, MapObject> mapMatrix;
+    private final MapSource mapSource;
     private final PositiveInt sizeX;
     private final PositiveInt sizeY;
 
-    public Map(String name, java.util.Map<MapPrototype.Coordinate, MapObject> mapMatrix) {
+    public Map(String name, java.util.Map<MapPrototype.Coordinate, MapObject> mapMatrix, MapSource mapSource) {
         this.name = name;
         this.mapMatrix = HashMap.ofAll(
             mapMatrix.entrySet().stream(),
             mapObjectByCoordinatePrototype -> new TileCoordinate(mapObjectByCoordinatePrototype.getKey()),
             java.util.Map.Entry::getValue
         );
+        this.mapSource = mapSource;
 
         if (mapMatrix.isEmpty()) {
             this.sizeX = PositiveInt.of(0);
@@ -40,10 +43,11 @@ public class Map {
         }
     }
 
-    public Map(String name, PositiveInt columns, PositiveInt rows) {
+    public Map(String name, PositiveInt columns, PositiveInt rows, MapSource mapSource) {
         this.name = name;
         this.sizeX = columns;
         this.sizeY = rows;
+        this.mapSource = mapSource;
         List<Integer> xCoordinates = List.range(0, columns.value());
         List<Integer> yCoordinates = List.range(0, rows.value());
 
@@ -52,11 +56,12 @@ public class Map {
             .toMap(Function.identity(), Function1.constant(MapObject.none()));
     }
 
-    private Map(String name, io.vavr.collection.Map<TileCoordinate, MapObject> mapMatrix, PositiveInt sizeX, PositiveInt sizeY) {
+    private Map(String name, io.vavr.collection.Map<TileCoordinate, MapObject> mapMatrix, PositiveInt sizeX, PositiveInt sizeY, MapSource mapSource) {
         this.name = name;
         this.mapMatrix = mapMatrix;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
+        this.mapSource = mapSource;
     }
 
     public PositiveInt getSizeX() {
@@ -87,7 +92,11 @@ public class Map {
     }
 
     public Map insertObjectAt(MapObject mapObject, TileCoordinate tileCoordinate) {
-        return new Map(this.name, this.mapMatrix.put(tileCoordinate, mapObject), this.sizeX, this.sizeY);
+        return new Map(this.name, this.mapMatrix.put(tileCoordinate, mapObject), this.sizeX, this.sizeY, this.mapSource);
+    }
+
+    public MapSource getSource() {
+        return this.mapSource;
     }
 
     @EqualsAndHashCode

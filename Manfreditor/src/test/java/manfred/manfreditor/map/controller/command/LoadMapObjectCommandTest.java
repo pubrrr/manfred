@@ -1,8 +1,8 @@
 package manfred.manfreditor.map.controller.command;
 
 import manfred.data.InvalidInputException;
-import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.tile.MapTileReader;
+import manfred.data.infrastructure.map.tile.MapTileStructurePrototype;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
 import manfred.data.persistence.reader.MapTileSource;
 import manfred.manfreditor.common.command.Command;
@@ -89,7 +89,7 @@ class LoadMapObjectCommandTest {
         return getClass().getResource("/mapObject/tree2.yaml").getFile();
     }
 
-    private MapPrototype mapMatrixMock() {
-        return mock(MapPrototype.class);
+    private MapTileStructurePrototype mapMatrixMock() {
+        return mock(MapTileStructurePrototype.class);
     }
 }

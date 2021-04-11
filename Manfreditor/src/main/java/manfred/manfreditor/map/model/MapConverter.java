@@ -25,7 +25,7 @@ public class MapConverter implements ObjectConverter<MapPrototype, Map> {
                 coordinate -> createMapObject(mapPrototype, coordinate)
             ));
 
-        return new Map(mapPrototype.getName(), mapMatrix);
+        return new Map(mapPrototype.getName(), mapMatrix, mapPrototype.getMapSource());
     }
 
     private MapObject createMapObject(MapPrototype mapPrototype, MapPrototype.Coordinate coordinate) {

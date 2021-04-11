@@ -24,7 +24,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -51,7 +54,7 @@ class MapValidatorTest {
 
     @Test
     void emptyOtherStructs() throws InvalidInputException {
-        RawMapDto input = new RawMapDto("test", List.of("1"), List.of(), List.of(), List.of(), List.of());
+        RawMapDto input = new RawMapDto("test", List.of("1"), List.of(), List.of(), List.of(), List.of(), null);
 
         MapPrototype result = underTest.validate(input);
 
@@ -77,7 +80,8 @@ class MapValidatorTest {
                 new TransporterDto("", PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0), PositiveInt.of(0)),
                 new TransporterDto("", PositiveInt.of(1), PositiveInt.of(0), PositiveInt.of(1), PositiveInt.of(0))
             ),
-            List.of(new MapEnemyDto())
+            List.of(new MapEnemyDto()),
+            null
         );
 
         MapPrototype result = underTest.validate(input);
@@ -105,7 +109,8 @@ class MapValidatorTest {
             List.of(),
             List.of(),
             List.of(),
-            List.of(new MapEnemyDto())
+            List.of(new MapEnemyDto()),
+            null
         );
 
         InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.validate(input));
@@ -124,7 +129,8 @@ class MapValidatorTest {
             List.of(),
             List.of(),
             List.of(),
-            List.of(new MapEnemyDto())
+            List.of(new MapEnemyDto()),
+            null
         );
 
         InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.validate(input));
@@ -143,7 +149,8 @@ class MapValidatorTest {
             List.of(),
             List.of(),
             List.of(),
-            List.of()
+            List.of(),
+            null
         );
 
         MapPrototype result = underTest.validate(input);
@@ -164,7 +171,8 @@ class MapValidatorTest {
             List.of(),
             List.of(),
             List.of(),
-            List.of()
+            List.of(),
+            null
         );
 
         MapPrototype result = underTest.validate(input);
@@ -186,7 +194,8 @@ class MapValidatorTest {
             List.of(),
             List.of(),
             List.of(),
-            List.of()
+            List.of(),
+            null
         );
 
         MapPrototype result = underTest.validate(input);
@@ -210,7 +219,8 @@ class MapValidatorTest {
             List.of(),
             List.of(),
             List.of(),
-            List.of()
+            List.of(),
+            null
         );
 
         MapPrototype result = underTest.validate(input);
@@ -234,7 +244,8 @@ class MapValidatorTest {
             List.of(),
             List.of(),
             List.of(),
-            List.of()
+            List.of(),
+            null
         );
 
         MapPrototype result = underTest.validate(input);
@@ -259,7 +270,8 @@ class MapValidatorTest {
             List.of(),
             List.of(),
             List.of(),
-            List.of()
+            List.of(),
+            null
         );
 
         InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.validate(input));
@@ -281,7 +293,8 @@ class MapValidatorTest {
             List.of(),
             List.of(),
             List.of(),
-            List.of()
+            List.of(),
+            null
         );
 
         InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.validate(input));
@@ -293,7 +306,7 @@ class MapValidatorTest {
 
     @Test
     void oneFailingValidator() {
-        RawMapDto input = new RawMapDto("test", List.of("1"), List.of(), List.of(), List.of(), List.of());
+        RawMapDto input = new RawMapDto("test", List.of("1"), List.of(), List.of(), List.of(), List.of(), null);
 
         when(validatorMock1.validate(any(), any())).thenReturn(List.of("message1", "message2"));
 
@@ -303,7 +316,7 @@ class MapValidatorTest {
 
     @Test
     void twoFailingValidators() {
-        RawMapDto input = new RawMapDto("test", List.of("1"), List.of(), List.of(), List.of(), List.of());
+        RawMapDto input = new RawMapDto("test", List.of("1"), List.of(), List.of(), List.of(), List.of(), null);
 
         when(validatorMock1.validate(any(), any())).thenReturn(List.of("validator1_message1", "validator1_message2"));
         when(validatorMock2.validate(any(), any())).thenReturn(List.of("validator2_message1", "validator2_message2"));

@@ -48,7 +48,7 @@ class MapTileDtoValidatorTest {
 
         ValidatedMapTileDto result = underTest.validate(input);
 
-        MapPrototype structure = result.getStructure();
+        MapTileStructurePrototype structure = result.getStructure();
         List<MapPrototype.Coordinate> coordinateSet = structure.getCoordinateSet();
         assertThat(coordinateSet, hasSize(4));
 

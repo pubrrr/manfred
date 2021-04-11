@@ -2,6 +2,7 @@ package manfred.manfreditor.map;
 
 import manfred.data.DataContext;
 import manfred.data.infrastructure.map.TileConversionRule;
+import manfred.data.persistence.reader.MapSource;
 import manfred.manfreditor.map.model.Map;
 import manfred.manfreditor.map.model.MapModel;
 import manfred.manfreditor.map.model.ObjectInsertionValidator;
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import java.io.File;
 import java.util.HashMap;
 
 @Configuration
@@ -26,7 +28,9 @@ public class MapContext {
 
     @Bean
     public MapModel mapModel(AccessibilityMerger accessibilityMerger, ObjectInsertionValidator objectInsertionValidator) {
-        return new MapModel(new Map("uninitialized", new HashMap<>()), accessibilityMerger, objectInsertionValidator);
+        File mapFile = new File("uninitializedMap");
+        mapFile.setReadOnly();
+        return new MapModel(new Map("uninitialized", new HashMap<>(), new MapSource(mapFile)), accessibilityMerger, objectInsertionValidator);
     }
 
     @Bean

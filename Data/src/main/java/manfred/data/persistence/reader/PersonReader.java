@@ -6,6 +6,7 @@ import manfred.data.persistence.ObjectReader;
 import manfred.data.persistence.dto.PersonDto;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.function.Supplier;
@@ -25,23 +26,23 @@ public class PersonReader implements ObjectReader<PersonSource, PersonDto> {
     @Override
     public PersonDto load(String name) throws InvalidInputException {
         return load(
-            urlHelper.getResourceForPerson(name).orElseThrow(invalidInputException("Resource for person " + name + " not found")),
+            urlHelper.getFileForPerson(name),
             urlHelper.getImageResourceForPerson(name).orElseThrow(invalidInputException("Image resource for person " + name + " not found"))
         );
     }
 
     @Override
     public PersonDto load(PersonSource personSource) throws InvalidInputException {
-        return load(personSource.getPersonSource(), personSource.getImageSource());
+        return load(new File(personSource.getPersonSource().getFile()), personSource.getImageSource());
     }
 
     private Supplier<InvalidInputException> invalidInputException(String message) {
         return () -> new InvalidInputException(message);
     }
 
-    PersonDto load(URL yamlURL, URL imageURL) throws InvalidInputException {
+    PersonDto load(File yamlFile, URL imageURL) throws InvalidInputException {
         try {
-            PersonDto personDto = objectMapper.readValue(yamlURL, PersonDto.class);
+            PersonDto personDto = objectMapper.readValue(yamlFile, PersonDto.class);
             personDto.setImage(imageLoader.load(imageURL));
             return personDto;
         } catch (IOException e) {

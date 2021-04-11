@@ -17,7 +17,7 @@ public class MapExporter {
     private final RawMapReader rawMapReader;
     private final MapToDtoMapper mapToDtoMapper;
 
-    public Try<Option<PreviousFileContent>> export(FlattenedMap flattenedMap, File fileToSaveIn) {
-        return rawMapReader.save(mapToDtoMapper.map(flattenedMap), fileToSaveIn);
+    public Try<Option<PreviousFileContent>> export(FlattenedMap flattenedMap) {
+        return rawMapReader.save(mapToDtoMapper.map(flattenedMap), flattenedMap.getMapSource().getMapFile());
     }
 }

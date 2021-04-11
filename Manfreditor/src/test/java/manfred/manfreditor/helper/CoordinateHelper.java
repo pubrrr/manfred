@@ -2,9 +2,11 @@ package manfred.manfreditor.helper;
 
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.tile.TilePrototype;
+import manfred.data.persistence.reader.MapSource;
 import manfred.data.shared.PositiveInt;
 import manfred.manfreditor.map.model.Map;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -29,7 +31,7 @@ public class CoordinateHelper {
     }
 
     public static Map.TileCoordinate tileCoordinate(int x, int y) {
-        return new TileCoordinateDouble(x, y, new Map("test", new HashMap<>()));
+        return new TileCoordinateDouble(x, y, new Map("test", new HashMap<>(), new MapSource(new File("file"))));
     }
 
     public static Map.TileCoordinate tileCoordinate(int x, int y, int mapSizeY) {

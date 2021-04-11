@@ -1,6 +1,6 @@
 package manfred.manfreditor.map.model.mapobject;
 
-import manfred.data.infrastructure.map.MapPrototype;
+import manfred.data.infrastructure.map.tile.MapTileStructurePrototype;
 import manfred.data.infrastructure.map.tile.ValidatedMapTileDto;
 import manfred.data.shared.PositiveInt;
 import org.eclipse.swt.graphics.ImageData;
@@ -107,8 +107,8 @@ class MapObjectRepositoryTest {
         return new ImageData(1, 1, 1, new PaletteData(1, 1, 1));
     }
 
-    private MapPrototype mockMapMatrix() {
-        MapPrototype mock = mock(MapPrototype.class);
+    private MapTileStructurePrototype mockMapMatrix() {
+        var mock = mock(MapTileStructurePrototype.class);
         when(mock.getSizeX()).thenReturn(PositiveInt.ofNonZero(1));
         return mock;
     }

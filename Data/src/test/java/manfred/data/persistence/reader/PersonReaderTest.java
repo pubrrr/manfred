@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.net.URL;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,7 +31,7 @@ class PersonReaderTest {
     @Test
     void invalidFileContent() {
         InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.load("unknown"));
-        assertThat(exception.getMessage(), containsString("Resource for person unknown not found"));
+        assertThat(exception.getMessage(), containsString("Image resource for person unknown not found"));
     }
 
     @Test
@@ -39,7 +40,7 @@ class PersonReaderTest {
         when(imageLoaderMock.load(any(URL.class))).thenReturn(imageMock);
 
         URL url = getClass().getResource("/persons/testOpa.yaml");
-        PersonDto result = underTest.load(url, getClass().getResource("/persons/testOpa.yaml"));
+        PersonDto result = underTest.load(new File(url.getFile()), getClass().getResource("/persons/testOpa.yaml"));
 
         assertThat(result.getName(), equalToObject("Opa"));
         assertThat(result.getImage(), equalToObject(imageMock));

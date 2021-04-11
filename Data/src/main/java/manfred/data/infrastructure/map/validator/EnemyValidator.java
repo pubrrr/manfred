@@ -1,17 +1,16 @@
 package manfred.data.infrastructure.map.validator;
 
 import lombok.AllArgsConstructor;
-import manfred.data.persistence.reader.UrlHelper;
-import manfred.data.persistence.dto.MapEnemyDto;
-import manfred.data.persistence.dto.RawMapDto;
 import manfred.data.infrastructure.map.matrix.MapMatrix;
 import manfred.data.infrastructure.map.tile.TilePrototype;
+import manfred.data.persistence.dto.MapEnemyDto;
+import manfred.data.persistence.dto.RawMapDto;
+import manfred.data.persistence.reader.UrlHelper;
 
-import java.net.URL;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 
 @AllArgsConstructor
@@ -23,14 +22,14 @@ public class EnemyValidator extends MapObjectDtoValidator<MapEnemyDto> implement
     public List<String> validate(RawMapDto rawMapDto, MapMatrix<TilePrototype> mapMatrix) {
         List<MapEnemyDto> enemies = rawMapDto.getEnemies();
 
-        List<String> validationMessages = new LinkedList<>(validateTargetsExist(enemies, urlHelper::getResourceForEnemy));
+        List<String> validationMessages = new LinkedList<>(validateTargetsExist(enemies, urlHelper::getFileForEnemy));
         validationMessages.addAll(validateTilesAreAccessible(mapMatrix, enemies));
 
         return validationMessages;
     }
 
     @Override
-    protected Function<Map.Entry<String, Optional<URL>>, String> targetNotExistentErrorMessage() {
+    protected Function<Map.Entry<String, File>, String> targetNotExistentErrorMessage() {
         return emptyResourceByTarget -> "Resource for enemy " + emptyResourceByTarget.getKey() + " not found";
     }
 
