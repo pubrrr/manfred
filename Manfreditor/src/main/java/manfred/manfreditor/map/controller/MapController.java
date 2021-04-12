@@ -17,12 +17,10 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -53,7 +51,6 @@ public class MapController implements MouseListener {
             public void widgetSelected(SelectionEvent e) {
                 LoadMapDialog loadMapDialog = loadMapDialogFactory.create(mainShell);
                 Optional<MapRepository.MapKey> selectedKey = loadMapDialog.open();
-                System.out.println(selectedKey);
                 selectedKey.ifPresent(key -> {
                         controllerHelper
                             .execute(loadMapCommandFactory.create(key))
@@ -75,7 +72,7 @@ public class MapController implements MouseListener {
                         messageBox.setMessage("Des hod id fongtsionierd:\n\n" + errorMessage);
                         messageBox.open();
                     })
-                    .onSuccess(() -> popupProvider.showMessage(mainShell, "Gschbeicherd. Bassd."));
+                    .onSuccess(() -> popupProvider.showInformation(mainShell, "Gschpeichert. Basst."));
             }
         };
     }

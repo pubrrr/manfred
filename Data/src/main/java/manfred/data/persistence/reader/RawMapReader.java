@@ -42,10 +42,6 @@ public class RawMapReader {
         return load(new MapSource(yamlFile));
     }
 
-    private Supplier<InvalidInputException> invalidInputException(String name) {
-        return () -> new InvalidInputException("Did not find resource for map " + name);
-    }
-
     public Try<Option<PreviousFileContent>> save(RawMapDto mapDto, File targetFile) {
         return Try.of(() -> targetFile.isFile() ? Files.readAllLines(targetFile.toPath()) : List.of(""))
             .map(lines -> String.join("\n", lines))

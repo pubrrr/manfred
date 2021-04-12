@@ -53,7 +53,7 @@ public class SaveMapCommand implements Command {
 
     private RollbackOperation tryToRestorePreviousContent(PreviousFileContent previousFileContent) {
         return () -> {
-            int clickedButton = this.popupProvider.showConfirmationDialog(outputShell, "Wirklich alten Zustand von " + flattenedMap.getName() + " wiederherstellen?");
+            int clickedButton = this.popupProvider.showConfirmationDialog(outputShell, "Wirklich Speichern von " + flattenedMap.getName() + " rückgängig machen?");
             if (clickedButton == SWT.YES) {
                 fileHelper.write(flattenedMap.getMapSource().getMapFile(), previousFileContent.getContent())
                     .onFailure(throwable -> popupProvider.showMessage(

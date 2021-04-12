@@ -15,10 +15,17 @@ public class PopupProvider {
         return confirmationDialog.open();
     }
 
-    public int showMessage(Shell shell, String message) {
+    public void showMessage(Shell shell, String message) {
         var messageBox = new MessageBox(shell, SWT.ICON_ERROR | SWT.OK);
         messageBox.setText("Obacht!");
         messageBox.setMessage(message);
-        return messageBox.open();
+        messageBox.open();
+    }
+
+    public void showInformation(Shell shell, String message) {
+        var messageBox = new MessageBox(shell, SWT.ICON_INFORMATION | SWT.OK);
+        messageBox.setText("OK!!!1!");
+        messageBox.setMessage(message);
+        messageBox.open();
     }
 }

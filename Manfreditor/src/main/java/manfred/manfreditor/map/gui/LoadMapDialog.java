@@ -3,6 +3,8 @@ package manfred.manfreditor.map.gui;
 import lombok.AllArgsConstructor;
 import manfred.manfreditor.map.model.MapRepository;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 import static java.util.Comparator.comparing;
+import static manfred.manfreditor.common.command.ControllerHelper.LEFT_MOUSE_BUTTON;
 
 public class LoadMapDialog extends Dialog {
 
@@ -43,6 +46,16 @@ public class LoadMapDialog extends Dialog {
         shell.setLayout(layout);
 
         mapsList = new List(shell, SWT.SINGLE);
+        mapsList.addMouseListener(
+            new MouseAdapter() {
+                @Override
+                public void mouseDoubleClick(MouseEvent e) {
+                    if (e.button == LEFT_MOUSE_BUTTON) {
+                        checkSelectionAndDispose(shell);
+                    }
+                }
+            }
+        );
         mapsList.setLayoutData(new RowData(260, 300));
         sortedKeys.forEach(key -> mapsList.add(key.value));
 
@@ -85,14 +98,18 @@ public class LoadMapDialog extends Dialog {
             new SelectionAdapter() {
                 @Override
                 public void widgetSelected(SelectionEvent e) {
-                    int selectionIndex = mapsList.getSelectionIndex();
-                    if (selectionIndex >= 0) {
-                        LoadMapDialog.this.result = Optional.of(sortedKeys.get(selectionIndex));
-                        parent.getShell().dispose();
-                    }
+                    checkSelectionAndDispose(parent);
                 }
             }
         );
+    }
+
+    private void checkSelectionAndDispose(Composite parent) {
+        int selectionIndex = mapsList.getSelectionIndex();
+        if (selectionIndex >= 0) {
+            LoadMapDialog.this.result = Optional.of(sortedKeys.get(selectionIndex));
+            parent.getShell().dispose();
+        }
     }
 
     @Component
