@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import manfred.manfreditor.common.command.ControllerHelper;
 import manfred.manfreditor.newmapobject.controller.command.ClickObjectPreviewCommand;
 import manfred.manfreditor.newmapobject.controller.command.LoadObjectImageCommand;
+import manfred.manfreditor.newmapobject.controller.command.SetColumnsCommand;
+import manfred.manfreditor.newmapobject.controller.command.SetRowsCommand;
 import manfred.manfreditor.newmapobject.model.NewMapObjectData;
 import manfred.manfreditor.newmapobject.model.NewMapObjectModel;
 import org.eclipse.swt.events.ModifyListener;
@@ -31,6 +33,8 @@ public class NewMapObjectController {
     private final ControllerHelper controllerHelper;
     private final LoadObjectImageCommand.Factory loadObjectImageCommandFactory;
     private final ClickObjectPreviewCommand.Factory clickObjectPreviewCommandFactory;
+    private final SetColumnsCommand.Factory setColumnsCommandFactory;
+    private final SetRowsCommand.Factory setRowsCommandFactory;
 
     private final List<Runnable> postActions;
 
@@ -43,15 +47,9 @@ public class NewMapObjectController {
         return e -> newMapObjectModel.setName(nameSupplier.get());
     }
 
-    public SelectionListener setImageFromPath(Supplier<String> imagePathSupplier) {
-        return new SelectionAdapter() {
-
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                controllerHelper.execute(loadObjectImageCommandFactory.create(imagePathSupplier.get()));
-                postActions.forEach(Runnable::run);
-            }
-        };
+    public void setImageFromPath(Supplier<String> imagePathSupplier) {
+        controllerHelper.execute(loadObjectImageCommandFactory.create(imagePathSupplier.get()));
+        postActions.forEach(Runnable::run);
     }
 
     public MouseListener clickOnObjectPreview(Supplier<Point> canvasSizeSupplier) {
@@ -73,5 +71,15 @@ public class NewMapObjectController {
 
     public void addPostAction(Runnable postAction) {
         this.postActions.add(postAction);
+    }
+
+    public void setColumns(Supplier<Integer> columnsSupplier) {
+        controllerHelper.execute(setColumnsCommandFactory.create(columnsSupplier.get()));
+        postActions.forEach(Runnable::run);
+    }
+
+    public void setRows(Supplier<Integer> rowsSupplier) {
+        controllerHelper.execute(setRowsCommandFactory.create(rowsSupplier.get()));
+        postActions.forEach(Runnable::run);
     }
 }

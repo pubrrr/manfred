@@ -54,14 +54,6 @@
                     <release>11</release>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.3</version>
-                <configuration>
-                    <mainClass>manfred.manfreditor.application.Manfreditor</mainClass>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 </project>

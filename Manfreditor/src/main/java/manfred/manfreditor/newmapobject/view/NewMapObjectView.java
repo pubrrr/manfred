@@ -40,7 +40,7 @@ public class NewMapObjectView {
 
         gc.drawImage(new Image(display, imageData), imagePosition.x, imagePosition.y);
 
-        int gridTopCoordinate = imagePosition.y + imageData.height - gridTileSize;
+        int gridTopCoordinate = getGridTopCoordinate(imageData, gridTileSize, imagePosition);
         gc.setBackground(new Color(display, red));
         gc.setAlpha(120);
         newMapObjectModel.getAccessibilityGrid().getGrid()
@@ -75,7 +75,7 @@ public class NewMapObjectView {
         int gridTileSize = getGridTileSize(imageData);
         Point imagePosition = getImagePosition(imageData, gridTileSize, canvasSize);
 
-        int gridTopCoordinate = imagePosition.y + imageData.height - gridTileSize;
+        int gridTopCoordinate = getGridTopCoordinate(imageData, gridTileSize, imagePosition);
         return newMapObjectModel.getAccessibilityGrid()
             .getGrid()
             .keySet()
@@ -103,6 +103,11 @@ public class NewMapObjectView {
             (canvasSize.x - imageData.width) / 2,
             Math.max((canvasSize.y - imageData.height) / 2, gridTileSize - imageData.height)
         );
+    }
+
+    private int getGridTopCoordinate(ImageData imageData, int gridTileSize, Point imagePosition) {
+        int gridSizeY = newMapObjectModel.getAccessibilityGrid().getSizeY();
+        return imagePosition.y + imageData.height - gridSizeY * gridTileSize;
     }
 
     @Value
