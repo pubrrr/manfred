@@ -3,6 +3,7 @@ package manfred.game;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Game {
+
     private final Thread graphicsPainterThread;
 
     public static void main(String[] args) {

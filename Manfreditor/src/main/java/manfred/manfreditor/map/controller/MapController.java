@@ -1,26 +1,26 @@
 package manfred.manfreditor.map.controller;
 
 import lombok.AllArgsConstructor;
-import manfred.manfreditor.common.command.CommandResult;
+import manfred.manfreditor.common.PopupProvider;
 import manfred.manfreditor.common.command.ControllerHelper;
 import manfred.manfreditor.map.controller.command.DeleteMapObjectCommand;
 import manfred.manfreditor.map.controller.command.InsertMapObjectCommand;
 import manfred.manfreditor.map.controller.command.LoadMapCommand;
 import manfred.manfreditor.map.controller.command.NewMapCommand;
 import manfred.manfreditor.map.controller.command.SaveMapCommand;
+import manfred.manfreditor.map.gui.LoadMapDialog;
 import manfred.manfreditor.map.gui.NewMapDialog;
+import manfred.manfreditor.map.model.MapRepository;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -33,34 +33,31 @@ import static manfred.manfreditor.common.command.ControllerHelper.RIGHT_MOUSE_BU
 public class MapController implements MouseListener {
 
     private final ControllerHelper controllerHelper;
+    private final PopupProvider popupProvider;
     private final LoadMapCommand.Factory loadMapCommandFactory;
     private final SaveMapCommand.Factory saveMapCommandFactory;
     private final NewMapCommand.Factory newMapCommandFactory;
     private final InsertMapObjectCommand.Factory insertMapObjectCommandFactory;
     private final DeleteMapObjectCommand.Factory deleteMapObjectCommandFactory;
+    private final LoadMapDialog.Factory loadMapDialogFactory;
 
-    private final List<Consumer<String>> loadMapPostActions;
+    private final List<Runnable> loadMapPostActions;
     private final List<Runnable> insertPostActions;
     private final List<Runnable> deletePostActions;
-
-    public CommandResult loadMap(String selectedFile) {
-        return controllerHelper.execute(loadMapCommandFactory.create(selectedFile));
-    }
 
     public SelectionListener loadMap(Shell mainShell) {
         return new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                FileDialog fileDialog = new FileDialog(mainShell);
-                String selectedFile = fileDialog.open();
-                if (selectedFile != null) {
-                    loadMap(selectedFile).onFailure(message -> {
-                        MessageBox messageBox = new MessageBox(mainShell);
-                        messageBox.setMessage(message);
-                        messageBox.open();
-                    });
-                    loadMapPostActions.forEach(stringConsumer -> stringConsumer.accept(selectedFile));
-                }
+                LoadMapDialog loadMapDialog = loadMapDialogFactory.create(mainShell);
+                Optional<MapRepository.MapKey> selectedKey = loadMapDialog.open();
+                selectedKey.ifPresent(key -> {
+                        controllerHelper
+                            .execute(loadMapCommandFactory.create(key))
+                            .onFailure(errorMessage -> popupProvider.showMessage(mainShell, errorMessage));
+                        loadMapPostActions.forEach(Runnable::run);
+                    }
+                );
             }
         };
     }
@@ -69,25 +66,13 @@ public class MapController implements MouseListener {
         return new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                FileDialog fileDialog = new FileDialog(mainShell);
-                String selectedFile = fileDialog.open();
-                if (selectedFile != null) {
-                    File fileToSaveIn = new File(selectedFile);
-                    if (fileToSaveIn.isFile()) {
-                        MessageBox messageBox = new MessageBox(mainShell, SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
-                        messageBox.setMessage("Obacht:\n\n" + selectedFile + "\ngibts scho. Willsch trotzdem?");
-                        int open = messageBox.open();
-                        if (open == SWT.CANCEL) {
-                            return;
-                        }
-                    }
-                    controllerHelper.execute(saveMapCommandFactory.create(fileToSaveIn, mainShell))
-                        .onFailure(errorMessage -> {
-                            MessageBox messageBox = new MessageBox(mainShell, SWT.ICON_ERROR | SWT.OK);
-                            messageBox.setMessage("Des hod id fongtsionierd:\n\n" + errorMessage);
-                            messageBox.open();
-                        });
-                }
+                controllerHelper.execute(saveMapCommandFactory.create(mainShell))
+                    .onFailure(errorMessage -> {
+                        MessageBox messageBox = new MessageBox(mainShell, SWT.ICON_ERROR | SWT.OK);
+                        messageBox.setMessage("Des hod id fongtsionierd:\n\n" + errorMessage);
+                        messageBox.open();
+                    })
+                    .onSuccess(() -> popupProvider.showInformation(mainShell, "Gschpeichert. Basst."));
             }
         };
     }
@@ -112,12 +97,12 @@ public class MapController implements MouseListener {
                     messageBox.setMessage("Des hod id fongtsionierd:\n\n" + errorMessage);
                     messageBox.open();
                 });
-            loadMapPostActions.forEach(stringConsumer -> stringConsumer.accept("new map"));
+            loadMapPostActions.forEach(Runnable::run);
         };
     }
 
-    public void addLoadMapPostAction(Consumer<String> selectedFileConsumer) {
-        this.loadMapPostActions.add(selectedFileConsumer);
+    public void addLoadMapPostAction(Runnable postAction) {
+        this.loadMapPostActions.add(postAction);
     }
 
     public void addInsertPostAction(Runnable postAction) {

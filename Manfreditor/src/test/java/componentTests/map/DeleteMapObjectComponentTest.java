@@ -1,5 +1,6 @@
 package componentTests.map;
 
+import componentTests.ComponentTestCase;
 import manfred.manfreditor.common.command.CommandHistory;
 import manfred.manfreditor.common.command.CommandResult;
 import manfred.manfreditor.map.controller.command.DeleteMapObjectCommand;

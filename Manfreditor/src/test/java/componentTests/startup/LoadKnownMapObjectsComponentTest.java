@@ -1,8 +1,8 @@
-package componentTests.map;
+package componentTests.startup;
 
-import componentTests.TestManfreditorContext;
-import manfred.manfreditor.common.command.CommandResult;
+import manfred.manfreditor.application.ManfreditorContext;
 import manfred.manfreditor.application.startup.LoadKnownMapObjectsCommand;
+import manfred.manfreditor.common.command.CommandResult;
 import manfred.manfreditor.map.model.mapobject.MapObjectRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +40,6 @@ public class LoadKnownMapObjectsComponentTest {
     }
 
     @Configuration
-    public static class TestContextClone extends TestManfreditorContext {
+    public static class TestContextClone extends ManfreditorContext {
     }
 }

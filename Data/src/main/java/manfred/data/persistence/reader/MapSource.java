@@ -2,9 +2,9 @@ package manfred.data.persistence.reader;
 
 import lombok.Value;
 
-import java.net.URL;
+import java.io.File;
 
 @Value
 public class MapSource {
-    URL mapUrl;
+    File mapFile;
 }

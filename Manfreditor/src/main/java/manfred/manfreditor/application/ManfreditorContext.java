@@ -2,6 +2,7 @@ package manfred.manfreditor.application;
 
 import manfred.data.DataContext;
 import manfred.data.infrastructure.map.TileConversionRule;
+import manfred.manfreditor.application.startup.LoadKnownMapsCommand;
 import manfred.manfreditor.common.CommonContext;
 import manfred.manfreditor.common.command.Command;
 import manfred.manfreditor.application.startup.LoadKnownMapObjectsCommand;
@@ -30,29 +31,12 @@ import java.util.List;
 @Import({DataContext.class, CommonContext.class, MapContext.class})
 public class ManfreditorContext {
 
-    @Bean
-    public MapModel mapModel(AccessibilityMerger accessibilityMerger, ObjectInsertionValidator objectInsertionValidator) {
-        return new MapModel(new Map("uninitialized", new HashMap<>()), accessibilityMerger, objectInsertionValidator);
-    }
-
-    @Bean
-    public TileConversionRule<MapObject> tileConversionRule(ConcreteMapObjectFactory concreteMapObjectFactory) {
-        return concreteMapObjectFactory;
-    }
-
-    @Bean
-    public ObjectsViewCoordinateFactory objectsViewCoordinateFactory() {
-        return new ObjectsViewCoordinateFactory(MapObjectsView.NUMBER_OF_COLUMNS);
-    }
-
-    @Bean
-    public SelectedObject selectedObject() {
-        return new SelectedObject(SelectionState.empty());
-    }
-
     @Bean("StartupCommands")
-    public List<Command> startupCommands(LoadKnownMapObjectsCommand loadKnownMapObjectsCommand) {
-        return List.of(loadKnownMapObjectsCommand);
+    public List<Command> startupCommands(
+        LoadKnownMapObjectsCommand loadKnownMapObjectsCommand,
+        LoadKnownMapsCommand loadKnownMapsCommand
+    ) {
+        return List.of(loadKnownMapObjectsCommand, loadKnownMapsCommand);
     }
 
     @Bean

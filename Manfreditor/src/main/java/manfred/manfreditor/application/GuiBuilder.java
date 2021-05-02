@@ -53,10 +53,7 @@ public class GuiBuilder {
         Label label = new Label(composite, SWT.FILL);
         label.setText("Map debug");
         label.setLayoutData(new RowData(500, 30));
-        mapController.addLoadMapPostAction(selectedFile -> {
-            label.setText(selectedFile);
-            label.redraw();
-        });
+        mapController.addLoadMapPostAction(label::redraw);
 
         Button newMapObjectButton = new Button(composite, SWT.CENTER);
         newMapObjectButton.setText("Neues Objekt");
@@ -98,7 +95,7 @@ public class GuiBuilder {
         mapScrollContainer.setContent(mapCanvas); // to make scrolling work
         mapCanvas.addMouseListener(mapController);
         mapCanvas.addPaintListener(event -> mapView.draw(event.gc, mainShell.getDisplay()));
-        mapController.addLoadMapPostAction(selectedFile -> {
+        mapController.addLoadMapPostAction(() -> {
             mapCanvas.setSize(mapView.getMapViewSize());
             mapCanvas.redraw();
         });
@@ -117,7 +114,7 @@ public class GuiBuilder {
         mapObjectsCanvas.addPaintListener(event -> mapObjectsView.draw(event.gc, mainShell.getDisplay()));
         mapObjectsCanvas.addMouseListener(mapObjectsController);
         mapObjectsController.addPostAction(mapObjectsCanvas::redraw);
-        mapController.addLoadMapPostAction(selectedFile -> mapObjectsCanvas.redraw());
+        mapController.addLoadMapPostAction(mapObjectsCanvas::redraw);
         rollbackController.addPostAction(mapObjectsCanvas::redraw);
     }
 }

@@ -17,7 +17,7 @@ class ValidatedMapTileDtoTest {
 
     @Test
     void getOriginCoordinate_everyTileIsAccessible_thenBottomLeftIsReturned() {
-        var structureMock = mock(MapPrototype.class);
+        var structureMock = mock(MapTileStructurePrototype.class);
         List<MapPrototype.Coordinate> coordinates = List.of(mockCoordinate(0, 0));
         when(structureMock.getCoordinateSet()).thenReturn(coordinates);
         when(structureMock.getFromMap(any())).thenReturn(TilePrototype.accessible());
@@ -32,7 +32,7 @@ class ValidatedMapTileDtoTest {
 
     @Test
     void getOriginCoordinate_onlyCoordinatesWithXEqual0AreAllowed() {
-        var structureMock = mock(MapPrototype.class);
+        var structureMock = mock(MapTileStructurePrototype.class);
         List<MapPrototype.Coordinate> coordinates = List.of(mockCoordinate(1, 0));
         when(structureMock.getCoordinateSet()).thenReturn(coordinates);
         when(structureMock.getFromMap(any())).thenReturn(TilePrototype.notAccessible());
@@ -47,7 +47,7 @@ class ValidatedMapTileDtoTest {
 
     @Test
     void getOriginCoordinate_oneCoordinateWhosTileIsNotAccessible() {
-        var structureMock = mock(MapPrototype.class);
+        var structureMock = mock(MapTileStructurePrototype.class);
         MapPrototype.Coordinate coordinate = mockCoordinate(0, 0);
         when(structureMock.getCoordinateSet()).thenReturn(List.of(coordinate));
         when(structureMock.getFromMap(any())).thenReturn(TilePrototype.notAccessible());
@@ -60,7 +60,7 @@ class ValidatedMapTileDtoTest {
 
     @Test
     void getOriginCoordinate_bottomLeftAccessible_thenCoordinateTopOfItIsReturned() {
-        var structureMock = mock(MapPrototype.class);
+        var structureMock = mock(MapTileStructurePrototype.class);
         MapPrototype.Coordinate coordinate_0_0 = mockCoordinate(0, 0);
         MapPrototype.Coordinate coordinate_0_1 = mockCoordinate(0, 1);
         when(structureMock.getCoordinateSet()).thenReturn(List.of(coordinate_0_0, coordinate_0_1));
@@ -75,7 +75,7 @@ class ValidatedMapTileDtoTest {
 
     @Test
     void getOriginCoordinate_twoCoordinatesAreNotAccessbile_thenBottommostIsReturend() {
-        var structureMock = mock(MapPrototype.class);
+        var structureMock = mock(MapTileStructurePrototype.class);
         MapPrototype.Coordinate coordinate_0_0 = mockCoordinate(0, 0);
         MapPrototype.Coordinate coordinate_0_1 = mockCoordinate(0, 1);
         when(structureMock.getCoordinateSet()).thenReturn(List.of(coordinate_0_0, coordinate_0_1));

@@ -52,7 +52,8 @@ public class MapConverterTest {
             List.of(),
             List.of(),
             List.of(),
-            List.of()
+            List.of(),
+            null
         );
 
         Map result = underTest.convert(input);
@@ -71,7 +72,8 @@ public class MapConverterTest {
             List.of(),
             List.of(),
             List.of(),
-            List.of()
+            List.of(),
+            null
         );
 
         Map result = underTest.convert(input);
@@ -94,7 +96,8 @@ public class MapConverterTest {
             List.of(),
             List.of(),
             List.of(),
-            List.of(new EnemyPrototype("name", PositiveInt.of(0), PositiveInt.of(0), null, PositiveInt.of(0), PositiveInt.of(0)))
+            List.of(new EnemyPrototype("name", PositiveInt.of(0), PositiveInt.of(0), null, PositiveInt.of(0), PositiveInt.of(0))),
+            null
         );
 
         underTest.convert(input);

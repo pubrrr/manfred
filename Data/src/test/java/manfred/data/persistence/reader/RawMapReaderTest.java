@@ -42,7 +42,7 @@ class RawMapReaderTest {
     @Test
     void testConvert() throws InvalidInputException {
         URL url = getClass().getResource("/maps/testMap.yaml");
-        RawMapDto result = underTest.load(url);
+        RawMapDto result = underTest.load(new File(url.getFile()));
 
         assertThat(result.getName(), equalTo("Wald"));
         assertThat(result.getMap(), hasSize(2));
@@ -54,7 +54,7 @@ class RawMapReaderTest {
     @Test
     void unknownInputFile() {
         InvalidInputException exception = Assertions.assertThrows(InvalidInputException.class, () -> underTest.load("unknown"));
-        assertThat(exception.getMessage(), containsString("Did not find resource for map"));
+        assertThat(exception.getMessage(), containsString("Could not read map from"));
     }
 
     @Test

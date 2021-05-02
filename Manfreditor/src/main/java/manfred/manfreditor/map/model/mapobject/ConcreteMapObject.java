@@ -5,6 +5,7 @@ import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
 import io.vavr.control.Either;
 import manfred.data.infrastructure.map.MapPrototype;
+import manfred.data.infrastructure.map.MapStructurePrototype;
 import manfred.data.infrastructure.map.tile.TilePrototype;
 import manfred.manfreditor.map.view.map.MapViewCoordinate;
 import manfred.manfreditor.map.view.map.TileViewSize;
@@ -24,11 +25,11 @@ public class ConcreteMapObject implements MapObject {
     private final static RGB red = new RGB(255, 0, 0);
 
     private final String name;
-    private final MapPrototype structure;
+    private final MapStructurePrototype structure;
     private final MapPrototype.Coordinate originCoordinate;
     private final ImageData imageData;
 
-    public ConcreteMapObject(String name, MapPrototype structure, MapPrototype.Coordinate originCoordinate, ImageData imageData) {
+    public ConcreteMapObject(String name, MapStructurePrototype structure, MapPrototype.Coordinate originCoordinate, ImageData imageData) {
         this.name = name;
         this.structure = structure;
         this.originCoordinate = originCoordinate;

@@ -45,7 +45,8 @@ public class MapValidator {
                 personsLoader.load(rawMap.getPersons()),
                 rawMap.getPortals(),
                 rawMap.getDoors(),
-                enemiesLoader.load(rawMap.getEnemies())
+                enemiesLoader.load(rawMap.getEnemies()),
+                rawMap.getMapSource()
             );
         } catch (InvalidInputException e) {
             throw new InvalidInputException("Error when creating objects for map " + rawMap.getName(), e);

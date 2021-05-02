@@ -4,6 +4,7 @@ import io.vavr.collection.HashMap;
 import io.vavr.control.Validation;
 import manfred.data.infrastructure.map.MapPrototype;
 import manfred.data.infrastructure.map.tile.TilePrototype;
+import manfred.data.persistence.reader.MapSource;
 import manfred.manfreditor.map.model.accessibility.ColoredAccessibilityIndicator;
 import manfred.manfreditor.map.model.accessibility.EmptyAccessibilityIndicator;
 import manfred.manfreditor.map.model.accessibility.Source;
@@ -12,6 +13,7 @@ import manfred.manfreditor.map.model.mapobject.ConcreteMapObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +38,7 @@ class ObjectInsertionValidatorTest {
     void objectAndMapAreAlwaysAccessible() {
         MapPrototype structureMock = mockMapPrototype(Map.of(coordinatePrototype(0, 0), TilePrototype.accessible()));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        var flattenedMap = new FlattenedMap("name", HashMap.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator()));
+        var flattenedMap = new FlattenedMap("name", HashMap.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator()), someMapSource());
 
         Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), flattenedMap);
 
@@ -47,7 +49,7 @@ class ObjectInsertionValidatorTest {
     void objectTileIsNotAccessible() {
         MapPrototype structureMock = mockMapPrototype(Map.of(coordinatePrototype(0, 0), TilePrototype.notAccessible()));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        var flattenedMap = new FlattenedMap("name", HashMap.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator()));
+        var flattenedMap = new FlattenedMap("name", HashMap.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator()), someMapSource());
 
         Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), flattenedMap);
 
@@ -58,7 +60,7 @@ class ObjectInsertionValidatorTest {
     void mapIsNotAccessible() {
         MapPrototype structureMock = mockMapPrototype(Map.of(coordinatePrototype(0, 0), TilePrototype.accessible()));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        var flattenedMap = new FlattenedMap("name", HashMap.of(tileCoordinate(0, 0), new ColoredAccessibilityIndicator(null, null)));
+        var flattenedMap = new FlattenedMap("name", HashMap.of(tileCoordinate(0, 0), new ColoredAccessibilityIndicator(null, null)), someMapSource());
 
         Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), flattenedMap);
 
@@ -71,7 +73,7 @@ class ObjectInsertionValidatorTest {
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
         var flattenedMap = new FlattenedMap("name", HashMap.of(
             tileCoordinate(0, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
-        ));
+        ), someMapSource());
 
         Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), flattenedMap);
 
@@ -89,7 +91,7 @@ class ObjectInsertionValidatorTest {
         var flattenedMap = new FlattenedMap("name", HashMap.of(
             tileCoordinate(0, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0))),
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
-        ));
+        ), someMapSource());
 
         Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), flattenedMap);
 
@@ -110,7 +112,7 @@ class ObjectInsertionValidatorTest {
         var flattenedMap = new FlattenedMap("name", HashMap.of(
             tileCoordinate(0, 0), new EmptyAccessibilityIndicator(),
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
-        ));
+        ), someMapSource());
 
         Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), flattenedMap);
 
@@ -128,7 +130,7 @@ class ObjectInsertionValidatorTest {
         var flattenedMap = new FlattenedMap("name", HashMap.of(
             tileCoordinate(0, 0), new EmptyAccessibilityIndicator(),
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(0, 0)))
-        ));
+        ), someMapSource());
 
         Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), flattenedMap);
 
@@ -142,7 +144,7 @@ class ObjectInsertionValidatorTest {
         var flattenedMap = new FlattenedMap("name", HashMap.of(
             tileCoordinate(0, 0), new EmptyAccessibilityIndicator(),
             tileCoordinate(1, 0), new ColoredAccessibilityIndicator(null, new Source("tileName", tileCoordinate(3, 0)))
-        ));
+        ), someMapSource());
 
         Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(1, 0), flattenedMap);
 
@@ -157,7 +159,7 @@ class ObjectInsertionValidatorTest {
             coordinatePrototype(0, 1), TilePrototype.notAccessible()
         ));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 1), null);
-        var flattenedMap = new FlattenedMap("name", HashMap.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator()));
+        var flattenedMap = new FlattenedMap("name", HashMap.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator()), someMapSource());
 
         Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), flattenedMap);
 
@@ -174,10 +176,14 @@ class ObjectInsertionValidatorTest {
             coordinatePrototype(1, 1), TilePrototype.accessible()
         ));
         ConcreteMapObject object = new ConcreteMapObject("name", structureMock, coordinatePrototype(0, 0), null);
-        var flattenedMap = new FlattenedMap("name", HashMap.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator()));
+        var flattenedMap = new FlattenedMap("name", HashMap.of(tileCoordinate(0, 0), new EmptyAccessibilityIndicator()), someMapSource());
 
         Validation<List<String>, ConcreteMapObject> result = underTest.mayObjectBeInserted(object, tileCoordinate(0, 0), flattenedMap);
 
         assertTrue(result.isValid());
+    }
+
+    private MapSource someMapSource() {
+        return new MapSource(new File(""));
     }
 }

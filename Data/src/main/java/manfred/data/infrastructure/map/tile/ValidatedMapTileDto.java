@@ -19,7 +19,7 @@ import java.util.Comparator;
 @FieldDefaults(makeFinal=true, level= AccessLevel.PRIVATE)
 public class ValidatedMapTileDto {
     String name;
-    MapPrototype structure;
+    MapTileStructurePrototype structure;
     BufferedImage image;
     ImageData imageData;
 

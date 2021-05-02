@@ -9,7 +9,9 @@ public abstract class CommandResult {
 
     public abstract CommandResult registerRollbackOperation(CommandHistory commandHistory);
 
-    public abstract void onFailure(Consumer<String> errorConsumer);
+    public abstract CommandResult onFailure(Consumer<String> errorConsumer);
+
+    public abstract CommandResult onSuccess(Runnable action);
 
     public abstract Try<RollbackOperation> toTry();
 
@@ -36,8 +38,14 @@ public abstract class CommandResult {
         }
 
         @Override
-        public void onFailure(Consumer<String> errorConsumer) {
-            // do nothing
+        public CommandResult onFailure(Consumer<String> errorConsumer) {
+            return this;
+        }
+
+        @Override
+        public CommandResult onSuccess(Runnable action) {
+            action.run();
+            return this;
         }
 
         @Override
@@ -61,8 +69,14 @@ public abstract class CommandResult {
         }
 
         @Override
-        public void onFailure(Consumer<String> errorConsumer) {
+        public CommandResult onFailure(Consumer<String> errorConsumer) {
             errorConsumer.accept(errorMessage);
+            return this;
+        }
+
+        @Override
+        public CommandResult onSuccess(Runnable action) {
+            return this;
         }
 
         @Override

@@ -3,6 +3,7 @@ package manfred.manfreditor.map.controller.command;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import manfred.data.persistence.PreviousFileContent;
+import manfred.data.persistence.reader.MapSource;
 import manfred.manfreditor.common.FileHelper;
 import manfred.manfreditor.common.command.CommandHistory;
 import manfred.manfreditor.common.command.CommandResult;
@@ -51,13 +52,14 @@ class SaveMapCommandTest {
         FlattenedMap mapToSave = mock(FlattenedMap.class);
         when(mapModelMock.getFlattenedMap()).thenReturn(mapToSave);
         File fileToSaveIn = mock(File.class);
+        when(mapToSave.getMapSource()).thenReturn(new MapSource(fileToSaveIn));
 
-        when(mapExporterMock.export(any(), any())).thenReturn(Try.success(Option.none()));
+        when(mapExporterMock.export(any())).thenReturn(Try.success(Option.none()));
 
-        CommandResult result = commandFactory.create(fileToSaveIn, null).execute();
+        CommandResult result = commandFactory.create(null).execute();
 
         assertThat(result, wasSuccessful());
-        verify(mapExporterMock).export(eq(mapToSave), eq(fileToSaveIn));
+        verify(mapExporterMock).export(eq(mapToSave));
 
         when(popupProviderMock.showConfirmationDialog(any(), any())).thenReturn(SWT.NO);
         result.registerRollbackOperation(commandHistory);
@@ -75,16 +77,17 @@ class SaveMapCommandTest {
         FlattenedMap mapToSave = mock(FlattenedMap.class);
         when(mapModelMock.getFlattenedMap()).thenReturn(mapToSave);
         File fileToSaveIn = mock(File.class);
+        when(mapToSave.getMapSource()).thenReturn(new MapSource(fileToSaveIn));
 
-        when(mapExporterMock.export(any(), any())).thenReturn(
+        when(mapExporterMock.export(any())).thenReturn(
             Try.success(Option.some(new PreviousFileContent("previous content")))
         );
         when(fileHelperMock.write(any(), any())).thenReturn(Try.success(null));
 
-        CommandResult result = commandFactory.create(fileToSaveIn, null).execute();
+        CommandResult result = commandFactory.create(null).execute();
 
         assertThat(result, wasSuccessful());
-        verify(mapExporterMock).export(eq(mapToSave), eq(fileToSaveIn));
+        verify(mapExporterMock).export(eq(mapToSave));
 
         when(popupProviderMock.showConfirmationDialog(any(), any())).thenReturn(SWT.NO);
         result.registerRollbackOperation(commandHistory);
@@ -102,10 +105,11 @@ class SaveMapCommandTest {
         FlattenedMap mapToSave = mock(FlattenedMap.class);
         when(mapModelMock.getFlattenedMap()).thenReturn(mapToSave);
         File fileToSaveIn = mock(File.class);
+        when(mapToSave.getMapSource()).thenReturn(new MapSource(fileToSaveIn));
 
-        when(mapExporterMock.export(any(), any())).thenReturn(Try.failure(new Exception("message")));
+        when(mapExporterMock.export(any())).thenReturn(Try.failure(new Exception("message")));
 
-        CommandResult result = commandFactory.create(fileToSaveIn, null).execute();
+        CommandResult result = commandFactory.create(null).execute();
 
         assertThat(result, failedWithMessageContaining("message"));
     }

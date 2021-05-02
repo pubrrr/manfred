@@ -6,6 +6,7 @@ import manfred.data.persistence.ObjectReader;
 import manfred.data.persistence.dto.EnemyDto;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.function.Supplier;
@@ -26,27 +27,27 @@ public class EnemyReader implements ObjectReader<EnemySource, EnemyDto> {
     @Override
     public EnemyDto load(String name) throws InvalidInputException {
         return load(
-            urlHelper.getResourceForEnemy(name).orElseThrow(invalidInputException("Resource for enemy " + name + " not found")),
+            urlHelper.getFileForEnemy(name),
             urlHelper.getImageResourceForEnemy(name).orElseThrow(invalidInputException("Image resource for enemy " + name + " not found"))
         );
     }
 
     @Override
     public EnemyDto load(EnemySource enemySource) throws InvalidInputException {
-        return load(enemySource.getEnemyUrl(), enemySource.getImageUrl());
+        return load(new File(enemySource.getEnemyUrl().getFile()), enemySource.getImageUrl());
     }
 
     private Supplier<InvalidInputException> invalidInputException(String message) {
         return () -> new InvalidInputException(message);
     }
 
-    EnemyDto load(URL yamlURL, URL imageURL) throws InvalidInputException {
+    EnemyDto load(File yamlFile, URL imageURL) throws InvalidInputException {
         try {
-            EnemyDto enemyDto = objectMapper.readValue(yamlURL, EnemyDto.class);
+            EnemyDto enemyDto = objectMapper.readValue(yamlFile, EnemyDto.class);
             enemyDto.setImage(imageLoader.load(imageURL));
             return enemyDto;
         } catch (IOException e) {
-            throw new InvalidInputException("Could not read enemy " + yamlURL, e);
+            throw new InvalidInputException("Could not read enemy " + yamlFile, e);
         }
     }
 }
